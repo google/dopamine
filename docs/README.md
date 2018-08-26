@@ -113,7 +113,7 @@ method in
 [`colab/utils.py`](https://github.com/google/dopamine/blob/master/colab/utils.py).
 
 We provide a
-[colab](https://github.com/google/dopamine/blob/master/colab/load_statistics.ipynb)
+[colab](https://colab.research.google.com/github/google/dopamine/blob/master/colab/load_statistics.ipynb)
 to illustrate how you can load the statistics from an experiment and plot them
 against our provided baseline runs.
 
@@ -126,7 +126,7 @@ of simplicity and ease of use. To begin, we recommend modifying the agent code
 directly to suit your research purposes.
 
 We provide a
-[colab](https://github.com/google/dopamine/blob/master/colab/agents.ipynb)
+[colab](https://colab.research.google.com/github/google/dopamine/blob/master/colab/agents.ipynb)
 where we illustrate how one can extend the DQN agent, or create a new agent from
 scratch, and then plot the experimental results against our provided baselines.
 
@@ -174,19 +174,19 @@ We provide a series of files for all 4 agents on all 60 games. These are all
 *   The raw logs are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_raw_logs_files.tar.gz)
     *  You can view this
-       [colab](https://github.com/google/dopamine/blob/master/colab/load_statistics.ipynb)
+       [colab](https://colab.research.google.com/github/google/dopamine/blob/master/colab/load_statistics.ipynb)
        for instructions on how to load and visualize them.
 *   The compiled pickle files are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_pkl_files.tar.gz)
     *  We make use of these compiled pickle files in both
-       [agents](https://github.com/google/dopamine/blob/master/colab/agents.ipynb)
+       [agents](https://colab.research.google.com/github/google/dopamine/blob/master/colab/agents.ipynb)
        and the
-       [statistics](https://github.com/google/dopamine/blob/master/colab/load_statistics.ipynb)
+       [statistics](https://colab.research.google.com/github/google/dopamine/blob/master/colab/load_statistics.ipynb)
        colabs.
 *   The Tensorboard event files are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_tb_event_files.tar.gz)
     *  We provide a
-       [colab](https://github.com/google/dopamine/blob/master/colab/tensorboard.ipynb)
+       [colab](https://colab.research.google.com/github/google/dopamine/blob/master/colab/tensorboard.ipynb)
        where you can start Tensorboard directly from the colab using `ngrok`.
        In the provided example your Tensorboard will look something like this:
 
