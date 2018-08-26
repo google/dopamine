@@ -1,6 +1,6 @@
-# Hyperparameters follow the classic Nature DQN (Mnih et al. 2015), but we modify
-# as necessary to match those used in Rainbow (Hessel et al., 2018), to ensure
-# apples-to-apples comparison.
+# Hyperparameters follow the classic Nature DQN, but we modify as necessary to
+# match those used in Rainbow (Hessel et al., 2018), to ensure apples-to-apples
+# comparison.
 import dopamine.atari.run_experiment
 import dopamine.agents.dqn.dqn_agent
 import dopamine.replay_memory.circular_replay_buffer
