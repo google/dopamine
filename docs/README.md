@@ -4,7 +4,7 @@ This document gives examples and pointers on how to experiment with and extend
 Dopamine.
 
 You can find the documentation for each module in our codebase in our
-[API documentation](https://github.com/google/dopamine/blob/master/docs/api_docs/python).
+[API documentation](https://github.com/google/dopamine/blob/master/docs/api_docs/python/index.md).
 
 ## File organization
 
