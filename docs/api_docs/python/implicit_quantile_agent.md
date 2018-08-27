@@ -5,10 +5,10 @@
 
 # Module: implicit_quantile_agent
 
-An extension of Rainbow to perform implicit quantile regression.
+The implicit quantile networks (IQN) agent.
 
-This loss is computed as in "Implicit Quantile Networks for Distributional RL -
-Dabney et. al, 2018"
+The agent follows the description given in "Implicit Quantile Networks for
+Distributional RL" (Dabney et. al, 2018).
 
 ## Classes
 

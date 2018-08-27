@@ -35,7 +35,7 @@ Initialize the TrainRunner object in charge of running a full experiment.
 *   <b>`base_dir`</b>: str, the base directory to host all required
     sub-directories.
 *   <b>`create_agent_fn`</b>: A function that takes as args a Tensorflow session
-    and a Gym Atari 2600 environment, and returns an agent.
+    and an Atari 2600 Gym environment, and returns an agent.
 
 <h3 id="run_experiment"><code>run_experiment</code></h3>
 

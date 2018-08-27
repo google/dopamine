@@ -20,10 +20,13 @@ Inherits From:
 
 Wrapper of OutOfGraphPrioritizedReplayBuffer with in-graph sampling.
 
-Usage: To add a transition: call the add function.
+Usage:
 
-To sample a batch: Query any of the tensors in the transition dictionary. Every
-sess.run that requires any of these tensors will sample a new transition.
+*   To add a transition: Call the add function.
+
+*   To sample a batch: Query any of the tensors in the transition dictionary.
+    Every sess.run that requires any of these tensors will sample a new
+    transition.
 
 ## Methods
 

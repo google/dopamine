@@ -43,10 +43,10 @@ Initialize the Runner object in charge of running a full experiment.
 *   <b>`base_dir`</b>: str, the base directory to host all required
     sub-directories.
 *   <b>`create_agent_fn`</b>: A function that takes as args a Tensorflow session
-    and a Gym Atari 2600 environment, and returns an agent.
+    and an Atari 2600 Gym environment, and returns an agent.
 *   <b>`create_environment_fn`</b>: A function which receives a game name and
     creates an Atari 2600 Gym environment.
-*   <b>`game_name`</b>: str, name of the Atari game to run (required).
+*   <b>`game_name`</b>: str, name of the Atari 2600 domain to run (required).
 *   <b>`sticky_actions`</b>: bool, whether to enable sticky actions in the
     environment.
 *   <b>`checkpoint_file_prefix`</b>: str, the prefix to use for checkpoint

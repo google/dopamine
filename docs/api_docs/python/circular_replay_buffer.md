@@ -16,7 +16,7 @@ off-policy corrections.
 ## Classes
 
 [`class OutOfGraphReplayBuffer`](./circular_replay_buffer/OutOfGraphReplayBuffer.md):
-A simple Out of Graph Replay Buffer.
+A simple out-of-graph Replay Buffer.
 
 [`class WrappedReplayBuffer`](./circular_replay_buffer/WrappedReplayBuffer.md):
 Wrapper of OutOfGraphReplayBuffer with an in graph sampling mechanism.

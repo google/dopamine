@@ -20,13 +20,14 @@ the Tensorflow graph, the replay buffer) should be performed *prior* to calling
 Checkpointer.save_checkpoint(). This allows the Checkpointer to detect
 incomplete checkpoints.
 
-=== Example === After running 10 iterations (numbered 0...9) with
-base_directory='/checkpoint', the following files will exist: /checkpoint/cpkt.6
-/checkpoint/cpkt.7 /checkpoint/cpkt.8 /checkpoint/cpkt.9
-/checkpoint/sentinel_checkpoint_complete.6
+#### Example
+
+After running 10 iterations (numbered 0...9) with base_directory='/checkpoint',
+the following files will exist: `/checkpoint/cpkt.6 /checkpoint/cpkt.7
+/checkpoint/cpkt.8 /checkpoint/cpkt.9 /checkpoint/sentinel_checkpoint_complete.6
 /checkpoint/sentinel_checkpoint_complete.7
 /checkpoint/sentinel_checkpoint_complete.8
-/checkpoint/sentinel_checkpoint_complete.9
+/checkpoint/sentinel_checkpoint_complete.9`
 
 ## Classes
 

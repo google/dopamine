@@ -17,7 +17,8 @@ Processes log data into a per-iteration summary.
 #### Args:
 
 *   <b>`data`</b>: Dictionary loaded by load_statistics describing the data.
-    This dictionary has keys iter0, iter1, ... describing per-iteration data.
+    This dictionary has keys iteration_0, iteration_1, ... describing
+    per-iteration data.
 *   <b>`summary_keys`</b>: List of per-iteration data to be summarized.
 
 Example: data = load_statistics(...) get_iteration_summmary(data,

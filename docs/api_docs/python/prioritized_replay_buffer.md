@@ -14,7 +14,7 @@ for providing useful pointers on the algorithm and its implementation.
 ## Classes
 
 [`class OutOfGraphPrioritizedReplayBuffer`](./prioritized_replay_buffer/OutOfGraphPrioritizedReplayBuffer.md):
-An Out of Graph Replay Buffer for Prioritized Experience Replay.
+An out-of-graph Replay Buffer for Prioritized Experience Replay.
 
 [`class WrappedPrioritizedReplayBuffer`](./prioritized_replay_buffer/WrappedPrioritizedReplayBuffer.md):
 Wrapper of OutOfGraphPrioritizedReplayBuffer with in-graph sampling.

@@ -16,12 +16,12 @@ Creates a DQN agent.
 
 #### Args:
 
-*   <b>`sess`</b>: A `tf.Session`object for running associated ops.
-*   <b>`environment`</b>: An Atari 2600 environment.
+*   <b>`sess`</b>: A `tf.Session` object for running associated ops.
+*   <b>`environment`</b>: An Atari 2600 Gym environment.
 
 #### Returns:
 
-*   <b>`agent`</b>: A RL agent.
+*   <b>`agent`</b>: An RL agent.
 
 #### Raises:
 

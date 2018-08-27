@@ -28,7 +28,7 @@
 Inherits From:
 [`OutOfGraphReplayBuffer`](../circular_replay_buffer/OutOfGraphReplayBuffer.md)
 
-An Out of Graph Replay Buffer for Prioritized Experience Replay.
+An out-of-graph Replay Buffer for Prioritized Experience Replay.
 
 See circular_replay_buffer.py for details.
 

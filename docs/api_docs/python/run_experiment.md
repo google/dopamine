@@ -5,7 +5,7 @@
 
 # Module: run_experiment
 
-Module defining classes and helper methods for running Atari 2600 games.
+Module defining classes and helper methods for running Atari 2600 agents.
 
 ## Classes
 

@@ -438,8 +438,7 @@ class Runner(object):
       self._checkpointer.save_checkpoint(iteration, experiment_data)
 
   def run_experiment(self):
-    """Runs a full experiment, spread over multiple iterations.
-    """
+    """Runs a full experiment, spread over multiple iterations."""
     tf.logging.info('Beginning training...')
     if self._num_iterations <= self._start_iteration:
       tf.logging.warning('num_iterations (%d) < start_iteration(%d)',

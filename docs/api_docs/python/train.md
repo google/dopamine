@@ -5,7 +5,7 @@
 
 # Module: train
 
-The entry point for running a DQN agent on Atari.
+The entry point for running an agent on an Atari 2600 domain.
 
 
 ## Functions

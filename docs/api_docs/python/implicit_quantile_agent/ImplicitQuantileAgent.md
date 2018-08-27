@@ -30,9 +30,12 @@ __init__(
 
 Initializes the agent and constructs the Graph.
 
+Most of this constructor's parameters are IQN-specific hyperparameters whose
+values are taken from Dabney et al. (2018).
+
 #### Args:
 
-*   <b>`sess`</b>: A `tf.Session`object for running associated ops.
+*   <b>`sess`</b>: `tf.Session` object for running associated ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
 *   <b>`kappa`</b>: float, Huber loss cutoff.
@@ -41,9 +44,9 @@ Initializes the agent and constructs the Graph.
 *   <b>`num_tau_prime_samples`</b>: int, number of target quantile samples for
     loss estimation.
 *   <b>`num_quantile_samples`</b>: int, number of quantile samples for computing
-    Q values.
+    Q-values.
 *   <b>`quantile_embedding_dim`</b>: int, embedding dimension for the quantile
-    input
+    input.
 
 <h3 id="begin_episode"><code>begin_episode</code></h3>
 

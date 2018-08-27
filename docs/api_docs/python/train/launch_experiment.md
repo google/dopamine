@@ -17,6 +17,6 @@ Launches the experiment.
 #### Args:
 
 *   <b>`create_runner_fn`</b>: A function that takes as args a base directory
-    and a function for creating an agent and returns a `Runner` like object.
+    and a function for creating an agent and returns a `Runner`-like object.
 *   <b>`create_agent_fn`</b>: A function that takes as args a Tensorflow session
-    and a Gym Atari 2600 environment, and returns an agent.
+    and an Atari 2600 Gym environment, and returns an agent.

@@ -23,7 +23,7 @@
 
 ## Class `OutOfGraphReplayBuffer`
 
-A simple Out of Graph Replay Buffer.
+A simple out-of-graph Replay Buffer.
 
 Stores transitions, state, action, reward, next_state, terminal (and any extra
 contents specified) in a circular buffer and provides a uniform transition

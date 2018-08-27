@@ -21,10 +21,14 @@ https://arxiv.org/abs/1707.06887 In the rest of the comments we will refer to
 this equation simply as Eq7.
 
 This code is not easy to digest, so we will use a running example to clarify
-what is going on, with the following sample inputs: * supports = [[0, 2, 4, 6,
-8], [1, 3, 4, 5, 6]] * weights = [[0.1, 0.6, 0.1, 0.1, 0.1], [0.1, 0.2, 0.5,
-0.1, 0.1]] * target_support = [4, 5, 6, 7, 8] In the code below, comments
-preceded with 'Ex:' will be referencing the above values.
+what is going on, with the following sample inputs:
+
+*   supports = [[0, 2, 4, 6, 8], [1, 3, 4, 5, 6]]
+*   weights = [[0.1, 0.6, 0.1, 0.1, 0.1], [0.1, 0.2, 0.5, 0.1, 0.1]]
+*   target_support = [4, 5, 6, 7, 8]
+
+In the code below, comments preceded with 'Ex:' will be referencing the above
+values.
 
 #### Args:
 
