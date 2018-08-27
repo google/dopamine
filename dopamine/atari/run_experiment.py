@@ -376,6 +376,7 @@ class Runner(object):
       A dict containing summary statistics for this iteration.
     """
     statistics = iteration_statistics.IterationStatistics()
+    tf.logging.info('Starting iteration %d', iteration)
     num_episodes_train, average_reward_train = self._run_train_phase(
         statistics)
     num_episodes_eval, average_reward_eval = self._run_eval_phase(
