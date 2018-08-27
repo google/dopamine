@@ -200,7 +200,7 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 If you use Dopamine in your work, we ask that you cite this repository as a
 reference. The preferred format (authors in alphabetical order) is:
 
-Marc G. Bellemare, Pablo Castro, Carles Gelada, Saurabh Kumar, Subhodeep Moitra.
+Marc G. Bellemare, Pablo Samuel Castro, Carles Gelada, Saurabh Kumar, Subhodeep Moitra.
 Dopamine, https://github.com/google/dopamine, 2018.
 
 
