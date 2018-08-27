@@ -14,17 +14,19 @@
 """Compact implementation of a simplified Rainbow agent.
 
 Specifically, we implement the following components from Rainbow:
-  . n-step updates;
-  . prioritized replay; and
-  . distributional RL.
+
+  * n-step updates;
+  * prioritized replay; and
+  * distributional RL.
 
 These three components were found to significantly impact the performance of
 the Atari game-playing agent.
 
 Furthermore, our implementation does away with some minor hyperparameter
 choices. Specifically, we
-  . keep the beta exponent fixed at beta=0.5, rather than increase it linearly;
-  . remove the alpha parameter, which was set to alpha=0.5 throughout the paper.
+
+  * keep the beta exponent fixed at beta=0.5, rather than increase it linearly;
+  * remove the alpha parameter, which was set to alpha=0.5 throughout the paper.
 
 Details in "Rainbow: Combining Improvements in Deep Reinforcement Learning" by
 Hessel et al. (2018).
@@ -193,8 +195,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
 
     First, we compute the support of the Bellman target, r + gamma Z'. Where Z'
     is the support of the next state distribution:
-      . Evenly spaced in [-vmax, vmax] if the current state is nonterminal;
-      . 0 otherwise (duplicated num_atoms times).
+
+      * Evenly spaced in [-vmax, vmax] if the current state is nonterminal;
+      * 0 otherwise (duplicated num_atoms times).
 
     Second, we compute the next-state probabilities, corresponding to the action
     with highest expected value.
@@ -331,11 +334,13 @@ def project_distribution(supports, weights, target_support,
 
   This code is not easy to digest, so we will use a running example to clarify
   what is going on, with the following sample inputs:
+
     * supports =       [[0, 2, 4, 6, 8],
                         [1, 3, 4, 5, 6]]
     * weights =        [[0.1, 0.6, 0.1, 0.1, 0.1],
                         [0.1, 0.2, 0.5, 0.1, 0.1]]
     * target_support = [4, 5, 6, 7, 8]
+
   In the code below, comments preceded with 'Ex:' will be referencing the above
   values.
 

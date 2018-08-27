@@ -78,7 +78,7 @@ def invalid_range(cursor, replay_capacity, stack_size, update_horizon):
 
 
 class OutOfGraphReplayBuffer(object):
-  """A simple Out of Graph Replay Buffer.
+  """A simple out-of-graph Replay Buffer.
 
   Stores transitions, state, action, reward, next_state, terminal (and any
   extra contents specified) in a circular buffer and provides a uniform

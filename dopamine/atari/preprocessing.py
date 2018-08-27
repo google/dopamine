@@ -35,6 +35,7 @@ class AtariPreprocessing(object):
 
   Specifically, this provides the following subset from the JAIR paper
   (Bellemare et al., 2013) and Nature DQN paper (Mnih et al., 2015):
+
     * Frame skipping (defaults to 4).
     * Terminal signal when a life is lost (off by default).
     * Grayscale and max-pooling of the last two frames.
@@ -135,10 +136,11 @@ class AtariPreprocessing(object):
     """Applies the given action in the environment.
 
     Remarks:
-    * If a terminal state (from life loss or episode end) is reached, this may
-      execute fewer than self.frame_skip steps in the environment.
-    * Furthermore, in this case the returned observation may not contain valid
-      image data and should be ignored.
+
+      * If a terminal state (from life loss or episode end) is reached, this may
+        execute fewer than self.frame_skip steps in the environment.
+      * Furthermore, in this case the returned observation may not contain valid
+        image data and should be ignored.
 
     Args:
       action: The action to be executed.

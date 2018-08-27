@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Module defining classes and helper methods for running Atari 2600 games."""
+"""Module defining classes and helper methods for running Atari 2600 agents."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -67,7 +67,7 @@ def create_atari_environment(game_name, sticky_actions=True):
   We use them by default.
 
   Args:
-    game_name: str, the name of the Atari 2600 game.
+    game_name: str, the name of the Atari 2600 domain.
     sticky_actions: bool, whether to use sticky_actions as per Machado et al.
 
   Returns:
@@ -121,11 +121,11 @@ class Runner(object):
 
     Args:
       base_dir: str, the base directory to host all required sub-directories.
-      create_agent_fn: A function that takes as args a Tensorflow session and a
-        Gym Atari 2600 environment, and returns an agent.
+      create_agent_fn: A function that takes as args a Tensorflow session and an
+        Atari 2600 Gym environment, and returns an agent.
       create_environment_fn: A function which receives a game name and creates
         an Atari 2600 Gym environment.
-      game_name: str, name of the Atari game to run (required).
+      game_name: str, name of the Atari 2600 domain to run (required).
       sticky_actions: bool, whether to enable sticky actions in the environment.
       checkpoint_file_prefix: str, the prefix to use for checkpoint files.
       logging_file_prefix: str, prefix to use for the log files.
@@ -465,8 +465,8 @@ class TrainRunner(Runner):
 
     Args:
       base_dir: str, the base directory to host all required sub-directories.
-      create_agent_fn: A function that takes as args a Tensorflow session and a
-        Gym Atari 2600 environment, and returns an agent.
+      create_agent_fn: A function that takes as args a Tensorflow session and an
+        Atari 2600 Gym environment, and returns an agent.
     """
     tf.logging.info('Creating TrainRunner ...')
     super(TrainRunner, self).__init__(

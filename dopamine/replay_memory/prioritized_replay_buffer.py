@@ -34,7 +34,7 @@ import gin.tf
 
 class OutOfGraphPrioritizedReplayBuffer(
     circular_replay_buffer.OutOfGraphReplayBuffer):
-  """An Out of Graph Replay Buffer for Prioritized Experience Replay.
+  """An out-of-graph Replay Buffer for Prioritized Experience Replay.
 
   See circular_replay_buffer.py for details.
   """
@@ -241,9 +241,10 @@ class WrappedPrioritizedReplayBuffer(
   """Wrapper of OutOfGraphPrioritizedReplayBuffer with in-graph sampling.
 
   Usage:
-    To add a transition:  call the add function.
 
-    To sample a batch:    Query any of the tensors in the transition dictionary.
+    * To add a transition:  Call the add function.
+
+    * To sample a batch:  Query any of the tensors in the transition dictionary.
                           Every sess.run that requires any of these tensors will
                           sample a new transition.
   """

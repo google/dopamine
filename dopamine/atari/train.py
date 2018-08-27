@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-r"""The entry point for running a DQN agent on Atari.
+r"""The entry point for running an agent on an Atari 2600 domain.
 
 """
 
@@ -32,7 +32,8 @@ import tensorflow as tf
 
 
 flags.DEFINE_string('agent_name', None,
-                    'Name of the agent. Must be one of (dqn, rainbow)')
+                    'Name of the agent. Must be one of '
+                    '(dqn, rainbow, implicit_quantile)')
 flags.DEFINE_string('base_dir', None,
                     'Base directory to host all required sub-directories.')
 flags.DEFINE_multi_string(
@@ -57,11 +58,11 @@ def create_agent(sess, environment):
   """Creates a DQN agent.
 
   Args:
-    sess: A `tf.Session`object  for running associated ops.
-    environment: An Atari 2600 environment.
+    sess: A `tf.Session` object for running associated ops.
+    environment: An Atari 2600 Gym environment.
 
   Returns:
-    agent: A RL agent.
+    agent: An RL agent.
 
   Raises:
     ValueError: If `agent_name` is not in supported list.
@@ -83,8 +84,8 @@ def create_runner(base_dir, create_agent_fn):
 
   Args:
     base_dir: str, base directory for hosting all subdirectories.
-    create_agent_fn: A function that takes as args a Tensorflow session and a
-     Gym Atari 2600 environment, and returns an agent.
+    create_agent_fn: A function that takes as args a Tensorflow session and an
+     Atari 2600 Gym environment, and returns an agent.
 
   Returns:
     runner: A `run_experiment.Runner` like object.
@@ -93,10 +94,10 @@ def create_runner(base_dir, create_agent_fn):
     ValueError: When an unknown schedule is encountered.
   """
   assert base_dir is not None
-  # Continuously runs training and eval till max num_iterations is hit.
+  # Continuously runs training and evaluation until max num_iterations is hit.
   if FLAGS.schedule == 'continuous_train_and_eval':
     return run_experiment.Runner(base_dir, create_agent_fn)
-  # Continuously runs training till max num_iterations is hit.
+  # Continuously runs training until max num_iterations is hit.
   elif FLAGS.schedule == 'continuous_train':
     return run_experiment.TrainRunner(base_dir, create_agent_fn)
   else:
@@ -108,9 +109,9 @@ def launch_experiment(create_runner_fn, create_agent_fn):
 
   Args:
     create_runner_fn: A function that takes as args a base directory and a
-      function for creating an agent and returns a `Runner` like object.
-    create_agent_fn: A function that takes as args a Tensorflow session and a
-     Gym Atari 2600 environment, and returns an agent.
+      function for creating an agent and returns a `Runner`-like object.
+    create_agent_fn: A function that takes as args a Tensorflow session and an
+     Atari 2600 Gym environment, and returns an agent.
   """
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
   runner = create_runner_fn(FLAGS.base_dir, create_agent_fn)

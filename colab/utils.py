@@ -160,7 +160,8 @@ def summarize_data(data, summary_keys):
 
   Args:
     data: Dictionary loaded by load_statistics describing the data. This
-      dictionary has keys iter0, iter1, ... describing per-iteration data.
+      dictionary has keys iteration_0, iteration_1, ... describing per-iteration
+      data.
     summary_keys: List of per-iteration data to be summarized.
 
   Example:

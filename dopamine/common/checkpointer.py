@@ -26,9 +26,11 @@ globally successful. This means that all other checkpointing activities
 to calling Checkpointer.save_checkpoint(). This allows the Checkpointer to
 detect incomplete checkpoints.
 
-=== Example ===
+#### Example
+
 After running 10 iterations (numbered 0...9) with base_directory='/checkpoint',
 the following files will exist:
+```
   /checkpoint/cpkt.6
   /checkpoint/cpkt.7
   /checkpoint/cpkt.8
@@ -37,6 +39,7 @@ the following files will exist:
   /checkpoint/sentinel_checkpoint_complete.7
   /checkpoint/sentinel_checkpoint_complete.8
   /checkpoint/sentinel_checkpoint_complete.9
+```
 """
 
 from __future__ import absolute_import

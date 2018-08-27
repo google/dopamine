@@ -43,8 +43,8 @@ manager (e.g. `apt` on Ubuntu, `homebrew` on Mac OS X), and that a C++ compiler
 is available from the command-line (almost certainly the case if your favourite
 package manager works).
 
-The instructions below assume that you will be running Dopamine in a virtual
-environment. A virtual environment lets you control which dependencies are
+The instructions below assume that you will be running Dopamine in a *virtual
+environment*. A virtual environment lets you control which dependencies are
 installed for which program; however, this step is optional and you may choose
 to ignore it.
 
@@ -76,7 +76,8 @@ pip install absl-py atari-py gin-config gym opencv-python tensorflow
 ```
 
 During installation, you may safely ignore the following error message:
-*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3*.
+*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3, but you'll have
+numpy 1.15.1 which is incompatible*.
 
 Finally, download the Dopamine source, e.g.
 
@@ -89,7 +90,7 @@ git clone https://github.com/google/dopamine.git
 First set up the virtual environment:
 
 ```
-brew install virtualenv
+pip install virtualenv
 virtualenv --python=python2.7 dopamine-env
 source dopamine-env/bin/activate
 ```
@@ -105,12 +106,13 @@ pip install absl-py atari-py gin-config gym opencv-python tensorflow
 ```
 
 During installation, you may safely ignore the following error message:
-*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3*.
+*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3, but you'll have
+numpy 1.15.1 which is incompatible*.
 
 Finally, download the Dopamine source, e.g.
 
 ```
-git clone git@github.com:google/dopamine.git
+git clone https://github.com/google/dopamine.git
 ```
 
 #### Running tests
@@ -184,7 +186,7 @@ general agents*. Journal of Artificial Intelligence Research, 2013.][ale]
 [Hessel et al., *Rainbow: Combining Improvements in Deep Reinforcement Learning*.
 Proceedings of the AAAI Conference on Artificial Intelligence, 2018.][rainbow]
 
-[Mnih et al., *Human-level control through deep reinforcement learning*. Nature,
+[Mnih et al., *Human-level Control through Deep Reinforcement Learning*. Nature,
 2015.][dqn]
 
 [Mnih et al., *Asynchronous Methods for Deep Reinforcement Learning*. Proceedings
@@ -196,7 +198,7 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 ### Giving credit
 
 If you use Dopamine in your work, we ask that you cite this repository as a
-source. The preferred format (authors in alphabetical order) is:
+reference. The preferred format (authors in alphabetical order) is:
 
 Marc G. Bellemare, Pablo Castro, Carles Gelada, Saurabh Kumar, Subhodeep Moitra.
 Dopamine, https://github.com/google/dopamine, 2018.
