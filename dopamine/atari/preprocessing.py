@@ -151,7 +151,6 @@ class AtariPreprocessing(object):
       is_terminal: bool, whether the environment has reached a terminal state.
         This is true when a life is lost and terminal_on_life_loss, or when the
         episode is over.
-      is_episode_over: bool, reports whether the episode is actually over.
       info: Gym API's info data structure.
     """
     accumulated_reward = 0.
