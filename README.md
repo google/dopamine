@@ -60,7 +60,7 @@ compatible, there may be some additional steps needed during installation.
 First set up the virtual environment:
 
 ```
-sudo apt-get install virtualenv
+sudo apt-get update && sudo apt-get install virtualenv
 virtualenv --python=python2.7 dopamine-env
 source dopamine-env/bin/activate
 ```
@@ -71,7 +71,7 @@ environment lives. The last command activates the environment.
 Then, install the dependencies to Dopamine:
 
 ```
-sudo apt-get install cmake zlib1g-dev
+sudo apt-get update && sudo apt-get install cmake zlib1g-dev
 pip install absl-py atari-py gin-config gym opencv-python tensorflow
 ```
 
@@ -163,7 +163,8 @@ More generally, the whole of Dopamine is easily configured using the
 An easy, alternative way to install Dopamine is as a Python library:
 
 ```
-sudo apt-get install cmake  # Or brew install, see Mac OS X instructions above.
+# Alternatively brew install, see Mac OS X instructions above.
+sudo apt-get update && sudo apt-get install cmake
 pip install dopamine-rl
 pip install atari-py
 ```
