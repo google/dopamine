@@ -286,7 +286,8 @@ class WrappedPrioritizedReplayBuffer(
     memory = OutOfGraphPrioritizedReplayBuffer(
         observation_shape, stack_size, replay_capacity, batch_size,
         update_horizon, gamma, max_sample_attempts,
-        extra_storage_types=extra_storage_types)
+        extra_storage_types=extra_storage_types,
+        observation_dtype=observation_dtype)
     super(WrappedPrioritizedReplayBuffer, self).__init__(
         observation_shape,
         stack_size,
@@ -296,7 +297,8 @@ class WrappedPrioritizedReplayBuffer(
         update_horizon,
         gamma,
         wrapped_memory=memory,
-        extra_storage_types=extra_storage_types)
+        extra_storage_types=extra_storage_types,
+        observation_dtype=observation_dtype)
 
   def tf_set_priority(self, indices, priorities):
     """Sets the priorities for the given indices.
