@@ -15,7 +15,9 @@ Our design principles are:
 * _Flexible development_: Make it easy for new users to try out research ideas.
 * _Compact and reliable_: Provide implementations for a few, battle-tested
                           algorithms.
-* _Reproducible_: Facilitate reproducibility in results.
+* _Reproducible_: Facilitate reproducibility in results. In particular, our
+                  setup follows the recommendations given by
+                  [Machado et al. (2018)][machado].
 
 In the spirit of these principles, this first version focuses on supporting the
 state-of-the-art, single-GPU *Rainbow* agent ([Hessel et al., 2018][rainbow])
@@ -184,6 +186,10 @@ python -um tests.agents.rainbow.rainbow_agent_test
 [Bellemare et al., *The Arcade Learning Environment: An evaluation platform for
 general agents*. Journal of Artificial Intelligence Research, 2013.][ale]
 
+[Machado et al., *Revisiting the Arcade Learning Environment: Evaluation
+Protocols and Open Problems for General Agents*, Journal of Artificial
+Intelligence Research, 2018.][machado]
+
 [Hessel et al., *Rainbow: Combining Improvements in Deep Reinforcement Learning*.
 Proceedings of the AAAI Conference on Artificial Intelligence, 2018.][rainbow]
 
@@ -206,10 +212,11 @@ Dopamine, https://github.com/google/dopamine, 2018.
 
 
 
-[ale]: https://arxiv.org/abs/1207.4708
+[machado]: https://jair.org/index.php/jair/article/view/11182
+[ale]: https://jair.org/index.php/jair/article/view/10819
 [dqn]: https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
-[a3c]: https://arxiv.org/abs/1602.01783
+[a3c]: http://proceedings.mlr.press/v48/mniha16.html
 [prioritized_replay]: https://arxiv.org/abs/1511.05952
-[c51]: https://arxiv.org/abs/1707.06887
-[rainbow]: https://arxiv.org/abs/1710.02298
+[c51]: http://proceedings.mlr.press/v70/bellemare17a.html
+[rainbow]: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/17204/16680
 [iqn]: https://arxiv.org/abs/1806.06923

@@ -215,6 +215,6 @@ We provide a series of files for all 4 agents on all 60 games. These are all
     *  [IQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/iqn_checkpoints.tar.gz)
 
 [dqn]: https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
-[c51]: https://arxiv.org/abs/1707.06887
-[rainbow]: https://arxiv.org/abs/1710.02298
+[c51]: http://proceedings.mlr.press/v70/bellemare17a.html
+[rainbow]: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/17204/16680
 [iqn]: https://arxiv.org/abs/1806.06923
