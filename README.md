@@ -70,11 +70,14 @@ source dopamine-env/bin/activate
 This will create a directory called `dopamine-env` in which your virtual
 environment lives. The last command activates the environment.
 
-Then, install the dependencies to Dopamine:
+Then, install the dependencies to Dopamine. If you don't have access to a
+GPU, then replace `tensorflow-gpu` with `tensorflow` in the line below
+(see [Tensorflow instructions](https://www.tensorflow.org/install/install_linux)
+for details).
 
 ```
 sudo apt-get update && sudo apt-get install cmake zlib1g-dev
-pip install absl-py atari-py gin-config gym opencv-python tensorflow
+pip install absl-py atari-py gin-config gym opencv-python tensorflow-gpu
 ```
 
 During installation, you may safely ignore the following error message:
