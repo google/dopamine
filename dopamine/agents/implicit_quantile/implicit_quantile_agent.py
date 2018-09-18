@@ -47,6 +47,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
                num_tau_prime_samples=32,
                num_quantile_samples=32,
                quantile_embedding_dim=64,
+               double_dqn=False,
                summary_writer=None,
                summary_writing_frequency=500):
     """Initializes the agent and constructs the Graph.
@@ -65,6 +66,8 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
       num_quantile_samples: int, number of quantile samples for computing
         Q-values.
       quantile_embedding_dim: int, embedding dimension for the quantile input.
+      double_dqn: boolean, whether to perform double DQN style learning
+        as described in Van Hasselt et al.: https://arxiv.org/abs/1509.06461.
       summary_writer: SummaryWriter object for outputting training statistics.
         Summary writing disabled if set to None.
       summary_writing_frequency: int, frequency with which summaries will be
@@ -79,6 +82,8 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     self.num_quantile_samples = num_quantile_samples
     # quantile_embedding_dim = n above equation (4) in the paper.
     self.quantile_embedding_dim = quantile_embedding_dim
+    # option to perform double dqn.
+    self.double_dqn = double_dqn
 
     super(ImplicitQuantileAgent, self).__init__(
         sess=sess,
@@ -198,24 +203,13 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     self._replay_net_target_quantile_values = vals
 
     # Compute Q-values which are used for action selection for the next states
-    # in the replay buffer.
-    outputs_q = self.target_convnet(
-        self._replay.next_states, self.num_quantile_samples)
-    # Shape: (num_quantile_samples x batch_size) x num_actions.
-    target_quantile_values_q = outputs_q.quantile_values
-    # Shape: num_quantile_samples x batch_size x num_actions.
-    target_quantile_values_q = tf.reshape(target_quantile_values_q,
-                                          [self.num_quantile_samples,
-                                           self._replay.batch_size,
-                                           self.num_actions])
-    # Shape: batch_size x num_actions.
-    self._replay_net_target_q_values = tf.squeeze(tf.reduce_mean(
-        target_quantile_values_q, axis=0))
-
-    # Compute the argmax over target net Q-values using different quantile
-    # inputs.
-    outputs_action = self.target_convnet(self._replay.next_states,
-                                         self.num_quantile_samples)
+    # in the replay buffer. Compute the argmax over the Q-values.
+    if self.double_dqn:
+      outputs_action = self.online_convnet(self._replay.next_states,
+                                           self.num_quantile_samples)
+    else:
+      outputs_action = self.target_convnet(self._replay.next_states,
+                                           self.num_quantile_samples)
 
     # Shape: (num_quantile_samples x batch_size) x num_actions.
     target_quantile_values_action = outputs_action.quantile_values
@@ -225,9 +219,10 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
                                                 self._replay.batch_size,
                                                 self.num_actions])
     # Shape: batch_size x num_actions.
-    target_q_values_action = tf.squeeze(tf.reduce_mean(
+    self._replay_net_target_q_values = tf.squeeze(tf.reduce_mean(
         target_quantile_values_action, axis=0))
-    self._replay_next_qt_argmax = tf.argmax(target_q_values_action, axis=1)
+    self._replay_next_qt_argmax = tf.argmax(
+        self._replay_net_target_q_values, axis=1)
 
   def _build_target_quantile_values_op(self):
     """Build an op used as a target for return values at given quantiles.
