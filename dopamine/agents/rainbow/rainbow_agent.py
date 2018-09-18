@@ -72,7 +72,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
                tf_device='/cpu:*',
                use_staging=True,
                optimizer=tf.train.AdamOptimizer(
-                   learning_rate=0.00025, epsilon=0.0003125)):
+                   learning_rate=0.00025, epsilon=0.0003125),
+               summary_writer=None,
+               summary_writing_frequency=500):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -100,6 +102,10 @@ class RainbowAgent(dqn_agent.DQNAgent):
       use_staging: bool, when True use a staging area to prefetch the next
         training batch, speeding training up by about 30%.
       optimizer: `tf.train.Optimizer`, for training the value function.
+      summary_writer: SummaryWriter object for outputting training statistics.
+        Summary writing disabled if set to None.
+      summary_writing_frequency: int, frequency with which summaries will be
+        written. Lower values will result in slower training.
     """
     # We need this because some tools convert round floats into ints.
     vmax = float(vmax)
@@ -123,7 +129,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
         epsilon_decay_period=epsilon_decay_period,
         tf_device=tf_device,
         use_staging=use_staging,
-        optimizer=self.optimizer)
+        optimizer=self.optimizer,
+        summary_writer=summary_writer,
+        summary_writing_frequency=summary_writing_frequency)
 
   def _get_network_type(self):
     """Returns the type of the outputs of a value distribution network.
@@ -288,6 +296,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
       update_priorities_op = tf.no_op()
 
     with tf.control_dependencies([update_priorities_op]):
+      if self.summary_writer is not None:
+        with tf.variable_scope('Losses'):
+          tf.summary.scalar('CrossEntropyLoss', tf.reduce_mean(loss))
       # Schaul et al. reports a slightly different rule, where 1/N is also
       # exponentiated by beta. Not doing so seems more reasonable, and did not
       # impact performance in our experiments.

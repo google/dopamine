@@ -38,7 +38,8 @@ class TrainTest(tf.test.TestCase):
     FLAGS.agent_name = 'dqn'
     with mock.patch.object(train, 'dqn_agent') as mock_dqn_agent:
 
-      def mock_fn(unused_sess, num_actions):
+      def mock_fn(unused_sess, num_actions, summary_writer):
+        del summary_writer
         return num_actions * 10
 
       mock_dqn_agent.DQNAgent.side_effect = mock_fn
@@ -50,7 +51,8 @@ class TrainTest(tf.test.TestCase):
     FLAGS.agent_name = 'rainbow'
     with mock.patch.object(train, 'rainbow_agent') as mock_rainbow_agent:
 
-      def mock_fn(unused_sess, num_actions):
+      def mock_fn(unused_sess, num_actions, summary_writer):
+        del summary_writer
         return num_actions * 10
 
       mock_rainbow_agent.RainbowAgent.side_effect = mock_fn

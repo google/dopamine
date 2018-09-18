@@ -160,7 +160,8 @@ class Runner(object):
     # Set up a session and initialize variables.
     self._sess = tf.Session('',
                             config=tf.ConfigProto(allow_soft_placement=True))
-    self._agent = create_agent_fn(self._sess, self._environment)
+    self._agent = create_agent_fn(self._sess, self._environment,
+                                  summary_writer=self._summary_writer)
     self._sess.run(tf.global_variables_initializer())
 
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)

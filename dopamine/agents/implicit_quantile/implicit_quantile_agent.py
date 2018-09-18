@@ -46,7 +46,9 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
                num_tau_samples=32,
                num_tau_prime_samples=32,
                num_quantile_samples=32,
-               quantile_embedding_dim=64):
+               quantile_embedding_dim=64,
+               summary_writer=None,
+               summary_writing_frequency=500):
     """Initializes the agent and constructs the Graph.
 
     Most of this constructor's parameters are IQN-specific hyperparameters whose
@@ -63,6 +65,10 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
       num_quantile_samples: int, number of quantile samples for computing
         Q-values.
       quantile_embedding_dim: int, embedding dimension for the quantile input.
+      summary_writer: SummaryWriter object for outputting training statistics.
+        Summary writing disabled if set to None.
+      summary_writing_frequency: int, frequency with which summaries will be
+        written. Lower values will result in slower training.
     """
     self.kappa = kappa
     # num_tau_samples = N below equation (3) in the paper.
@@ -76,7 +82,9 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
 
     super(ImplicitQuantileAgent, self).__init__(
         sess=sess,
-        num_actions=num_actions)
+        num_actions=num_actions,
+        summary_writer=summary_writer,
+        summary_writing_frequency=summary_writing_frequency)
 
   def _get_network_type(self):
     """Returns the type of the outputs of the implicit quantile network.
@@ -349,4 +357,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     # TODO(kumasaurabh): Add prioritized replay functionality here.
     update_priorities_op = tf.no_op()
     with tf.control_dependencies([update_priorities_op]):
+      if self.summary_writer is not None:
+        with tf.variable_scope('Losses'):
+          tf.summary.scalar('QuantileLoss', tf.reduce_mean(loss))
       return self.optimizer.minimize(tf.reduce_mean(loss)), tf.reduce_mean(loss)

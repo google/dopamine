@@ -31,6 +31,10 @@ from dopamine.atari import run_experiment
 import tensorflow as tf
 
 
+flags.DEFINE_bool('debug_mode', False,
+                  'If set to true, the agent will output in-episode statistics '
+                  'to Tensorboard. Disabled by default as this results in '
+                  'slower training.')
 flags.DEFINE_string('agent_name', None,
                     'Name of the agent. Must be one of '
                     '(dqn, rainbow, implicit_quantile)')
@@ -54,12 +58,14 @@ FLAGS = flags.FLAGS
 
 
 
-def create_agent(sess, environment):
+def create_agent(sess, environment, summary_writer=None):
   """Creates a DQN agent.
 
   Args:
     sess: A `tf.Session` object for running associated ops.
     environment: An Atari 2600 Gym environment.
+    summary_writer: A Tensorflow summary writer to pass to the agent
+      for in-agent training statistics in Tensorboard.
 
   Returns:
     agent: An RL agent.
@@ -67,14 +73,19 @@ def create_agent(sess, environment):
   Raises:
     ValueError: If `agent_name` is not in supported list.
   """
+  if not FLAGS.debug_mode:
+    summary_writer = None
   if FLAGS.agent_name == 'dqn':
-    return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n)
+    return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n,
+                              summary_writer=summary_writer)
   elif FLAGS.agent_name == 'rainbow':
     return rainbow_agent.RainbowAgent(
-        sess, num_actions=environment.action_space.n)
+        sess, num_actions=environment.action_space.n,
+        summary_writer=summary_writer)
   elif FLAGS.agent_name == 'implicit_quantile':
     return implicit_quantile_agent.ImplicitQuantileAgent(
-        sess, num_actions=environment.action_space.n)
+        sess, num_actions=environment.action_space.n,
+        summary_writer=summary_writer)
   else:
     raise ValueError('Unknown agent: {}'.format(FLAGS.agent_name))
 

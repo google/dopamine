@@ -85,7 +85,9 @@ class DQNAgent(object):
                    decay=0.95,
                    momentum=0.0,
                    epsilon=0.00001,
-                   centered=True)):
+                   centered=True),
+               summary_writer=None,
+               summary_writing_frequency=500):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -111,6 +113,10 @@ class DQNAgent(object):
       max_tf_checkpoints_to_keep: int, the number of TensorFlow checkpoints to
         keep.
       optimizer: `tf.train.Optimizer`, for training the value function.
+      summary_writer: SummaryWriter object for outputting training statistics.
+        Summary writing disabled if set to None.
+      summary_writing_frequency: int, frequency with which summaries will be
+        written. Lower values will result in slower training.
     """
 
     tf.logging.info('Creating %s agent with the following parameters:',
@@ -141,6 +147,8 @@ class DQNAgent(object):
     self.eval_mode = False
     self.training_steps = 0
     self.optimizer = optimizer
+    self.summary_writer = summary_writer
+    self.summary_writing_frequency = summary_writing_frequency
 
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
@@ -155,6 +163,9 @@ class DQNAgent(object):
       self._train_op = self._build_train_op()
       self._sync_qt_ops = self._build_sync_op()
 
+    if self.summary_writer is not None:
+      # All tf.summaries should have been defined prior to running this.
+      self._merged_summaries = tf.summary.merge_all()
     self._sess = sess
     self._saver = tf.train.Saver(max_to_keep=max_tf_checkpoints_to_keep)
 
@@ -269,6 +280,9 @@ class DQNAgent(object):
     target = tf.stop_gradient(self._build_target_q_op())
     loss = tf.losses.huber_loss(
         target, replay_chosen_q, reduction=tf.losses.Reduction.NONE)
+    if self.summary_writer is not None:
+      with tf.variable_scope('Losses'):
+        tf.summary.scalar('HuberLoss', tf.reduce_mean(loss))
     return self.optimizer.minimize(tf.reduce_mean(loss))
 
   def _build_sync_op(self):
@@ -377,6 +391,11 @@ class DQNAgent(object):
     if self._replay.memory.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sess.run(self._train_op)
+        if (self.summary_writer is not None and
+            self.training_steps > 0 and
+            self.training_steps % self.summary_writing_frequency == 0):
+          summary = self._sess.run(self._merged_summaries)
+          self.summary_writer.add_summary(summary, self.training_steps)
 
       if self.training_steps % self.target_update_period == 0:
         self._sess.run(self._sync_qt_ops)
