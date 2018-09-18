@@ -36,6 +36,14 @@ For additional details, please see our
 
 This is not an official Google product.
 
+## What's new
+*  **18/09/2018:** Added support for reporting in-iteration losses directly from
+   the agent to Tensorboard.
+   *  Include the flag `--debug_mode` in your command line to enable it.
+   *  Control frequency of writes with the `summary_writing_frequency`
+      agent constructor parameter (defaults to `500`).
+*  **27/08/2018:** Dopamine launched!
+
 ## Instructions
 ### Install via source
 Installing from source allows you to modify the agents and experiments as
