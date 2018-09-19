@@ -37,6 +37,9 @@ For additional details, please see our
 This is not an official Google product.
 
 ## What's new
+*  **18/09/2018:** Added support for double-DQN style updates for the
+   `ImplicitQuantileAgent`.
+   *  Can be enabled via the `double_dqn` constructor parameter.
 *  **18/09/2018:** Added support for reporting in-iteration losses directly from
    the agent to Tensorboard.
    *  Include the flag `--debug_mode` in your command line to enable it.
