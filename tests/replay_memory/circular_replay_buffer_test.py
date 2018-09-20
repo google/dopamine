@@ -151,6 +151,89 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         update_horizon=5,
         gamma=1.0)
 
+  def testGetRangeInvalidIndexOrder(self):
+    replay_capacity = 10
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=replay_capacity,
+        batch_size=BATCH_SIZE,
+        update_horizon=5,
+        gamma=1.0)
+    with self.assertRaisesRegexp(AssertionError,
+                                 'end_index must be larger than start_index'):
+      memory.get_range([], 2, 1)
+    with self.assertRaises(AssertionError):
+      # Negative end_index.
+      memory.get_range([], 1, -1)
+    with self.assertRaises(AssertionError):
+      # Start index beyond replay capacity.
+      memory.get_range([], replay_capacity, replay_capacity + 1)
+    with self.assertRaisesRegexp(AssertionError,
+                                 'Index 1 has not been added.'):
+      memory.get_range([], 1, 2)
+
+  def testGetRangeNoWraparound(self):
+    # Test the get_range function when the indices do not wrap around the
+    # circular buffer. In other words, start_index < end_index.
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=10,
+        batch_size=BATCH_SIZE,
+        update_horizon=5,
+        gamma=1.0)
+    for _ in range(10):
+      memory.add(
+          np.full((OBSERVATION_SHAPE, OBSERVATION_SHAPE), 0, dtype=OBS_DTYPE),
+          0, 2.0, 0)
+    # The constructed `array` will be:
+    # array([[ 1.,  1.,  1.,  1.,  1.],
+    #        [ 2.,  2.,  2.,  2.,  2.],
+    #        [ 3.,  3.,  3.,  3.,  3.],
+    #        [ 4.,  4.,  4.,  4.,  4.],
+    #        [ 5.,  5.,  5.,  5.,  5.],
+    #        [ 6.,  6.,  6.,  6.,  6.],
+    #        [ 7.,  7.,  7.,  7.,  7.],
+    #        [ 8.,  8.,  8.,  8.,  8.],
+    #        [ 9.,  9.,  9.,  9.,  9.],
+    #        [10., 10., 10., 10., 10.]])
+    array = np.arange(10).reshape(10, 1) + np.ones(5)
+    sliced_array = memory.get_range(array, 2, 5)
+    self.assertAllEqual(sliced_array, array[2:5])
+
+  def testGetRangeWithWraparound(self):
+    # Test the get_range function when the indices wrap around the circular
+    # buffer. In other words, start_index > end_index.
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=10,
+        batch_size=BATCH_SIZE,
+        update_horizon=5,
+        gamma=1.0)
+    for _ in range(10):
+      memory.add(
+          np.full((OBSERVATION_SHAPE, OBSERVATION_SHAPE), 0, dtype=OBS_DTYPE),
+          0, 2.0, 0)
+    # The constructed `array` will be:
+    # array([[ 1.,  1.,  1.,  1.,  1.],
+    #        [ 2.,  2.,  2.,  2.,  2.],
+    #        [ 3.,  3.,  3.,  3.,  3.],
+    #        [ 4.,  4.,  4.,  4.,  4.],
+    #        [ 5.,  5.,  5.,  5.,  5.],
+    #        [ 6.,  6.,  6.,  6.,  6.],
+    #        [ 7.,  7.,  7.,  7.,  7.],
+    #        [ 8.,  8.,  8.,  8.,  8.],
+    #        [ 9.,  9.,  9.,  9.,  9.],
+    #        [10., 10., 10., 10., 10.]])
+    array = np.arange(10).reshape(10, 1) + np.ones(5)
+    sliced_array = memory.get_range(array, 8, 12)
+    # We roll by two, since start_index == 8 and replay_capacity == 10, so the
+    # resulting indices used will be [8, 9, 0, 1].
+    rolled_array = np.roll(array, 2, axis=0)
+    self.assertAllEqual(sliced_array, rolled_array[:4])
+
   def testNSteprewardum(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
