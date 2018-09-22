@@ -329,7 +329,8 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
 
     # Reshape replay_quantiles to batch_size x num_tau_samples x 1
     replay_quantiles = tf.reshape(
-        self._replay_net_quantiles, [batch_size, self.num_tau_samples, 1])
+        self._replay_net_quantiles, [self.num_tau_samples, batch_size, 1])
+    replay_quantiles = tf.transpose(replay_quantiles, [1, 0, 2])
 
     # Tile by num_tau_prime_samples along a new dimension. Shape is now
     # batch_size x num_tau_prime_samples x num_tau_samples x 1.
@@ -338,10 +339,8 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     replay_quantiles = tf.to_float(tf.tile(
         replay_quantiles[:, None, :, :], [1, self.num_tau_prime_samples, 1, 1]))
     # Shape: batch_size x num_tau_prime_samples x num_tau_samples x 1.
-    quantile_huber_loss = (
-        tf.abs(replay_quantiles - tf.stop_gradient(
-            tf.to_float(bellman_errors < 0))) * huber_loss) / self.kappa
-
+    quantile_huber_loss = (tf.abs(replay_quantiles - tf.stop_gradient(
+        tf.to_float(bellman_errors < 0))) * huber_loss) / self.kappa
     # Sum over current quantile value (num_tau_samples) dimension,
     # average over target quantile value (num_tau_prime_samples) dimension.
     # Shape: batch_size x num_tau_prime_samples x 1.
