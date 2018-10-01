@@ -63,7 +63,7 @@ def load_baselines(base_dir, verbose=False):
       if not tf.gfile.Exists(game_data_file):
         if verbose:
           # pylint: disable=superfluous-parens
-          print('Unable to load data for agnet {} on game {}'.format(agent,
+          print('Unable to load data for agent {} on game {}'.format(agent,
                                                                      game))
           # pylint: enable=superfluous-parens
         continue
@@ -71,6 +71,8 @@ def load_baselines(base_dir, verbose=False):
         if sys.version_info.major >= 3:
           # pylint: disable=unexpected-keyword-arg
           single_agent_data = pickle.load(f, encoding='latin1')
+          for label in single_agent_data.columns:
+              single_agent_data[label]=pd.to_numeric(single_agent_data[label],errors='ignore')
           # pylint: enable=unexpected-keyword-arg
         else:
           single_agent_data = pickle.load(f)
