@@ -37,6 +37,8 @@ For additional details, please see our
 This is not an official Google product.
 
 ## What's new
+*  **16/10/2018:** Fixed a subtle bug in the IQN implementation and upated
+   the colab tools, the JSON files, and all the downloadable data.
 *  **18/09/2018:** Added support for double-DQN style updates for the
    `ImplicitQuantileAgent`.
    *  Can be enabled via the `double_dqn` constructor parameter.

@@ -9,7 +9,7 @@
     {
       "filter": {
         "field": "Agent",
-        "oneOf": ["DQN", "C51", "RAINBOW", "IMPLICIT_QUANTILE"]
+        "oneOf": ["DQN", "C51", "RAINBOW", "IQN"]
       }
     }
   ],
