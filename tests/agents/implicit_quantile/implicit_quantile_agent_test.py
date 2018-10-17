@@ -25,6 +25,11 @@ from dopamine.agents.implicit_quantile import implicit_quantile_agent
 import numpy as np
 import tensorflow as tf
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 slim = tf.contrib.slim
 
 
