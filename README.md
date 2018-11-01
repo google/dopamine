@@ -37,6 +37,8 @@ For additional details, please see our
 This is not an official Google product.
 
 ## What's new
+*  **01/11/2018:** Download links for each individual checkpoint, to avoid
+   having to download all of the checkpoints.
 *  **29/10/2018:** Graph definitions now show up in Tensorboard.
 *  **16/10/2018:** Fixed a subtle bug in the IQN implementation and upated
    the colab tools, the JSON files, and all the downloadable data.

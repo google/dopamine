@@ -208,7 +208,14 @@ We provide a series of files for all 4 agents on all 60 games. These are all
 </div>
 
 *   The TensorFlow checkpoint files for 5 independent runs of the 4 agents on
-    all 60 games are available below. **Note**: these files are quite large, over 15Gb each.
+    all 60 games are available. The format for each of the files is:
+    `https://storage.cloud.google.com/download-dopamine-rl/lucid/${AGENT}/${GAME}/${RUN}/tf_ckpt-199.${SUFFIX}`,
+    where:
+    *  `AGENT` can be "dqn", "c51", "rainbow", or "iqn".
+    *  `GAME` can be any of the 60 games.
+    *  `RUN` can be 1, 2, 3, 4, or 5
+    *  `SUFFIX` can be one of `data-00000-of-00001`, `index`, or `meta`.
+*   You can also download all of these as a single `.tar.gz` file. **Note**: these files are quite large, over 15Gb each.
     *  [DQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/dqn_checkpoints.tar.gz)
     *  [C51 checkpoints](https://storage.cloud.google.com/download-dopamine-rl/c51_checkpoints.tar.gz)
     *  [Rainbow checkpoints](https://storage.cloud.google.com/download-dopamine-rl/rainbow_checkpoints.tar.gz)
