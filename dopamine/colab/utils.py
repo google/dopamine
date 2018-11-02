@@ -1,3 +1,19 @@
+# coding=utf-8
+# Copyright 2018 The Dopamine Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# IGNORE_COPYRIGHT: This is Google-owned code.
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +29,7 @@
 # limitations under the License.
 """This provides utilities for dealing with Dopamine data.
 
-See: dopamine/common/logger.py .
+See: dopamine//common/logger.py .
 """
 
 import itertools
@@ -63,7 +79,7 @@ def load_baselines(base_dir, verbose=False):
       if not tf.gfile.Exists(game_data_file):
         if verbose:
           # pylint: disable=superfluous-parens
-          print('Unable to load data for agent {} on game {}'.format(agent,
+          print('Unable to load data for agnet {} on game {}'.format(agent,
                                                                      game))
           # pylint: enable=superfluous-parens
         continue

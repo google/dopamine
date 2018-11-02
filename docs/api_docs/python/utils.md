@@ -7,7 +7,7 @@
 
 This provides utilities for dealing with Dopamine data.
 
-See: dopamine/common/logger.py .
+See: dopamine//common/logger.py .
 
 ## Functions
 
