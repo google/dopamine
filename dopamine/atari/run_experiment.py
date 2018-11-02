@@ -125,7 +125,7 @@ class Runner(object):
         Atari 2600 Gym environment, and returns an agent.
       create_environment_fn: A function which receives a game name and creates
         an Atari 2600 Gym environment.
-      game_name: str, name of the Atari 2600 domain to run (required).
+      game_name: str, name of the Atari 2600 domain to run.
       sticky_actions: bool, whether to enable sticky actions in the environment.
       checkpoint_file_prefix: str, the prefix to use for checkpoint files.
       logging_file_prefix: str, prefix to use for the log files.
@@ -145,7 +145,8 @@ class Runner(object):
     - Reload from the latest checkpoint, if available, and initialize the
       Checkpointer object.
     """
-    assert base_dir and game_name is not None
+    assert base_dir is not None
+    assert game_name is not None
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations
@@ -162,6 +163,7 @@ class Runner(object):
                             config=tf.ConfigProto(allow_soft_placement=True))
     self._agent = create_agent_fn(self._sess, self._environment,
                                   summary_writer=self._summary_writer)
+    self._summary_writer.add_graph(graph=tf.get_default_graph())
     self._sess.run(tf.global_variables_initializer())
 
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)

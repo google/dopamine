@@ -58,7 +58,7 @@ def load_baselines(base_dir, verbose=False):
   """
   experimental_data = {}
   for game in ALL_GAMES:
-    for agent in ['dqn', 'c51', 'rainbow', 'implicit_quantile']:
+    for agent in ['dqn', 'c51', 'rainbow', 'iqn']:
       game_data_file = os.path.join(base_dir, agent, '{}.pkl'.format(game))
       if not tf.gfile.Exists(game_data_file):
         if verbose:

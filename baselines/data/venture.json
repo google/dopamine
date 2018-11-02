@@ -14926,4978 +14926,4978 @@
   },
   {
     "Iteration":0,
-    "Value":2.91262135922,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":3.33333333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":1,
-    "Value":18.9473684211,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":16.9811320755,
+    "Agent":"IQN"
   },
   {
     "Iteration":2,
-    "Value":13.1313131313,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":15.9574468085,
+    "Agent":"IQN"
   },
   {
     "Iteration":3,
-    "Value":10.3092783505,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":5.26315789474,
+    "Agent":"IQN"
   },
   {
     "Iteration":4,
-    "Value":4.30107526882,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":5,
-    "Value":9.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":6,
-    "Value":9.78260869565,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":7,
-    "Value":10.8108108108,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":8,
-    "Value":5.88235294118,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":9,
-    "Value":19.387755102,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":10,
-    "Value":26.0416666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":11,
-    "Value":10.101010101,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":12,
-    "Value":10.8695652174,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":13,
-    "Value":12.8712871287,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":14,
-    "Value":15.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":15,
-    "Value":9.90099009901,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":16,
-    "Value":4.21052631579,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":17,
-    "Value":13.2653061224,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":18,
-    "Value":6.52173913043,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":19,
-    "Value":14.5833333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":20,
-    "Value":8.33333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":21,
-    "Value":15.6626506024,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":22,
-    "Value":17.2413793103,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":23,
-    "Value":13.0952380952,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":24,
-    "Value":20.6896551724,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":25,
-    "Value":19.3548387097,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":26,
-    "Value":12.987012987,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":27,
-    "Value":12.2222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":28,
-    "Value":17.2413793103,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":29,
-    "Value":8.98876404494,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":30,
-    "Value":15.1162790698,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":31,
-    "Value":7.05882352941,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":32,
-    "Value":15.625,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":33,
-    "Value":2.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":34,
-    "Value":7.77777777778,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":35,
-    "Value":12.9032258065,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":36,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":37,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":38,
-    "Value":12.0879120879,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":39,
-    "Value":4.54545454545,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":40,
-    "Value":21.686746988,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":41,
-    "Value":10.1265822785,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":42,
-    "Value":8.64197530864,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":43,
-    "Value":6.02409638554,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":44,
-    "Value":8.10810810811,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":45,
-    "Value":2.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":46,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":47,
-    "Value":2.24719101124,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":48,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":49,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":50,
-    "Value":5.31914893617,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":51,
-    "Value":6.59340659341,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":52,
-    "Value":10.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":53,
-    "Value":3.52941176471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":54,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":55,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":56,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":57,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":58,
-    "Value":8.04597701149,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":59,
-    "Value":6.81818181818,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":60,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":61,
-    "Value":2.15053763441,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":62,
-    "Value":5.55555555556,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":63,
-    "Value":10.4166666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":64,
-    "Value":2.40963855422,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":65,
-    "Value":2.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":66,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":67,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":68,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":69,
-    "Value":6.31578947368,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":70,
-    "Value":7.36842105263,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":71,
-    "Value":5.81395348837,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":72,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":73,
-    "Value":2.53164556962,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":74,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":75,
-    "Value":3.52941176471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":76,
-    "Value":3.84615384615,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":77,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":78,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":79,
-    "Value":10.4651162791,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":80,
-    "Value":3.7037037037,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":81,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":82,
-    "Value":10.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":83,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":84,
-    "Value":2.24719101124,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":85,
-    "Value":2.43902439024,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":86,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":87,
-    "Value":2.63157894737,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":88,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":89,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":90,
-    "Value":5.12820512821,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":91,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":92,
-    "Value":6.09756097561,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":93,
-    "Value":7.31707317073,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":94,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":95,
-    "Value":7.14285714286,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":96,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":97,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":98,
-    "Value":4.93827160494,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":99,
-    "Value":2.63157894737,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":100,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":101,
-    "Value":6.32911392405,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":102,
-    "Value":4.59770114943,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":103,
-    "Value":5.26315789474,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":104,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":105,
-    "Value":2.12765957447,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":106,
-    "Value":3.44827586207,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":107,
-    "Value":4.87804878049,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":108,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":109,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":110,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":111,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":112,
-    "Value":5.15463917526,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":113,
-    "Value":5.37634408602,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":114,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":115,
-    "Value":7.86516853933,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":116,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":117,
-    "Value":3.2967032967,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":118,
-    "Value":4.80769230769,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":119,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":120,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":121,
-    "Value":3.33333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":122,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":123,
-    "Value":3.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":124,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":125,
-    "Value":6.45161290323,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":126,
-    "Value":3.8961038961,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":127,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":128,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":129,
-    "Value":2.35294117647,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":130,
-    "Value":4.81927710843,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":131,
-    "Value":2.24719101124,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":132,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":133,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":134,
-    "Value":2.32558139535,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":135,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":136,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":137,
-    "Value":2.15053763441,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":138,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":139,
-    "Value":7.22891566265,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":140,
-    "Value":9.47368421053,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":141,
-    "Value":7.07070707071,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":142,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":143,
-    "Value":8.79120879121,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":144,
     "Value":5.68181818182,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":145,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":146,
-    "Value":2.32558139535,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":147,
-    "Value":2.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":148,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":149,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":150,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":151,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":152,
-    "Value":4.12371134021,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":153,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":154,
-    "Value":4.3956043956,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":155,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":156,
-    "Value":4.3956043956,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":157,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":158,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":159,
-    "Value":4.59770114943,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":160,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":161,
-    "Value":6.18556701031,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":162,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":163,
-    "Value":6.45161290323,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":164,
-    "Value":7.86516853933,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":165,
-    "Value":6.52173913043,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":166,
-    "Value":8.88888888889,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":167,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":168,
-    "Value":8.16326530612,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":169,
-    "Value":4.49438202247,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":170,
-    "Value":2.10526315789,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":171,
-    "Value":6.52173913043,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":172,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":173,
-    "Value":4.7619047619,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":174,
-    "Value":19.3181818182,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":175,
-    "Value":44.2307692308,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":176,
-    "Value":250.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":177,
-    "Value":365.909090909,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":178,
-    "Value":532.773109244,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":179,
-    "Value":721.917808219,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":180,
-    "Value":950.34965035,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":181,
-    "Value":1115.44117647,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":182,
-    "Value":1208.96551724,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":183,
-    "Value":1153.125,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":184,
-    "Value":1187.76978417,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":185,
-    "Value":1189.55223881,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":186,
-    "Value":1191.60839161,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":187,
-    "Value":1232.3943662,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":188,
-    "Value":1192.53731343,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":189,
-    "Value":1087.78625954,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":190,
-    "Value":1174.26470588,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":191,
-    "Value":1216.05839416,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":192,
-    "Value":1300.74074074,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":193,
-    "Value":1306.42857143,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":194,
-    "Value":1320.56737589,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":195,
-    "Value":1282.85714286,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":196,
-    "Value":1314.81481481,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":197,
-    "Value":1322.69503546,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":198,
-    "Value":1311.26760563,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":0,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":1,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":2,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":3,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":4,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Agent":"IQN"
   },
   {
     "Iteration":5,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":2.27272727273,
+    "Agent":"IQN"
   },
   {
     "Iteration":6,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":7,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":8,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":9,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":10,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":11,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":12,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":13,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":14,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":15,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":16,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":17,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":18,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":19,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":20,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":21,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":22,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":23,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":24,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":25,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":26,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":27,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":28,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":29,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":30,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":31,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":32,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":33,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":34,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":35,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":36,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":37,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":38,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":39,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":40,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":41,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":42,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":43,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":44,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":45,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":46,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":47,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":48,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":49,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":50,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":51,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":52,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":53,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":54,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":55,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":56,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":57,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":58,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":59,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":60,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":61,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":62,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":63,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":64,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":65,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":66,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":67,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":68,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":69,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":70,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":71,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":72,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":73,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":74,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":75,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":76,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":77,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":78,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":79,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":80,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":81,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":82,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":83,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":84,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":85,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":86,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":87,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":88,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":89,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":90,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":91,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":92,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":93,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":94,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":95,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":96,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":97,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":98,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":99,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":100,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":101,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":102,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":103,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":104,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":105,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":106,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":107,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":108,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":109,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":110,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":111,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":112,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":113,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":114,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":115,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":116,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":117,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":118,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":119,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":120,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":121,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":122,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":123,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":124,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":125,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":126,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":127,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":128,
-    "Value":1.7094017094,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":129,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":130,
-    "Value":3.47826086957,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":131,
-    "Value":2.85714285714,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":132,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":133,
-    "Value":5.60747663551,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":134,
     "Value":2.08333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":135,
-    "Value":3.22580645161,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":136,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":137,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":138,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":139,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":140,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":141,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":142,
-    "Value":4.03225806452,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":143,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":144,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":145,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":146,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":147,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":148,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":149,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":150,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":151,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":152,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":153,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":154,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":155,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":156,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":157,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":158,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":159,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":160,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":161,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":162,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":163,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":164,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":165,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":166,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":167,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":168,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":169,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":170,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":171,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":172,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":173,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":174,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":175,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":176,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":177,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":178,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":179,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":180,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":181,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":182,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":183,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":184,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":185,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":186,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":187,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":188,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":189,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":190,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":191,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":192,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":193,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":194,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":195,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":196,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":197,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":198,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":0,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":1,
-    "Value":9.00900900901,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":2,
-    "Value":42.4528301887,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":3,
-    "Value":6.06060606061,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":4,
-    "Value":4.70588235294,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":5,
-    "Value":4.25531914894,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":6,
-    "Value":5.81395348837,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Agent":"IQN"
   },
   {
     "Iteration":7,
-    "Value":4.21052631579,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":17.3913043478,
+    "Agent":"IQN"
   },
   {
     "Iteration":8,
-    "Value":15.7894736842,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":9,
-    "Value":15.7894736842,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":10,
-    "Value":11.1111111111,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":11,
-    "Value":2.32558139535,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":12,
-    "Value":15.4761904762,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":13,
-    "Value":22.3529411765,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":14,
-    "Value":8.04597701149,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":15,
-    "Value":7.92079207921,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":16,
-    "Value":12.3595505618,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":17,
-    "Value":10.1123595506,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":18,
-    "Value":7.40740740741,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":19,
-    "Value":32.9268292683,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":20,
-    "Value":5.26315789474,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":21,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":22,
-    "Value":13.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":23,
-    "Value":2.24719101124,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":24,
-    "Value":8.88888888889,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":25,
-    "Value":12.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":26,
-    "Value":16.6666666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":27,
-    "Value":19.2771084337,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":28,
-    "Value":14.1176470588,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":29,
-    "Value":6.66666666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":30,
-    "Value":7.60869565217,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":31,
-    "Value":16.3043478261,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":32,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":33,
-    "Value":20.8333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":34,
-    "Value":5.82524271845,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":35,
-    "Value":14.1176470588,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":36,
-    "Value":12.9411764706,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":37,
-    "Value":13.829787234,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":38,
-    "Value":8.42105263158,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":39,
-    "Value":5.49450549451,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":40,
-    "Value":11.3924050633,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":41,
-    "Value":29.8850574713,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":42,
-    "Value":18.3908045977,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":43,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":44,
-    "Value":8.13953488372,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":45,
-    "Value":6.17283950617,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":46,
-    "Value":5.95238095238,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":47,
-    "Value":14.9425287356,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":48,
-    "Value":8.04597701149,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":49,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":50,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":51,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":52,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":53,
-    "Value":6.32911392405,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":54,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":55,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":56,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":57,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":58,
-    "Value":2.10526315789,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":59,
-    "Value":4.87804878049,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":60,
-    "Value":10.2272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":61,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":62,
-    "Value":7.60869565217,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":63,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":64,
-    "Value":7.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":65,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":66,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":67,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":68,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":69,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":70,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":71,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":72,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":73,
-    "Value":6.06060606061,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":74,
-    "Value":6.31578947368,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":75,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":76,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":77,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":78,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":79,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":80,
-    "Value":6.59340659341,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":81,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":82,
-    "Value":6.41025641026,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":83,
-    "Value":2.63157894737,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":84,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":85,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":86,
-    "Value":5.06329113924,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":87,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":88,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":89,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":90,
-    "Value":3.94736842105,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":91,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":92,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":93,
-    "Value":5.31914893617,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":94,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":95,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":96,
-    "Value":4.25531914894,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":97,
-    "Value":2.0618556701,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":98,
-    "Value":4.44444444444,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":99,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":100,
-    "Value":2.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":101,
-    "Value":2.7397260274,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":102,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":103,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":104,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":105,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":106,
-    "Value":5.31914893617,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":107,
-    "Value":2.53164556962,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":108,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":109,
-    "Value":7.14285714286,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":110,
-    "Value":4.87804878049,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":111,
-    "Value":2.35294117647,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":112,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":113,
-    "Value":4.05405405405,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":114,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":115,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":116,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":117,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":118,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":119,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":120,
-    "Value":3.9603960396,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":121,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":122,
-    "Value":9.78260869565,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":123,
-    "Value":6.25,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":124,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":125,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":126,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":127,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":128,
-    "Value":1.92307692308,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":129,
-    "Value":3.40909090909,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":130,
-    "Value":9.67741935484,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":131,
-    "Value":9.09090909091,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":132,
-    "Value":3.37078651685,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":133,
-    "Value":3.1914893617,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":134,
-    "Value":7.29166666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":135,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":136,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":137,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":138,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":139,
-    "Value":9.52380952381,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":140,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":141,
-    "Value":2.7027027027,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":142,
-    "Value":5.19480519481,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":143,
-    "Value":2.32558139535,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":144,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":145,
-    "Value":3.0612244898,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":146,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":147,
-    "Value":3.09278350515,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":148,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":149,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":150,
-    "Value":3.22580645161,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":151,
-    "Value":2.40963855422,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":152,
-    "Value":13.3333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":153,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":154,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":155,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":156,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":157,
-    "Value":2.38095238095,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":158,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":159,
-    "Value":2.66666666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":160,
-    "Value":2.43902439024,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":161,
-    "Value":5.95238095238,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":162,
-    "Value":9.57446808511,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":163,
-    "Value":8.60215053763,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":164,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":165,
-    "Value":3.61445783133,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":166,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":167,
-    "Value":2.5,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":168,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":169,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":170,
-    "Value":3.15789473684,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":171,
-    "Value":9.78260869565,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":172,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":173,
-    "Value":3.33333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":174,
-    "Value":2.15053763441,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":175,
-    "Value":2.40963855422,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":176,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":177,
-    "Value":2.53164556962,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":178,
-    "Value":2.27272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":179,
-    "Value":2.17391304348,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":180,
-    "Value":7.14285714286,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":181,
-    "Value":4.81927710843,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":182,
-    "Value":2.32558139535,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":183,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":184,
-    "Value":8.04597701149,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":185,
-    "Value":4.81927710843,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":186,
-    "Value":2.1978021978,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":187,
-    "Value":4.81927710843,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":188,
-    "Value":2.29885057471,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":189,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":190,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":191,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":192,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":193,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":194,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":195,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":196,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":197,
-    "Value":3.73831775701,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":198,
-    "Value":4.59770114943,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":0,
-    "Value":1.7094017094,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":1,
-    "Value":26.1682242991,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":2,
-    "Value":12.1212121212,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":3,
-    "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":4,
-    "Value":3.48837209302,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":5,
-    "Value":2.0202020202,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":6,
-    "Value":18.085106383,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":7,
-    "Value":8.69565217391,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":8,
-    "Value":18.1818181818,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":9,
-    "Value":15.2173913043,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":10,
-    "Value":14.9425287356,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":11,
-    "Value":11.3636363636,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":12,
-    "Value":34.7826086957,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":13,
-    "Value":18.6046511628,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":14,
-    "Value":32.1428571429,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":15,
-    "Value":34.0206185567,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":16,
-    "Value":13.0434782609,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":17,
-    "Value":22.7272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":18,
-    "Value":13.1313131313,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":19,
-    "Value":21.8390804598,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":20,
-    "Value":34.0206185567,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":21,
-    "Value":26.5957446809,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":22,
-    "Value":22.619047619,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":23,
-    "Value":33.3333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":24,
-    "Value":21.6494845361,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":25,
-    "Value":47.311827957,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":26,
-    "Value":29.347826087,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":27,
-    "Value":43.2692307692,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":28,
-    "Value":37.3626373626,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":29,
-    "Value":35.8695652174,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":30,
-    "Value":22.6804123711,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":31,
-    "Value":34.5238095238,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":32,
-    "Value":21.0,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":33,
-    "Value":15.5555555556,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":34,
-    "Value":27.7777777778,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":35,
-    "Value":33.3333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":36,
-    "Value":21.4285714286,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":37,
-    "Value":33.3333333333,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":38,
-    "Value":35.2272727273,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":39,
-    "Value":28.2608695652,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":40,
-    "Value":34.5238095238,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":41,
-    "Value":35.4166666667,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":42,
-    "Value":25.7731958763,
-    "Agent":"IMPLICIT_QUANTILE"
-  },
-  {
-    "Iteration":43,
     "Value":22.2222222222,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":9,
+    "Value":14.1025641026,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":10,
+    "Value":15.7894736842,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":11,
+    "Value":28.2352941176,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":12,
+    "Value":17.0454545455,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":13,
+    "Value":21.686746988,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":14,
+    "Value":32.3529411765,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":15,
+    "Value":25.2747252747,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":16,
+    "Value":18.085106383,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":17,
+    "Value":39.7849462366,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":18,
+    "Value":41.3043478261,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":19,
+    "Value":67.0212765957,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":20,
+    "Value":75.2688172043,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":21,
+    "Value":98.1818181818,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":22,
+    "Value":159.482758621,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":23,
+    "Value":400.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":24,
+    "Value":663.709677419,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":25,
+    "Value":819.178082192,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":26,
+    "Value":1085.71428571,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":27,
+    "Value":1155.55555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":28,
+    "Value":1075.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":29,
+    "Value":1195.68345324,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":30,
+    "Value":1213.76811594,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":31,
+    "Value":1169.17293233,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":32,
+    "Value":1179.38931298,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":33,
+    "Value":1162.6984127,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":34,
+    "Value":1093.6,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":35,
+    "Value":1102.36220472,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":36,
+    "Value":1150.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":37,
+    "Value":1173.7704918,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":38,
+    "Value":1237.6,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":39,
+    "Value":1212.12121212,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":40,
+    "Value":1210.6557377,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":41,
+    "Value":1228.78787879,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":42,
+    "Value":1209.09090909,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":43,
+    "Value":1200.81967213,
+    "Agent":"IQN"
   },
   {
     "Iteration":44,
-    "Value":22.4719101124,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1208.59375,
+    "Agent":"IQN"
   },
   {
     "Iteration":45,
-    "Value":27.1739130435,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1283.72093023,
+    "Agent":"IQN"
   },
   {
     "Iteration":46,
-    "Value":35.5555555556,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1337.19008264,
+    "Agent":"IQN"
   },
   {
     "Iteration":47,
-    "Value":38.5542168675,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1253.03030303,
+    "Agent":"IQN"
   },
   {
     "Iteration":48,
-    "Value":23.9130434783,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1338.46153846,
+    "Agent":"IQN"
   },
   {
     "Iteration":49,
-    "Value":50.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1216.40625,
+    "Agent":"IQN"
   },
   {
     "Iteration":50,
-    "Value":58.2417582418,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1313.63636364,
+    "Agent":"IQN"
   },
   {
     "Iteration":51,
-    "Value":64.8351648352,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1296.8503937,
+    "Agent":"IQN"
   },
   {
     "Iteration":52,
-    "Value":92.3913043478,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1235.03649635,
+    "Agent":"IQN"
   },
   {
     "Iteration":53,
-    "Value":95.4022988506,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1310.86956522,
+    "Agent":"IQN"
   },
   {
     "Iteration":54,
-    "Value":163.636363636,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1385.50724638,
+    "Agent":"IQN"
   },
   {
     "Iteration":55,
-    "Value":166.666666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1345.98540146,
+    "Agent":"IQN"
   },
   {
     "Iteration":56,
-    "Value":308.163265306,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1421.83098592,
+    "Agent":"IQN"
   },
   {
     "Iteration":57,
-    "Value":444.776119403,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1410.41666667,
+    "Agent":"IQN"
   },
   {
     "Iteration":58,
-    "Value":574.193548387,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1423.13432836,
+    "Agent":"IQN"
   },
   {
     "Iteration":59,
-    "Value":822.13740458,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1369.46564885,
+    "Agent":"IQN"
   },
   {
     "Iteration":60,
-    "Value":840.506329114,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1267.17557252,
+    "Agent":"IQN"
   },
   {
     "Iteration":61,
-    "Value":950.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1406.33802817,
+    "Agent":"IQN"
   },
   {
     "Iteration":62,
-    "Value":1106.28930818,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1425.83333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":63,
-    "Value":1213.15789474,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1383.89261745,
+    "Agent":"IQN"
   },
   {
     "Iteration":64,
-    "Value":1258.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1432.66666667,
+    "Agent":"IQN"
   },
   {
     "Iteration":65,
-    "Value":1250.72463768,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1443.75,
+    "Agent":"IQN"
   },
   {
     "Iteration":66,
-    "Value":1280.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1402.20588235,
+    "Agent":"IQN"
   },
   {
     "Iteration":67,
-    "Value":1273.07692308,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1400.67114094,
+    "Agent":"IQN"
   },
   {
     "Iteration":68,
-    "Value":1241.53846154,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1372.79411765,
+    "Agent":"IQN"
   },
   {
     "Iteration":69,
-    "Value":1213.95348837,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1333.79310345,
+    "Agent":"IQN"
   },
   {
     "Iteration":70,
-    "Value":1319.7080292,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1422.44897959,
+    "Agent":"IQN"
   },
   {
     "Iteration":71,
-    "Value":1323.91304348,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1392.14285714,
+    "Agent":"IQN"
   },
   {
     "Iteration":72,
-    "Value":1257.2519084,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1389.20863309,
+    "Agent":"IQN"
   },
   {
     "Iteration":73,
-    "Value":1354.33070866,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1425.36231884,
+    "Agent":"IQN"
   },
   {
     "Iteration":74,
-    "Value":1309.28571429,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1367.54966887,
+    "Agent":"IQN"
   },
   {
     "Iteration":75,
-    "Value":1261.94690265,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1414.76510067,
+    "Agent":"IQN"
   },
   {
     "Iteration":76,
-    "Value":1315.32846715,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1407.53424658,
+    "Agent":"IQN"
   },
   {
     "Iteration":77,
-    "Value":1373.38129496,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1424.13793103,
+    "Agent":"IQN"
   },
   {
     "Iteration":78,
-    "Value":1372.02797203,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1425.85034014,
+    "Agent":"IQN"
   },
   {
     "Iteration":79,
-    "Value":1381.61764706,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1397.26027397,
+    "Agent":"IQN"
   },
   {
     "Iteration":80,
-    "Value":1370.0729927,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1368.02721088,
+    "Agent":"IQN"
   },
   {
     "Iteration":81,
-    "Value":1385.21126761,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1433.55704698,
+    "Agent":"IQN"
   },
   {
     "Iteration":82,
-    "Value":1371.12676056,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1406.04026846,
+    "Agent":"IQN"
   },
   {
     "Iteration":83,
-    "Value":1343.07692308,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1284.32835821,
+    "Agent":"IQN"
   },
   {
     "Iteration":84,
-    "Value":1369.65517241,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1365.51724138,
+    "Agent":"IQN"
   },
   {
     "Iteration":85,
-    "Value":1440.28776978,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1256.93430657,
+    "Agent":"IQN"
   },
   {
     "Iteration":86,
-    "Value":1382.43243243,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1330.82191781,
+    "Agent":"IQN"
   },
   {
     "Iteration":87,
-    "Value":1371.23287671,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1409.09090909,
+    "Agent":"IQN"
   },
   {
     "Iteration":88,
-    "Value":1387.24832215,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1393.47826087,
+    "Agent":"IQN"
   },
   {
     "Iteration":89,
-    "Value":1414.48275862,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1455.39568345,
+    "Agent":"IQN"
   },
   {
     "Iteration":90,
-    "Value":1366.43356643,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1344.28571429,
+    "Agent":"IQN"
   },
   {
     "Iteration":91,
-    "Value":1302.11267606,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1361.53846154,
+    "Agent":"IQN"
   },
   {
     "Iteration":92,
-    "Value":1257.89473684,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1320.94594595,
+    "Agent":"IQN"
   },
   {
     "Iteration":93,
-    "Value":1255.3030303,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1310.2739726,
+    "Agent":"IQN"
   },
   {
     "Iteration":94,
-    "Value":1338.23529412,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1350.99337748,
+    "Agent":"IQN"
   },
   {
     "Iteration":95,
-    "Value":1348.20143885,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1323.57142857,
+    "Agent":"IQN"
   },
   {
     "Iteration":96,
-    "Value":1387.32394366,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1385.23489933,
+    "Agent":"IQN"
   },
   {
     "Iteration":97,
-    "Value":1350.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1433.55704698,
+    "Agent":"IQN"
   },
   {
     "Iteration":98,
-    "Value":1303.78787879,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1404.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":99,
-    "Value":1330.65693431,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1441.05960265,
+    "Agent":"IQN"
   },
   {
     "Iteration":100,
-    "Value":1258.27338129,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1425.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":101,
-    "Value":1405.18518519,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1374.04580153,
+    "Agent":"IQN"
   },
   {
     "Iteration":102,
-    "Value":1353.03030303,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1416.10738255,
+    "Agent":"IQN"
   },
   {
     "Iteration":103,
-    "Value":1329.93197279,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1382.1192053,
+    "Agent":"IQN"
   },
   {
     "Iteration":104,
-    "Value":1287.41258741,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1386.20689655,
+    "Agent":"IQN"
   },
   {
     "Iteration":105,
-    "Value":1301.3986014,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1368.75,
+    "Agent":"IQN"
   },
   {
     "Iteration":106,
-    "Value":1342.95302013,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1380.41958042,
+    "Agent":"IQN"
   },
   {
     "Iteration":107,
-    "Value":1354.92957746,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1365.71428571,
+    "Agent":"IQN"
   },
   {
     "Iteration":108,
-    "Value":1347.2972973,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1295.52238806,
+    "Agent":"IQN"
   },
   {
     "Iteration":109,
-    "Value":1348.25174825,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1393.15068493,
+    "Agent":"IQN"
   },
   {
     "Iteration":110,
-    "Value":1367.91044776,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1321.32352941,
+    "Agent":"IQN"
   },
   {
     "Iteration":111,
-    "Value":1400.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1446.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":112,
-    "Value":1352.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1362.23776224,
+    "Agent":"IQN"
   },
   {
     "Iteration":113,
-    "Value":1400.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1448.61111111,
+    "Agent":"IQN"
   },
   {
     "Iteration":114,
-    "Value":1391.09589041,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1355.10204082,
+    "Agent":"IQN"
   },
   {
     "Iteration":115,
-    "Value":1360.95890411,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1419.73684211,
+    "Agent":"IQN"
   },
   {
     "Iteration":116,
-    "Value":1360.54421769,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1358.16993464,
+    "Agent":"IQN"
   },
   {
     "Iteration":117,
-    "Value":1323.07692308,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1417.56756757,
+    "Agent":"IQN"
   },
   {
     "Iteration":118,
-    "Value":1334.55882353,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1393.33333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":119,
-    "Value":1365.56291391,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1374.4966443,
+    "Agent":"IQN"
   },
   {
     "Iteration":120,
-    "Value":1282.58064516,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1428.36879433,
+    "Agent":"IQN"
   },
   {
     "Iteration":121,
-    "Value":1302.01342282,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1369.93006993,
+    "Agent":"IQN"
   },
   {
     "Iteration":122,
-    "Value":1327.09677419,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1342.55319149,
+    "Agent":"IQN"
   },
   {
     "Iteration":123,
-    "Value":1361.18421053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1375.83892617,
+    "Agent":"IQN"
   },
   {
     "Iteration":124,
-    "Value":1377.63157895,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1386.5248227,
+    "Agent":"IQN"
   },
   {
     "Iteration":125,
-    "Value":1358.38926174,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1365.33333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":126,
-    "Value":1361.80555556,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1380.55555556,
+    "Agent":"IQN"
   },
   {
     "Iteration":127,
-    "Value":1328.87323944,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1390.97222222,
+    "Agent":"IQN"
   },
   {
     "Iteration":128,
-    "Value":1272.85714286,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1340.93959732,
+    "Agent":"IQN"
   },
   {
     "Iteration":129,
-    "Value":1302.02702703,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1388.65248227,
+    "Agent":"IQN"
   },
   {
     "Iteration":130,
-    "Value":1342.65734266,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1418.36734694,
+    "Agent":"IQN"
   },
   {
     "Iteration":131,
-    "Value":1259.57446809,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1384.93150685,
+    "Agent":"IQN"
   },
   {
     "Iteration":132,
-    "Value":1267.33333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1380.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":133,
-    "Value":1265.03496503,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1342.95774648,
+    "Agent":"IQN"
   },
   {
     "Iteration":134,
-    "Value":1298.71794872,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1416.33986928,
+    "Agent":"IQN"
   },
   {
     "Iteration":135,
-    "Value":1356.37583893,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1409.5890411,
+    "Agent":"IQN"
   },
   {
     "Iteration":136,
-    "Value":1375.35211268,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1410.06711409,
+    "Agent":"IQN"
   },
   {
     "Iteration":137,
-    "Value":1316.43835616,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1368.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":138,
-    "Value":1328.47682119,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1422.22222222,
+    "Agent":"IQN"
   },
   {
     "Iteration":139,
-    "Value":1300.67567568,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1399.36305732,
+    "Agent":"IQN"
   },
   {
     "Iteration":140,
-    "Value":1337.58865248,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1362.02531646,
+    "Agent":"IQN"
   },
   {
     "Iteration":141,
-    "Value":1295.62043796,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1382.38993711,
+    "Agent":"IQN"
   },
   {
     "Iteration":142,
-    "Value":1307.28476821,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1416.77852349,
+    "Agent":"IQN"
   },
   {
     "Iteration":143,
-    "Value":1323.8410596,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1372.15189873,
+    "Agent":"IQN"
   },
   {
     "Iteration":144,
-    "Value":1300.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1418.98734177,
+    "Agent":"IQN"
   },
   {
     "Iteration":145,
-    "Value":1252.38095238,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1391.82389937,
+    "Agent":"IQN"
   },
   {
     "Iteration":146,
-    "Value":1298.67549669,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1341.17647059,
+    "Agent":"IQN"
   },
   {
     "Iteration":147,
-    "Value":1228.27586207,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1363.57615894,
+    "Agent":"IQN"
   },
   {
     "Iteration":148,
-    "Value":1298.61111111,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1308.90410959,
+    "Agent":"IQN"
   },
   {
     "Iteration":149,
-    "Value":1284.72222222,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1333.11688312,
+    "Agent":"IQN"
   },
   {
     "Iteration":150,
-    "Value":1296.77419355,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1375.81699346,
+    "Agent":"IQN"
   },
   {
     "Iteration":151,
-    "Value":1288.02816901,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1342.20779221,
+    "Agent":"IQN"
   },
   {
     "Iteration":152,
-    "Value":1221.73913043,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1367.10526316,
+    "Agent":"IQN"
   },
   {
     "Iteration":153,
-    "Value":1193.70629371,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1339.18918919,
+    "Agent":"IQN"
   },
   {
     "Iteration":154,
-    "Value":1151.77304965,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1353.24675325,
+    "Agent":"IQN"
   },
   {
     "Iteration":155,
-    "Value":1261.0738255,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1355.48387097,
+    "Agent":"IQN"
   },
   {
     "Iteration":156,
-    "Value":1222.72727273,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1335.52631579,
+    "Agent":"IQN"
   },
   {
     "Iteration":157,
-    "Value":1183.10810811,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1354.60526316,
+    "Agent":"IQN"
   },
   {
     "Iteration":158,
-    "Value":1288.15789474,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1287.67123288,
+    "Agent":"IQN"
   },
   {
     "Iteration":159,
-    "Value":1276.08695652,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1286.86131387,
+    "Agent":"IQN"
   },
   {
     "Iteration":160,
-    "Value":1253.69127517,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1308.75912409,
+    "Agent":"IQN"
   },
   {
     "Iteration":161,
-    "Value":1267.30769231,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1281.48148148,
+    "Agent":"IQN"
   },
   {
     "Iteration":162,
-    "Value":1289.04109589,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1268.49315068,
+    "Agent":"IQN"
   },
   {
     "Iteration":163,
-    "Value":1205.26315789,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1337.33333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":164,
-    "Value":1257.05128205,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1314.18918919,
+    "Agent":"IQN"
   },
   {
     "Iteration":165,
-    "Value":1188.53503185,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1373.37662338,
+    "Agent":"IQN"
   },
   {
     "Iteration":166,
-    "Value":1273.58490566,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1299.31034483,
+    "Agent":"IQN"
   },
   {
     "Iteration":167,
-    "Value":1170.96774194,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1332.65306122,
+    "Agent":"IQN"
   },
   {
     "Iteration":168,
-    "Value":1234.19354839,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1362.58064516,
+    "Agent":"IQN"
   },
   {
     "Iteration":169,
-    "Value":1237.25490196,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1345.13888889,
+    "Agent":"IQN"
   },
   {
     "Iteration":170,
-    "Value":1265.56291391,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1315.06849315,
+    "Agent":"IQN"
   },
   {
     "Iteration":171,
-    "Value":1267.29559748,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1343.79084967,
+    "Agent":"IQN"
   },
   {
     "Iteration":172,
-    "Value":1250.32679739,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1273.97260274,
+    "Agent":"IQN"
   },
   {
     "Iteration":173,
-    "Value":1261.53846154,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1302.01342282,
+    "Agent":"IQN"
   },
   {
     "Iteration":174,
-    "Value":1215.48387097,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1280.28169014,
+    "Agent":"IQN"
   },
   {
     "Iteration":175,
-    "Value":1154.19354839,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1330.55555556,
+    "Agent":"IQN"
   },
   {
     "Iteration":176,
-    "Value":1188.05031447,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1334.86842105,
+    "Agent":"IQN"
   },
   {
     "Iteration":177,
-    "Value":1155.19480519,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1341.09589041,
+    "Agent":"IQN"
   },
   {
     "Iteration":178,
-    "Value":1176.8707483,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1326.89655172,
+    "Agent":"IQN"
   },
   {
     "Iteration":179,
-    "Value":1192.25806452,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1329.33333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":180,
-    "Value":1196.77419355,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1294.85294118,
+    "Agent":"IQN"
   },
   {
     "Iteration":181,
-    "Value":1165.38461538,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1319.58041958,
+    "Agent":"IQN"
   },
   {
     "Iteration":182,
-    "Value":1211.25827815,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1292.19858156,
+    "Agent":"IQN"
   },
   {
     "Iteration":183,
-    "Value":1167.33333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1256.57894737,
+    "Agent":"IQN"
   },
   {
     "Iteration":184,
-    "Value":1172.84768212,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1336.84210526,
+    "Agent":"IQN"
   },
   {
     "Iteration":185,
-    "Value":1138.96103896,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1373.61111111,
+    "Agent":"IQN"
   },
   {
     "Iteration":186,
-    "Value":1200.65789474,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1314.59854015,
+    "Agent":"IQN"
   },
   {
     "Iteration":187,
-    "Value":1230.92105263,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1321.85430464,
+    "Agent":"IQN"
   },
   {
     "Iteration":188,
-    "Value":1176.82119205,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1346.89655172,
+    "Agent":"IQN"
   },
   {
     "Iteration":189,
-    "Value":1189.47368421,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1316.32653061,
+    "Agent":"IQN"
   },
   {
     "Iteration":190,
-    "Value":1232.02614379,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1299.32432432,
+    "Agent":"IQN"
   },
   {
     "Iteration":191,
-    "Value":1190.34482759,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1331.33333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":192,
-    "Value":1195.45454545,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1319.48051948,
+    "Agent":"IQN"
   },
   {
     "Iteration":193,
-    "Value":1175.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1282.73381295,
+    "Agent":"IQN"
   },
   {
     "Iteration":194,
-    "Value":1232.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1315.89403974,
+    "Agent":"IQN"
   },
   {
     "Iteration":195,
-    "Value":1224.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1339.04109589,
+    "Agent":"IQN"
   },
   {
     "Iteration":196,
-    "Value":1212.75167785,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1335.09933775,
+    "Agent":"IQN"
   },
   {
     "Iteration":197,
-    "Value":1186.2745098,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1335.7615894,
+    "Agent":"IQN"
   },
   {
     "Iteration":198,
-    "Value":1232.2147651,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1342.17687075,
+    "Agent":"IQN"
   },
   {
     "Iteration":0,
-    "Value":17.4311926606,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":1,
-    "Value":10.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1.8018018018,
+    "Agent":"IQN"
   },
   {
     "Iteration":2,
-    "Value":9.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":19.4174757282,
+    "Agent":"IQN"
   },
   {
     "Iteration":3,
-    "Value":12.5,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":23.4042553191,
+    "Agent":"IQN"
   },
   {
     "Iteration":4,
-    "Value":2.24719101124,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":26.2626262626,
+    "Agent":"IQN"
   },
   {
     "Iteration":5,
-    "Value":2.22222222222,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":8.10810810811,
+    "Agent":"IQN"
   },
   {
     "Iteration":6,
-    "Value":19.387755102,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":18.2795698925,
+    "Agent":"IQN"
   },
   {
     "Iteration":7,
-    "Value":2.10526315789,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":24.7311827957,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":8,
+    "Value":17.3913043478,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":9,
+    "Value":39.3617021277,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":10,
+    "Value":17.3913043478,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":11,
+    "Value":42.5531914894,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":12,
+    "Value":66.3366336634,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":13,
+    "Value":94.0170940171,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":14,
+    "Value":297.183098592,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":15,
+    "Value":571.604938272,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":16,
+    "Value":704.827586207,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":17,
+    "Value":950.735294118,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":18,
+    "Value":1133.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":19,
+    "Value":1273.72262774,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":20,
+    "Value":1281.1023622,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":21,
+    "Value":1085.71428571,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":22,
+    "Value":1177.39130435,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":23,
+    "Value":1265.54621849,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":24,
+    "Value":1205.88235294,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":25,
+    "Value":1282.03125,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":26,
+    "Value":1321.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":27,
+    "Value":1342.10526316,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":28,
+    "Value":1379.84496124,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":29,
+    "Value":1305.64516129,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":30,
+    "Value":1296.8503937,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":31,
+    "Value":1375.37313433,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":32,
+    "Value":1414.63414634,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":33,
+    "Value":1428.46153846,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":34,
+    "Value":1405.83333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":35,
+    "Value":1376.98412698,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":36,
+    "Value":1450.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":37,
+    "Value":1371.96969697,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":38,
+    "Value":1365.18518519,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":39,
+    "Value":1392.53731343,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":40,
+    "Value":1444.44444444,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":41,
+    "Value":1401.45985401,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":42,
+    "Value":1334.09090909,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":43,
+    "Value":1382.44274809,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":44,
+    "Value":1457.44680851,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":45,
+    "Value":1419.7080292,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":46,
+    "Value":1464.28571429,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":47,
+    "Value":1446.21212121,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":48,
+    "Value":1471.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":49,
+    "Value":1516.78832117,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":50,
+    "Value":1430.88235294,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":51,
+    "Value":1533.82352941,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":52,
+    "Value":1442.36111111,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":53,
+    "Value":1491.21621622,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":54,
+    "Value":1490.72847682,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":55,
+    "Value":1496.59863946,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":56,
+    "Value":1479.45205479,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":57,
+    "Value":1424.81203008,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":58,
+    "Value":1438.57142857,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":59,
+    "Value":1376.59574468,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":60,
+    "Value":1406.81818182,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":61,
+    "Value":1395.77464789,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":62,
+    "Value":1505.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":63,
+    "Value":1474.82993197,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":64,
+    "Value":1437.58389262,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":65,
+    "Value":1476.05633803,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":66,
+    "Value":1412.31884058,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":67,
+    "Value":1425.17482517,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":68,
+    "Value":1507.53424658,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":69,
+    "Value":1455.55555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":70,
+    "Value":1390.90909091,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":71,
+    "Value":1560.28368794,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":72,
+    "Value":1472.72727273,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":73,
+    "Value":1485.91549296,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":74,
+    "Value":1496.05263158,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":75,
+    "Value":1483.66013072,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":76,
+    "Value":1444.75524476,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":77,
+    "Value":1502.01342282,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":78,
+    "Value":1418.97810219,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":79,
+    "Value":1504.8951049,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":80,
+    "Value":1395.65217391,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":81,
+    "Value":1407.14285714,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":82,
+    "Value":1444.96644295,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":83,
+    "Value":1427.51677852,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":84,
+    "Value":1475.16778523,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":85,
+    "Value":1469.8630137,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":86,
+    "Value":1466.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":87,
+    "Value":1482.58064516,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":88,
+    "Value":1421.47651007,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":89,
+    "Value":1420.91503268,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":90,
+    "Value":1410.37037037,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":91,
+    "Value":1339.73509934,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":92,
+    "Value":1430.92105263,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":93,
+    "Value":1477.24137931,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":94,
+    "Value":1449.65986395,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":95,
+    "Value":1419.17808219,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":96,
+    "Value":1466.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":97,
+    "Value":1352.20588235,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":98,
+    "Value":1314.68531469,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":99,
+    "Value":1393.83561644,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":100,
+    "Value":1395.17241379,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":101,
+    "Value":1477.14285714,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":102,
+    "Value":1436.55172414,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":103,
+    "Value":1390.14084507,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":104,
+    "Value":1434.26573427,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":105,
+    "Value":1393.57142857,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":106,
+    "Value":1394.52054795,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":107,
+    "Value":1384.02777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":108,
+    "Value":1383.8028169,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":109,
+    "Value":1352.77777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":110,
+    "Value":1394.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":111,
+    "Value":1446.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":112,
+    "Value":1381.87919463,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":113,
+    "Value":1392.30769231,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":114,
+    "Value":1414.38848921,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":115,
+    "Value":1447.68211921,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":116,
+    "Value":1343.79562044,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":117,
+    "Value":1434.26573427,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":118,
+    "Value":1423.87096774,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":119,
+    "Value":1426.71232877,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":120,
+    "Value":1390.07092199,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":121,
+    "Value":1365.54054054,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":122,
+    "Value":1407.69230769,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":123,
+    "Value":1394.33962264,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":124,
+    "Value":1423.64864865,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":125,
+    "Value":1376.25899281,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":126,
+    "Value":1380.1369863,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":127,
+    "Value":1370.83333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":128,
+    "Value":1385.52631579,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":129,
+    "Value":1410.1910828,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":130,
+    "Value":1418.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":131,
+    "Value":1433.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":132,
+    "Value":1425.16129032,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":133,
+    "Value":1455.26315789,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":134,
+    "Value":1391.44736842,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":135,
+    "Value":1372.54901961,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":136,
+    "Value":1398.69281046,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":137,
+    "Value":1430.4964539,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":138,
+    "Value":1412.90322581,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":139,
+    "Value":1447.5862069,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":140,
+    "Value":1435.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":141,
+    "Value":1428.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":142,
+    "Value":1467.11409396,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":143,
+    "Value":1366.89189189,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":144,
+    "Value":1378.32167832,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":145,
+    "Value":1402.5974026,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":146,
+    "Value":1448.71794872,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":147,
+    "Value":1404.76190476,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":148,
+    "Value":1405.22875817,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":149,
+    "Value":1440.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":150,
+    "Value":1365.75342466,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":151,
+    "Value":1371.81208054,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":152,
+    "Value":1423.68421053,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":153,
+    "Value":1423.44827586,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":154,
+    "Value":1378.28947368,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":155,
+    "Value":1401.30718954,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":156,
+    "Value":1383.22147651,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":157,
+    "Value":1389.04109589,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":158,
+    "Value":1395.62043796,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":159,
+    "Value":1315.54054054,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":160,
+    "Value":1399.27536232,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":161,
+    "Value":1384.56375839,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":162,
+    "Value":1404.60526316,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":163,
+    "Value":1426.02739726,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":164,
+    "Value":1387.83783784,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":165,
+    "Value":1265.97222222,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":166,
+    "Value":1360.58394161,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":167,
+    "Value":1300.69444444,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":168,
+    "Value":1348.97959184,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":169,
+    "Value":1349.30555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":170,
+    "Value":1411.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":171,
+    "Value":1307.5862069,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":172,
+    "Value":1344.29530201,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":173,
+    "Value":1314.58333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":174,
+    "Value":1418.24324324,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":175,
+    "Value":1371.23287671,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":176,
+    "Value":1399.32885906,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":177,
+    "Value":1352.05479452,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":178,
+    "Value":1336.24161074,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":179,
+    "Value":1314.18918919,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":180,
+    "Value":1284.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":181,
+    "Value":1279.45205479,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":182,
+    "Value":1368.18181818,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":183,
+    "Value":1341.89189189,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":184,
+    "Value":1342.85714286,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":185,
+    "Value":1364.38356164,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":186,
+    "Value":1287.5,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":187,
+    "Value":1330.06535948,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":188,
+    "Value":1391.89189189,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":189,
+    "Value":1390.90909091,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":190,
+    "Value":1360.81081081,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":191,
+    "Value":1342.85714286,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":192,
+    "Value":1369.73684211,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":193,
+    "Value":1352.08333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":194,
+    "Value":1320.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":195,
+    "Value":1291.44736842,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":196,
+    "Value":1325.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":197,
+    "Value":1297.22222222,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":198,
+    "Value":1307.63888889,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":0,
+    "Value":1.78571428571,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":1,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":2,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":3,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":4,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":5,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":6,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":7,
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":8,
     "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Agent":"IQN"
   },
   {
     "Iteration":9,
-    "Value":15.5555555556,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":10,
-    "Value":23.595505618,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":11,
-    "Value":25.2525252525,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":12,
-    "Value":12.6582278481,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":13,
-    "Value":16.4835164835,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":14,
-    "Value":10.4166666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":15,
-    "Value":7.69230769231,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":16,
-    "Value":19.6078431373,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":17,
-    "Value":14.7368421053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":18,
-    "Value":12.3456790123,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":19,
-    "Value":2.15053763441,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":20,
-    "Value":5.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":21,
-    "Value":11.8279569892,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":22,
-    "Value":23.2558139535,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":23,
-    "Value":10.3448275862,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":24,
-    "Value":13.6363636364,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":25,
-    "Value":18.75,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":26,
-    "Value":13.9534883721,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":27,
-    "Value":20.7317073171,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":28,
-    "Value":25.5555555556,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":29,
-    "Value":14.0845070423,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":30,
-    "Value":18.9189189189,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":31,
-    "Value":8.43373493976,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":32,
     "Value":0.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Agent":"IQN"
   },
   {
     "Iteration":33,
-    "Value":15.2173913043,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":34,
-    "Value":3.33333333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":35,
-    "Value":8.13953488372,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":36,
-    "Value":12.2448979592,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":37,
-    "Value":10.4166666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":38,
-    "Value":27.9569892473,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":39,
-    "Value":20.618556701,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":40,
-    "Value":22.7272727273,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":41,
-    "Value":19.1489361702,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":42,
-    "Value":32.967032967,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":43,
-    "Value":8.13953488372,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":44,
-    "Value":23.8636363636,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":45,
-    "Value":38.6138613861,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":46,
-    "Value":65.5913978495,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":47,
-    "Value":80.8080808081,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1.92307692308,
+    "Agent":"IQN"
   },
   {
     "Iteration":48,
-    "Value":94.7368421053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":3.44827586207,
+    "Agent":"IQN"
   },
   {
     "Iteration":49,
-    "Value":119.811320755,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":4.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":50,
-    "Value":125.510204082,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":51,
-    "Value":131.578947368,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":0.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":52,
-    "Value":119.230769231,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":8.33333333333,
+    "Agent":"IQN"
   },
   {
     "Iteration":53,
-    "Value":115.454545455,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":30.612244898,
+    "Agent":"IQN"
   },
   {
     "Iteration":54,
-    "Value":129.090909091,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":16.0377358491,
+    "Agent":"IQN"
   },
   {
     "Iteration":55,
-    "Value":64.2857142857,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":4.70588235294,
+    "Agent":"IQN"
   },
   {
     "Iteration":56,
-    "Value":70.2380952381,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":6.59340659341,
+    "Agent":"IQN"
   },
   {
     "Iteration":57,
-    "Value":88.0434782609,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":22.5806451613,
+    "Agent":"IQN"
   },
   {
     "Iteration":58,
-    "Value":74.1573033708,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":14.4329896907,
+    "Agent":"IQN"
   },
   {
     "Iteration":59,
-    "Value":74.7126436782,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":14.9425287356,
+    "Agent":"IQN"
   },
   {
     "Iteration":60,
-    "Value":123.333333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":11.8279569892,
+    "Agent":"IQN"
   },
   {
     "Iteration":61,
-    "Value":176.923076923,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":11.2359550562,
+    "Agent":"IQN"
   },
   {
     "Iteration":62,
-    "Value":192.708333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":15.1162790698,
+    "Agent":"IQN"
   },
   {
     "Iteration":63,
-    "Value":294.845360825,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":17.8571428571,
+    "Agent":"IQN"
   },
   {
     "Iteration":64,
-    "Value":628.431372549,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":26.4367816092,
+    "Agent":"IQN"
   },
   {
     "Iteration":65,
-    "Value":784.347826087,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":13.1868131868,
+    "Agent":"IQN"
   },
   {
     "Iteration":66,
-    "Value":638.345864662,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":14.1304347826,
+    "Agent":"IQN"
   },
   {
     "Iteration":67,
-    "Value":851.351351351,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":18.6046511628,
+    "Agent":"IQN"
   },
   {
     "Iteration":68,
-    "Value":1228.27586207,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":39.7959183673,
+    "Agent":"IQN"
   },
   {
     "Iteration":69,
-    "Value":1204.60526316,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":42.8571428571,
+    "Agent":"IQN"
   },
   {
     "Iteration":70,
-    "Value":1196.37681159,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":83.8095238095,
+    "Agent":"IQN"
   },
   {
     "Iteration":71,
-    "Value":1067.71653543,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":67.9611650485,
+    "Agent":"IQN"
   },
   {
     "Iteration":72,
-    "Value":996.850393701,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":91.8181818182,
+    "Agent":"IQN"
   },
   {
     "Iteration":73,
-    "Value":937.398373984,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":82.3529411765,
+    "Agent":"IQN"
   },
   {
     "Iteration":74,
-    "Value":1049.6,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":160.396039604,
+    "Agent":"IQN"
   },
   {
     "Iteration":75,
-    "Value":1258.20895522,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":284.210526316,
+    "Agent":"IQN"
   },
   {
     "Iteration":76,
-    "Value":1284.50704225,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":567.479674797,
+    "Agent":"IQN"
   },
   {
     "Iteration":77,
-    "Value":1274.80916031,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":785.039370079,
+    "Agent":"IQN"
   },
   {
     "Iteration":78,
-    "Value":1315.44117647,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1043.57142857,
+    "Agent":"IQN"
   },
   {
     "Iteration":79,
-    "Value":1316.31205674,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1162.93706294,
+    "Agent":"IQN"
   },
   {
     "Iteration":80,
-    "Value":1340.28776978,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1241.84397163,
+    "Agent":"IQN"
   },
   {
     "Iteration":81,
-    "Value":1261.26760563,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1113.07692308,
+    "Agent":"IQN"
   },
   {
     "Iteration":82,
-    "Value":1298.58156028,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1219.68503937,
+    "Agent":"IQN"
   },
   {
     "Iteration":83,
-    "Value":1353.95683453,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1243.90243902,
+    "Agent":"IQN"
   },
   {
     "Iteration":84,
-    "Value":1316.54135338,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1082.56880734,
+    "Agent":"IQN"
   },
   {
     "Iteration":85,
-    "Value":1315.71428571,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1107.89473684,
+    "Agent":"IQN"
   },
   {
     "Iteration":86,
-    "Value":1297.85714286,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1159.50413223,
+    "Agent":"IQN"
   },
   {
     "Iteration":87,
-    "Value":1318.24324324,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1177.11864407,
+    "Agent":"IQN"
   },
   {
     "Iteration":88,
-    "Value":1314.17322835,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1298.52941176,
+    "Agent":"IQN"
   },
   {
     "Iteration":89,
-    "Value":1329.37062937,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1375.19379845,
+    "Agent":"IQN"
   },
   {
     "Iteration":90,
-    "Value":1297.84172662,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1278.63247863,
+    "Agent":"IQN"
   },
   {
     "Iteration":91,
-    "Value":1375.88652482,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1369.35483871,
+    "Agent":"IQN"
   },
   {
     "Iteration":92,
-    "Value":1416.54676259,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1325.20325203,
+    "Agent":"IQN"
   },
   {
     "Iteration":93,
-    "Value":1299.28571429,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1180.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":94,
-    "Value":1384.45945946,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1317.69230769,
+    "Agent":"IQN"
   },
   {
     "Iteration":95,
-    "Value":1443.38235294,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1395.93495935,
+    "Agent":"IQN"
   },
   {
     "Iteration":96,
-    "Value":1427.85714286,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1354.6875,
+    "Agent":"IQN"
   },
   {
     "Iteration":97,
-    "Value":1296.96969697,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1490.22556391,
+    "Agent":"IQN"
   },
   {
     "Iteration":98,
-    "Value":1360.58394161,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1324.44444444,
+    "Agent":"IQN"
   },
   {
     "Iteration":99,
-    "Value":1422.37762238,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1443.08943089,
+    "Agent":"IQN"
   },
   {
     "Iteration":100,
-    "Value":1415.625,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1438.88888889,
+    "Agent":"IQN"
   },
   {
     "Iteration":101,
-    "Value":1380.91603053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1368.93939394,
+    "Agent":"IQN"
   },
   {
     "Iteration":102,
-    "Value":1403.40136054,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1423.1884058,
+    "Agent":"IQN"
   },
   {
     "Iteration":103,
-    "Value":1336.36363636,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1355.38461538,
+    "Agent":"IQN"
   },
   {
     "Iteration":104,
-    "Value":1363.26530612,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1441.86046512,
+    "Agent":"IQN"
   },
   {
     "Iteration":105,
-    "Value":1445.33333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1422.30769231,
+    "Agent":"IQN"
   },
   {
     "Iteration":106,
-    "Value":1327.15231788,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1390.29850746,
+    "Agent":"IQN"
   },
   {
     "Iteration":107,
-    "Value":1333.57142857,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1360.43165468,
+    "Agent":"IQN"
   },
   {
     "Iteration":108,
-    "Value":1359.42028986,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1420.15503876,
+    "Agent":"IQN"
   },
   {
     "Iteration":109,
-    "Value":1361.48648649,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1404.79452055,
+    "Agent":"IQN"
   },
   {
     "Iteration":110,
-    "Value":1278.51851852,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1428.57142857,
+    "Agent":"IQN"
   },
   {
     "Iteration":111,
-    "Value":1354.22535211,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1438.97058824,
+    "Agent":"IQN"
   },
   {
     "Iteration":112,
-    "Value":1383.67346939,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1446.09929078,
+    "Agent":"IQN"
   },
   {
     "Iteration":113,
-    "Value":1346.42857143,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1432.62411348,
+    "Agent":"IQN"
   },
   {
     "Iteration":114,
-    "Value":1445.20547945,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1428.26086957,
+    "Agent":"IQN"
   },
   {
     "Iteration":115,
-    "Value":1389.40397351,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1356.71641791,
+    "Agent":"IQN"
   },
   {
     "Iteration":116,
-    "Value":1400.6993007,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1445.52845528,
+    "Agent":"IQN"
   },
   {
     "Iteration":117,
-    "Value":1378.16901408,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1320.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":118,
-    "Value":1412.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1370.22900763,
+    "Agent":"IQN"
   },
   {
     "Iteration":119,
-    "Value":1380.27210884,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1398.5915493,
+    "Agent":"IQN"
   },
   {
     "Iteration":120,
-    "Value":1353.06122449,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1419.85815603,
+    "Agent":"IQN"
   },
   {
     "Iteration":121,
-    "Value":1390.4109589,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1398.66666667,
+    "Agent":"IQN"
   },
   {
     "Iteration":122,
-    "Value":1376.19047619,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1405.26315789,
+    "Agent":"IQN"
   },
   {
     "Iteration":123,
-    "Value":1306.80272109,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1423.40425532,
+    "Agent":"IQN"
   },
   {
     "Iteration":124,
-    "Value":1428.05755396,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1377.39726027,
+    "Agent":"IQN"
   },
   {
     "Iteration":125,
-    "Value":1368.91891892,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1381.42857143,
+    "Agent":"IQN"
   },
   {
     "Iteration":126,
-    "Value":1383.44370861,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1391.78082192,
+    "Agent":"IQN"
   },
   {
     "Iteration":127,
-    "Value":1317.14285714,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1432.16783217,
+    "Agent":"IQN"
   },
   {
     "Iteration":128,
-    "Value":1400.64935065,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1385.27131783,
+    "Agent":"IQN"
   },
   {
     "Iteration":129,
-    "Value":1438.7755102,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1405.14705882,
+    "Agent":"IQN"
   },
   {
     "Iteration":130,
-    "Value":1402.64900662,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1357.24637681,
+    "Agent":"IQN"
   },
   {
     "Iteration":131,
-    "Value":1389.33333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1408.10810811,
+    "Agent":"IQN"
   },
   {
     "Iteration":132,
-    "Value":1391.15646259,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1448.61111111,
+    "Agent":"IQN"
   },
   {
     "Iteration":133,
-    "Value":1374.12587413,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1440.42553191,
+    "Agent":"IQN"
   },
   {
     "Iteration":134,
-    "Value":1390.47619048,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1411.56462585,
+    "Agent":"IQN"
   },
   {
     "Iteration":135,
-    "Value":1411.48648649,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1435.60606061,
+    "Agent":"IQN"
   },
   {
     "Iteration":136,
-    "Value":1368.21192053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1425.69444444,
+    "Agent":"IQN"
   },
   {
     "Iteration":137,
-    "Value":1392.20779221,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1390.69767442,
+    "Agent":"IQN"
   },
   {
     "Iteration":138,
-    "Value":1400.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1390.66666667,
+    "Agent":"IQN"
   },
   {
     "Iteration":139,
-    "Value":1398.70967742,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1412.24489796,
+    "Agent":"IQN"
   },
   {
     "Iteration":140,
-    "Value":1355.55555556,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1364.74820144,
+    "Agent":"IQN"
   },
   {
     "Iteration":141,
-    "Value":1368.62745098,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1430.34482759,
+    "Agent":"IQN"
   },
   {
     "Iteration":142,
-    "Value":1313.69863014,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1344.44444444,
+    "Agent":"IQN"
   },
   {
     "Iteration":143,
-    "Value":1283.21678322,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1360.46511628,
+    "Agent":"IQN"
   },
   {
     "Iteration":144,
-    "Value":1359.09090909,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1402.91970803,
+    "Agent":"IQN"
   },
   {
     "Iteration":145,
-    "Value":1276.8707483,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1377.46478873,
+    "Agent":"IQN"
   },
   {
     "Iteration":146,
-    "Value":1330.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1372.53521127,
+    "Agent":"IQN"
   },
   {
     "Iteration":147,
-    "Value":1322.44897959,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1442.28187919,
+    "Agent":"IQN"
   },
   {
     "Iteration":148,
-    "Value":1336.73469388,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1383.22147651,
+    "Agent":"IQN"
   },
   {
     "Iteration":149,
-    "Value":1315.86206897,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1431.50684932,
+    "Agent":"IQN"
   },
   {
     "Iteration":150,
-    "Value":1330.0,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1436.05442177,
+    "Agent":"IQN"
   },
   {
     "Iteration":151,
-    "Value":1346.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1397.88732394,
+    "Agent":"IQN"
   },
   {
     "Iteration":152,
-    "Value":1297.31543624,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1449.00662252,
+    "Agent":"IQN"
   },
   {
     "Iteration":153,
-    "Value":1345.80645161,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1393.75,
+    "Agent":"IQN"
   },
   {
     "Iteration":154,
-    "Value":1339.73509934,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1390.27777778,
+    "Agent":"IQN"
   },
   {
     "Iteration":155,
-    "Value":1334.43708609,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1408.02919708,
+    "Agent":"IQN"
   },
   {
     "Iteration":156,
-    "Value":1292.66666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1404.13793103,
+    "Agent":"IQN"
   },
   {
     "Iteration":157,
-    "Value":1362.83783784,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1419.48051948,
+    "Agent":"IQN"
   },
   {
     "Iteration":158,
-    "Value":1311.03448276,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1433.56164384,
+    "Agent":"IQN"
   },
   {
     "Iteration":159,
-    "Value":1289.93288591,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1404.13793103,
+    "Agent":"IQN"
   },
   {
     "Iteration":160,
-    "Value":1296.62162162,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1399.25925926,
+    "Agent":"IQN"
   },
   {
     "Iteration":161,
-    "Value":1292.19858156,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1323.28767123,
+    "Agent":"IQN"
   },
   {
     "Iteration":162,
-    "Value":1329.71014493,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1384.50704225,
+    "Agent":"IQN"
   },
   {
     "Iteration":163,
-    "Value":1282.31292517,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1397.2027972,
+    "Agent":"IQN"
   },
   {
     "Iteration":164,
-    "Value":1259.06040268,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1388.27586207,
+    "Agent":"IQN"
   },
   {
     "Iteration":165,
-    "Value":1263.38028169,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1444.92753623,
+    "Agent":"IQN"
   },
   {
     "Iteration":166,
-    "Value":1247.61904762,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1354.10958904,
+    "Agent":"IQN"
   },
   {
     "Iteration":167,
-    "Value":1290.06622517,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1410.2739726,
+    "Agent":"IQN"
   },
   {
     "Iteration":168,
-    "Value":1293.33333333,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1423.40425532,
+    "Agent":"IQN"
   },
   {
     "Iteration":169,
-    "Value":1276.12903226,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1406.75675676,
+    "Agent":"IQN"
   },
   {
     "Iteration":170,
-    "Value":1282.43243243,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1331.11111111,
+    "Agent":"IQN"
   },
   {
     "Iteration":171,
-    "Value":1261.26760563,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1357.71812081,
+    "Agent":"IQN"
   },
   {
     "Iteration":172,
-    "Value":1241.17647059,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1386.84210526,
+    "Agent":"IQN"
   },
   {
     "Iteration":173,
-    "Value":1239.1025641,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1374.64788732,
+    "Agent":"IQN"
   },
   {
     "Iteration":174,
-    "Value":1216.21621622,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1332.33082707,
+    "Agent":"IQN"
   },
   {
     "Iteration":175,
-    "Value":1197.97297297,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1340.26845638,
+    "Agent":"IQN"
   },
   {
     "Iteration":176,
-    "Value":1170.94594595,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1386.71328671,
+    "Agent":"IQN"
   },
   {
     "Iteration":177,
-    "Value":1176.02739726,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1383.21678322,
+    "Agent":"IQN"
   },
   {
     "Iteration":178,
-    "Value":1264.4295302,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1394.73684211,
+    "Agent":"IQN"
   },
   {
     "Iteration":179,
-    "Value":1208.27067669,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1358.38926174,
+    "Agent":"IQN"
   },
   {
     "Iteration":180,
-    "Value":1197.98657718,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1358.66666667,
+    "Agent":"IQN"
   },
   {
     "Iteration":181,
-    "Value":1153.06122449,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1385.03401361,
+    "Agent":"IQN"
   },
   {
     "Iteration":182,
-    "Value":1144.82758621,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1323.02158273,
+    "Agent":"IQN"
   },
   {
     "Iteration":183,
-    "Value":1172.4137931,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1306.12244898,
+    "Agent":"IQN"
   },
   {
     "Iteration":184,
-    "Value":1186.18421053,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1372.48322148,
+    "Agent":"IQN"
   },
   {
     "Iteration":185,
-    "Value":1206.75675676,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1429.65517241,
+    "Agent":"IQN"
   },
   {
     "Iteration":186,
-    "Value":1190.72847682,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1334.02777778,
+    "Agent":"IQN"
   },
   {
     "Iteration":187,
-    "Value":1185.13513514,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1314.38356164,
+    "Agent":"IQN"
   },
   {
     "Iteration":188,
-    "Value":1241.55844156,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1402.05479452,
+    "Agent":"IQN"
   },
   {
     "Iteration":189,
-    "Value":1184.41558442,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1345.39473684,
+    "Agent":"IQN"
   },
   {
     "Iteration":190,
-    "Value":1211.03448276,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1313.60544218,
+    "Agent":"IQN"
   },
   {
     "Iteration":191,
-    "Value":1183.55263158,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1347.5177305,
+    "Agent":"IQN"
   },
   {
     "Iteration":192,
-    "Value":1154.16666667,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1329.86111111,
+    "Agent":"IQN"
   },
   {
     "Iteration":193,
-    "Value":1160.78431373,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1321.83098592,
+    "Agent":"IQN"
   },
   {
     "Iteration":194,
-    "Value":1193.95973154,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1347.18309859,
+    "Agent":"IQN"
   },
   {
     "Iteration":195,
-    "Value":1131.84713376,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1358.38926174,
+    "Agent":"IQN"
   },
   {
     "Iteration":196,
-    "Value":1115.89403974,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1280.0,
+    "Agent":"IQN"
   },
   {
     "Iteration":197,
-    "Value":1184.41558442,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1416.99346405,
+    "Agent":"IQN"
   },
   {
     "Iteration":198,
-    "Value":1162.91390728,
-    "Agent":"IMPLICIT_QUANTILE"
+    "Value":1347.7124183,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":0,
+    "Value":4.42477876106,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":1,
+    "Value":38.3838383838,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":2,
+    "Value":11.8279569892,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":3,
+    "Value":20.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":4,
+    "Value":17.8947368421,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":5,
+    "Value":15.0943396226,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":6,
+    "Value":9.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":7,
+    "Value":20.6896551724,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":8,
+    "Value":15.9090909091,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":9,
+    "Value":16.091954023,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":10,
+    "Value":17.9775280899,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":11,
+    "Value":6.06060606061,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":12,
+    "Value":15.2173913043,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":13,
+    "Value":7.60869565217,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":14,
+    "Value":17.0731707317,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":15,
+    "Value":58.5106382979,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":16,
+    "Value":71.5596330275,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":17,
+    "Value":67.6470588235,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":18,
+    "Value":93.1034482759,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":19,
+    "Value":173.076923077,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":20,
+    "Value":221.875,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":21,
+    "Value":594.957983193,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":22,
+    "Value":710.344827586,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":23,
+    "Value":993.793103448,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":24,
+    "Value":1063.88888889,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":25,
+    "Value":1165.97222222,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":26,
+    "Value":1190.78014184,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":27,
+    "Value":1300.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":28,
+    "Value":1317.39130435,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":29,
+    "Value":1350.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":30,
+    "Value":1387.87878788,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":31,
+    "Value":1242.96875,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":32,
+    "Value":1264.1221374,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":33,
+    "Value":1063.02521008,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":34,
+    "Value":1206.03448276,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":35,
+    "Value":1248.09160305,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":36,
+    "Value":1296.2406015,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":37,
+    "Value":1294.53125,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":38,
+    "Value":1402.20588235,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":39,
+    "Value":1349.61832061,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":40,
+    "Value":1357.24637681,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":41,
+    "Value":1266.16541353,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":42,
+    "Value":1370.63492063,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":43,
+    "Value":1387.02290076,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":44,
+    "Value":1432.8125,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":45,
+    "Value":1391.47286822,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":46,
+    "Value":1359.39849624,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":47,
+    "Value":1395.3125,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":48,
+    "Value":1441.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":49,
+    "Value":1314.92537313,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":50,
+    "Value":1484.44444444,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":51,
+    "Value":1368.65671642,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":52,
+    "Value":1428.05755396,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":53,
+    "Value":1448.57142857,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":54,
+    "Value":1388.96551724,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":55,
+    "Value":1401.49253731,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":56,
+    "Value":1439.04109589,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":57,
+    "Value":1446.15384615,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":58,
+    "Value":1524.63768116,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":59,
+    "Value":1393.75,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":60,
+    "Value":1457.74647887,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":61,
+    "Value":1453.79310345,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":62,
+    "Value":1447.5177305,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":63,
+    "Value":1448.90510949,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":64,
+    "Value":1419.85294118,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":65,
+    "Value":1432.08955224,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":66,
+    "Value":1435.13513514,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":67,
+    "Value":1480.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":68,
+    "Value":1340.42553191,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":69,
+    "Value":1407.14285714,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":70,
+    "Value":1470.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":71,
+    "Value":1510.56338028,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":72,
+    "Value":1496.4028777,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":73,
+    "Value":1446.15384615,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":74,
+    "Value":1431.65467626,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":75,
+    "Value":1425.67567568,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":76,
+    "Value":1401.36054422,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":77,
+    "Value":1561.84210526,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":78,
+    "Value":1511.40939597,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":79,
+    "Value":1396.57534247,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":80,
+    "Value":1401.41843972,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":81,
+    "Value":1438.9261745,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":82,
+    "Value":1458.82352941,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":83,
+    "Value":1489.47368421,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":84,
+    "Value":1454.90196078,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":85,
+    "Value":1462.74509804,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":86,
+    "Value":1467.83216783,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":87,
+    "Value":1452.4137931,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":88,
+    "Value":1422.79411765,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":89,
+    "Value":1415.03267974,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":90,
+    "Value":1446.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":91,
+    "Value":1415.43624161,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":92,
+    "Value":1446.20253165,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":93,
+    "Value":1460.81081081,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":94,
+    "Value":1473.58490566,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":95,
+    "Value":1450.34965035,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":96,
+    "Value":1430.87248322,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":97,
+    "Value":1434.04255319,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":98,
+    "Value":1428.76712329,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":99,
+    "Value":1421.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":100,
+    "Value":1340.4109589,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":101,
+    "Value":1347.36842105,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":102,
+    "Value":1355.70469799,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":103,
+    "Value":1383.66013072,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":104,
+    "Value":1418.70503597,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":105,
+    "Value":1366.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":106,
+    "Value":1444.05594406,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":107,
+    "Value":1432.37410072,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":108,
+    "Value":1419.01408451,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":109,
+    "Value":1427.77777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":110,
+    "Value":1427.46478873,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":111,
+    "Value":1448.95104895,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":112,
+    "Value":1445.65217391,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":113,
+    "Value":1362.67605634,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":114,
+    "Value":1402.17391304,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":115,
+    "Value":1414.08450704,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":116,
+    "Value":1447.94520548,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":117,
+    "Value":1362.5,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":118,
+    "Value":1439.45578231,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":119,
+    "Value":1383.56164384,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":120,
+    "Value":1404.10958904,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":121,
+    "Value":1427.09677419,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":122,
+    "Value":1335.91549296,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":123,
+    "Value":1379.86111111,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":124,
+    "Value":1419.44444444,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":125,
+    "Value":1372.97297297,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":126,
+    "Value":1381.15942029,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":127,
+    "Value":1422.97297297,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":128,
+    "Value":1394.20289855,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":129,
+    "Value":1356.06060606,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":130,
+    "Value":1337.03703704,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":131,
+    "Value":1338.97058824,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":132,
+    "Value":1320.14925373,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":133,
+    "Value":1338.02816901,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":134,
+    "Value":1413.90728477,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":135,
+    "Value":1336.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":136,
+    "Value":1359.31034483,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":137,
+    "Value":1344.28571429,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":138,
+    "Value":1330.21582734,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":139,
+    "Value":1319.6969697,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":140,
+    "Value":1356.02836879,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":141,
+    "Value":1372.53521127,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":142,
+    "Value":1366.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":143,
+    "Value":1402.0979021,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":144,
+    "Value":1345.89041096,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":145,
+    "Value":1362.58992806,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":146,
+    "Value":1386.89655172,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":147,
+    "Value":1334.7826087,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":148,
+    "Value":1343.16546763,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":149,
+    "Value":1365.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":150,
+    "Value":1293.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":151,
+    "Value":1372.05882353,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":152,
+    "Value":1344.36619718,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":153,
+    "Value":1323.77622378,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":154,
+    "Value":1368.96551724,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":155,
+    "Value":1342.02898551,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":156,
+    "Value":1352.4137931,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":157,
+    "Value":1362.23776224,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":158,
+    "Value":1335.61643836,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":159,
+    "Value":1337.12121212,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":160,
+    "Value":1292.8057554,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":161,
+    "Value":1342.75362319,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":162,
+    "Value":1349.65986395,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":163,
+    "Value":1295.86206897,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":164,
+    "Value":1277.23577236,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":165,
+    "Value":1277.6119403,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":166,
+    "Value":1313.4751773,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":167,
+    "Value":1269.28571429,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":168,
+    "Value":1288.11188811,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":169,
+    "Value":1288.27586207,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":170,
+    "Value":1330.55555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":171,
+    "Value":1295.62043796,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":172,
+    "Value":1293.19727891,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":173,
+    "Value":1361.0738255,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":174,
+    "Value":1290.54054054,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":175,
+    "Value":1344.75524476,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":176,
+    "Value":1316.77852349,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":177,
+    "Value":1317.8807947,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":178,
+    "Value":1207.24637681,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":179,
+    "Value":1279.28571429,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":180,
+    "Value":1262.12121212,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":181,
+    "Value":1314.38848921,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":182,
+    "Value":1302.77777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":183,
+    "Value":1305.44217687,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":184,
+    "Value":1311.64383562,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":185,
+    "Value":1293.79310345,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":186,
+    "Value":1322.44897959,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":187,
+    "Value":1285.51724138,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":188,
+    "Value":1320.27027027,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":189,
+    "Value":1304.66666667,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":190,
+    "Value":1333.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":191,
+    "Value":1309.61538462,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":192,
+    "Value":1318.32061069,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":193,
+    "Value":1308.21917808,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":194,
+    "Value":1311.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":195,
+    "Value":1290.20979021,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":196,
+    "Value":1300.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":197,
+    "Value":1352.34899329,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":198,
+    "Value":1255.14705882,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":0,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":1,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":2,
+    "Value":1.81818181818,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":3,
+    "Value":0.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":4,
+    "Value":28.5714285714,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":5,
+    "Value":31.914893617,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":6,
+    "Value":11.1111111111,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":7,
+    "Value":21.1764705882,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":8,
+    "Value":22.5806451613,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":9,
+    "Value":35.8695652174,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":10,
+    "Value":13.0952380952,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":11,
+    "Value":27.1604938272,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":12,
+    "Value":12.8712871287,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":13,
+    "Value":35.2272727273,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":14,
+    "Value":13.1868131868,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":15,
+    "Value":33.6956521739,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":16,
+    "Value":32.3232323232,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":17,
+    "Value":41.2371134021,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":18,
+    "Value":25.8426966292,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":19,
+    "Value":16.8421052632,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":20,
+    "Value":47.4226804124,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":21,
+    "Value":48.9583333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":22,
+    "Value":131.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":23,
+    "Value":193.333333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":24,
+    "Value":357.522123894,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":25,
+    "Value":321.621621622,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":26,
+    "Value":544.444444444,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":27,
+    "Value":859.259259259,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":28,
+    "Value":1064.56692913,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":29,
+    "Value":1180.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":30,
+    "Value":1048.87218045,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":31,
+    "Value":1113.84615385,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":32,
+    "Value":1218.11023622,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":33,
+    "Value":1073.4375,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":34,
+    "Value":950.892857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":35,
+    "Value":1096.58119658,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":36,
+    "Value":1122.22222222,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":37,
+    "Value":1140.7079646,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":38,
+    "Value":1168.50393701,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":39,
+    "Value":1202.43902439,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":40,
+    "Value":1254.4,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":41,
+    "Value":1291.40625,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":42,
+    "Value":1305.55555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":43,
+    "Value":1360.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":44,
+    "Value":1371.77419355,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":45,
+    "Value":1310.23622047,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":46,
+    "Value":1223.38709677,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":47,
+    "Value":1270.4,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":48,
+    "Value":1276.33587786,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":49,
+    "Value":1307.03125,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":50,
+    "Value":1303.93700787,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":51,
+    "Value":1422.3880597,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":52,
+    "Value":1382.8358209,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":53,
+    "Value":1394.02985075,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":54,
+    "Value":1344.27480916,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":55,
+    "Value":1430.07518797,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":56,
+    "Value":1297.72727273,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":57,
+    "Value":1407.91366906,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":58,
+    "Value":1308.27067669,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":59,
+    "Value":1408.06451613,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":60,
+    "Value":1420.83333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":61,
+    "Value":1464.22764228,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":62,
+    "Value":1451.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":63,
+    "Value":1443.88489209,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":64,
+    "Value":1388.4057971,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":65,
+    "Value":1408.8,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":66,
+    "Value":1450.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":67,
+    "Value":1519.85294118,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":68,
+    "Value":1368.21705426,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":69,
+    "Value":1386.61417323,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":70,
+    "Value":1350.41322314,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":71,
+    "Value":1337.6,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":72,
+    "Value":1421.89781022,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":73,
+    "Value":1375.96899225,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":74,
+    "Value":1422.85714286,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":75,
+    "Value":1437.76223776,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":76,
+    "Value":1451.51515152,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":77,
+    "Value":1365.51724138,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":78,
+    "Value":1461.0738255,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":79,
+    "Value":1353.19148936,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":80,
+    "Value":1355.47445255,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":81,
+    "Value":1428.35820896,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":82,
+    "Value":1429.54545455,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":83,
+    "Value":1468.14814815,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":84,
+    "Value":1398.5915493,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":85,
+    "Value":1496.96969697,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":86,
+    "Value":1501.44927536,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":87,
+    "Value":1444.02985075,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":88,
+    "Value":1409.70149254,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":89,
+    "Value":1429.05405405,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":90,
+    "Value":1412.31884058,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":91,
+    "Value":1477.85714286,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":92,
+    "Value":1451.04895105,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":93,
+    "Value":1365.75342466,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":94,
+    "Value":1365.69343066,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":95,
+    "Value":1473.46938776,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":96,
+    "Value":1449.64028777,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":97,
+    "Value":1427.7027027,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":98,
+    "Value":1385.81560284,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":99,
+    "Value":1370.14925373,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":100,
+    "Value":1350.72463768,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":101,
+    "Value":1444.82758621,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":102,
+    "Value":1433.58778626,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":103,
+    "Value":1409.55882353,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":104,
+    "Value":1460.81081081,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":105,
+    "Value":1355.55555556,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":106,
+    "Value":1391.27516779,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":107,
+    "Value":1394.55782313,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":108,
+    "Value":1431.46853147,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":109,
+    "Value":1441.95804196,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":110,
+    "Value":1404.02684564,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":111,
+    "Value":1371.21212121,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":112,
+    "Value":1294.48275862,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":113,
+    "Value":1400.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":114,
+    "Value":1391.03448276,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":115,
+    "Value":1369.07894737,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":116,
+    "Value":1327.73722628,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":117,
+    "Value":1326.4,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":118,
+    "Value":1413.66906475,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":119,
+    "Value":1419.31034483,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":120,
+    "Value":1349.64539007,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":121,
+    "Value":1366.17647059,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":122,
+    "Value":1415.58441558,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":123,
+    "Value":1335.25179856,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":124,
+    "Value":1418.75,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":125,
+    "Value":1383.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":126,
+    "Value":1390.34482759,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":127,
+    "Value":1404.79452055,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":128,
+    "Value":1410.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":129,
+    "Value":1375.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":130,
+    "Value":1409.375,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":131,
+    "Value":1369.12751678,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":132,
+    "Value":1383.68794326,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":133,
+    "Value":1309.30232558,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":134,
+    "Value":1321.70542636,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":135,
+    "Value":1375.83892617,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":136,
+    "Value":1333.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":137,
+    "Value":1338.35616438,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":138,
+    "Value":1362.41134752,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":139,
+    "Value":1315.38461538,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":140,
+    "Value":1315.67164179,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":141,
+    "Value":1334.09090909,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":142,
+    "Value":1359.02777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":143,
+    "Value":1322.55639098,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":144,
+    "Value":1369.71830986,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":145,
+    "Value":1335.33834586,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":146,
+    "Value":1326.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":147,
+    "Value":1404.13793103,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":148,
+    "Value":1395.30201342,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":149,
+    "Value":1339.18918919,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":150,
+    "Value":1323.1884058,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":151,
+    "Value":1327.77777778,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":152,
+    "Value":1337.08609272,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":153,
+    "Value":1357.66423358,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":154,
+    "Value":1346.26865672,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":155,
+    "Value":1277.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":156,
+    "Value":1305.51724138,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":157,
+    "Value":1306.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":158,
+    "Value":1303.81679389,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":159,
+    "Value":1332.16783217,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":160,
+    "Value":1361.83206107,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":161,
+    "Value":1302.08333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":162,
+    "Value":1366.44736842,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":163,
+    "Value":1317.39130435,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":164,
+    "Value":1337.5,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":165,
+    "Value":1328.8590604,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":166,
+    "Value":1335.71428571,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":167,
+    "Value":1283.33333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":168,
+    "Value":1181.30081301,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":169,
+    "Value":1243.93939394,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":170,
+    "Value":1294.24460432,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":171,
+    "Value":1301.38888889,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":172,
+    "Value":1281.42857143,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":173,
+    "Value":1258.45070423,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":174,
+    "Value":1336.42384106,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":175,
+    "Value":1279.05405405,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":176,
+    "Value":1369.8630137,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":177,
+    "Value":1398.6013986,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":178,
+    "Value":1277.08333333,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":179,
+    "Value":1304.82758621,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":180,
+    "Value":1381.75182482,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":181,
+    "Value":1304.5112782,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":182,
+    "Value":1305.88235294,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":183,
+    "Value":1340.4109589,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":184,
+    "Value":1351.67785235,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":185,
+    "Value":1228.24427481,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":186,
+    "Value":1355.10204082,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":187,
+    "Value":1338.25503356,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":188,
+    "Value":1305.51724138,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":189,
+    "Value":1304.31654676,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":190,
+    "Value":1326.92307692,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":191,
+    "Value":1260.46511628,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":192,
+    "Value":1265.0,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":193,
+    "Value":1253.47222222,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":194,
+    "Value":1247.18309859,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":195,
+    "Value":1254.34782609,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":196,
+    "Value":1280.71428571,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":197,
+    "Value":1223.7037037,
+    "Agent":"IQN"
+  },
+  {
+    "Iteration":198,
+    "Value":1311.51079137,
+    "Agent":"IQN"
   },
   {}
 ]
