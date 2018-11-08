@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# IGNORE_COPYRIGHT: This is Google-owned code.
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -79,7 +78,7 @@ def load_baselines(base_dir, verbose=False):
       if not tf.gfile.Exists(game_data_file):
         if verbose:
           # pylint: disable=superfluous-parens
-          print('Unable to load data for agnet {} on game {}'.format(agent,
+          print('Unable to load data for agent {} on game {}'.format(agent,
                                                                      game))
           # pylint: enable=superfluous-parens
         continue
