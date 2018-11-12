@@ -48,8 +48,9 @@ import gin.tf
 slim = tf.contrib.slim
 
 
-OBSERVATION_SHAPE = 84  # Size of a downscaled Atari 2600 frame.
-STACK_SIZE = 4  # Number of frames in the state stack.
+NATURE_DQN_OBSERVATION_SHAPE = 84  # Size of a downscaled Atari 2600 frame.
+NATURE_DQN_DTYPE = tf.uint8  # DType of Atari 2600 observations.
+NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
 
 
 def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
@@ -83,6 +84,9 @@ class DQNAgent(object):
   def __init__(self,
                sess,
                num_actions,
+               observation_shape=NATURE_DQN_OBSERVATION_SHAPE,
+               observation_dtype=NATURE_DQN_DTYPE,
+               stack_size=NATURE_DQN_STACK_SIZE,
                gamma=0.99,
                update_horizon=1,
                min_replay_history=20000,
@@ -108,6 +112,11 @@ class DQNAgent(object):
     Args:
       sess: `tf.Session`, for executing ops.
       num_actions: int, number of actions the agent can take at any state.
+      observation_shape: tuple of ints or an int. If single int, the observation
+        is assumed to be a 2D square.
+      observation_dtype: tf.DType, specifies the type of the observations. Note
+        that if your inputs are continuous, you should set this to tf.float32.
+      stack_size: int, number of frames to use in state stack.
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -149,6 +158,8 @@ class DQNAgent(object):
     tf.logging.info('\t optimizer: %s', optimizer)
 
     self.num_actions = num_actions
+    self.observation_shape = observation_shape
+    self.stack_size = stack_size
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -168,9 +179,10 @@ class DQNAgent(object):
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      state_shape = [1, OBSERVATION_SHAPE, OBSERVATION_SHAPE, STACK_SIZE]
+      state_shape = [1, observation_shape, observation_shape, stack_size]
       self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(tf.uint8, state_shape, name='state_ph')
+      self.state_ph = tf.placeholder(observation_dtype, state_shape,
+                                     name='state_ph')
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
@@ -254,8 +266,8 @@ class DQNAgent(object):
       A WrapperReplayBuffer object.
     """
     return circular_replay_buffer.WrappedReplayBuffer(
-        observation_shape=OBSERVATION_SHAPE,
-        stack_size=STACK_SIZE,
+        observation_shape=self.observation_shape,
+        stack_size=self.stack_size,
         use_staging=use_staging,
         update_horizon=self.update_horizon,
         gamma=self.gamma)

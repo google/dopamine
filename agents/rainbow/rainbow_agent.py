@@ -72,6 +72,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
   def __init__(self,
                sess,
                num_actions,
+               observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
+               observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
+               stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
                num_atoms=51,
                vmax=10.,
                gamma=0.99,
@@ -95,6 +98,11 @@ class RainbowAgent(dqn_agent.DQNAgent):
     Args:
       sess: `tf.Session`, for executing ops.
       num_actions: int, number of actions the agent can take at any state.
+      observation_shape: tuple of ints or an int. If single int, the observation
+        is assumed to be a 2D square.
+      observation_dtype: tf.DType, specifies the type of the observations. Note
+        that if your inputs are continuous, you should set this to tf.float32.
+      stack_size: int, number of frames to use in state stack.
       num_atoms: int, the number of buckets of the value function distribution.
       vmax: float, the value distribution support is [-vmax, vmax].
       gamma: float, discount factor with the usual RL meaning.
@@ -133,6 +141,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
     super(RainbowAgent, self).__init__(
         sess=sess,
         num_actions=num_actions,
+        observation_shape=observation_shape,
+        observation_dtype=observation_dtype,
+        stack_size=stack_size,
         gamma=gamma,
         update_horizon=update_horizon,
         min_replay_history=min_replay_history,
@@ -207,8 +218,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
     if self._replay_scheme not in ['uniform', 'prioritized']:
       raise ValueError('Invalid replay scheme: {}'.format(self._replay_scheme))
     return prioritized_replay_buffer.WrappedPrioritizedReplayBuffer(
-        observation_shape=dqn_agent.OBSERVATION_SHAPE,
-        stack_size=dqn_agent.STACK_SIZE,
+        observation_shape=self.observation_shape,
+        stack_size=self.stack_size,
         use_staging=use_staging,
         update_horizon=self.update_horizon,
         gamma=self.gamma)

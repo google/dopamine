@@ -309,8 +309,9 @@ class RainbowAgentTest(tf.test.TestCase):
     self._vmax = 7.
     self._min_replay_history = 32
     self._epsilon_decay_period = 90
-    self.observation_shape = dqn_agent.OBSERVATION_SHAPE
-    self.stack_size = dqn_agent.STACK_SIZE
+    self.observation_shape = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
+    self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
+    self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = np.zeros(
         [1, self.observation_shape, self.observation_shape, self.stack_size])
 
