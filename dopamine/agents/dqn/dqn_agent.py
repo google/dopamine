@@ -144,7 +144,11 @@ class DQNAgent(object):
     tf.logging.info('\t optimizer: %s', optimizer)
 
     self.num_actions = num_actions
-    self.observation_shape = observation_shape
+    if (isinstance(observation_shape, tuple) or
+        isinstance(observation_shape, list)):
+      self.observation_shape = tuple(observation_shape)
+    else:
+      self.observation_shape = (observation_shape, observation_shape)
     self.stack_size = stack_size
     self.gamma = gamma
     self.update_horizon = update_horizon
@@ -165,7 +169,7 @@ class DQNAgent(object):
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      state_shape = [1, observation_shape, observation_shape, stack_size]
+      state_shape = (1,) + self.observation_shape + (stack_size,)
       self.state = np.zeros(state_shape)
       self.state_ph = tf.placeholder(observation_dtype, state_shape,
                                      name='state_ph')
