@@ -43,7 +43,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='1.0.4',
+    version='1.0.5',
     include_package_data=True,
     packages=find_packages(exclude=['docs']),  # Required
     package_data={'testdata': ['testdata/*.gin']},
