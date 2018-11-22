@@ -107,8 +107,7 @@ class OutOfGraphReplayBuffer(object):
     """Initializes OutOfGraphReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       replay_capacity: int, number of transitions to keep in memory.
       batch_size: int.
@@ -125,6 +124,7 @@ class OutOfGraphReplayBuffer(object):
       ValueError: If replay_capacity is too small to hold at least one
         transition.
     """
+    assert isinstance(observation_shape, tuple)
     if replay_capacity < update_horizon + stack_size:
       raise ValueError('There is not enough capacity to cover '
                        'update_horizon and stack_size.')
@@ -133,16 +133,14 @@ class OutOfGraphReplayBuffer(object):
         'Creating a %s replay memory with the following parameters:',
         self.__class__.__name__)
     tf.logging.info('\t observation_shape: %s', str(observation_shape))
+    tf.logging.info('\t observation_dtype: %s', str(observation_dtype))
     tf.logging.info('\t stack_size: %d', stack_size)
     tf.logging.info('\t replay_capacity: %d', replay_capacity)
     tf.logging.info('\t batch_size: %d', batch_size)
     tf.logging.info('\t update_horizon: %d', update_horizon)
     tf.logging.info('\t gamma: %f', gamma)
 
-    if isinstance(observation_shape, tuple):
-      self._observation_shape = observation_shape
-    else:
-      self._observation_shape = (observation_shape, observation_shape)
+    self._observation_shape = observation_shape
     self._stack_size = stack_size
     self._state_shape = self._observation_shape + (self._stack_size,)
     self._replay_capacity = replay_capacity
@@ -663,8 +661,7 @@ class WrappedReplayBuffer(object):
     """Initializes WrappedReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       use_staging: bool, when True it would use a staging area to prefetch
         the next sampling batch.

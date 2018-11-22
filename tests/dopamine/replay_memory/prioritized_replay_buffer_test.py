@@ -25,7 +25,7 @@ import tensorflow as tf
 
 
 # Default parameters used when creating the replay memory.
-SCREEN_SIZE = 84
+SCREEN_SIZE = (84, 84)
 STACK_SIZE = 4
 BATCH_SIZE = 32
 REPLAY_CAPACITY = 100
@@ -56,7 +56,7 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
     Returns:
       Index of the transition just added.
     """
-    dummy = np.zeros((84, 84))
+    dummy = np.zeros(SCREEN_SIZE)
     # We use _add here to bypass the additional padding done by the replay
     # memory at the beginning of an episode.
     memory.add(dummy, action, reward, terminal, priority)
@@ -162,7 +162,7 @@ class WrappedPrioritizedReplayBufferTest(tf.test.TestCase):
         max_sample_attempts=10)  # For faster tests.
 
   def add_blank(self, replay, sess):
-    replay.add(np.zeros((84, 84)), 0, 0, 0, 1.)
+    replay.add(np.zeros(SCREEN_SIZE), 0, 0, 0, 1.)
 
   def testSetAndGetPriority(self):
     replay = self.create_default_memory()

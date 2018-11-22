@@ -37,7 +37,7 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.ones_state = np.ones(
-        [1, self.observation_shape, self.observation_shape, self.stack_size])
+        (1,) + self.observation_shape + (self.stack_size,))
 
   def _create_test_agent(self, sess):
 

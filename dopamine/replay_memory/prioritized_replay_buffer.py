@@ -53,8 +53,7 @@ class OutOfGraphPrioritizedReplayBuffer(
     """Initializes OutOfGraphPrioritizedReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square with sides equal to observation_shape.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       replay_capacity: int, number of transitions to keep in memory.
       batch_size: int.
@@ -264,8 +263,7 @@ class WrappedPrioritizedReplayBuffer(
     """Initializes WrappedPrioritizedReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square with sides equal to observation_shape.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       use_staging: bool, when True it would use a staging area to prefetch
         the next sampling batch.

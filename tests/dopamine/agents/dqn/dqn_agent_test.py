@@ -50,7 +50,7 @@ class DQNAgentTest(tf.test.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = np.zeros(
-        [1, self.observation_shape, self.observation_shape, self.stack_size])
+        (1,) + self.observation_shape + (self.stack_size,))
 
   def _create_test_agent(self, sess):
     stack_size = self.stack_size
@@ -76,6 +76,9 @@ class DQNAgentTest(tf.test.TestCase):
 
     agent = MockDQNAgent(
         sess=sess,
+        observation_shape=self.observation_shape,
+        observation_dtype=self.observation_dtype,
+        stack_size=self.stack_size,
         num_actions=self.num_actions,
         min_replay_history=self.min_replay_history,
         epsilon_fn=lambda w, x, y, z: 0.0,  # No exploration.
@@ -108,14 +111,12 @@ class DQNAgentTest(tf.test.TestCase):
       # We fill up the state with 9s. On calling agent.begin_episode the state
       # should be reset to all 0s.
       agent.state.fill(9)
-      first_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      first_observation = np.ones(self.observation_shape + (1,))
       self.assertEqual(agent.begin_episode(first_observation), 0)
       # When the all-1s observation is received, it will be placed at the end of
       # the state.
       expected_state = self.zero_state
-      expected_state[:, :, :, -1] = np.ones(
-          [1, self.observation_shape, self.observation_shape])
+      expected_state[:, :, :, -1] = np.ones((1,) + self.observation_shape)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(agent._observation, first_observation[:, :, 0])
       # No training happens in eval mode.
@@ -126,13 +127,11 @@ class DQNAgentTest(tf.test.TestCase):
       # Having a low replay memory add_count will prevent any of the
       # train/prefetch/sync ops from being called.
       agent._replay.memory.add_count = 0
-      second_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1]) * 2
+      second_observation = np.ones(self.observation_shape + (1,)) * 2
       agent.begin_episode(second_observation)
       # The agent's state will be reset, so we will only be left with the all-2s
       # observation.
-      expected_state[:, :, :, -1] = np.full(
-          (1, self.observation_shape, self.observation_shape), 2)
+      expected_state[:, :, :, -1] = np.full((1,) + self.observation_shape, 2)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(agent._observation, second_observation[:, :, 0])
       # training_steps is incremented since we set eval_mode to False.
@@ -145,8 +144,7 @@ class DQNAgentTest(tf.test.TestCase):
     """
     with tf.Session() as sess:
       agent = self._create_test_agent(sess)
-      base_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      base_observation = np.ones(self.observation_shape + (1,))
       # This will reset state and choose a first action.
       agent.begin_episode(base_observation)
       # We mock the replay buffer to verify how the agent interacts with it.
@@ -163,12 +161,11 @@ class DQNAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1, self.observation_shape, self.observation_shape), step)
+              (1,) + self.observation_shape, step)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.ones([self.observation_shape, self.observation_shape]) *
-          (num_steps - 1))
+          np.ones(self.observation_shape) * (num_steps - 1))
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # No training happens in eval mode.
       self.assertEqual(agent.training_steps, 0)
@@ -183,8 +180,7 @@ class DQNAgentTest(tf.test.TestCase):
     with tf.Session() as sess:
       agent = self._create_test_agent(sess)
       agent.eval_mode = False
-      base_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      base_observation = np.ones(self.observation_shape + (1,))
       # We mock the replay buffer to verify how the agent interacts with it.
       agent._replay = test_utils.MockReplayBuffer()
       self.evaluate(tf.global_variables_initializer())
@@ -203,7 +199,7 @@ class DQNAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1, self.observation_shape, self.observation_shape), step)
+              (1,) + self.observation_shape, step)
         self.assertEqual(agent._replay.add.call_count, step)
         mock_args, _ = agent._replay.add.call_args
         self.assertAllEqual(last_observation[:, :, 0], mock_args[0])
@@ -213,8 +209,7 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.full((self.observation_shape, self.observation_shape),
-                  num_steps - 1))
+          np.full(self.observation_shape, num_steps - 1))
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # We expect one more than num_steps because of the call to begin_episode.
       self.assertEqual(agent.training_steps, num_steps + 1)
@@ -227,6 +222,78 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertAllEqual(0, mock_args[1])  # Action selected.
       self.assertAllEqual(1, mock_args[2])  # Reward received.
       self.assertTrue(mock_args[3])  # is_terminal
+
+  def testNonTupleObservationShape(self):
+    with self.assertRaises(AssertionError):
+      self.observation_shape = 84
+      with tf.Session() as sess:
+        _ = self._create_test_agent(sess)
+
+  def _testCustomShapes(self, shape, dtype, stack_size):
+    self.observation_shape = shape
+    self.observation_dtype = dtype
+    self.stack_size = stack_size
+    self.zero_state = np.zeros((1,) + shape + (stack_size,))
+    with tf.Session() as sess:
+      agent = self._create_test_agent(sess)
+      agent.eval_mode = False
+      base_observation = np.ones(self.observation_shape + (1,))
+      # We mock the replay buffer to verify how the agent interacts with it.
+      agent._replay = test_utils.MockReplayBuffer()
+      self.evaluate(tf.global_variables_initializer())
+      # This will reset state and choose a first action.
+      agent.begin_episode(base_observation)
+      observation = base_observation
+
+      expected_state = self.zero_state
+      num_steps = 10
+      for step in range(1, num_steps + 1):
+        # We make observation a multiple of step for testing purposes (to
+        # uniquely identify each observation).
+        last_observation = observation
+        observation = base_observation * step
+        self.assertEqual(agent.step(reward=1, observation=observation), 0)
+        stack_pos = step - num_steps - 1
+        if stack_pos >= -self.stack_size:
+          expected_state[..., stack_pos] = np.full(
+              (1,) + self.observation_shape, step)
+        self.assertEqual(agent._replay.add.call_count, step)
+        mock_args, _ = agent._replay.add.call_args
+        self.assertAllEqual(last_observation[..., 0], mock_args[0])
+        self.assertAllEqual(0, mock_args[1])  # Action selected.
+        self.assertAllEqual(1, mock_args[2])  # Reward received.
+        self.assertFalse(mock_args[3])  # is_terminal
+      self.assertAllEqual(agent.state, expected_state)
+      self.assertAllEqual(
+          agent._last_observation,
+          np.full(self.observation_shape, num_steps - 1))
+      self.assertAllEqual(agent._observation, observation[..., 0])
+      # We expect one more than num_steps because of the call to begin_episode.
+      self.assertEqual(agent.training_steps, num_steps + 1)
+      self.assertEqual(agent._replay.add.call_count, num_steps)
+
+      agent.end_episode(reward=1)
+      self.assertEqual(agent._replay.add.call_count, num_steps + 1)
+      mock_args, _ = agent._replay.add.call_args
+      self.assertAllEqual(observation[..., 0], mock_args[0])
+      self.assertAllEqual(0, mock_args[1])  # Action selected.
+      self.assertAllEqual(1, mock_args[2])  # Reward received.
+      self.assertTrue(mock_args[3])  # is_terminal
+
+  def testStepTrainCustomObservationShapes(self):
+    custom_shapes = [(1,), (4, 4), (6, 1), (1, 6), (1, 1, 6), (6, 6, 6, 6)]
+    for shape in custom_shapes:
+      self._testCustomShapes(shape, tf.uint8, 1)
+
+  def testStepTrainCustomTypes(self):
+    custom_types = [tf.float32, tf.uint8, tf.int64]
+    for dtype in custom_types:
+      self._testCustomShapes((4, 4), dtype, 1)
+
+  def testStepTrainCustomStackSizes(self):
+    custom_stack_sizes = [1, 4, 8]
+    for stack_size in custom_stack_sizes:
+      self._testCustomShapes((4, 4), tf.uint8, stack_size)
 
   def testLinearlyDecayingEpsilon(self):
     """Test the functionality of the linearly_decaying_epsilon function."""

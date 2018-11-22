@@ -299,7 +299,7 @@ class RainbowAgentTest(tf.test.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = np.zeros(
-        [1, self.observation_shape, self.observation_shape, self.stack_size])
+        (1,) + self.observation_shape + (self.stack_size,))
 
   def _create_test_agent(self, sess):
     stack_size = self.stack_size
@@ -393,14 +393,12 @@ class RainbowAgentTest(tf.test.TestCase):
       # We fill up the state with 9s. On calling agent.begin_episode the state
       # should be reset to all 0s.
       agent.state.fill(9)
-      first_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      first_observation = np.ones(self.observation_shape + (1,))
       self.assertEqual(agent.begin_episode(first_observation), 0)
       # When the all-1s observation is received, it will be placed at the end of
       # the state.
       expected_state = self.zero_state
-      expected_state[:, :, :, -1] = np.ones(
-          [1, self.observation_shape, self.observation_shape])
+      expected_state[:, :, :, -1] = np.ones((1,) + self.observation_shape)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(agent._observation, first_observation[:, :, 0])
       # No training happens in eval mode.
@@ -411,13 +409,11 @@ class RainbowAgentTest(tf.test.TestCase):
       # Having a low replay memory add_count will prevent any of the
       # train/prefetch/sync ops from being called.
       agent._replay.memory.add_count = 0
-      second_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1]) * 2
+      second_observation = np.ones(self.observation_shape + (1,)) * 2
       agent.begin_episode(second_observation)
       # The agent's state will be reset, so we will only be left with the all-2s
       # observation.
-      expected_state[:, :, :, -1] = np.full(
-          (1, self.observation_shape, self.observation_shape), 2)
+      expected_state[:, :, :, -1] = np.full((1,) + self.observation_shape, 2)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(agent._observation, second_observation[:, :, 0])
       # training_steps is incremented since we set eval_mode to False.
@@ -430,8 +426,7 @@ class RainbowAgentTest(tf.test.TestCase):
     """
     with tf.Session() as sess:
       agent = self._create_test_agent(sess)
-      base_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      base_observation = np.ones(self.observation_shape + (1,))
       # This will reset state and choose a first action.
       agent.begin_episode(base_observation)
       # We mock the replay buffer to verify how the agent interacts with it.
@@ -448,12 +443,11 @@ class RainbowAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1, self.observation_shape, self.observation_shape), step)
+              (1,) + self.observation_shape, step)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.ones([self.observation_shape, self.observation_shape]) *
-          (num_steps - 1))
+          np.ones(self.observation_shape) * (num_steps - 1))
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # No training happens in eval mode.
       self.assertEqual(agent.training_steps, 0)
@@ -468,8 +462,7 @@ class RainbowAgentTest(tf.test.TestCase):
     with tf.Session() as sess:
       agent = self._create_test_agent(sess)
       agent.eval_mode = False
-      base_observation = np.ones(
-          [self.observation_shape, self.observation_shape, 1])
+      base_observation = np.ones(self.observation_shape + (1,))
       # We mock the replay buffer to verify how the agent interacts with it.
       agent._replay = test_utils.MockReplayBuffer()
       self.evaluate(tf.global_variables_initializer())
@@ -486,12 +479,11 @@ class RainbowAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1, self.observation_shape, self.observation_shape), step)
+              (1,) + self.observation_shape, step)
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.full((self.observation_shape, self.observation_shape),
-                  num_steps - 1))
+          np.full(self.observation_shape, num_steps - 1))
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # We expect one more than num_steps because of the call to begin_episode.
       self.assertEqual(agent.training_steps, num_steps + 1)

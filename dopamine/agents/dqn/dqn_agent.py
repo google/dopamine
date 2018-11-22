@@ -34,7 +34,7 @@ import gin.tf
 slim = tf.contrib.slim
 
 
-NATURE_DQN_OBSERVATION_SHAPE = 84  # Size of a downscaled Atari 2600 frame.
+NATURE_DQN_OBSERVATION_SHAPE = (84, 84)  # Size of downscaled Atari 2600 frame.
 NATURE_DQN_DTYPE = tf.uint8  # DType of Atari 2600 observations.
 NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
 
@@ -98,8 +98,7 @@ class DQNAgent(object):
     Args:
       sess: `tf.Session`, for executing ops.
       num_actions: int, number of actions the agent can take at any state.
-      observation_shape: tuple of ints or an int. If single int, the observation
-        is assumed to be a 2D square.
+      observation_shape: tuple of ints describing the observation shape.
       observation_dtype: tf.DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to tf.float32.
       stack_size: int, number of frames to use in state stack.
@@ -128,7 +127,7 @@ class DQNAgent(object):
       summary_writing_frequency: int, frequency with which summaries will be
         written. Lower values will result in slower training.
     """
-
+    assert isinstance(observation_shape, tuple)
     tf.logging.info('Creating %s agent with the following parameters:',
                     self.__class__.__name__)
     tf.logging.info('\t gamma: %f', gamma)
@@ -144,11 +143,8 @@ class DQNAgent(object):
     tf.logging.info('\t optimizer: %s', optimizer)
 
     self.num_actions = num_actions
-    if (isinstance(observation_shape, tuple) or
-        isinstance(observation_shape, list)):
-      self.observation_shape = tuple(observation_shape)
-    else:
-      self.observation_shape = (observation_shape, observation_shape)
+    self.observation_shape = tuple(observation_shape)
+    self.observation_dtype = observation_dtype
     self.stack_size = stack_size
     self.gamma = gamma
     self.update_horizon = update_horizon
@@ -171,7 +167,7 @@ class DQNAgent(object):
       # The last axis indicates the number of consecutive frames stacked.
       state_shape = (1,) + self.observation_shape + (stack_size,)
       self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(observation_dtype, state_shape,
+      self.state_ph = tf.placeholder(self.observation_dtype, state_shape,
                                      name='state_ph')
       self._replay = self._build_replay_buffer(use_staging)
 
@@ -260,7 +256,8 @@ class DQNAgent(object):
         stack_size=self.stack_size,
         use_staging=use_staging,
         update_horizon=self.update_horizon,
-        gamma=self.gamma)
+        gamma=self.gamma,
+        observation_dtype=self.observation_dtype.as_numpy_dtype)
 
   def _build_target_q_op(self):
     """Build an op used as a target for the Q-value.
@@ -428,11 +425,14 @@ class DQNAgent(object):
     Args:
       observation: numpy array, an observation from the environment.
     """
-    # Set current observation. Represents an 84 x 84 x 1 image frame.
-    self._observation = observation[:, :, 0]
+    # Set current observation. We do the reshaping to handle environments
+    # without frame stacking.
+    observation = np.reshape(observation, self.observation_shape)
+    self._observation = observation[..., 0]
+    self._observation = np.reshape(observation, self.observation_shape)
     # Swap out the oldest frame with the current frame.
-    self.state = np.roll(self.state, -1, axis=3)
-    self.state[0, :, :, -1] = self._observation
+    self.state = np.roll(self.state, -1, axis=-1)
+    self.state[0, ..., -1] = self._observation
 
   def _store_transition(self, last_observation, action, reward, is_terminal):
     """Stores an experienced transition.
