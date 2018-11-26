@@ -72,6 +72,9 @@ def load_baselines(base_dir, verbose=False):
         if sys.version_info.major >= 3:
           # pylint: disable=unexpected-keyword-arg
           single_agent_data = pickle.load(f, encoding='latin1')
+          cols = single_agent_data.columns
+          single_agent_data[cols] = single_agent_data[cols].apply(
+            pd.to_numeric, errors='ignore')
           # pylint: enable=unexpected-keyword-arg
         else:
           single_agent_data = pickle.load(f)
@@ -277,4 +280,8 @@ def read_experiment(log_path,
       row_index += 1
 
   # Shed any unused rows.
-  return data_frame.drop(np.arange(row_index, expected_num_rows))
+  df = data_frame.drop(np.arange(row_index, expected_num_rows))
+
+  cols = df.columns
+  df[cols] = df[cols].apply(pd.to_numeric, errors='ignore')
+  return df
