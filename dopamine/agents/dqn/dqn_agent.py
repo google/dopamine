@@ -165,10 +165,9 @@ class DQNAgent(object):
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      state_shape = (1,) + self.observation_shape + (stack_size,)
-      self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(self.observation_dtype, state_shape,
-                                     name='state_ph')
+      self._state_shape = (1,) + self.observation_shape + (stack_size,)
+      self.state = np.zeros(self._state_shape)
+      self._init_placeholder()
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
@@ -186,6 +185,10 @@ class DQNAgent(object):
     # environment.
     self._observation = None
     self._last_observation = None
+
+  def _init_placeholder(self):
+    self.state_ph = tf.placeholder(self.observation_dtype, self._state_shape,
+                                   name='state_ph')
 
   def _get_network_type(self):
     """Returns the type of the outputs of a Q value network.
