@@ -165,8 +165,6 @@ class DQNAgent(object):
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      self._state_shape = (1,) + self.observation_shape + (stack_size,)
-      self.state = np.zeros(self._state_shape)
       self._init_placeholder()
       self._replay = self._build_replay_buffer(use_staging)
 
@@ -187,7 +185,9 @@ class DQNAgent(object):
     self._last_observation = None
 
   def _init_placeholder(self):
-    self.state_ph = tf.placeholder(self.observation_dtype, self._state_shape,
+    _state_shape = (1,) + self.observation_shape + (self.stack_size,)
+    self.state = np.zeros(_state_shape)
+    self.state_ph = tf.placeholder(self.observation_dtype, _state_shape,
                                    name='state_ph')
 
   def _get_network_type(self):
@@ -430,8 +430,6 @@ class DQNAgent(object):
     """
     # Set current observation. We do the reshaping to handle environments
     # without frame stacking.
-    observation = np.reshape(observation, self.observation_shape)
-    self._observation = observation[..., 0]
     self._observation = np.reshape(observation, self.observation_shape)
     # Swap out the oldest frame with the current frame.
     self.state = np.roll(self.state, -1, axis=-1)
