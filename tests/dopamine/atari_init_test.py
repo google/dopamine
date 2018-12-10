@@ -21,7 +21,7 @@ import shutil
 
 
 from absl import flags
-from dopamine.discrete_domains import train
+from dopamine.atari import train
 import tensorflow as tf
 
 
@@ -34,6 +34,7 @@ class AtariInitTest(tf.test.TestCase):
     FLAGS.base_dir = os.path.join(
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+    FLAGS.agent_name = 'dqn'
     FLAGS.gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     # `num_iterations` set to zero to prevent runner execution.
     FLAGS.gin_bindings = [

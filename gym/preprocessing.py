@@ -12,9 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Gym-specific (non-Atari) utilities.
-
-Currently just a wrapper class around Gym environments.
+"""A wrapper class around Gym environments.
 
 This class makes general Gym environments conformant with the API Dopamine is
 expecting.
