@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for dopamine.gym.preprocessing."""
+"""Tests for dopamine.discrete_domains.gym_lib."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -20,7 +20,7 @@ from __future__ import print_function
 
 
 
-from dopamine.gym import preprocessing
+from dopamine.discrete_domains import gym_lib
 import tensorflow as tf
 
 
@@ -43,7 +43,7 @@ class MockGymEnvironment(object):
 class GymPreprocessingTest(tf.test.TestCase):
 
   def testAll(self):
-    env = preprocessing.GymPreprocessing(MockGymEnvironment())
+    env = gym_lib.GymPreprocessing(MockGymEnvironment())
     self.assertEqual('observation_space', env.observation_space)
     self.assertEqual('action_space', env.action_space)
     self.assertEqual('reward_range', env.reward_range)

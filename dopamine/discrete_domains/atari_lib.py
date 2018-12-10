@@ -12,9 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""A class implementing minimal Atari 2600 preprocessing.
+"""Atari-specific utilities.
 
-This includes:
+This includes a class implementing minimal Atari 2600 preprocessing, which
+is in charge of:
   . Emitting a terminal signal when losing a life (optional).
   . Frame skipping and color pooling.
   . Resizing the image before it is provided to the agent.
@@ -24,10 +25,84 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+
+
+import atari_py
+import gym
 from gym.spaces.box import Box
 import numpy as np
+import tensorflow as tf
+
 import gin.tf
 import cv2
+
+
+
+
+# `copy_roms` is only needed internally to copy ROMS from CNS.
+@gin.configurable
+def copy_roms(source_dir, destination_dir=None):
+  """Copy all the Atari ROMs to a destination directory.
+
+  Args:
+    source_dir: str, directory where ROMs are stored.
+    destination_dir: str, destination directory for ROMs.
+  """
+  # To use alternative_roms_path pass --atari_roms_path='...'
+  destination_dir = destination_dir or atari_py.alternative_roms_path()
+  if not destination_dir:
+    tf.logging.info('Skipping copying roms, use default atari_py roms path.')
+    return
+  source_roms = tf.gfile.ListDirectory(source_dir)
+  assert source_roms, 'No source ROMs available, quitting.'
+  if not tf.gfile.Exists(destination_dir):
+    tf.gfile.MakeDirs(destination_dir)
+  for rom in source_roms:
+    try:
+      source = os.path.join(source_dir, rom)
+      destination = os.path.join(destination_dir, rom)
+      if not tf.gfile.Exists(destination):
+        tf.gfile.Copy(source, destination)
+    except tf.errors.OpError:
+      tf.logging.info('Unable to copy %s to %s', rom, destination_dir)
+      continue
+
+
+@gin.configurable
+def create_atari_environment(game_name=None, sticky_actions=True):
+  """Wraps an Atari 2600 Gym environment with some basic preprocessing.
+
+  This preprocessing matches the guidelines proposed in Machado et al. (2017),
+  "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open
+  Problems for General Agents".
+
+  The created environment is the Gym wrapper around the Arcade Learning
+  Environment.
+
+  The main choice available to the user is whether to use sticky actions or not.
+  Sticky actions, as prescribed by Machado et al., cause actions to persist
+  with some probability (0.25) when a new command is sent to the ALE. This
+  can be viewed as introducing a mild form of stochasticity in the environment.
+  We use them by default.
+
+  Args:
+    game_name: str, the name of the Atari 2600 domain.
+    sticky_actions: bool, whether to use sticky_actions as per Machado et al.
+
+  Returns:
+    An Atari 2600 environment with some standard preprocessing.
+  """
+  assert game_name is not None
+  game_version = 'v0' if sticky_actions else 'v4'
+  full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
+  env = gym.make(full_game_name)
+  # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
+  # handle this time limit internally instead, which lets us cap at 108k frames
+  # (30 minutes). The TimeLimit wrapper also plays poorly with saving and
+  # restoring states.
+  env = env.env
+  env = AtariPreprocessing(env)
+  return env
 
 
 @gin.configurable
