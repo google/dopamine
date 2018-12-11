@@ -21,7 +21,7 @@ import shutil
 
 
 from absl import flags
-from dopamine.atari import train
+from dopamine.discrete_domains import train
 import tensorflow as tf
 
 import gin.tf
@@ -46,24 +46,26 @@ class AtariIntegrationTest(tf.test.TestCase):
 
   def quickDqnFlags(self):
     """Assign flags for a quick run of DQNAgent."""
-    FLAGS.agent_name = 'dqn'
     FLAGS.gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     FLAGS.gin_bindings = [
-        'Runner.training_steps=100', 'Runner.evaluation_steps=10',
-        'Runner.num_iterations=1', 'Runner.max_steps_per_episode=100',
+        'Runner.training_steps=100',
+        'Runner.evaluation_steps=10',
+        'Runner.num_iterations=1',
+        'Runner.max_steps_per_episode=100',
         'dqn_agent.DQNAgent.min_replay_history=500',
         'WrappedReplayBuffer.replay_capacity=100'
     ]
 
   def quickRainbowFlags(self):
     """Assign flags for a quick run of RainbowAgent."""
-    FLAGS.agent_name = 'rainbow'
     FLAGS.gin_files = [
         'dopamine/agents/rainbow/configs/rainbow.gin'
     ]
     FLAGS.gin_bindings = [
-        'Runner.training_steps=100', 'Runner.evaluation_steps=10',
-        'Runner.num_iterations=1', 'Runner.max_steps_per_episode=100',
+        'Runner.training_steps=100',
+        'Runner.evaluation_steps=10',
+        'Runner.num_iterations=1',
+        'Runner.max_steps_per_episode=100',
         "rainbow_agent.RainbowAgent.replay_scheme='prioritized'",
         'rainbow_agent.RainbowAgent.min_replay_history=500',
         'WrappedReplayBuffer.replay_capacity=100'
