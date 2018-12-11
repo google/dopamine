@@ -29,5 +29,7 @@ Runner.training_steps = 250000  # agent steps
 Runner.evaluation_steps = 125000  # agent steps
 Runner.max_steps_per_episode = 27000  # agent steps
 
+AtariPreprocessing.terminal_on_life_loss = True
+
 WrappedReplayBuffer.replay_capacity = 1000000
 WrappedReplayBuffer.batch_size = 32

@@ -1,4 +1,4 @@
-# Hyperparameters follow Dabney et al. (2018)
+# Hyperparameters follow Dabney et al. (2018).
 import dopamine.agents.implicit_quantile.implicit_quantile_agent
 import dopamine.agents.rainbow.rainbow_agent
 import dopamine.atari.run_experiment
