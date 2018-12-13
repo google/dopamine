@@ -21,9 +21,7 @@ from __future__ import print_function
 import os
 import pickle
 import tensorflow as tf
-
-
-CHECKPOINT_DURATION = 4
+from dopamine.common import CHECKPOINT_DURATION
 
 
 class Logger(object):

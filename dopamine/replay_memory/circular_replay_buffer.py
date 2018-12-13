@@ -32,6 +32,7 @@ import pickle
 
 import numpy as np
 import tensorflow as tf
+from dopamine.common import CHECKPOINT_DURATION
 
 import gin.tf
 
@@ -47,7 +48,6 @@ ReplayElement = (
 STORE_FILENAME_PREFIX = '$store$_'
 
 # This constant determines how many iterations a checkpoint is kept for.
-CHECKPOINT_DURATION = 4
 MAX_SAMPLE_ATTEMPTS = 1000
 
 
