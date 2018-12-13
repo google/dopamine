@@ -8,7 +8,7 @@ import gin.tf.external_configurables
 DQNAgent.observation_shape = %gym_lib.CARTPOLE_OBSERVATION_SHAPE
 DQNAgent.observation_dtype = %gym_lib.CARTPOLE_OBSERVATION_DTYPE
 DQNAgent.stack_size = %gym_lib.CARTPOLE_STACK_SIZE
-DQNAgent.network_template = @gym_lib.cartpole_dqn_network
+DQNAgent.network = @gym_lib.cartpole_dqn_network
 DQNAgent.gamma = 0.99
 DQNAgent.update_horizon = 1
 DQNAgent.min_replay_history = 500
