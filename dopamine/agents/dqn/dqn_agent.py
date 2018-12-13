@@ -68,7 +68,8 @@ def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
 
 
 @gin.configurable
-def identity_epsilon(epsilon):
+def identity_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
+                     epsilon):
   return epsilon
 
 
