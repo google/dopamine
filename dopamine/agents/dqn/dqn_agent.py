@@ -25,6 +25,7 @@ import random
 
 
 
+from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
 import numpy as np
 import tensorflow as tf
@@ -34,11 +35,14 @@ import gin.tf
 slim = tf.contrib.slim
 
 
-NATURE_DQN_OBSERVATION_SHAPE = (84, 84)  # Size of downscaled Atari 2600 frame.
-NATURE_DQN_DTYPE = tf.uint8  # DType of Atari 2600 observations.
-NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
+# These are aliases which are used by other classes.
+NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
+NATURE_DQN_DTYPE = atari_lib.NATURE_DQN_DTYPE
+NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE
+nature_dqn_network = atari_lib.nature_dqn_network
 
 
+@gin.configurable
 def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   """Returns the current epsilon for the agent's epsilon-greedy policy.
 
@@ -64,15 +68,21 @@ def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
 
 
 @gin.configurable
+def identity_epsilon(epsilon):
+  return epsilon
+
+
+@gin.configurable
 class DQNAgent(object):
   """An implementation of the DQN agent."""
 
   def __init__(self,
                sess,
                num_actions,
-               observation_shape=NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=NATURE_DQN_DTYPE,
-               stack_size=NATURE_DQN_STACK_SIZE,
+               observation_shape=atari_lib.NATURE_DQN_OBSERVATION_SHAPE,
+               observation_dtype=atari_lib.NATURE_DQN_DTYPE,
+               stack_size=atari_lib.NATURE_DQN_STACK_SIZE,
+               network=atari_lib.nature_dqn_network,
                gamma=0.99,
                update_horizon=1,
                min_replay_history=20000,
@@ -102,6 +112,11 @@ class DQNAgent(object):
       observation_dtype: tf.DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to tf.float32.
       stack_size: int, number of frames to use in state stack.
+      network: function expecting three parameters:
+        (num_actions, network_type, state). This function will return the
+        network_type object containing the tensors output by the network.
+        See dopamine.discrete_domains.atari_lib.nature_dqn_network as
+        an example.
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -146,6 +161,7 @@ class DQNAgent(object):
     self.observation_shape = tuple(observation_shape)
     self.observation_dtype = observation_dtype
     self.stack_size = stack_size
+    self.network = network
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -204,15 +220,7 @@ class DQNAgent(object):
     Returns:
       net: _network_type object containing the tensors output by the network.
     """
-    net = tf.cast(state, tf.float32)
-    net = tf.div(net, 255.)
-    net = slim.conv2d(net, 32, [8, 8], stride=4)
-    net = slim.conv2d(net, 64, [4, 4], stride=2)
-    net = slim.conv2d(net, 64, [3, 3], stride=1)
-    net = slim.flatten(net)
-    net = slim.fully_connected(net, 512)
-    q_values = slim.fully_connected(net, self.num_actions, activation_fn=None)
-    return self._get_network_type()(q_values)
+    return self.network(self.num_actions, self._get_network_type(), state)
 
   def _build_networks(self):
     """Builds the Q-value network computations needed for acting and training.
@@ -378,11 +386,14 @@ class DQNAgent(object):
     Returns:
        int, the selected action.
     """
-    epsilon = self.epsilon_eval if self.eval_mode else self.epsilon_fn(
-        self.epsilon_decay_period,
-        self.training_steps,
-        self.min_replay_history,
-        self.epsilon_train)
+    if self.eval_mode:
+      epsilon = self.epsilon_eval
+    else:
+      epsilon = self.epsilon_fn(
+          self.epsilon_decay_period,
+          self.training_steps,
+          self.min_replay_history,
+          self.epsilon_train)
     if random.random() <= epsilon:
       # Choose a random action with probability epsilon.
       return random.randint(0, self.num_actions - 1)

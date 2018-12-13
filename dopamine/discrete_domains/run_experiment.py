@@ -106,11 +106,10 @@ def create_runner(base_dir, schedule='continuous_train_and_eval'):
   assert base_dir is not None
   # Continuously runs training and evaluation until max num_iterations is hit.
   if schedule == 'continuous_train_and_eval':
-    return Runner(base_dir, create_agent, atari_lib.create_atari_environment)
+    return Runner(base_dir, create_agent)
   # Continuously runs training until max num_iterations is hit.
   elif schedule == 'continuous_train':
-    return TrainRunner(base_dir, create_agent,
-                       atari_lib.create_atari_environment)
+    return TrainRunner(base_dir, create_agent)
   else:
     raise ValueError('Unknown schedule: {}'.format(schedule))
 
@@ -138,7 +137,7 @@ class Runner(object):
   def __init__(self,
                base_dir,
                create_agent_fn,
-               create_environment_fn,
+               create_environment_fn=atari_lib.create_atari_environment,
                checkpoint_file_prefix='ckpt',
                logging_file_prefix='log',
                log_every_n=1,
@@ -489,7 +488,8 @@ class TrainRunner(Runner):
   preserved as before.
   """
 
-  def __init__(self, base_dir, create_agent_fn, create_environment_fn):
+  def __init__(self, base_dir, create_agent_fn,
+               create_environment_fn=atari_lib.create_atari_environment):
     """Initialize the TrainRunner object in charge of running a full experiment.
 
     Args:
