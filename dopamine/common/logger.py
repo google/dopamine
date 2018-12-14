@@ -21,7 +21,7 @@ from __future__ import print_function
 import os
 import pickle
 import tensorflow as tf
-from dopamine.common import CHECKPOINT_DURATION
+from dopamine.common import get_checkpoint_duration
 
 
 class Logger(object):
@@ -88,7 +88,7 @@ class Logger(object):
       pickle.dump(self.data, fout, protocol=pickle.HIGHEST_PROTOCOL)
     # After writing a checkpoint file, we garbage collect the log file
     # that is CHECKPOINT_DURATION versions old.
-    stale_iteration_number = iteration_number - CHECKPOINT_DURATION
+    stale_iteration_number = iteration_number - get_checkpoint_duration()
     if stale_iteration_number >= 0:
       stale_file = self._generate_filename(filename_prefix,
                                            stale_iteration_number)

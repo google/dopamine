@@ -32,7 +32,7 @@ import pickle
 
 import numpy as np
 import tensorflow as tf
-from dopamine.common import CHECKPOINT_DURATION
+from dopamine.common import get_checkpoint_duration
 
 import gin.tf
 
@@ -589,7 +589,7 @@ class OutOfGraphReplayBuffer(object):
 
       # After writing a checkpoint file, we garbage collect the checkpoint file
       # that is four versions old.
-      stale_iteration_number = iteration_number - CHECKPOINT_DURATION
+      stale_iteration_number = iteration_number - get_checkpoint_duration()
       if stale_iteration_number >= 0:
         stale_filename = self._generate_filename(checkpoint_dir, attr,
                                                  stale_iteration_number)

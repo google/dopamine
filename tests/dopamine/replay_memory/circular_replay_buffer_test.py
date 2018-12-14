@@ -494,7 +494,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     memory.terminal = self._test_terminal
     current_iteration = 5
     stale_iteration = (
-        current_iteration - circular_replay_buffer.CHECKPOINT_DURATION)
+        current_iteration - circular_replay_buffer.get_checkpoint_duration())
     memory.save(self._test_subdir, stale_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):
@@ -528,7 +528,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
     current_iteration = 5
     stale_iteration = (
-        current_iteration - circular_replay_buffer.CHECKPOINT_DURATION)
+        current_iteration - circular_replay_buffer.get_checkpoint_duration())
     memory.save(self._test_subdir, stale_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):

@@ -26,7 +26,7 @@ import random
 
 
 from dopamine.replay_memory import circular_replay_buffer
-from dopamine.common import CHECKPOINT_DURATION
+from dopamine.common import get_checkpoint_duration
 import numpy as np
 import tensorflow as tf
 
@@ -85,7 +85,7 @@ class DQNAgent(object):
                epsilon_decay_period=250000,
                tf_device='/cpu:*',
                use_staging=True,
-               max_tf_checkpoints_to_keep=CHECKPOINT_DURATION,
+               max_tf_checkpoints_to_keep=get_checkpoint_duration(),
                optimizer=tf.train.RMSPropOptimizer(
                    learning_rate=0.00025,
                    decay=0.95,
