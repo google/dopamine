@@ -39,6 +39,9 @@ import gin.tf
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_SHAPE', (4, 1))
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_DTYPE', tf.float32)
 gin.constant('gym_lib.CARTPOLE_STACK_SIZE', 1)
+gin.constant('gym_lib.ACROBOT_OBSERVATION_SHAPE', (6, 1))
+gin.constant('gym_lib.ACROBOT_OBSERVATION_DTYPE', tf.float32)
+gin.constant('gym_lib.ACROBOT_STACK_SIZE', 1)
 
 slim = tf.contrib.slim
 
@@ -66,6 +69,18 @@ def create_gym_environment(environment_name=None, version='v0'):
 
 
 @gin.configurable
+def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state):
+  net = tf.cast(state, tf.float32)
+  net = slim.flatten(net)
+  net -= min_vals
+  net /= max_vals - min_vals
+  net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
+  net = slim.fully_connected(net, 512)
+  net = slim.fully_connected(net, 512)
+  return slim.fully_connected(net, num_actions, activation_fn=None)
+
+
+@gin.configurable
 def cartpole_dqn_network(num_actions, network_type, state):
   """Builds the deep network used to compute the agent's Q-values.
 
@@ -81,14 +96,29 @@ def cartpole_dqn_network(num_actions, network_type, state):
   """
   min_vals = np.array([-2.4, -5, -math.pi/12, -math.pi*2])
   max_vals = np.array([2.4, 5, math.pi/12, math.pi*2])
-  net = tf.cast(state, tf.float32)
-  net = slim.flatten(net)
-  net -= min_vals
-  net /= max_vals - min_vals
-  net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
-  net = slim.fully_connected(net, 512)
-  net = slim.fully_connected(net, 512)
-  q_values = slim.fully_connected(net, num_actions, activation_fn=None)
+  q_values = _basic_discrete_domain_network(min_vals, max_vals, num_actions,
+                                            state)
+  return network_type(q_values)
+
+
+@gin.configurable
+def acrobot_dqn_network(num_actions, network_type, state):
+  """Builds the deep network used to compute the agent's Q-values.
+
+  It rescales the input features to a range that yields improved performance.
+
+  Args:
+    num_actions: int, number of actions.
+    network_type: namedtuple, collection of expected values to return.
+    state: `tf.Tensor`, contains the agent's current state.
+
+  Returns:
+    net: _network_type object containing the tensors output by the network.
+  """
+  min_vals = [-1., -1., -1., -1., -5., -5.]
+  max_vals = [1., 1., 1., 1., 5., 5.]
+  q_values = _basic_discrete_domain_network(min_vals, max_vals, num_actions,
+                                            state)
   return network_type(q_values)
 
 
