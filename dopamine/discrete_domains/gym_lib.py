@@ -115,8 +115,8 @@ def acrobot_dqn_network(num_actions, network_type, state):
   Returns:
     net: _network_type object containing the tensors output by the network.
   """
-  min_vals = [-1., -1., -1., -1., -5., -5.]
-  max_vals = [1., 1., 1., 1., 5., 5.]
+  min_vals = np.array([-1., -1., -1., -1., -5., -5.])
+  max_vals = np.array([1., 1., 1., 1., 5., 5.])
   q_values = _basic_discrete_domain_network(min_vals, max_vals, num_actions,
                                             state)
   return network_type(q_values)
