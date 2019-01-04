@@ -223,11 +223,26 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 
 ### Giving credit
 
-If you use Dopamine in your work, we ask that you cite this repository as a
-reference. The preferred format (authors in alphabetical order) is:
-
-Marc G. Bellemare, Pablo Samuel Castro, Carles Gelada, Saurabh Kumar, Subhodeep Moitra.
-Dopamine, https://github.com/google/dopamine, 2018.
+If you use Dopamine in your work, we ask that you use the following BibTeX entry:
+```
+@article{DBLP:journals/corr/abs-1812-06110,
+  author    = {Pablo Samuel Castro and
+               Subhodeep Moitra and
+               Carles Gelada and
+               Saurabh Kumar and
+               Marc G. Bellemare},
+  title     = {Dopamine: {A} Research Framework for Deep Reinforcement Learning},
+  journal   = {CoRR},
+  volume    = {abs/1812.06110},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1812.06110},
+  archivePrefix = {arXiv},
+  eprint    = {1812.06110},
+  timestamp = {Tue, 01 Jan 2019 15:01:25 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1812-06110},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+```
 
 
 
