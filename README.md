@@ -223,11 +223,22 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 
 ### Giving credit
 
-If you use Dopamine in your work, we ask that you cite this repository as a
-reference. The preferred format (authors in alphabetical order) is:
+If you use Dopamine in your work, we ask that you cite our
+[white paper][dopamine_paper]. Here is an example BibTeX entry:
 
-Marc G. Bellemare, Pablo Samuel Castro, Carles Gelada, Saurabh Kumar, Subhodeep Moitra.
-Dopamine, https://github.com/google/dopamine, 2018.
+```
+@article{castro18dopamine,
+  author    = {Pablo Samuel Castro and
+               Subhodeep Moitra and
+               Carles Gelada and
+               Saurabh Kumar and
+               Marc G. Bellemare},
+  title     = {Dopamine: {A} {R}esearch {F}ramework for {D}eep {R}einforcement {L}earning},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1812.06110},
+  archivePrefix = {arXiv}
+}
+```
 
 
 
@@ -239,3 +250,4 @@ Dopamine, https://github.com/google/dopamine, 2018.
 [c51]: http://proceedings.mlr.press/v70/bellemare17a.html
 [rainbow]: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/17204/16680
 [iqn]: https://arxiv.org/abs/1806.06923
+[dopamine_paper]: https://arxiv.org/abs/1812.06110
