@@ -330,10 +330,13 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         [min((x + num_adds - replay_capacity) % 4, 1) for x in indices])
     batch = memory.sample_transition_batch(batch_size=len(indices),
                                            indices=indices)
-    states, action, reward, next_states, terminal, indices_batch = batch
+    (states, action, reward, next_states, next_action, next_reward, terminal,
+     indices_batch) = batch
     self.assertAllEqual(states, expected_states)
     self.assertAllEqual(action, np.zeros(len(indices)))
     self.assertAllEqual(reward, np.zeros(len(indices)))
+    self.assertAllEqual(next_action, np.zeros(len(indices)))
+    self.assertAllEqual(next_reward, np.zeros(len(indices)))
     self.assertAllEqual(next_states, expected_next_states)
     self.assertAllEqual(terminal, expected_terminal)
     self.assertAllEqual(indices_batch, indices)
@@ -385,11 +388,13 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     expected_extra2 = np.zeros([len(indices), 2])
     batch = memory.sample_transition_batch(
         batch_size=len(indices), indices=indices)
-    (states, action, reward, next_states, terminal, indices_batch, extra1,
-     extra2) = batch
+    (states, action, reward, next_states, next_action, next_reward, terminal,
+     indices_batch, extra1, extra2) = batch
     self.assertAllEqual(states, expected_states)
     self.assertAllEqual(action, np.zeros(len(indices)))
     self.assertAllEqual(reward, np.zeros(len(indices)))
+    self.assertAllEqual(next_action, np.zeros(len(indices)))
+    self.assertAllEqual(next_reward, np.zeros(len(indices)))
     self.assertAllEqual(next_states, expected_next_states)
     self.assertAllEqual(terminal, expected_terminal)
     self.assertAllEqual(indices_batch, indices)
@@ -415,7 +420,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     indices = [2, 3, 4]
     batch = memory.sample_transition_batch(batch_size=len(indices),
                                            indices=indices)
-    states, action, reward, _, terminal, indices_batch = batch
+    states, action, reward, _, _, _, terminal, indices_batch = batch
     expected_states = np.array([
         np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE)
         for i in indices
@@ -686,7 +691,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         ])
 
   def _verify_sampled_trajectories(self, batch):
-    states, action, reward, next_states, terminal, indices = batch.values()
+    (states, action, reward, next_states, next_action, next_reward, terminal,
+     indices) = batch.values()
     # Because we've added BATCH_SIZE * 2 observation, using the enumerator to
     # fill the respective observation, all observation will be np.full arrays
     # where the values are in [0, BATCH_SIZE * 2). Because we're sampling we can
@@ -702,6 +708,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     self.assertAllClose(next_states, midpoint_observation, rtol=BATCH_SIZE)
     self.assertAllClose(action, np.ones(BATCH_SIZE) * 2)
     self.assertAllClose(reward, np.ones(BATCH_SIZE))
+    self.assertAllClose(next_action, np.ones(BATCH_SIZE) * 2)
+    self.assertAllClose(next_reward, np.ones(BATCH_SIZE))
     self.assertAllClose(terminal, np.zeros(BATCH_SIZE))
     self.assertAllClose(indices, np.ones(BATCH_SIZE) * BATCH_SIZE,
                         rtol=BATCH_SIZE)
