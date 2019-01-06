@@ -50,8 +50,7 @@ from __future__ import print_function
 import os
 import pickle
 import tensorflow as tf
-
-CHECKPOINT_DURATION = 4
+from dopamine.common import get_checkpoint_duration
 
 
 def get_latest_checkpoint_number(base_directory):
@@ -141,7 +140,7 @@ class Checkpointer(object):
     # After writing a the checkpoint and sentinel file, we garbage collect files
     # that are CHECKPOINT_DURATION * self._checkpoint_frequency versions old.
     stale_iteration_number = iteration_number - (self._checkpoint_frequency *
-                                                 CHECKPOINT_DURATION)
+                                                 get_checkpoint_duration())
 
     if stale_iteration_number >= 0:
       stale_file = self._generate_filename(self._checkpoint_file_prefix,

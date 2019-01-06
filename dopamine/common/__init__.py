@@ -12,3 +12,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+CHECKPOINT_DURATION = 4
+
+
+def set_checkpoint_duration(n):
+    global CHECKPOINT_DURATION
+    CHECKPOINT_DURATION = n
+
+
+def get_checkpoint_duration():
+    return CHECKPOINT_DURATION

@@ -32,6 +32,7 @@ import pickle
 
 import numpy as np
 import tensorflow as tf
+from dopamine.common import get_checkpoint_duration
 
 import gin.tf
 
@@ -47,7 +48,6 @@ ReplayElement = (
 STORE_FILENAME_PREFIX = '$store$_'
 
 # This constant determines how many iterations a checkpoint is kept for.
-CHECKPOINT_DURATION = 4
 MAX_SAMPLE_ATTEMPTS = 1000
 
 
@@ -589,7 +589,7 @@ class OutOfGraphReplayBuffer(object):
 
       # After writing a checkpoint file, we garbage collect the checkpoint file
       # that is four versions old.
-      stale_iteration_number = iteration_number - CHECKPOINT_DURATION
+      stale_iteration_number = iteration_number - get_checkpoint_duration()
       if stale_iteration_number >= 0:
         stale_filename = self._generate_filename(checkpoint_dir, attr,
                                                  stale_iteration_number)

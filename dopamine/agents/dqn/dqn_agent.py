@@ -26,6 +26,7 @@ import random
 
 
 from dopamine.replay_memory import circular_replay_buffer
+from dopamine.common import get_checkpoint_duration
 import numpy as np
 import tensorflow as tf
 
@@ -84,7 +85,7 @@ class DQNAgent(object):
                epsilon_decay_period=250000,
                tf_device='/cpu:*',
                use_staging=True,
-               max_tf_checkpoints_to_keep=3,
+               max_tf_checkpoints_to_keep=get_checkpoint_duration(),
                optimizer=tf.train.RMSPropOptimizer(
                    learning_rate=0.00025,
                    decay=0.95,
@@ -165,10 +166,7 @@ class DQNAgent(object):
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      state_shape = (1,) + self.observation_shape + (stack_size,)
-      self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(self.observation_dtype, state_shape,
-                                     name='state_ph')
+      self._init_placeholder()
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
@@ -186,6 +184,12 @@ class DQNAgent(object):
     # environment.
     self._observation = None
     self._last_observation = None
+
+  def _init_placeholder(self):
+    _state_shape = (1,) + self.observation_shape + (self.stack_size,)
+    self.state = np.zeros(_state_shape)
+    self.state_ph = tf.placeholder(self.observation_dtype, _state_shape,
+                                   name='state_ph')
 
   def _get_network_type(self):
     """Returns the type of the outputs of a Q value network.
@@ -427,8 +431,6 @@ class DQNAgent(object):
     """
     # Set current observation. We do the reshaping to handle environments
     # without frame stacking.
-    observation = np.reshape(observation, self.observation_shape)
-    self._observation = observation[..., 0]
     self._observation = np.reshape(observation, self.observation_shape)
     # Swap out the oldest frame with the current frame.
     self.state = np.roll(self.state, -1, axis=-1)
