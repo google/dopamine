@@ -108,7 +108,7 @@ class Runner(object):
   def __init__(self,
                base_dir,
                create_agent_fn,
-               random_seed,  
+               random_seed,
                create_environment_fn=create_atari_environment,
                game_name=None,
                sticky_actions=True,
