@@ -25,11 +25,12 @@ tf.train.AdamOptimizer.epsilon = 0.00015
 
 Runner.game_name = 'Pong'
 # Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
-Runner.sticky_actions = True
-Runner.num_iterations = 200
+Runner.sticky_actions = False
+Runner.num_iterations = 15
 Runner.training_steps = 250000  # agent steps
 Runner.evaluation_steps = 125000  # agent steps
 Runner.max_steps_per_episode = 27000  # agent steps
+Runner.random_seed = 1
 
 WrappedPrioritizedReplayBuffer.replay_capacity = 1000000
 WrappedPrioritizedReplayBuffer.batch_size = 32

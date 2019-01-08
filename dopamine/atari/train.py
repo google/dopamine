@@ -41,6 +41,8 @@ flags.DEFINE_string('agent_name', None,
                     '(dqn, rainbow, implicit_quantile)')
 flags.DEFINE_string('base_dir', None,
                     'Base directory to host all required sub-directories.')
+flags.DEFINE_integer('random_seed', 1,
+                     'graph level random seed')
 flags.DEFINE_multi_string(
     'gin_files', [], 'List of paths to gin configuration files (e.g.'
     '"dopamine/agents/dqn/dqn.gin").')
@@ -91,7 +93,7 @@ def create_agent(sess, environment, summary_writer=None):
     raise ValueError('Unknown agent: {}'.format(FLAGS.agent_name))
 
 
-def create_runner(base_dir, create_agent_fn):
+def create_runner(base_dir, create_agent_fn, random_seed):
   """Creates an experiment Runner.
 
   Args:
@@ -108,7 +110,7 @@ def create_runner(base_dir, create_agent_fn):
   assert base_dir is not None
   # Continuously runs training and evaluation until max num_iterations is hit.
   if FLAGS.schedule == 'continuous_train_and_eval':
-    return run_experiment.Runner(base_dir, create_agent_fn)
+    return run_experiment.Runner(base_dir, create_agent_fn, random_seed)
   # Continuously runs training until max num_iterations is hit.
   elif FLAGS.schedule == 'continuous_train':
     return run_experiment.TrainRunner(base_dir, create_agent_fn)
@@ -126,7 +128,7 @@ def launch_experiment(create_runner_fn, create_agent_fn):
      Atari 2600 Gym environment, and returns an agent.
   """
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
-  runner = create_runner_fn(FLAGS.base_dir, create_agent_fn)
+  runner = create_runner_fn(FLAGS.base_dir, create_agent_fn, FLAGS.random_seed)
   runner.run_experiment()
 
 

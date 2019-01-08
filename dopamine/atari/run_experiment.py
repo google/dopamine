@@ -108,6 +108,7 @@ class Runner(object):
   def __init__(self,
                base_dir,
                create_agent_fn,
+               random_seed,  # changed by lkx
                create_environment_fn=create_atari_environment,
                game_name=None,
                sticky_actions=True,
@@ -148,6 +149,7 @@ class Runner(object):
     """
     assert base_dir is not None
     assert game_name is not None
+    assert random_seed is not None
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations
@@ -160,10 +162,15 @@ class Runner(object):
 
     self._environment = create_environment_fn(game_name, sticky_actions)
     # Set up a session and initialize variables.
+    tf.set_random_seed(random_seed)
     self._sess = tf.Session('',
                             config=tf.ConfigProto(allow_soft_placement=True))
     self._agent = create_agent_fn(self._sess, self._environment,
                                   summary_writer=self._summary_writer)
+    tf.logging.info('Running %s with the following parameters:',
+                    self.__class__.__name__)
+    tf.logging.info('\t random_seed: %s', random_seed)
+
     self._summary_writer.add_graph(graph=tf.get_default_graph())
     self._sess.run(tf.global_variables_initializer())
 
