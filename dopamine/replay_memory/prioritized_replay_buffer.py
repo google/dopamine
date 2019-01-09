@@ -154,7 +154,7 @@ class OutOfGraphPrioritizedReplayBuffer(
       if not self.is_valid_transition(indices[i]):
         if allowed_attempts == 0:
           raise RuntimeError(
-              'Max saple attempsts: Tried {} times but only sampled {}'
+              'Max sample attempts: Tried {} times but only sampled {}'
               ' valid indices. Batch size is {}'.
               format(self._max_sample_attempts, i, batch_size))
         index = indices[i]
