@@ -130,7 +130,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
     # TODO(b/110897128): Make agent optimizer attribute private.
     self.optimizer = optimizer
 
-    super(RainbowAgent, self).__init__(
+    dqn_agent.DQNAgent.__init__(
+        self,
         sess=sess,
         num_actions=num_actions,
         observation_shape=observation_shape,
