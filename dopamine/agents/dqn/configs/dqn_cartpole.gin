@@ -1,4 +1,5 @@
-# Hyperparameters for a simple Cartpole agent.
+# Hyperparameters for a simple DQN-style Cartpole agent. The hyperparameters
+# chosen achieve reasonable performance.
 import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.agents.dqn.dqn_agent

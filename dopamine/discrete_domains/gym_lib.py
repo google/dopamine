@@ -36,6 +36,10 @@ import tensorflow as tf
 import gin.tf
 
 
+CARTPOLE_MIN_VALS = np.array([-2.4, -5., -math.pi/12., -math.pi*2.])
+CARTPOLE_MAX_VALS = np.array([2.4, 5., math.pi/12., math.pi*2.])
+ACROBOT_MIN_VALS = np.array([-1., -1., -1., -1., -5., -5.])
+ACROBOT_MAX_VALS = np.array([1., 1., 1., 1., 5., 5.])
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_SHAPE', (4, 1))
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_DTYPE', tf.float32)
 gin.constant('gym_lib.CARTPOLE_STACK_SIZE', 1)
@@ -69,7 +73,21 @@ def create_gym_environment(environment_name=None, version='v0'):
 
 
 @gin.configurable
-def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state):
+def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
+                                   num_atoms=None):
+  """Builds a basic network for discrete domains, rescaling inputs to [-1, 1].
+
+  Args:
+    min_vals: float, minimum attainable values (must be same shape as `state`).
+    max_vals: float, maximum attainable values (must be same shape as `state`).
+    num_actions: int, number of actions.
+    state: `tf.Tensor`, the state input.
+    num_atoms: int or None, if None will construct a DQN-style network,
+      otherwise will construct a Rainbow-style network.
+
+  Returns:
+    The Q-values for DQN-style agents or logits for Rainbow-style agents.
+  """
   net = tf.cast(state, tf.float32)
   net = slim.flatten(net)
   net -= min_vals
@@ -77,7 +95,13 @@ def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state):
   net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
   net = slim.fully_connected(net, 512)
   net = slim.fully_connected(net, 512)
-  return slim.fully_connected(net, num_actions, activation_fn=None)
+  if num_atoms is None:
+    # We are constructing a DQN-style network.
+    return slim.fully_connected(net, num_actions, activation_fn=None)
+  else:
+    # We are constructing a rainbow-style network.
+    return slim.fully_connected(net, num_actions * num_atoms,
+                                activation_fn=None)
 
 
 @gin.configurable
@@ -94,11 +118,33 @@ def cartpole_dqn_network(num_actions, network_type, state):
   Returns:
     net: _network_type object containing the tensors output by the network.
   """
-  min_vals = np.array([-2.4, -5, -math.pi/12, -math.pi*2])
-  max_vals = np.array([2.4, 5, math.pi/12, math.pi*2])
-  q_values = _basic_discrete_domain_network(min_vals, max_vals, num_actions,
-                                            state)
+  q_values = _basic_discrete_domain_network(
+      CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, state)
   return network_type(q_values)
+
+
+@gin.configurable
+def cartpole_rainbow_network(num_actions, num_atoms, support, network_type,
+                             state):
+  """Build the deep network used to compute the agent's Q-value distributions.
+
+  Args:
+    num_actions: int, number of actions.
+    num_atoms: int, the number of buckets of the value function distribution.
+    support: tf.linspace, the support of the Q-value distribution.
+    network_type: `namedtuple`, collection of expected values to return.
+    state: `tf.Tensor`, contains the agent's current state.
+
+  Returns:
+    net: _network_type object containing the tensors output by the network.
+  """
+  net = _basic_discrete_domain_network(
+      CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, state,
+      num_atoms=num_atoms)
+  logits = tf.reshape(net, [-1, num_actions, num_atoms])
+  probabilities = tf.contrib.layers.softmax(logits)
+  q_values = tf.reduce_sum(support * probabilities, axis=2)
+  return network_type(q_values, logits, probabilities)
 
 
 @gin.configurable
@@ -115,11 +161,33 @@ def acrobot_dqn_network(num_actions, network_type, state):
   Returns:
     net: _network_type object containing the tensors output by the network.
   """
-  min_vals = np.array([-1., -1., -1., -1., -5., -5.])
-  max_vals = np.array([1., 1., 1., 1., 5., 5.])
-  q_values = _basic_discrete_domain_network(min_vals, max_vals, num_actions,
-                                            state)
+  q_values = _basic_discrete_domain_network(
+      ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, state)
   return network_type(q_values)
+
+
+@gin.configurable
+def acrobot_rainbow_network(num_actions, num_atoms, support, network_type,
+                            state):
+  """Build the deep network used to compute the agent's Q-value distributions.
+
+  Args:
+    num_actions: int, number of actions.
+    num_atoms: int, the number of buckets of the value function distribution.
+    support: tf.linspace, the support of the Q-value distribution.
+    network_type: `namedtuple`, collection of expected values to return.
+    state: `tf.Tensor`, contains the agent's current state.
+
+  Returns:
+    net: _network_type object containing the tensors output by the network.
+  """
+  net = _basic_discrete_domain_network(
+      ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, state,
+      num_atoms=num_atoms)
+  logits = tf.reshape(net, [-1, num_actions, num_atoms])
+  probabilities = tf.contrib.layers.softmax(logits)
+  q_values = tf.reduce_sum(support * probabilities, axis=2)
+  return network_type(q_values, logits, probabilities)
 
 
 @gin.configurable

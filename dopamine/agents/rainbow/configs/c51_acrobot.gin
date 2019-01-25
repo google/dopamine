@@ -1,0 +1,39 @@
+# Hyperparameters for a simple C51-style Acrobot agent. The hyperparameters
+# chosen achieve reasonable performance.
+import dopamine.agents.dqn.dqn_agent
+import dopamine.agents.rainbow.rainbow_agent
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import gin.tf.external_configurables
+
+RainbowAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
+RainbowAgent.observation_dtype = %gym_lib.ACROBOT_OBSERVATION_DTYPE
+RainbowAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
+RainbowAgent.network = @gym_lib.acrobot_rainbow_network
+RainbowAgent.num_atoms = 51
+RainbowAgent.vmax = 10.
+RainbowAgent.gamma = 0.99
+RainbowAgent.update_horizon = 1
+RainbowAgent.min_replay_history = 500
+RainbowAgent.update_period = 4
+RainbowAgent.target_update_period = 100
+RainbowAgent.epsilon_fn = @dqn_agent.identity_epsilon
+RainbowAgent.replay_scheme = 'uniform'
+RainbowAgent.tf_device = '/gpu:0'  # use '/cpu:*' for non-GPU version
+RainbowAgent.optimizer = @tf.train.AdamOptimizer()
+
+tf.train.AdamOptimizer.learning_rate = 0.1
+tf.train.AdamOptimizer.epsilon = 0.0003125
+
+create_gym_environment.environment_name = 'Acrobot'
+create_gym_environment.version = 'v1'
+create_agent.agent_name = 'rainbow'
+Runner.create_environment_fn = @gym_lib.create_gym_environment
+Runner.num_iterations = 500
+Runner.training_steps = 1000
+Runner.evaluation_steps = 1000
+Runner.max_steps_per_episode = 500
+
+WrappedPrioritizedReplayBuffer.replay_capacity = 50000
+WrappedPrioritizedReplayBuffer.batch_size = 128
