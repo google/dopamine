@@ -147,11 +147,11 @@ python tests/atari_init_test.py
 ```
 
 The entry point to the standard Atari 2600 experiment is
-[`dopamine/atari/train.py`](https://github.com/google/dopamine/blob/master/dopamine/atari/train.py).
+[`dopamine/discrete_domains/train.py`](https://github.com/google/dopamine/blob/master/dopamine/discrete_domains/train.py).
 To run the basic DQN agent,
 
 ```
-python -um dopamine.atari.train \
+python -um dopamine.discrete_domains.train \
   --agent_name=dqn \
   --base_dir=/tmp/dopamine \
   --gin_files='dopamine/agents/dqn/configs/dqn.gin'
