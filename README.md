@@ -37,6 +37,8 @@ For additional details, please see our
 This is not an official Google product.
 
 ## What's new
+*  **30/01/2019:** Dopamine 2.0 now supports general discrete-domain gym
+   environments.
 *  **01/11/2018:** Download links for each individual checkpoint, to avoid
    having to download all of the checkpoints.
 *  **29/10/2018:** Graph definitions now show up in Tensorboard.
@@ -141,9 +143,8 @@ git clone https://github.com/google/dopamine.git
 You can test whether the installation was successful by running the following:
 
 ```
-cd dopamine
 export PYTHONPATH=${PYTHONPATH}:.
-python tests/atari_init_test.py
+python tests/dopamine/atari_init_test.py
 ```
 
 The entry point to the standard Atari 2600 experiment is
@@ -152,7 +153,6 @@ To run the basic DQN agent,
 
 ```
 python -um dopamine.discrete_domains.train \
-  --agent_name=dqn \
   --base_dir=/tmp/dopamine \
   --gin_files='dopamine/agents/dqn/configs/dqn.gin'
 ```
@@ -178,6 +178,26 @@ are generated at the end of each iteration.
 
 More generally, the whole of Dopamine is easily configured using the
 [gin configuration framework](https://github.com/google/gin-config).
+
+#### Non-Atari discrete environments
+
+We provide sample configuration files for training an agent on Cartpole and
+Acrobot. For example, to train C51 on Cartpole with default settings, run the
+following command:
+
+```
+python -um dopamine.discrete_domains.train \
+  --base_dir=/tmp/dopamine \
+  --gin_files='dopamine/agents/rainbow/configs/c51_cartpole.gin'
+```
+
+You can train Rainbow on Acrobot with the following command:
+
+```
+python -um dopamine.discrete_domains.train \
+  --base_dir=/tmp/dopamine \
+  --gin_files='dopamine/agents/rainbow/configs/rainbow_acrobot.gin'
+```
 
 
 ### Install as a library
