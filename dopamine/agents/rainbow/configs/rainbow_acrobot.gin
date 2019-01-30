@@ -22,7 +22,7 @@ RainbowAgent.replay_scheme = 'prioritized'
 RainbowAgent.tf_device = '/gpu:0'  # use '/cpu:*' for non-GPU version
 RainbowAgent.optimizer = @tf.train.AdamOptimizer()
 
-tf.train.AdamOptimizer.learning_rate = 0.1
+tf.train.AdamOptimizer.learning_rate = 0.09
 tf.train.AdamOptimizer.epsilon = 0.0003125
 
 create_gym_environment.environment_name = 'Acrobot'
