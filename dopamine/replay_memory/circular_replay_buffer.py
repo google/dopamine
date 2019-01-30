@@ -92,6 +92,8 @@ class OutOfGraphReplayBuffer(object):
   Attributes:
     add_count: int, counter of how many transitions have been added (including
       the blank ones at the beginning of an episode).
+    invalid_range: np.array, an array with the indices of cursor-related invalid
+      transitions
   """
 
   def __init__(self,
@@ -508,9 +510,9 @@ class OutOfGraphReplayBuffer(object):
         if element.name == 'state':
           element_array[batch_element] = self.get_observation_stack(state_index)
         elif element.name == 'reward':
-          # cumpute the discounted sum of rewards in the trajectory.
-          element_array[batch_element] = trajectory_discount_vector.dot(
-              trajectory_rewards)
+          # compute the discounted sum of rewards in the trajectory.
+          element_array[batch_element] = np.sum(
+              trajectory_discount_vector * trajectory_rewards, axis=0)
         elif element.name == 'next_state':
           element_array[batch_element] = self.get_observation_stack(
               (next_state_index) % self._replay_capacity)
