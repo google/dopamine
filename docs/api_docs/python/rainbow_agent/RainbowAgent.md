@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="rainbow_agent.RainbowAgent" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="begin_episode"/>
 <meta itemprop="property" content="bundle_and_checkpoint"/>
@@ -17,9 +17,7 @@ Inherits From: [`DQNAgent`](../dqn_agent/DQNAgent.md)
 
 A compact implementation of a simplified Rainbow agent.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -35,6 +33,16 @@ Initializes the agent and constructs the components of its graph.
 *   <b>`sess`</b>: `tf.Session`, for executing ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
+*   <b>`observation_shape`</b>: tuple of ints or an int. If single int, the
+    observation is assumed to be a 2D square.
+*   <b>`observation_dtype`</b>: tf.DType, specifies the type of the
+    observations. Note that if your inputs are continuous, you should set this
+    to tf.float32.
+*   <b>`stack_size`</b>: int, number of frames to use in state stack.
+*   <b>`network`</b>: function expecting three parameters: (num_actions,
+    network_type, state). This function will return the network_type object
+    containing the tensors output by the network. See
+    dopamine.discrete_domains.atari_lib.rainbow_network as an example.
 *   <b>`num_atoms`</b>: int, the number of buckets of the value function
     distribution.
 *   <b>`vmax`</b>: float, the value distribution support is [-vmax, vmax].
@@ -59,6 +67,12 @@ Initializes the agent and constructs the components of its graph.
 *   <b>`use_staging`</b>: bool, when True use a staging area to prefetch the
     next training batch, speeding training up by about 30%.
 *   <b>`optimizer`</b>: `tf.train.Optimizer`, for training the value function.
+*   <b>`summary_writer`</b>: SummaryWriter object for outputting training
+    statistics. Summary writing disabled if set to None.
+*   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will
+    be written. Lower values will result in slower training.
+
+## Methods
 
 <h3 id="begin_episode"><code>begin_episode</code></h3>
 

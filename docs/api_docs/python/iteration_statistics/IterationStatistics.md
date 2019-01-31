@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="iteration_statistics.IterationStatistics" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="append"/>
 </div>
@@ -22,13 +22,13 @@ per-episode returns achieved during this iteration.
 *   <b>`data_lists`</b>: dict mapping each metric_name (str) to a list of said
     metric across episodes.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__()
 ```
+
+## Methods
 
 <h3 id="append"><code>append</code></h3>
 

@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="run_experiment.Runner" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="run_experiment"/>
 </div>
@@ -9,7 +9,7 @@
 
 ## Class `Runner`
 
-Object that handles running Atari 2600 experiments.
+Object that handles running Dopamine experiments.
 
 Here we use the term 'experiment' to mean simulating interactions between the
 agent and the environment and reporting some statistics pertaining to these
@@ -18,16 +18,15 @@ interactions.
 A simple scenario to train a DQN agent is as follows:
 
 ```python
+import dopamine.discrete_domains.atari_lib
 base_dir = '/tmp/simple_example'
 def create_agent(sess, environment):
   return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n)
-runner = Runner(base_dir, create_agent, game_name='Pong')
+runner = Runner(base_dir, create_agent, atari_lib.create_atari_environment)
 runner.run()
 ```
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -43,12 +42,9 @@ Initialize the Runner object in charge of running a full experiment.
 *   <b>`base_dir`</b>: str, the base directory to host all required
     sub-directories.
 *   <b>`create_agent_fn`</b>: A function that takes as args a Tensorflow session
-    and an Atari 2600 Gym environment, and returns an agent.
-*   <b>`create_environment_fn`</b>: A function which receives a game name and
-    creates an Atari 2600 Gym environment.
-*   <b>`game_name`</b>: str, name of the Atari 2600 domain to run (required).
-*   <b>`sticky_actions`</b>: bool, whether to enable sticky actions in the
-    environment.
+    and an environment, and returns an agent.
+*   <b>`create_environment_fn`</b>: A function which receives a problem name and
+    creates a Gym environment for that problem (e.g. an Atari 2600 game).
 *   <b>`checkpoint_file_prefix`</b>: str, the prefix to use for checkpoint
     files.
 *   <b>`logging_file_prefix`</b>: str, prefix to use for the log files.
@@ -64,6 +60,8 @@ This constructor will take the following actions: - Initialize an environment. -
 Initialize a `tf.Session`. - Initialize a logger. - Initialize an agent. -
 Reload from the latest checkpoint, if available, and initialize the Checkpointer
 object.
+
+## Methods
 
 <h3 id="run_experiment"><code>run_experiment</code></h3>
 

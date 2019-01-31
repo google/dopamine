@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="dqn_agent.DQNAgent" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="begin_episode"/>
 <meta itemprop="property" content="bundle_and_checkpoint"/>
@@ -15,9 +15,7 @@
 
 An implementation of the DQN agent.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -33,6 +31,15 @@ Initializes the agent and constructs the components of its graph.
 *   <b>`sess`</b>: `tf.Session`, for executing ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
+*   <b>`observation_shape`</b>: tuple of ints describing the observation shape.
+*   <b>`observation_dtype`</b>: tf.DType, specifies the type of the
+    observations. Note that if your inputs are continuous, you should set this
+    to tf.float32.
+*   <b>`stack_size`</b>: int, number of frames to use in state stack.
+*   <b>`network`</b>: function expecting three parameters: (num_actions,
+    network_type, state). This function will return the network_type object
+    containing the tensors output by the network. See
+    dopamine.discrete_domains.atari_lib.nature_dqn_network as an example.
 *   <b>`gamma`</b>: float, discount factor with the usual RL meaning.
 *   <b>`update_horizon`</b>: int, horizon at which updates are performed, the
     'n' in n-step update.
@@ -54,6 +61,12 @@ Initializes the agent and constructs the components of its graph.
 *   <b>`max_tf_checkpoints_to_keep`</b>: int, the number of TensorFlow
     checkpoints to keep.
 *   <b>`optimizer`</b>: `tf.train.Optimizer`, for training the value function.
+*   <b>`summary_writer`</b>: SummaryWriter object for outputting training
+    statistics. Summary writing disabled if set to None.
+*   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will
+    be written. Lower values will result in slower training.
+
+## Methods
 
 <h3 id="begin_episode"><code>begin_episode</code></h3>
 

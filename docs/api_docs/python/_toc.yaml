@@ -1,5 +1,19 @@
 # Automatically generated file; please do not edit
 toc:
+  - title: atari_lib
+    section:
+    - title: Overview
+      path: /dopamine/api_docs/python/atari_lib
+    - title: AtariPreprocessing
+      path: /dopamine/api_docs/python/atari_lib/AtariPreprocessing
+    - title: create_atari_environment
+      path: /dopamine/api_docs/python/atari_lib/create_atari_environment
+    - title: implicit_quantile_network
+      path: /dopamine/api_docs/python/atari_lib/implicit_quantile_network
+    - title: nature_dqn_network
+      path: /dopamine/api_docs/python/atari_lib/nature_dqn_network
+    - title: rainbow_network
+      path: /dopamine/api_docs/python/atari_lib/rainbow_network
   - title: checkpointer
     section:
     - title: Overview
@@ -20,6 +34,22 @@ toc:
       path: /dopamine/api_docs/python/dqn_agent
     - title: DQNAgent
       path: /dopamine/api_docs/python/dqn_agent/DQNAgent
+  - title: gym_lib
+    section:
+    - title: Overview
+      path: /dopamine/api_docs/python/gym_lib
+    - title: acrobot_dqn_network
+      path: /dopamine/api_docs/python/gym_lib/acrobot_dqn_network
+    - title: acrobot_rainbow_network
+      path: /dopamine/api_docs/python/gym_lib/acrobot_rainbow_network
+    - title: cartpole_dqn_network
+      path: /dopamine/api_docs/python/gym_lib/cartpole_dqn_network
+    - title: cartpole_rainbow_network
+      path: /dopamine/api_docs/python/gym_lib/cartpole_rainbow_network
+    - title: create_gym_environment
+      path: /dopamine/api_docs/python/gym_lib/create_gym_environment
+    - title: GymPreprocessing
+      path: /dopamine/api_docs/python/gym_lib/GymPreprocessing
   - title: implicit_quantile_agent
     section:
     - title: Overview
@@ -58,6 +88,10 @@ toc:
     section:
     - title: Overview
       path: /dopamine/api_docs/python/run_experiment
+    - title: create_agent
+      path: /dopamine/api_docs/python/run_experiment/create_agent
+    - title: create_runner
+      path: /dopamine/api_docs/python/run_experiment/create_runner
     - title: Runner
       path: /dopamine/api_docs/python/run_experiment/Runner
     - title: TrainRunner
@@ -66,12 +100,6 @@ toc:
     section:
     - title: Overview
       path: /dopamine/api_docs/python/train
-    - title: create_agent
-      path: /dopamine/api_docs/python/train/create_agent
-    - title: create_runner
-      path: /dopamine/api_docs/python/train/create_runner
-    - title: launch_experiment
-      path: /dopamine/api_docs/python/train/launch_experiment
   - title: utils
     section:
     - title: Overview
