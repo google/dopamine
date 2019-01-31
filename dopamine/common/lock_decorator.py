@@ -19,8 +19,10 @@ from __future__ import print_function
 
 import threading
 
+_LOCK_ATTR_NAME = '_lock'
 
-def _fn_decorator(fn):
+
+def lock_decorator(fn):
   """Wraps a class's method so it's locked.
 
   Args:
@@ -35,6 +37,11 @@ def _fn_decorator(fn):
     A function with same signature as the input function.
   """
   def _decorated(self, *args, **kwargs):
-    with self._lock:  # pylint: disable=protected-access
+    lock = getattr(self, _LOCK_ATTR_NAME, None)
+    if not lock:
+      raise AttributeError(
+          'Object {} expected to have a `{}` attribute.'.format(
+              self, _LOCK_ATTR_NAME))
+    with lock:  # pylint: disable=protected-access
       return fn(self, *args, **kwargs)
   return _decorated
