@@ -23,8 +23,6 @@ import math
 import os
 import random
 
-
-
 from dopamine.replay_memory import circular_replay_buffer
 import numpy as np
 import tensorflow as tf

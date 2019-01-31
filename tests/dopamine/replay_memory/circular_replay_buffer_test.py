@@ -38,6 +38,34 @@ STACK_SIZE = 4
 BATCH_SIZE = 32
 
 
+class _MockLock(object):
+  """Mock lock for testing purposes."""
+
+  def __init__(self):
+    self.unlock()
+    self._exited = True
+    self._blocked = None
+
+  def unlock(self):
+    """Releases the lock."""
+    self._blocked = False
+
+  def __enter__(self, *args, **kwargs):
+    """Locks the lock."""
+    if self._blocked:
+      raise ValueError('Lock is locked.')
+    self._blocked = True
+    self._exited = False
+
+  def __exit__(self, *args, **kwargs):
+    """Purposely leaves the lock locked to be `manually` unlocked."""
+    self._exited = True
+
+  def exited_properly(self):
+    """Checks that ' `__exit__` is properly called when the lock is released."""
+    return self._exited
+
+
 class CheckpointableClass(object):
 
   def __init__(self):
@@ -635,34 +663,6 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
   def test_memory_is_locked(self):
     """Tests that the lock/unlock of the buffer's methods work properly."""
-
-    class _MockLock(object):
-      """Mock lock for testing purposes."""
-
-      def __init__(self):
-        self.unlock()
-        self._exited = True
-        self._blocked = None
-
-      def unlock(self):
-        """Releases the lock."""
-        self._blocked = False
-
-      def __enter__(self, *args, **kwargs):
-        """Locks the lock."""
-        if self._blocked:
-          raise ValueError('Lock is locked.')
-        self._blocked = True
-        self._exited = False
-
-      def __exit__(self, *args, **kwargs):
-        """Purposely leaves the lock locked to be `manually` unlocked."""
-        self._exited = True
-
-      def exited_properly(self):
-        """Checks that ' `__exit__` is properly called when the lock is released."""
-        return self._exited
-
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=(2,),
         stack_size=1,
@@ -864,6 +864,24 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE, replay_capacity=10, observation_dtype=np.int32)
     self.assertEqual(replay.memory._store['observation'].dtype, np.int32)
+
+  def test_replay_buffer_is_locked(self):
+    """Tests that the lock/unlock of the buffer's methods work properly."""
+    replay = circular_replay_buffer.WrappedReplayBuffer(
+        observation_shape=(2,),
+        stack_size=1,
+        replay_capacity=10,
+        batch_size=2)
+    replay.memory._lock = _MockLock()
+    add_op = lambda: replay.add((1, 2), 0, 0, False)
+
+    # Add one element.
+    add_op()
+    # Check that the lock went throughh the proper unlock process.
+    self.assertTrue(replay.memory._lock.exited_properly())  # pylint: disable=protected-access
+    # Check that the lock is still active.
+    with self.assertRaisesRegexp(ValueError, 'Lock is locked.'):
+      add_op()
 
 
 if __name__ == '__main__':
