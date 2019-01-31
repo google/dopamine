@@ -22,6 +22,30 @@ import threading
 _LOCK_ATTR_NAME = '_lock'
 
 
+class _MockLock(object):
+  """Mock lock for testing purposes."""
+
+  def __init__(self):
+    self._blocked = None
+
+  def __enter__(self, *args, **kwargs):
+    """Locks the lock."""
+    if self._blocked:
+      raise ValueError('Lock is locked.')
+    self._blocked = True
+
+  def __exit__(self, *args, **kwargs):
+    """Purposely leaves the lock locked to be `manually` unlocked."""
+    self._blocked = False
+
+
+class LockedClass(object):
+  def __init__(self, *args, **kwargs):
+    if hasattr(self, _LOCK_ATTR_NAME):
+      raise ValueError('Object already has a `{}` attribute.')
+    setattr(self, _LOCK_ATTR_NAME, _MockLock())
+
+
 def lock_decorator(fn):
   """Wraps a class's method so it's locked.
 

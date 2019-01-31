@@ -30,6 +30,7 @@ import math
 import os
 import pickle
 
+from dopamine.common import lock
 import numpy as np
 import tensorflow as tf
 
@@ -78,7 +79,7 @@ def invalid_range(cursor, replay_capacity, stack_size, update_horizon):
        for i in range(stack_size + update_horizon)])
 
 
-class OutOfGraphReplayBuffer(object):
+class OutOfGraphReplayBuffer(lock.LockedClass):
   """A simple out-of-graph Replay Buffer.
 
   Stores transitions, state, action, reward, next_state, terminal (and any
@@ -161,6 +162,7 @@ class OutOfGraphReplayBuffer(object):
     self._cumulative_discount_vector = np.array(
         [math.pow(self._gamma, n) for n in range(update_horizon)],
         dtype=np.float32)
+    super(OutOfGraphReplayBuffer, self).__init__()
 
   def _create_storage(self):
     """Creates the numpy arrays used to store transitions.
@@ -211,6 +213,7 @@ class OutOfGraphReplayBuffer(object):
           np.zeros(element_type.shape, dtype=element_type.type))
     self._add(*zero_transition)
 
+  @lock.lock_decorator
   def add(self, observation, action, reward, terminal, *args):
     """Adds a transition to the replay memory.
 
@@ -431,6 +434,7 @@ class OutOfGraphReplayBuffer(object):
 
     return indices
 
+  @lock.lock_decorator
   def sample_transition_batch(self, batch_size=None, indices=None):
     """Returns a batch of transitions (including any extra contents).
 
@@ -554,6 +558,7 @@ class OutOfGraphReplayBuffer(object):
         checkpointable_elements[member_name] = member
     return checkpointable_elements
 
+  @lock.lock_decorator
   def save(self, checkpoint_dir, iteration_number):
     """Save the OutOfGraphReplayBuffer attributes into a file.
 
@@ -598,6 +603,7 @@ class OutOfGraphReplayBuffer(object):
         except tf.errors.NotFoundError:
           pass
 
+  @lock.lock_decorator
   def load(self, checkpoint_dir, suffix):
     """Restores the object from bundle_dictionary and numpy checkpoints.
 

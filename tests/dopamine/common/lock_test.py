@@ -17,7 +17,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from dopamine.common import lock_decorator
+from dopamine.common import lock
 from tensorflow import test
 
 
@@ -35,7 +35,7 @@ class _MockLock(object):
 class _MockClass(object):
   """Mock class to test the lock againts."""
 
-  @lock_decorator.lock_decorator
+  @lock.lock_decorator
   def mock_method(self):
     pass
 
