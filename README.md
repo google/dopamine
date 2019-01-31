@@ -143,7 +143,7 @@ You can test whether the installation was successful by running the following:
 ```
 cd dopamine
 export PYTHONPATH=${PYTHONPATH}:.
-python tests/atari_init_test.py
+python tests/dopamine/atari_init_test.py
 ```
 
 The entry point to the standard Atari 2600 experiment is
