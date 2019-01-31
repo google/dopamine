@@ -633,6 +633,61 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     self.assertEqual(memory.add_count, self._test_add_count)
     self.assertAllClose(memory.invalid_range, self._test_invalid_range)
 
+  def test_memory_is_locked(self):
+    """Tests that the lock/unlock of the buffer's methods work properly."""
+
+    class _MockLock(object):
+      """Mock lock for testing purposes."""
+
+      def __init__(self):
+        self.unlock()
+        self._exited = True
+        self._blocked = None
+
+      def unlock(self):
+        """Releases the lock."""
+        self._blocked = False
+
+      def __enter__(self, *args, **kwargs):
+        """Locks the lock."""
+        if self._blocked:
+          raise ValueError('Lock is locked.')
+        self._blocked = True
+        self._exited = False
+
+      def __exit__(self, *args, **kwargs):
+        """Purposely leaves the lock locked to be `manually` unlocked."""
+        self._exited = True
+
+      def exited_properly(self):
+        """Checks that ' `__exit__` is properly called when the lock is released."""
+        return self._exited
+
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=(2,),
+        stack_size=1,
+        replay_capacity=10,
+        batch_size=2)
+    memory._lock = _MockLock()
+    add_op = lambda: memory.add((1, 2), 0, 0, False)
+
+    # Check that buffer is empty at first.
+    self.assertEqual(memory.add_count, 0)
+    # Add one element.
+    add_op()
+    # Check that buffer contains one element.
+    self.assertEqual(memory.add_count, 1)
+    # Check that the lock went throughh the proper unlock process.
+    self.assertTrue(memory._lock.exited_properly())  # pylint: disable=protected-access
+    # Check that the lock is still active.
+    with self.assertRaisesRegexp(ValueError, 'Lock is locked.'):
+      add_op()
+    memory._lock.unlock()  # pylint: disable=protected-access
+    # Add another element.
+    add_op()
+    # Check that the second element was properly added.
+    self.assertEqual(memory.add_count, 2)
+
 
 class WrappedReplayBufferTest(tf.test.TestCase):
 

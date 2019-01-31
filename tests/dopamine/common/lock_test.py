@@ -35,7 +35,7 @@ class _MockLock(object):
 class _MockClass(object):
   """Mock class to test the lock againts."""
 
-  @lock.lock_decorator
+  @lock.locked_method
   def mock_method(self):
     pass
 

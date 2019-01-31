@@ -213,7 +213,7 @@ class OutOfGraphReplayBuffer(lock.LockedClass):
           np.zeros(element_type.shape, dtype=element_type.type))
     self._add(*zero_transition)
 
-  @lock.lock_decorator
+  @lock.locked_method
   def add(self, observation, action, reward, terminal, *args):
     """Adds a transition to the replay memory.
 
@@ -434,7 +434,7 @@ class OutOfGraphReplayBuffer(lock.LockedClass):
 
     return indices
 
-  @lock.lock_decorator
+  @lock.locked_method
   def sample_transition_batch(self, batch_size=None, indices=None):
     """Returns a batch of transitions (including any extra contents).
 
@@ -558,7 +558,7 @@ class OutOfGraphReplayBuffer(lock.LockedClass):
         checkpointable_elements[member_name] = member
     return checkpointable_elements
 
-  @lock.lock_decorator
+  @lock.locked_method
   def save(self, checkpoint_dir, iteration_number):
     """Save the OutOfGraphReplayBuffer attributes into a file.
 
@@ -603,7 +603,7 @@ class OutOfGraphReplayBuffer(lock.LockedClass):
         except tf.errors.NotFoundError:
           pass
 
-  @lock.lock_decorator
+  @lock.locked_method
   def load(self, checkpoint_dir, suffix):
     """Restores the object from bundle_dictionary and numpy checkpoints.
 
