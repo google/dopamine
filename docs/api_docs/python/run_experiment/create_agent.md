@@ -23,7 +23,8 @@ Creates an agent.
     for in-agent training statistics in Tensorboard.
 *   <b>`debug_mode`</b>: bool, whether to output Tensorboard summaries. If set
     to true, the agent will output in-episode statistics to Tensorboard.
-    Disabled by default as this results in slower training.
+    Disabled by default as this results in slower training. The in-episode
+    statistics consists of in-iteration losses.
 
 #### Returns:
 

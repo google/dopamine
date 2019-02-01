@@ -295,6 +295,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
 
     with tf.control_dependencies([update_priorities_op]):
       if self.summary_writer is not None:
+        # Runs only in the debug_mode
         with tf.variable_scope('Losses'):
           tf.summary.scalar('CrossEntropyLoss', tf.reduce_mean(loss))
       # Schaul et al. reports a slightly different rule, where 1/N is also

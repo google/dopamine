@@ -304,6 +304,7 @@ class DQNAgent(object):
     loss = tf.losses.huber_loss(
         target, replay_chosen_q, reduction=tf.losses.Reduction.NONE)
     if self.summary_writer is not None:
+      # Runs only in the debug_mode
       with tf.variable_scope('Losses'):
         tf.summary.scalar('HuberLoss', tf.reduce_mean(loss))
     return self.optimizer.minimize(tf.reduce_mean(loss))

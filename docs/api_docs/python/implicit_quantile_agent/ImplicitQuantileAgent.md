@@ -52,7 +52,8 @@ values are taken from Dabney et al. (2018).
 *   <b>`double_dqn`</b>: boolean, whether to perform double DQN style learning
     as described in Van Hasselt et al.: https://arxiv.org/abs/1509.06461.
 *   <b>`summary_writer`</b>: SummaryWriter object for outputting training
-    statistics. Summary writing disabled if set to None.
+    statistics. Summary writing disabled if set to None. In-iteration losses
+    will be only displayed in debug_mode.
 *   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will
     be written. Lower values will result in slower training.
 
