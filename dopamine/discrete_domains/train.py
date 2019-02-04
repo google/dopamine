@@ -30,10 +30,6 @@ from dopamine.discrete_domains import run_experiment
 import tensorflow as tf
 
 
-flags.DEFINE_bool('debug_mode', False,
-                  'If set to true, the agent will output in-episode statistics '
-                  'to Tensorboard. Disabled by default as this results in '
-                  'slower training.')
 flags.DEFINE_string('base_dir', None,
                     'Base directory to host all required sub-directories.')
 flags.DEFINE_multi_string(

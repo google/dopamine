@@ -49,7 +49,8 @@ This is not an official Google product.
    *  Can be enabled via the `double_dqn` constructor parameter.
 *  **18/09/2018:** Added support for reporting in-iteration losses directly from
    the agent to Tensorboard.
-   *  Include the flag `--debug_mode` in your command line to enable it.
+   *  Set the `run_experiment.create_agent.debug_mode = True` via the
+      configuration file or using the `gin_bindings` flag to enable it.
    *  Control frequency of writes with the `summary_writing_frequency`
       agent constructor parameter (defaults to `500`).
 *  **27/08/2018:** Dopamine launched!

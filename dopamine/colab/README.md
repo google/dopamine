@@ -24,3 +24,8 @@ we illustrate how to load and visualize the logs data produced by Dopamine.
 In this
 [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/tensorboard.ipynb)
 we illustrate how to download and visualize different agents with Tensorboard.
+
+## Training on Cartpole
+In this
+[colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/cartpole.ipynb)
+we illustrate how to train DQN and C51 on the Cartpole environment.
