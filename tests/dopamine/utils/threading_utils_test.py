@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for threads.py."""
+"""Tests for threading_utils.py."""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -22,8 +22,8 @@ import tempfile
 import numpy as np
 import threading
 
-from dopamine.utils import threads
 from dopamine.agents.dqn import dqn_agent
+from dopamine.utils import threading_utils
 import tensorflow as tf
 from tensorflow import test
 
@@ -37,8 +37,8 @@ class ThreadsTest(test.TestCase):
 
   def test_main_thread(self):
 
-    @threads.local_attributes(['attr'])
-    class _MockClass(threads.LocalAttributes):
+    @threading_utils.local_attributes(['attr'])
+    class _MockClass(threading_utils.LocalAttributes):
 
       def __init__(self):
         super(_MockClass, self).__init__(attr=3)
@@ -53,8 +53,8 @@ class ThreadsTest(test.TestCase):
 
   def test_multiple_attributes(self):
 
-    @threads.local_attributes(['attr_1', 'attr_2'])
-    class _MockClass(threads.LocalAttributes):
+    @threading_utils.local_attributes(['attr_1', 'attr_2'])
+    class _MockClass(threading_utils.LocalAttributes):
 
       def __init__(self):
         super(_MockClass, self).__init__(attr_1=1, attr_2=2)
@@ -67,8 +67,8 @@ class ThreadsTest(test.TestCase):
 
   def test_np_array(self):
 
-    @threads.local_attributes(['attr'])
-    class _MockClass(threads.LocalAttributes):
+    @threading_utils.local_attributes(['attr'])
+    class _MockClass(threading_utils.LocalAttributes):
       def __init__(self):
         super(_MockClass, self).__init__(attr=np.zeros((2, 3)))
 

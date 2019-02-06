@@ -25,7 +25,7 @@ import random
 
 from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
-from dopamine.utils import threads
+from dopamine.utils import threading_utils
 import numpy as np
 import tensorflow as tf
 
@@ -73,9 +73,9 @@ def identity_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
 
 
 @gin.configurable
-@threads.local_attributes(['_last_observation', '_observation', 'state',
+@threading_utils.local_attributes(['_last_observation', '_observation', 'state',
                            'action'])
-class DQNAgent(threads.LocalAttributes):
+class DQNAgent(threading_utils.LocalAttributes):
   """An implementation of the DQN agent."""
 
   def __init__(self,
