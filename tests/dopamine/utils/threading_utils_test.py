@@ -17,11 +17,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import copy
 import mock
 import tempfile
-
-import numpy as np
 import threading
 
 from dopamine.agents.dqn import dqn_agent
@@ -47,7 +44,7 @@ def _create_mock_object(**kwargs):
 class ThreadsTest(test.TestCase):
   """Unit tests for threading utils."""
 
-  def test_default_value_is_set(self):
+  def test_default_value_is_added(self):
     """Tests that the default value is properly set by the helper."""
     obj = mock.Mock()
     threading_utils.initialize_local_attributes(obj, attr=3)
@@ -68,13 +65,13 @@ class ThreadsTest(test.TestCase):
     obj.attr_default = 'default-value'
     self.assertEqual(obj.attr, 'default-value')
 
-  def test_default_value_is_set(self):
+  def test_default_value_is_read(self):
     """Tests that getter properly initializes the local value."""
     MockClass = threading_utils.local_attributes(['attr'])(
         type('MockClass', (object,), {}))
     obj = MockClass()
     obj.attr_default = 'default-value'
-    obj.attr
+    obj.attr  # pylint: disable=pointless-statement
     self.assertEqual(getattr(obj, _get_internal_name('attr')), 'default-value')
 
   def test_internal_attribute_is_read(self):
