@@ -74,7 +74,7 @@ def identity_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
 
 @gin.configurable
 @threading_utils.local_attributes(['_last_observation', '_observation', 'state',
-                           'action'])
+                                   'action'])
 class DQNAgent(object):
   """An implementation of the DQN agent."""
 
