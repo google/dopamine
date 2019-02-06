@@ -343,7 +343,7 @@ class DQNAgentTest(tf.test.TestCase):
 
       agent.unbundle(self._test_subdir, iteration_number, bundle)
       for key in keys:
-        self.assertEqual(key, agent.__dict__[key])
+        self.assertEqual(key, getattr(agent, key))
 
 
 if __name__ == '__main__':
