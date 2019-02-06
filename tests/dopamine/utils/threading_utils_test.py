@@ -33,17 +33,19 @@ def _get_internal_name(attr):
   return '__' + attr + '_' + thread_id
 
 
+def _create_mock_object(**kwargs):
+  @threading_utils.local_attributes(kwargs.keys())
+  class _MockClass(object):
+
+    def __init__(self):
+      threading_utils.initialize_local_attributes(self, **kwargs)
+  return _MockClass()
+
+
 class ThreadsTest(test.TestCase):
 
   def test_main_thread(self):
-
-    @threading_utils.local_attributes(['attr'])
-    class _MockClass(threading_utils.LocalAttributes):
-
-      def __init__(self):
-        super(_MockClass, self).__init__(attr=3)
-
-    obj = _MockClass()
+    obj = _create_mock_object(attr=3)
     self.assertEqual(obj.attr_default, 3)
     self.assertEqual(obj.attr, 3)
     obj.attr = 5
@@ -52,27 +54,14 @@ class ThreadsTest(test.TestCase):
     self.assertEqual(getattr(obj, internal_name), 5)
 
   def test_multiple_attributes(self):
-
-    @threading_utils.local_attributes(['attr_1', 'attr_2'])
-    class _MockClass(threading_utils.LocalAttributes):
-
-      def __init__(self):
-        super(_MockClass, self).__init__(attr_1=1, attr_2=2)
-
-    obj = _MockClass()
+    obj = _create_mock_object(attr_1=1, attr_2=2)
     self.assertEqual(obj.attr_1, 1)
     self.assertEqual(getattr(obj, _get_internal_name('attr_1')), 1)
     self.assertEqual(obj.attr_2, 2)
     self.assertEqual(getattr(obj, _get_internal_name('attr_2')), 2)
 
   def test_np_array(self):
-
-    @threading_utils.local_attributes(['attr'])
-    class _MockClass(threading_utils.LocalAttributes):
-      def __init__(self):
-        super(_MockClass, self).__init__(attr=np.zeros((2, 3)))
-
-    obj = _MockClass()
+    obj = _create_mock_object(attr=np.zeros((2, 3)))
     self.assertTrue(obj.attr is not None)
     internal_name = _get_internal_name('attr')
     obj.attr.fill(1)

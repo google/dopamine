@@ -75,7 +75,7 @@ def identity_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
 @gin.configurable
 @threading_utils.local_attributes(['_last_observation', '_observation', 'state',
                            'action'])
-class DQNAgent(threading_utils.LocalAttributes):
+class DQNAgent(object):
   """An implementation of the DQN agent."""
 
   def __init__(self,
@@ -203,7 +203,10 @@ class DQNAgent(threading_utils.LocalAttributes):
     # environment.
     self._observation = None
     self._last_observation = None
-    super(DQNAgent, self).__init__(_observation=None, _last_observation=None,
+    threading_utils.initialize_local_attributes(
+        self,
+        _observation=None,
+        _last_observation=None,
         state=np.zeros(state_shape))
 
   def _get_network_type(self):

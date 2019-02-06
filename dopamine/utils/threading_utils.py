@@ -43,19 +43,14 @@ def _add_property(cls, attr_name):
   setattr(cls, attr_name, property(_get, _set, _del))
 
 
-class local_attributes(object):
-
-  def __init__(self, attributes):
-    self._attributes = attributes
-
-  def __call__(self, cls):
-    for attr_name in self._attributes:
+def local_attributes(attributes):
+  def _decorator(cls):
+    for attr_name in attributes:
       _add_property(cls, attr_name)
     return cls
+  return _decorator
 
 
-class LocalAttributes(object):
-
-  def __init__(self, **kwargs):
-    for key, val in kwargs.items():
-      setattr(self, _get_default_value_name(key), val)
+def initialize_local_attributes(obj, **kwargs):
+  for key, val in kwargs.items():
+    setattr(obj, _get_default_value_name(key), val)
