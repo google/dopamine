@@ -335,6 +335,7 @@ class DQNAgent(object):
 
     Args:
       observation: numpy array, the environment's initial observation.
+      training: bool, whether to also run a training step.
 
     Returns:
       int, the selected action.
@@ -357,6 +358,7 @@ class DQNAgent(object):
     Args:
       reward: float, the reward received from the agent's most recent action.
       observation: numpy array, the most recent observation.
+      training: bool, whether to also run a training step.
 
     Returns:
       int, the selected action.
