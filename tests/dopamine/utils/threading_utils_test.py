@@ -123,14 +123,11 @@ class ThreadsTest(test.TestCase):
     internal_attr.callable_method.assert_called_once()
 
 
-class DQNTest(test.TestCase):
-
-  def test_dqn_agent(self):
-    agent = dqn_agent.DQNAgent(self.cached_session(), 3)
-    self.assertTrue(agent.state is not None)
-    self.assertEqual(agent.state.shape, (1, 84, 84, 4))
+class DQNIntegrationTest(test.TestCase):
+  """Integration test for DQNAgent and threading utils."""
 
   def test_bundling(self):
+    """Tests that local values are poperly updated when reading a checkpoint."""
     with tf.Session() as sess:
       agent = agent = dqn_agent.DQNAgent(sess, 3, observation_shape=(2, 2))
       sess.run(tf.global_variables_initializer())
