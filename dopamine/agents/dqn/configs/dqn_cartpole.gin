@@ -29,7 +29,7 @@ Runner.create_environment_fn = @gym_lib.create_gym_environment
 Runner.num_iterations = 500
 Runner.training_steps = 1000
 Runner.evaluation_steps = 1000
-Runner.max_steps_per_episode = 500
+Runner.max_steps_per_episode = 200  # Default max episode length.
 
 WrappedReplayBuffer.replay_capacity = 50000
 WrappedReplayBuffer.batch_size = 128
