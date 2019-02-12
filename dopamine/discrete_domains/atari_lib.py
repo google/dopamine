@@ -45,33 +45,6 @@ NATURE_DQN_DTYPE = tf.uint8  # DType of Atari 2600 observations.
 NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
 
 
-# `copy_roms` is only needed internally to copy ROMS from CNS.
-@gin.configurable
-def copy_roms(source_dir, destination_dir=None):
-  """Copy all the Atari ROMs to a destination directory.
-
-  Args:
-    source_dir: str, directory where ROMs are stored.
-    destination_dir: str, destination directory for ROMs.
-  """
-  # To use alternative_roms_path pass --atari_roms_path='...'
-  destination_dir = destination_dir or atari_py.alternative_roms_path()
-  if not destination_dir:
-    tf.logging.info('Skipping copying roms, use default atari_py roms path.')
-    return
-  source_roms = tf.gfile.ListDirectory(source_dir)
-  assert source_roms, 'No source ROMs available, quitting.'
-  if not tf.gfile.Exists(destination_dir):
-    tf.gfile.MakeDirs(destination_dir)
-  for rom in source_roms:
-    try:
-      source = os.path.join(source_dir, rom)
-      destination = os.path.join(destination_dir, rom)
-      if not tf.gfile.Exists(destination):
-        tf.gfile.Copy(source, destination)
-    except tf.errors.OpError:
-      tf.logging.info('Unable to copy %s to %s', rom, destination_dir)
-      continue
 
 
 @gin.configurable
