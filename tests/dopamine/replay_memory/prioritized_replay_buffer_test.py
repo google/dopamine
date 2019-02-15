@@ -41,8 +41,7 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
         BATCH_SIZE,
         max_sample_attempts=10)  # For faster tests.
 
-  def add_blank(self, memory, action=0, reward=0.0, terminal=0,
-                priority=1.):
+  def add_blank(self, memory, action=0, reward=0.0, terminal=0, priority=1.0):
     """Adds a replay transition with a blank observation.
 
     Allows setting action, reward, terminal.
@@ -57,17 +56,14 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
       Index of the transition just added.
     """
     dummy = np.zeros(SCREEN_SIZE)
-    # We use _add here to bypass the additional padding done by the replay
-    # memory at the beginning of an episode.
     memory.add(dummy, action, reward, terminal, priority)
-    index = memory.cursor() - 1
-
+    index = (memory.cursor() - 1) % REPLAY_CAPACITY
     return index
 
   def testDummyScreensAddedToNewMemory(self):
     memory = self.create_default_memory()
     index = self.add_blank(memory)
-    for i in range(index -1):
+    for i in range(index):
       self.assertEqual(memory.sum_tree.get(i), 0.0)
 
   def testGetPriorityWithInvalidIndices(self):
@@ -95,7 +91,6 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
 
   def testNewElementHasHighPriority(self):
     memory = self.create_default_memory()
-
     index = self.add_blank(memory)
     self.assertEqual(
         memory.get_priority(np.array([index], dtype=np.int32))[0],
@@ -109,8 +104,8 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
     for _ in range(3):
       self.add_blank(memory, terminal=1)
     # This test should always pass.
-    for _ in range(5):
-      _, _, _, _, terminals, _, _ = (
+    for _ in range(100):
+      _, _, _, _, _, _, terminals, _, _ = (
           memory.sample_transition_batch(batch_size=2))
       # Ensure all terminals are set to 1.
       self.assertTrue((terminals == 1).all())
@@ -124,7 +119,7 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
     self.add_blank(memory)
     with self.assertRaises(
         RuntimeError,
-        msg='Max saple attempsts: Tried 10 times but only sampled 1  valid '
+        msg='Max sample attempts: Tried 10 times but only sampled 1 valid '
             'indices. Batch size is 2'):
       memory.sample_index_batch(2)
 
@@ -161,8 +156,8 @@ class WrappedPrioritizedReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE,
         max_sample_attempts=10)  # For faster tests.
 
-  def add_blank(self, replay, sess):
-    replay.add(np.zeros(SCREEN_SIZE), 0, 0, 0, 1.)
+  def add_blank(self, replay):
+    replay.add(np.zeros(SCREEN_SIZE), 0, 0, 0, 1.0)
 
   def testSetAndGetPriority(self):
     replay = self.create_default_memory()
@@ -171,7 +166,7 @@ class WrappedPrioritizedReplayBufferTest(tf.test.TestCase):
     with self.test_session() as sess:
       indices = np.zeros(batch_size, dtype=np.int32)
       for index in range(batch_size):
-        self.add_blank(replay, sess)
+        self.add_blank(replay)
         indices[index] = replay.memory.cursor() - 1
 
       priorities = np.arange(batch_size)
@@ -189,10 +184,10 @@ class WrappedPrioritizedReplayBufferTest(tf.test.TestCase):
     num_data = 64
     with self.test_session() as sess:
       for _ in range(num_data):
-        self.add_blank(replay, sess)
+        self.add_blank(replay)
       probabilities = sess.run(replay.transition['sampling_probabilities'])
       for prob in probabilities:
-        self.assertEqual(prob, 1.)
+        self.assertEqual(prob, 1.0)
 
   def testConstructorWithExtraStorageTypes(self):
     prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer(

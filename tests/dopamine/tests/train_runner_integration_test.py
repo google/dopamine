@@ -22,7 +22,7 @@ import shutil
 
 from absl import flags
 
-from dopamine.atari import train
+from dopamine.discrete_domains import train
 import tensorflow as tf
 
 FLAGS = flags.FLAGS
@@ -39,15 +39,16 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
     self._checkpoint_dir = os.path.join(FLAGS.base_dir, 'checkpoints')
     self._logging_dir = os.path.join(FLAGS.base_dir, 'logs')
-    FLAGS.schedule = 'continuous_train'
 
   def quickDqnFlags(self):
     """Assign flags for a quick run of DQN agent."""
-    FLAGS.agent_name = 'dqn'
     FLAGS.gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     FLAGS.gin_bindings = [
-        'Runner.training_steps=100', 'Runner.evaluation_steps=10',
-        'Runner.num_iterations=1', 'Runner.max_steps_per_episode=100',
+        "create_runner.schedule='continuous_train'",
+        'Runner.training_steps=100',
+        'Runner.evaluation_steps=10',
+        'Runner.num_iterations=1',
+        'Runner.max_steps_per_episode=100',
         'dqn_agent.DQNAgent.min_replay_history=500',
         'WrappedReplayBuffer.replay_capacity=100'
     ]

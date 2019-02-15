@@ -1,5 +1,11 @@
 # All symbols in Dopamine
 
+*   <a href="./atari_lib.md"><code>atari_lib</code></a>
+*   <a href="./atari_lib/AtariPreprocessing.md"><code>atari_lib.AtariPreprocessing</code></a>
+*   <a href="./atari_lib/create_atari_environment.md"><code>atari_lib.create_atari_environment</code></a>
+*   <a href="./atari_lib/implicit_quantile_network.md"><code>atari_lib.implicit_quantile_network</code></a>
+*   <a href="./atari_lib/nature_dqn_network.md"><code>atari_lib.nature_dqn_network</code></a>
+*   <a href="./atari_lib/rainbow_network.md"><code>atari_lib.rainbow_network</code></a>
 *   <a href="./checkpointer.md"><code>checkpointer</code></a>
 *   <a href="./checkpointer/Checkpointer.md"><code>checkpointer.Checkpointer</code></a>
 *   <a href="./circular_replay_buffer.md"><code>circular_replay_buffer</code></a>
@@ -7,6 +13,14 @@
 *   <a href="./circular_replay_buffer/WrappedReplayBuffer.md"><code>circular_replay_buffer.WrappedReplayBuffer</code></a>
 *   <a href="./dqn_agent.md"><code>dqn_agent</code></a>
 *   <a href="./dqn_agent/DQNAgent.md"><code>dqn_agent.DQNAgent</code></a>
+*   <a href="./atari_lib/nature_dqn_network.md"><code>dqn_agent.nature_dqn_network</code></a>
+*   <a href="./gym_lib.md"><code>gym_lib</code></a>
+*   <a href="./gym_lib/GymPreprocessing.md"><code>gym_lib.GymPreprocessing</code></a>
+*   <a href="./gym_lib/acrobot_dqn_network.md"><code>gym_lib.acrobot_dqn_network</code></a>
+*   <a href="./gym_lib/acrobot_rainbow_network.md"><code>gym_lib.acrobot_rainbow_network</code></a>
+*   <a href="./gym_lib/cartpole_dqn_network.md"><code>gym_lib.cartpole_dqn_network</code></a>
+*   <a href="./gym_lib/cartpole_rainbow_network.md"><code>gym_lib.cartpole_rainbow_network</code></a>
+*   <a href="./gym_lib/create_gym_environment.md"><code>gym_lib.create_gym_environment</code></a>
 *   <a href="./implicit_quantile_agent.md"><code>implicit_quantile_agent</code></a>
 *   <a href="./implicit_quantile_agent/ImplicitQuantileAgent.md"><code>implicit_quantile_agent.ImplicitQuantileAgent</code></a>
 *   <a href="./iteration_statistics.md"><code>iteration_statistics</code></a>
@@ -22,10 +36,9 @@
 *   <a href="./run_experiment.md"><code>run_experiment</code></a>
 *   <a href="./run_experiment/Runner.md"><code>run_experiment.Runner</code></a>
 *   <a href="./run_experiment/TrainRunner.md"><code>run_experiment.TrainRunner</code></a>
+*   <a href="./run_experiment/create_agent.md"><code>run_experiment.create_agent</code></a>
+*   <a href="./run_experiment/create_runner.md"><code>run_experiment.create_runner</code></a>
 *   <a href="./train.md"><code>train</code></a>
-*   <a href="./train/create_agent.md"><code>train.create_agent</code></a>
-*   <a href="./train/create_runner.md"><code>train.create_runner</code></a>
-*   <a href="./train/launch_experiment.md"><code>train.launch_experiment</code></a>
 *   <a href="./utils.md"><code>utils</code></a>
 *   <a href="./utils/get_latest_file.md"><code>utils.get_latest_file</code></a>
 *   <a href="./utils/get_latest_iteration.md"><code>utils.get_latest_iteration</code></a>

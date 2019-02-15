@@ -1,13 +1,13 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="utils" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 </div>
 
 # Module: utils
 
 This provides utilities for dealing with Dopamine data.
 
-See: dopamine//common/logger.py .
+See: dopamine/common/logger.py .
 
 ## Functions
 

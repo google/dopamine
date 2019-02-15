@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for dopamine.atari.run_experiment."""
+"""Tests for dopamine.common.run_experiment."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -24,9 +24,12 @@ import shutil
 
 
 from absl import flags
-from dopamine.atari import run_experiment
-from dopamine.common import checkpointer
-from dopamine.common import logger
+from dopamine.agents.dqn import dqn_agent
+from dopamine.agents.implicit_quantile import implicit_quantile_agent
+from dopamine.agents.rainbow import rainbow_agent
+from dopamine.discrete_domains import checkpointer
+from dopamine.discrete_domains import logger
+from dopamine.discrete_domains import run_experiment
 import mock
 import tensorflow as tf
 
@@ -108,6 +111,74 @@ class RunExperimentTest(tf.test.TestCase):
     self.assertEqual(gin_bindings, mock_kwargs['bindings'])
     self.assertFalse(mock_kwargs['skip_unknown'])
 
+  def testNoAgentName(self):
+    with self.assertRaises(AssertionError):
+      _ = run_experiment.create_agent(self.test_session(), mock.Mock())
+
+  @mock.patch.object(dqn_agent, 'DQNAgent')
+  def testCreateDQNAgent(self, mock_dqn_agent):
+    def mock_fn(unused_sess, num_actions, summary_writer):
+      del summary_writer
+      return num_actions * 10
+
+    mock_dqn_agent.side_effect = mock_fn
+    environment = mock.Mock()
+    environment.action_space.n = 7
+    self.assertEqual(70, run_experiment.create_agent(self.test_session(),
+                                                     environment,
+                                                     agent_name='dqn'))
+
+  @mock.patch.object(rainbow_agent, 'RainbowAgent')
+  def testCreateRainbowAgent(self, mock_rainbow_agent):
+    def mock_fn(unused_sess, num_actions, summary_writer):
+      del summary_writer
+      return num_actions * 10
+
+    mock_rainbow_agent.side_effect = mock_fn
+    environment = mock.Mock()
+    environment.action_space.n = 7
+    self.assertEqual(70, run_experiment.create_agent(self.test_session(),
+                                                     environment,
+                                                     agent_name='rainbow'))
+
+  @mock.patch.object(implicit_quantile_agent, 'ImplicitQuantileAgent')
+  def testCreateImplicitQuantileAgent(self, mock_implicit_quantile_agent):
+    def mock_fn(unused_sess, num_actions, summary_writer):
+      del summary_writer
+      return num_actions * 10
+
+    mock_implicit_quantile_agent.side_effect = mock_fn
+    environment = mock.Mock()
+    environment.action_space.n = 7
+    self.assertEqual(70, run_experiment.create_agent(
+        self.test_session(), environment, agent_name='implicit_quantile'))
+
+  def testCreateRunnerUnknown(self):
+    base_dir = '/tmp'
+    with self.assertRaisesRegexp(ValueError, 'Unknown schedule'):
+      run_experiment.create_runner(base_dir,
+                                   'Unknown schedule')
+
+  @mock.patch.object(run_experiment, 'Runner')
+  @mock.patch.object(run_experiment, 'create_agent')
+  def testCreateRunner(self, mock_create_agent, mock_runner_constructor):
+    base_dir = '/tmp'
+    run_experiment.create_runner(base_dir)
+    self.assertEqual(1, mock_runner_constructor.call_count)
+    mock_args, _ = mock_runner_constructor.call_args
+    self.assertEqual(base_dir, mock_args[0])
+    self.assertEqual(mock_create_agent, mock_args[1])
+
+  @mock.patch.object(run_experiment, 'TrainRunner')
+  @mock.patch.object(run_experiment, 'create_agent')
+  def testCreateTrainRunner(self, mock_create_agent, mock_runner_constructor):
+    base_dir = '/tmp'
+    run_experiment.create_runner(base_dir,
+                                 schedule='continuous_train')
+    self.assertEqual(1, mock_runner_constructor.call_count)
+    mock_args, _ = mock_runner_constructor.call_args
+    self.assertEqual(base_dir, mock_args[0])
+    self.assertEqual(mock_create_agent, mock_args[1])
 
 
 class RunnerTest(tf.test.TestCase):
@@ -129,18 +200,13 @@ class RunnerTest(tf.test.TestCase):
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)
 
-  def testFailsWithoutGameName(self):
-    with self.assertRaises(AssertionError):
-      run_experiment.Runner(self._test_subdir, self._create_agent_fn)
-
   @mock.patch.object(checkpointer, 'get_latest_checkpoint_number')
   def testInitializeCheckpointingWithNoCheckpointFile(self, mock_get_latest):
     mock_get_latest.return_value = -1
     base_dir = '/does/not/exist'
     with self.assertRaisesRegexp(tf.errors.PermissionDeniedError,
                                  '.*/does.*'):
-      run_experiment.Runner(base_dir, self._create_agent_fn,
-                            game_name='Pong')
+      run_experiment.Runner(base_dir, self._create_agent_fn, mock.Mock)
 
   @mock.patch.object(checkpointer, 'get_latest_checkpoint_number')
   @mock.patch.object(checkpointer, 'Checkpointer')
@@ -158,8 +224,7 @@ class RunnerTest(tf.test.TestCase):
     mock_logger_constructor.return_value = mock_logger
     runner = run_experiment.Runner(self._test_subdir,
                                    lambda x, y, summary_writer: agent,
-                                   create_environment_fn=lambda x, y: x,
-                                   game_name='Test')
+                                   mock.Mock)
     self.assertEqual(0, runner._start_iteration)
     self.assertEqual(1, mock_checkpointer.load_checkpoint.call_count)
     self.assertEqual(1, agent.unbundle.call_count)
@@ -186,7 +251,7 @@ class RunnerTest(tf.test.TestCase):
     mock_agent.unbundle.return_value = True
     runner = run_experiment.Runner(self._test_subdir,
                                    lambda x, y, summary_writer: mock_agent,
-                                   game_name='Pong')
+                                   mock.Mock)
     expected_iteration = current_iteration + 1
     self.assertEqual(expected_iteration, runner._start_iteration)
     self.assertDictEqual(logs_data, runner._logger.data)
@@ -197,8 +262,7 @@ class RunnerTest(tf.test.TestCase):
     max_steps_per_episode = 11
     environment = MockEnvironment()
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn, game_name='Test',
-        create_environment_fn=lambda x, y: environment,
+        self._test_subdir, self._create_agent_fn, lambda: environment,
         max_steps_per_episode=max_steps_per_episode)
     step_number, total_reward = runner._run_one_episode()
     self.assertEqual(self._agent.step.call_count, environment.max_steps - 1)
@@ -211,8 +275,7 @@ class RunnerTest(tf.test.TestCase):
     max_steps_per_episode = 2
     environment = MockEnvironment()
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn, game_name='Test',
-        create_environment_fn=lambda x, y: environment,
+        self._test_subdir, self._create_agent_fn, lambda: environment,
         max_steps_per_episode=max_steps_per_episode)
     step_number, total_reward = runner._run_one_episode()
     self.assertEqual(self._agent.step.call_count, max_steps_per_episode - 1)
@@ -226,8 +289,7 @@ class RunnerTest(tf.test.TestCase):
     environment = MockEnvironment(max_steps=environment_steps)
     statistics = []
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn, game_name='Test',
-        create_environment_fn=lambda x, y: environment)
+        self._test_subdir, self._create_agent_fn, lambda: environment)
     step_number, sum_returns, num_episodes = runner._run_one_phase(
         max_steps, statistics, 'test')
     calls_to_run_episode = int(max_steps / environment_steps)
@@ -252,9 +314,9 @@ class RunnerTest(tf.test.TestCase):
     training_steps = 20
     evaluation_steps = 10
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn, game_name='Test',
-        create_environment_fn=lambda x, y: environment,
-        training_steps=training_steps, evaluation_steps=evaluation_steps)
+        self._test_subdir, self._create_agent_fn, lambda: environment,
+        training_steps=training_steps,
+        evaluation_steps=evaluation_steps)
     dictionary = runner._run_one_iteration(1)
     train_calls = int(training_steps / environment_steps)
     eval_calls = int(evaluation_steps / environment_steps)
@@ -276,9 +338,7 @@ class RunnerTest(tf.test.TestCase):
     experiment_logger = MockLogger(test_cls=self)
     mock_logger_constructor.return_value = experiment_logger
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn,
-        game_name='Test',
-        create_environment_fn=lambda x, y: mock.Mock(),
+        self._test_subdir, self._create_agent_fn, mock.Mock,
         logging_file_prefix=logging_file_prefix,
         log_every_n=log_every_n)
     num_iterations = 10
@@ -308,9 +368,7 @@ class RunnerTest(tf.test.TestCase):
     mock_logger = MockLogger(run_asserts=False, data=logs_data)
     mock_logger_constructor.return_value = mock_logger
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn,
-        game_name='Test',
-        create_environment_fn=lambda x, y: mock.Mock())
+        self._test_subdir, self._create_agent_fn, mock.Mock)
     runner._checkpoint_experiment(iteration)
     self.assertEqual(1, experiment_checkpointer.save_checkpoint.call_count)
     mock_args, _ = experiment_checkpointer.save_checkpoint.call_args
@@ -328,9 +386,7 @@ class RunnerTest(tf.test.TestCase):
     experiment_checkpointer = mock.Mock()
     mock_checkpointer_constructor.return_value = experiment_checkpointer
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn,
-        game_name='Test',
-        create_environment_fn=lambda x, y: mock.Mock(),
+        self._test_subdir, self._create_agent_fn, mock.Mock,
         num_iterations=0)
     runner.run_experiment()
     self.assertEqual(0, experiment_checkpointer.save_checkpoint.call_count)
@@ -364,9 +420,7 @@ class RunnerTest(tf.test.TestCase):
     self._agent.unbundle.return_value = True
     end_iteration = start_iteration + num_iterations
     runner = run_experiment.Runner(
-        self._test_subdir, self._create_agent_fn,
-        game_name='Test',
-        create_environment_fn=lambda x, y: environment,
+        self._test_subdir, self._create_agent_fn, lambda: environment,
         log_every_n=log_every_n,
         num_iterations=end_iteration,
         training_steps=1,

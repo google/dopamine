@@ -24,11 +24,10 @@ from __future__ import print_function
 
 import collections
 
-import math
 
 
 from dopamine.agents.rainbow import rainbow_agent
-import numpy as np
+from dopamine.discrete_domains import atari_lib
 import tensorflow as tf
 
 import gin.tf
@@ -43,6 +42,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
   def __init__(self,
                sess,
                num_actions,
+               network=atari_lib.implicit_quantile_network,
                kappa=1.0,
                num_tau_samples=32,
                num_tau_prime_samples=32,
@@ -59,6 +59,11 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     Args:
       sess: `tf.Session` object for running associated ops.
       num_actions: int, number of actions the agent can take at any state.
+      network: function expecting three parameters:
+        (num_actions, network_type, state). This function will return the
+        network_type object containing the tensors output by the network.
+        See dopamine.discrete_domains.atari_lib.nature_dqn_network as
+        an example.
       kappa: float, Huber loss cutoff.
       num_tau_samples: int, number of online quantile samples for loss
         estimation.
@@ -89,6 +94,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     super(ImplicitQuantileAgent, self).__init__(
         sess=sess,
         num_actions=num_actions,
+        network=network,
         summary_writer=summary_writer,
         summary_writing_frequency=summary_writing_frequency)
 
@@ -113,50 +119,8 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     Returns:
       _network_type object containing quantile value outputs of the network.
     """
-
-    weights_initializer = slim.variance_scaling_initializer(
-        factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
-
-    state_net = tf.cast(state, tf.float32)
-    state_net = tf.div(state_net, 255.)
-    state_net = slim.conv2d(
-        state_net, 32, [8, 8], stride=4,
-        weights_initializer=weights_initializer)
-    state_net = slim.conv2d(
-        state_net, 64, [4, 4], stride=2,
-        weights_initializer=weights_initializer)
-    state_net = slim.conv2d(
-        state_net, 64, [3, 3], stride=1,
-        weights_initializer=weights_initializer)
-    state_net = slim.flatten(state_net)
-    state_net_size = state_net.get_shape().as_list()[-1]
-    state_net_tiled = tf.tile(state_net, [num_quantiles, 1])
-
-    batch_size = state_net.get_shape().as_list()[0]
-    quantiles_shape = [num_quantiles * batch_size, 1]
-    quantiles = tf.random_uniform(
-        quantiles_shape, minval=0, maxval=1, dtype=tf.float32)
-
-    quantile_net = tf.tile(quantiles, [1, self.quantile_embedding_dim])
-    pi = tf.constant(math.pi)
-    quantile_net = tf.cast(tf.range(
-        1, self.quantile_embedding_dim + 1, 1), tf.float32) * pi * quantile_net
-    quantile_net = tf.cos(quantile_net)
-    quantile_net = slim.fully_connected(quantile_net, state_net_size,
-                                        weights_initializer=weights_initializer)
-    # Hadamard product.
-    net = tf.multiply(state_net_tiled, quantile_net)
-
-    net = slim.fully_connected(
-        net, 512, weights_initializer=weights_initializer)
-    quantile_values = slim.fully_connected(
-        net,
-        self.num_actions,
-        activation_fn=None,
-        weights_initializer=weights_initializer)
-
-    return self._get_network_type()(quantile_values=quantile_values,
-                                    quantiles=quantiles)
+    return self.network(self.num_actions, self.quantile_embedding_dim,
+                        self._get_network_type(), state, num_quantiles)
 
   def _build_networks(self):
     """Builds the IQN computations needed for acting and training.

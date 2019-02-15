@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for dopamine.atari.preprocessing."""
+"""Tests for dopamine.discrete_domains.atari_lib."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -20,12 +20,42 @@ from __future__ import print_function
 
 
 
+
 from absl import flags
-from dopamine.atari import preprocessing
+from dopamine.discrete_domains import atari_lib
+import gym
+import mock
 import numpy as np
 import tensorflow as tf
 
 FLAGS = flags.FLAGS
+
+
+class AtariLibTest(tf.test.TestCase):
+
+
+  def testCreateAtariEnvironmentWithoutGameName(self):
+    with self.assertRaises(AssertionError):
+      atari_lib.create_atari_environment()
+
+  @mock.patch.object(atari_lib, 'AtariPreprocessing')
+  @mock.patch.object(gym, 'make')
+  def testCreateAtariEnvironment(self, mock_gym_make, mock_atari_lib):
+    class MockGymEnv(object):
+
+      def __init__(self, env_name):
+        self.env = 'gym({})'.format(env_name)
+
+    def fake_make_env(name):
+      return MockGymEnv(name)
+
+    mock_gym_make.side_effect = fake_make_env
+    # pylint: disable=unnecessary-lambda
+    mock_atari_lib.side_effect = lambda x: 'atari({})'.format(x)
+    # pylint: enable=unnecessary-lambda
+    game_name = 'Test'
+    env = atari_lib.create_atari_environment(game_name)
+    self.assertEqual('atari(gym(TestNoFrameskip-v0))', env)
 
 
 class MockALE(object):
@@ -77,7 +107,7 @@ class AtariPreprocessingTest(tf.test.TestCase):
 
   def testResetPassesObservation(self):
     env = MockEnvironment()
-    env = preprocessing.AtariPreprocessing(env, frame_skip=1, screen_size=16)
+    env = atari_lib.AtariPreprocessing(env, frame_skip=1, screen_size=16)
     observation = env.reset()
 
     self.assertEqual(observation.shape, (16, 16, 1))
@@ -85,7 +115,7 @@ class AtariPreprocessingTest(tf.test.TestCase):
   def testTerminalPassedThrough(self):
     max_steps = 10
     env = MockEnvironment(max_steps=max_steps)
-    env = preprocessing.AtariPreprocessing(env, frame_skip=1)
+    env = atari_lib.AtariPreprocessing(env, frame_skip=1)
     env.reset()
 
     # Make sure we get the right number of steps.
@@ -99,7 +129,7 @@ class AtariPreprocessingTest(tf.test.TestCase):
   def testFrameSkipAccumulatesReward(self):
     frame_skip = 2
     env = MockEnvironment()
-    env = preprocessing.AtariPreprocessing(env, frame_skip=frame_skip)
+    env = atari_lib.AtariPreprocessing(env, frame_skip=frame_skip)
     env.reset()
 
     # Make sure we get the right number of steps. Reward is 1 when we
@@ -110,7 +140,7 @@ class AtariPreprocessingTest(tf.test.TestCase):
   def testMaxFramePooling(self):
     frame_skip = 2
     env = MockEnvironment()
-    env = preprocessing.AtariPreprocessing(env, frame_skip=frame_skip)
+    env = atari_lib.AtariPreprocessing(env, frame_skip=frame_skip)
     env.reset()
 
     # The first observation is 2, the second 0; max is 2.

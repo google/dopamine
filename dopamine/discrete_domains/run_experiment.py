@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Module defining classes and helper methods for running Atari 2600 agents."""
+"""Module defining classes and helper methods for general agents."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -22,19 +22,18 @@ import os
 import sys
 import time
 
+from dopamine.agents.dqn import dqn_agent
+from dopamine.agents.implicit_quantile import implicit_quantile_agent
+from dopamine.agents.rainbow import rainbow_agent
+from dopamine.discrete_domains import atari_lib
+from dopamine.discrete_domains import checkpointer
+from dopamine.discrete_domains import iteration_statistics
+from dopamine.discrete_domains import logger
 
-import atari_py
-from dopamine.atari import preprocessing
-from dopamine.common import checkpointer
-from dopamine.common import iteration_statistics
-from dopamine.common import logger
-import gym
 import numpy as np
 import tensorflow as tf
 
 import gin.tf
-
-
 
 
 def load_gin_configs(gin_files, gin_bindings):
@@ -51,44 +50,73 @@ def load_gin_configs(gin_files, gin_bindings):
                                       skip_unknown=False)
 
 
-def create_atari_environment(game_name, sticky_actions=True):
-  """Wraps an Atari 2600 Gym environment with some basic preprocessing.
-
-  This preprocessing matches the guidelines proposed in Machado et al. (2017),
-  "Revisiting the Arcade Learning Environment: Evaluation Protocols and Open
-  Problems for General Agents".
-
-  The created environment is the Gym wrapper around the Arcade Learning
-  Environment.
-
-  The main choice available to the user is whether to use sticky actions or not.
-  Sticky actions, as prescribed by Machado et al., cause actions to persist
-  with some probability (0.25) when a new command is sent to the ALE. This
-  can be viewed as introducing a mild form of stochasticity in the environment.
-  We use them by default.
+@gin.configurable
+def create_agent(sess, environment, agent_name=None, summary_writer=None,
+                 debug_mode=False):
+  """Creates an agent.
 
   Args:
-    game_name: str, the name of the Atari 2600 domain.
-    sticky_actions: bool, whether to use sticky_actions as per Machado et al.
+    sess: A `tf.Session` object for running associated ops.
+    environment: An Atari 2600 Gym environment.
+    agent_name: str, name of the agent to create.
+    summary_writer: A Tensorflow summary writer to pass to the agent
+      for in-agent training statistics in Tensorboard.
+    debug_mode: bool, whether to output Tensorboard summaries. If set to true,
+      the agent will output in-episode statistics to Tensorboard. Disabled by
+      default as this results in slower training.
 
   Returns:
-    An Atari 2600 environment with some standard preprocessing.
+    agent: An RL agent.
+
+  Raises:
+    ValueError: If `agent_name` is not in supported list.
   """
-  game_version = 'v0' if sticky_actions else 'v4'
-  full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
-  env = gym.make(full_game_name)
-  # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
-  # handle this time limit internally instead, which lets us cap at 108k frames
-  # (30 minutes). The TimeLimit wrapper also plays poorly with saving and
-  # restoring states.
-  env = env.env
-  env = preprocessing.AtariPreprocessing(env)
-  return env
+  assert agent_name is not None
+  if not debug_mode:
+    summary_writer = None
+  if agent_name == 'dqn':
+    return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n,
+                              summary_writer=summary_writer)
+  elif agent_name == 'rainbow':
+    return rainbow_agent.RainbowAgent(
+        sess, num_actions=environment.action_space.n,
+        summary_writer=summary_writer)
+  elif agent_name == 'implicit_quantile':
+    return implicit_quantile_agent.ImplicitQuantileAgent(
+        sess, num_actions=environment.action_space.n,
+        summary_writer=summary_writer)
+  else:
+    raise ValueError('Unknown agent: {}'.format(agent_name))
+
+
+@gin.configurable
+def create_runner(base_dir, schedule='continuous_train_and_eval'):
+  """Creates an experiment Runner.
+
+  Args:
+    base_dir: str, base directory for hosting all subdirectories.
+    schedule: string, which type of Runner to use.
+
+  Returns:
+    runner: A `Runner` like object.
+
+  Raises:
+    ValueError: When an unknown schedule is encountered.
+  """
+  assert base_dir is not None
+  # Continuously runs training and evaluation until max num_iterations is hit.
+  if schedule == 'continuous_train_and_eval':
+    return Runner(base_dir, create_agent)
+  # Continuously runs training until max num_iterations is hit.
+  elif schedule == 'continuous_train':
+    return TrainRunner(base_dir, create_agent)
+  else:
+    raise ValueError('Unknown schedule: {}'.format(schedule))
 
 
 @gin.configurable
 class Runner(object):
-  """Object that handles running Atari 2600 experiments.
+  """Object that handles running Dopamine experiments.
 
   Here we use the term 'experiment' to mean simulating interactions between the
   agent and the environment and reporting some statistics pertaining to these
@@ -97,10 +125,11 @@ class Runner(object):
   A simple scenario to train a DQN agent is as follows:
 
   ```python
+  import dopamine.discrete_domains.atari_lib
   base_dir = '/tmp/simple_example'
   def create_agent(sess, environment):
     return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n)
-  runner = Runner(base_dir, create_agent, game_name='Pong')
+  runner = Runner(base_dir, create_agent, atari_lib.create_atari_environment)
   runner.run()
   ```
   """
@@ -108,9 +137,7 @@ class Runner(object):
   def __init__(self,
                base_dir,
                create_agent_fn,
-               create_environment_fn=create_atari_environment,
-               game_name=None,
-               sticky_actions=True,
+               create_environment_fn=atari_lib.create_atari_environment,
                checkpoint_file_prefix='ckpt',
                logging_file_prefix='log',
                log_every_n=1,
@@ -123,11 +150,9 @@ class Runner(object):
     Args:
       base_dir: str, the base directory to host all required sub-directories.
       create_agent_fn: A function that takes as args a Tensorflow session and an
-        Atari 2600 Gym environment, and returns an agent.
-      create_environment_fn: A function which receives a game name and creates
-        an Atari 2600 Gym environment.
-      game_name: str, name of the Atari 2600 domain to run.
-      sticky_actions: bool, whether to enable sticky actions in the environment.
+        environment, and returns an agent.
+      create_environment_fn: A function which receives a problem name and
+        creates a Gym environment for that problem (e.g. an Atari 2600 game).
       checkpoint_file_prefix: str, the prefix to use for checkpoint files.
       logging_file_prefix: str, prefix to use for the log files.
       log_every_n: int, the frequency for writing logs.
@@ -147,7 +172,6 @@ class Runner(object):
       Checkpointer object.
     """
     assert base_dir is not None
-    assert game_name is not None
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations
@@ -158,7 +182,7 @@ class Runner(object):
     self._create_directories()
     self._summary_writer = tf.summary.FileWriter(self._base_dir)
 
-    self._environment = create_environment_fn(game_name, sticky_actions)
+    self._environment = create_environment_fn()
     # Set up a session and initialize variables.
     self._sess = tf.Session('',
                             config=tf.ConfigProto(allow_soft_placement=True))
@@ -457,24 +481,27 @@ class Runner(object):
 
 @gin.configurable
 class TrainRunner(Runner):
-  """Object that handles running Atari 2600 experiments.
+  """Object that handles running experiments.
 
   The `TrainRunner` differs from the base `Runner` class in that it does not
   the evaluation phase. Checkpointing and logging for the train phase are
   preserved as before.
   """
 
-  def __init__(self, base_dir, create_agent_fn):
+  def __init__(self, base_dir, create_agent_fn,
+               create_environment_fn=atari_lib.create_atari_environment):
     """Initialize the TrainRunner object in charge of running a full experiment.
 
     Args:
       base_dir: str, the base directory to host all required sub-directories.
       create_agent_fn: A function that takes as args a Tensorflow session and an
-        Atari 2600 Gym environment, and returns an agent.
+        environment, and returns an agent.
+      create_environment_fn: A function which receives a problem name and
+        creates a Gym environment for that problem (e.g. an Atari 2600 game).
     """
     tf.logging.info('Creating TrainRunner ...')
-    super(TrainRunner, self).__init__(
-        base_dir=base_dir, create_agent_fn=create_agent_fn)
+    super(TrainRunner, self).__init__(base_dir, create_agent_fn,
+                                      create_environment_fn)
     self._agent.eval_mode = False
 
   def _run_one_iteration(self, iteration):

@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="logger.Logger" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="__setitem__"/>
 <meta itemprop="property" content="is_logging_enabled"/>
@@ -13,9 +13,7 @@
 
 Class for maintaining a dictionary of data to log.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(logging_dir)
@@ -26,6 +24,8 @@ Initializes Logger.
 #### Args:
 
 *   <b>`logging_dir`</b>: str, Directory to which logs are written.
+
+## Methods
 
 <h3 id="__setitem__"><code>__setitem__</code></h3>
 

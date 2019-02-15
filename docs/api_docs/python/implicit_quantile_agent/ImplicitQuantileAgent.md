@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="implicit_quantile_agent.ImplicitQuantileAgent" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="begin_episode"/>
 <meta itemprop="property" content="bundle_and_checkpoint"/>
@@ -17,9 +17,7 @@ Inherits From: [`RainbowAgent`](../rainbow_agent/RainbowAgent.md)
 
 An extension of Rainbow to perform implicit quantile regression.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -38,6 +36,10 @@ values are taken from Dabney et al. (2018).
 *   <b>`sess`</b>: `tf.Session` object for running associated ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
+*   <b>`network`</b>: function expecting three parameters: (num_actions,
+    network_type, state). This function will return the network_type object
+    containing the tensors output by the network. See
+    dopamine.discrete_domains.atari_lib.nature_dqn_network as an example.
 *   <b>`kappa`</b>: float, Huber loss cutoff.
 *   <b>`num_tau_samples`</b>: int, number of online quantile samples for loss
     estimation.
@@ -47,6 +49,14 @@ values are taken from Dabney et al. (2018).
     Q-values.
 *   <b>`quantile_embedding_dim`</b>: int, embedding dimension for the quantile
     input.
+*   <b>`double_dqn`</b>: boolean, whether to perform double DQN style learning
+    as described in Van Hasselt et al.: https://arxiv.org/abs/1509.06461.
+*   <b>`summary_writer`</b>: SummaryWriter object for outputting training
+    statistics. Summary writing disabled if set to None.
+*   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will
+    be written. Lower values will result in slower training.
+
+## Methods
 
 <h3 id="begin_episode"><code>begin_episode</code></h3>
 

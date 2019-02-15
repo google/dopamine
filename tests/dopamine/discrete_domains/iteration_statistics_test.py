@@ -20,7 +20,7 @@ from __future__ import print_function
 
 
 
-from dopamine.common import iteration_statistics
+from dopamine.discrete_domains import iteration_statistics
 import tensorflow as tf
 
 

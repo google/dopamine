@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="checkpointer.Checkpointer" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="load_checkpoint"/>
 <meta itemprop="property" content="save_checkpoint"/>
@@ -12,9 +12,8 @@
 
 Class for managing checkpoints for Dopamine agents.
 
-## Methods
 
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -37,6 +36,8 @@ Initializes Checkpointer.
 #### Raises:
 
 *   <b>`ValueError`</b>: if base_directory is empty, or not creatable.
+
+## Methods
 
 <h3 id="load_checkpoint"><code>load_checkpoint</code></h3>
 

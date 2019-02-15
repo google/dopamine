@@ -92,6 +92,8 @@ class OutOfGraphReplayBuffer(object):
   Attributes:
     add_count: int, counter of how many transitions have been added (including
       the blank ones at the beginning of an episode).
+    invalid_range: np.array, an array with the indices of cursor-related invalid
+      transitions
   """
 
   def __init__(self,
@@ -103,7 +105,11 @@ class OutOfGraphReplayBuffer(object):
                gamma=0.99,
                max_sample_attempts=MAX_SAMPLE_ATTEMPTS,
                extra_storage_types=None,
-               observation_dtype=np.uint8):
+               observation_dtype=np.uint8,
+               action_shape=(),
+               action_dtype=np.int32,
+               reward_shape=(),
+               reward_dtype=np.float32):
     """Initializes OutOfGraphReplayBuffer.
 
     Args:
@@ -119,6 +125,12 @@ class OutOfGraphReplayBuffer(object):
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      action_shape: tuple of ints, the shape for the action vector. Empty tuple
+        means the action is a scalar.
+      action_dtype: np.dtype, type of elements in the action.
+      reward_shape: tuple of ints, the shape of the reward vector. Empty tuple
+        means the reward is a scalar.
+      reward_dtype: np.dtype, type of elements in the reward.
 
     Raises:
       ValueError: If replay_capacity is too small to hold at least one
@@ -140,6 +152,10 @@ class OutOfGraphReplayBuffer(object):
     tf.logging.info('\t update_horizon: %d', update_horizon)
     tf.logging.info('\t gamma: %f', gamma)
 
+    self._action_shape = action_shape
+    self._action_dtype = action_dtype
+    self._reward_shape = reward_shape
+    self._reward_dtype = reward_dtype
     self._observation_shape = observation_shape
     self._stack_size = stack_size
     self._state_shape = self._observation_shape + (self._stack_size,)
@@ -193,8 +209,8 @@ class OutOfGraphReplayBuffer(object):
     storage_elements = [
         ReplayElement('observation', self._observation_shape,
                       self._observation_dtype),
-        ReplayElement('action', (), np.int32),
-        ReplayElement('reward', (), np.float32),
+        ReplayElement('action', self._action_shape, self._action_dtype),
+        ReplayElement('reward', self._reward_shape, self._reward_dtype),
         ReplayElement('terminal', (), np.uint8)
     ]
 
@@ -325,7 +341,10 @@ class OutOfGraphReplayBuffer(object):
     return return_array
 
   def get_observation_stack(self, index):
-    state = self.get_range(self._store['observation'],
+    return self._get_element_stack(index, 'observation')
+
+  def _get_element_stack(self, index, element_name):
+    state = self.get_range(self._store[element_name],
                            index - self._stack_size + 1, index + 1)
     # The stacking axis is 0 but the agent expects as the last axis.
     return np.moveaxis(state, 0, -1)
@@ -491,12 +510,16 @@ class OutOfGraphReplayBuffer(object):
         if element.name == 'state':
           element_array[batch_element] = self.get_observation_stack(state_index)
         elif element.name == 'reward':
-          # cumpute the discounted sum of rewards in the trajectory.
-          element_array[batch_element] = trajectory_discount_vector.dot(
-              trajectory_rewards)
+          # compute the discounted sum of rewards in the trajectory.
+          element_array[batch_element] = np.sum(
+              trajectory_discount_vector * trajectory_rewards, axis=0)
         elif element.name == 'next_state':
           element_array[batch_element] = self.get_observation_stack(
               (next_state_index) % self._replay_capacity)
+        elif element.name in ('next_action', 'next_reward'):
+          element_array[batch_element] = (
+              self._store[element.name.lstrip('next_')][(next_state_index) %
+                                                        self._replay_capacity])
         elif element.name == 'terminal':
           element_array[batch_element] = is_terminal_transition
         elif element.name == 'indices':
@@ -522,10 +545,16 @@ class OutOfGraphReplayBuffer(object):
     transition_elements = [
         ReplayElement('state', (batch_size,) + self._state_shape,
                       self._observation_dtype),
-        ReplayElement('action', (batch_size,), np.int32),
-        ReplayElement('reward', (batch_size,), np.float32),
+        ReplayElement('action', (batch_size,) + self._action_shape,
+                      self._action_dtype),
+        ReplayElement('reward', (batch_size,) + self._reward_shape,
+                      self._reward_dtype),
         ReplayElement('next_state', (batch_size,) + self._state_shape,
                       self._observation_dtype),
+        ReplayElement('next_action', (batch_size,) + self._action_shape,
+                      self._action_dtype),
+        ReplayElement('next_reward', (batch_size,) + self._reward_shape,
+                      self._reward_dtype),
         ReplayElement('terminal', (batch_size,), np.uint8),
         ReplayElement('indices', (batch_size,), np.int32)
     ]
@@ -657,7 +686,11 @@ class WrappedReplayBuffer(object):
                wrapped_memory=None,
                max_sample_attempts=MAX_SAMPLE_ATTEMPTS,
                extra_storage_types=None,
-               observation_dtype=np.uint8):
+               observation_dtype=np.uint8,
+               action_shape=(),
+               action_dtype=np.int32,
+               reward_shape=(),
+               reward_dtype=np.float32):
     """Initializes WrappedReplayBuffer.
 
     Args:
@@ -677,6 +710,12 @@ class WrappedReplayBuffer(object):
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      action_shape: tuple of ints, the shape for the action vector. Empty tuple
+        means the action is a scalar.
+      action_dtype: np.dtype, type of elements in the action.
+      reward_shape: tuple of ints, the shape of the reward vector. Empty tuple
+        means the reward is a scalar.
+      reward_dtype: np.dtype, type of elements in the reward.
 
     Raises:
       ValueError: If update_horizon is not positive.
@@ -698,10 +737,19 @@ class WrappedReplayBuffer(object):
       self.memory = wrapped_memory
     else:
       self.memory = OutOfGraphReplayBuffer(
-          observation_shape, stack_size, replay_capacity, batch_size,
-          update_horizon, gamma, max_sample_attempts,
+          observation_shape,
+          stack_size,
+          replay_capacity,
+          batch_size,
+          update_horizon,
+          gamma,
+          max_sample_attempts,
           observation_dtype=observation_dtype,
-          extra_storage_types=extra_storage_types)
+          extra_storage_types=extra_storage_types,
+          action_shape=action_shape,
+          action_dtype=action_dtype,
+          reward_shape=reward_shape,
+          reward_dtype=reward_dtype)
 
     self.create_sampling_ops(use_staging)
 
@@ -810,6 +858,8 @@ class WrappedReplayBuffer(object):
     self.actions = self.transition['action']
     self.rewards = self.transition['reward']
     self.next_states = self.transition['next_state']
+    self.next_actions = self.transition['next_action']
+    self.next_rewards = self.transition['next_reward']
     self.terminals = self.transition['terminal']
     self.indices = self.transition['indices']
 

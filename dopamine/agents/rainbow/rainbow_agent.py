@@ -42,8 +42,8 @@ import collections
 
 
 from dopamine.agents.dqn import dqn_agent
+from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import prioritized_replay_buffer
-import numpy as np
 import tensorflow as tf
 
 import gin.tf
@@ -61,6 +61,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
                observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
                observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
                stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+               network=atari_lib.rainbow_network,
                num_atoms=51,
                vmax=10.,
                gamma=0.99,
@@ -89,6 +90,11 @@ class RainbowAgent(dqn_agent.DQNAgent):
       observation_dtype: tf.DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to tf.float32.
       stack_size: int, number of frames to use in state stack.
+      network: function expecting three parameters:
+        (num_actions, network_type, state). This function will return the
+        network_type object containing the tensors output by the network.
+        See dopamine.discrete_domains.atari_lib.rainbow_network as
+        an example.
       num_atoms: int, the number of buckets of the value function distribution.
       vmax: float, the value distribution support is [-vmax, vmax].
       gamma: float, discount factor with the usual RL meaning.
@@ -124,12 +130,14 @@ class RainbowAgent(dqn_agent.DQNAgent):
     # TODO(b/110897128): Make agent optimizer attribute private.
     self.optimizer = optimizer
 
-    super(RainbowAgent, self).__init__(
+    dqn_agent.DQNAgent.__init__(
+        self,
         sess=sess,
         num_actions=num_actions,
         observation_shape=observation_shape,
         observation_dtype=observation_dtype,
         stack_size=stack_size,
+        network=network,
         gamma=gamma,
         update_horizon=update_horizon,
         min_replay_history=min_replay_history,
@@ -163,30 +171,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
     Returns:
       net: _network_type object containing the tensors output by the network.
     """
-    weights_initializer = slim.variance_scaling_initializer(
-        factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
-
-    net = tf.cast(state, tf.float32)
-    net = tf.div(net, 255.)
-    net = slim.conv2d(
-        net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)
-    net = slim.conv2d(
-        net, 64, [4, 4], stride=2, weights_initializer=weights_initializer)
-    net = slim.conv2d(
-        net, 64, [3, 3], stride=1, weights_initializer=weights_initializer)
-    net = slim.flatten(net)
-    net = slim.fully_connected(
-        net, 512, weights_initializer=weights_initializer)
-    net = slim.fully_connected(
-        net,
-        self.num_actions * self._num_atoms,
-        activation_fn=None,
-        weights_initializer=weights_initializer)
-
-    logits = tf.reshape(net, [-1, self.num_actions, self._num_atoms])
-    probabilities = tf.contrib.layers.softmax(logits)
-    q_values = tf.reduce_sum(self._support * probabilities, axis=2)
-    return self._get_network_type()(q_values, logits, probabilities)
+    return self.network(self.num_actions, self._num_atoms, self._support,
+                        self._get_network_type(), state)
 
   def _build_replay_buffer(self, use_staging):
     """Creates the replay buffer used by the agent.
@@ -340,8 +326,10 @@ class RainbowAgent(dqn_agent.DQNAgent):
         maximum ever seen [Schaul et al., 2015].
     """
     if priority is None:
-      priority = (1. if self._replay_scheme == 'uniform' else
-                  self._replay.memory.sum_tree.max_recorded_priority)
+      if self._replay_scheme == 'uniform':
+        priority = 1.
+      else:
+        priority = self._replay.memory.sum_tree.max_recorded_priority
 
     if not self.eval_mode:
       self._replay.add(last_observation, action, reward, is_terminal, priority)

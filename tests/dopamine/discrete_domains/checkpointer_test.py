@@ -24,7 +24,7 @@ import shutil
 
 
 from absl import flags
-from dopamine.common import checkpointer
+from dopamine.discrete_domains import checkpointer
 import tensorflow as tf
 
 FLAGS = flags.FLAGS

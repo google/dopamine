@@ -170,7 +170,7 @@ def summarize_data(data, summary_keys):
 
   Example:
     data = load_statistics(...)
-    get_iteration_summmary(data, ['train_episode_returns',
+    summarize_data(data, ['train_episode_returns',
         'eval_episode_returns'])
 
   Returns:
