@@ -34,6 +34,10 @@ For completeness, we also provide an implementation of DQN
 For additional details, please see our
 [documentation](https://github.com/google/dopamine/tree/master/docs).
 
+We provide a set of [Colaboratory
+notebooks](https://github.com/google/dopamine/tree/master/dopamine/colab)
+which demonstrate how to use Dopamine.
+
 This is not an official Google product.
 
 ## What's new
@@ -76,77 +80,58 @@ for additional details.
 Finally, these instructions are for Python 2.7. While Dopamine is Python 3
 compatible, there may be some additional steps needed during installation.
 
-#### Ubuntu
-
-First set up the virtual environment:
+First install [Anaconda](https://docs.anaconda.com/anaconda/install/), which
+we will use as the environment manager, then proceed below.
 
 ```
-sudo apt-get update && sudo apt-get install virtualenv
-virtualenv --python=python2.7 dopamine-env
-source dopamine-env/bin/activate
+conda create --name dopamine-env python=3.6
+conda activate dopamine-env
 ```
 
 This will create a directory called `dopamine-env` in which your virtual
 environment lives. The last command activates the environment.
 
-Then, install the dependencies to Dopamine. If you don't have access to a
-GPU, then replace `tensorflow-gpu` with `tensorflow` in the line below
-(see [Tensorflow instructions](https://www.tensorflow.org/install/install_linux)
-for details).
+Install the dependencies below, based on your operating system, and then
+finally download the Dopamine source, e.g.
+
+```
+git clone https://github.com/google/dopamine.git
+```
+
+#### Ubuntu
+
+If you don't have access to a GPU, then replace `tensorflow-gpu` with
+`tensorflow` in the line below (see [Tensorflow
+instructions](https://www.tensorflow.org/install/install_linux) for details).
 
 ```
 sudo apt-get update && sudo apt-get install cmake zlib1g-dev
 pip install absl-py atari-py gin-config gym opencv-python tensorflow-gpu
 ```
 
-During installation, you may safely ignore the following error message:
-*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3, but you'll have
-numpy 1.15.1 which is incompatible*.
-
-Finally, download the Dopamine source, e.g.
-
-```
-git clone https://github.com/google/dopamine.git
-```
-
 #### Mac OS X
-
-First set up the virtual environment:
-
-```
-pip install virtualenv
-virtualenv --python=python2.7 dopamine-env
-source dopamine-env/bin/activate
-```
-
-This will create a directory called `dopamine-env` in which your virtual
-environment lives. The last command activates the environment.
-
-Then, install the dependencies to Dopamine:
 
 ```
 brew install cmake zlib
 pip install absl-py atari-py gin-config gym opencv-python tensorflow
 ```
 
-During installation, you may safely ignore the following error message:
-*tensorflow 1.10.1 has requirement numpy<=1.14.5,>=1.13.3, but you'll have
-numpy 1.15.1 which is incompatible*.
-
-Finally, download the Dopamine source, e.g.
-
-```
-git clone https://github.com/google/dopamine.git
-```
-
-#### Running tests
+### Running tests
 
 You can test whether the installation was successful by running the following:
 
 ```
+cd dopamine
 export PYTHONPATH=${PYTHONPATH}:.
 python tests/dopamine/atari_init_test.py
 ```
+
+If you want to run some of the other tests you will need to `pip install mock`.
+
+
+### Training agents
+
+#### Atari games
 
 The entry point to the standard Atari 2600 experiment is
 [`dopamine/discrete_domains/train.py`](https://github.com/google/dopamine/blob/master/dopamine/discrete_domains/train.py).

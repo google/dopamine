@@ -137,7 +137,7 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
                                     feed_dict)
 
       q_values_arr = np.ones([agent.num_actions]) * q_value
-      for i in xrange(agent.num_actions):
+      for i in range(agent.num_actions):
         self.assertEqual(q_values[i], q_values_arr[i])
       self.assertEqual(q_argmax, 0)
 
@@ -145,8 +145,8 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
 
       batch_size = agent._replay.batch_size
 
-      for i in xrange(batch_size):
-        for j in xrange(agent.num_actions):
+      for i in range(batch_size):
+        for j in range(agent.num_actions):
           self.assertEqual(q_values_target[i][j], q_values[j])
 
   def test_replay_quantile_value_computation(self):
@@ -162,12 +162,12 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
           agent.num_tau_samples, batch_size, agent.num_actions])
       replay_target_quantile_vals = replay_target_quantile_vals.reshape([
           agent.num_tau_prime_samples, batch_size, agent.num_actions])
-      for i in xrange(agent.num_tau_samples):
-        for j in xrange(agent._replay.batch_size):
+      for i in range(agent.num_tau_samples):
+        for j in range(agent._replay.batch_size):
           self.assertEqual(replay_quantile_vals[i][j][0], agent.num_actions)
 
-      for i in xrange(agent.num_tau_prime_samples):
-        for j in xrange(agent._replay.batch_size):
+      for i in range(agent.num_tau_prime_samples):
+        for j in range(agent._replay.batch_size):
           self.assertEqual(replay_target_quantile_vals[i][j][0],
                            agent.num_actions)
 
