@@ -57,7 +57,7 @@ def create_agent(sess, environment, agent_name=None, summary_writer=None,
 
   Args:
     sess: A `tf.Session` object for running associated ops.
-    environment: An Atari 2600 Gym environment.
+    environment: A gym environment (e.g. Atari 2600).
     agent_name: str, name of the agent to create.
     summary_writer: A Tensorflow summary writer to pass to the agent
       for in-agent training statistics in Tensorboard.
