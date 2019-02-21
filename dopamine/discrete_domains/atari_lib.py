@@ -276,6 +276,9 @@ class AtariPreprocessing(object):
   def metadata(self):
     return self.environment.metadata
 
+  def close(self):
+    return self.environment.close()
+
   def reset(self):
     """Resets the environment.
 
