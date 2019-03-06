@@ -189,6 +189,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
     """
     if self._replay_scheme not in ['uniform', 'prioritized']:
       raise ValueError('Invalid replay scheme: {}'.format(self._replay_scheme))
+    # Both replay schemes use the same data structure, but the 'uniform' scheme
+    # sets all priorities to the same value (which yields uniform sampling).
     return prioritized_replay_buffer.WrappedPrioritizedReplayBuffer(
         observation_shape=self.observation_shape,
         stack_size=self.stack_size,
