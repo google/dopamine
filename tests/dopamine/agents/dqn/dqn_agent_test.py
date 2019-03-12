@@ -332,11 +332,10 @@ class DQNAgentTest(tf.test.TestCase):
       # used merely for facility of testing.
       agent.state = 'state'
       agent._replay = mock.Mock()
-      agent.eval_mode = 'eval_mode'
       agent.training_steps = 'training_steps'
       iteration_number = 1729
       bundle = agent.bundle_and_checkpoint(self._test_subdir, iteration_number)
-      keys = ['state', 'eval_mode', 'training_steps']
+      keys = ['state', 'training_steps']
       for key in keys:
         self.assertIn(key, bundle)
         self.assertEqual(key, bundle[key])
