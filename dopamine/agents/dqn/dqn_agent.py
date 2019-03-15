@@ -32,8 +32,6 @@ import tensorflow as tf
 
 import gin.tf
 
-slim = tf.contrib.slim
-
 
 # These are aliases which are used by other classes.
 NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE

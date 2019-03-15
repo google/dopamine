@@ -48,8 +48,6 @@ import tensorflow as tf
 
 import gin.tf
 
-slim = tf.contrib.slim
-
 
 @gin.configurable
 class RainbowAgent(dqn_agent.DQNAgent):

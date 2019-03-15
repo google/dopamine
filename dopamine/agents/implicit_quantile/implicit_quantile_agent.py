@@ -32,8 +32,6 @@ import tensorflow as tf
 
 import gin.tf
 
-slim = tf.contrib.slim
-
 
 @gin.configurable
 class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
