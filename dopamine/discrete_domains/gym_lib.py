@@ -42,10 +42,10 @@ CARTPOLE_MAX_VALS = np.array([2.4, 5., math.pi/12., math.pi*2.])
 ACROBOT_MIN_VALS = np.array([-1., -1., -1., -1., -5., -5.])
 ACROBOT_MAX_VALS = np.array([1., 1., 1., 1., 5., 5.])
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_SHAPE', (4, 1))
-gin.constant('gym_lib.CARTPOLE_OBSERVATION_DTYPE', tf.float32)
+gin.constant('gym_lib.CARTPOLE_OBSERVATION_DTYPE', tf.float64)
 gin.constant('gym_lib.CARTPOLE_STACK_SIZE', 1)
 gin.constant('gym_lib.ACROBOT_OBSERVATION_SHAPE', (6, 1))
-gin.constant('gym_lib.ACROBOT_OBSERVATION_DTYPE', tf.float32)
+gin.constant('gym_lib.ACROBOT_OBSERVATION_DTYPE', tf.float64)
 gin.constant('gym_lib.ACROBOT_STACK_SIZE', 1)
 
 slim = tf.contrib.slim
