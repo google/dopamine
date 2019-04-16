@@ -76,6 +76,15 @@ def load_baselines(base_dir, verbose=False):
         else:
           single_agent_data = pickle.load(f)
         single_agent_data['agent'] = agent
+        # The dataframe rows are all read as 'objects', which causes a
+        # ValueError when merging below. We cast the numerics to float64s to
+        # avoid this.
+        for field_name in single_agent_data.keys():
+          try:
+            single_agent_data[field_name] = (
+                single_agent_data[field_name].astype(np.float64))
+          except ValueError:
+            continue
         if game in experimental_data:
           experimental_data[game] = experimental_data[game].merge(
               single_agent_data, how='outer')
