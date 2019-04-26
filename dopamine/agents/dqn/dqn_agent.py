@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,19 +25,22 @@ import random
 
 
 
+from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
 import numpy as np
 import tensorflow as tf
 
 import gin.tf
 
-slim = tf.contrib.slim
+
+# These are aliases which are used by other classes.
+NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
+NATURE_DQN_DTYPE = atari_lib.NATURE_DQN_DTYPE
+NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE
+nature_dqn_network = atari_lib.nature_dqn_network
 
 
-OBSERVATION_SHAPE = 84  # Size of a downscaled Atari 2600 frame.
-STACK_SIZE = 4  # Number of frames in the state stack.
-
-
+@gin.configurable
 def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   """Returns the current epsilon for the agent's epsilon-greedy policy.
 
@@ -62,12 +66,22 @@ def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
 
 
 @gin.configurable
+def identity_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
+                     epsilon):
+  return epsilon
+
+
+@gin.configurable
 class DQNAgent(object):
   """An implementation of the DQN agent."""
 
   def __init__(self,
                sess,
                num_actions,
+               observation_shape=atari_lib.NATURE_DQN_OBSERVATION_SHAPE,
+               observation_dtype=atari_lib.NATURE_DQN_DTYPE,
+               stack_size=atari_lib.NATURE_DQN_STACK_SIZE,
+               network=atari_lib.nature_dqn_network,
                gamma=0.99,
                update_horizon=1,
                min_replay_history=20000,
@@ -78,19 +92,31 @@ class DQNAgent(object):
                epsilon_eval=0.001,
                epsilon_decay_period=250000,
                tf_device='/cpu:*',
+               eval_mode=False,
                use_staging=True,
-               max_tf_checkpoints_to_keep=3,
+               max_tf_checkpoints_to_keep=4,
                optimizer=tf.train.RMSPropOptimizer(
                    learning_rate=0.00025,
                    decay=0.95,
                    momentum=0.0,
                    epsilon=0.00001,
-                   centered=True)):
+                   centered=True),
+               summary_writer=None,
+               summary_writing_frequency=500):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
       sess: `tf.Session`, for executing ops.
       num_actions: int, number of actions the agent can take at any state.
+      observation_shape: tuple of ints describing the observation shape.
+      observation_dtype: tf.DType, specifies the type of the observations. Note
+        that if your inputs are continuous, you should set this to tf.float32.
+      stack_size: int, number of frames to use in state stack.
+      network: function expecting three parameters:
+        (num_actions, network_type, state). This function will return the
+        network_type object containing the tensors output by the network.
+        See dopamine.discrete_domains.atari_lib.nature_dqn_network as
+        an example.
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -106,13 +132,18 @@ class DQNAgent(object):
       epsilon_eval: float, epsilon used when evaluating the agent.
       epsilon_decay_period: int, length of the epsilon decay schedule.
       tf_device: str, Tensorflow device on which the agent's graph is executed.
+      eval_mode: bool, True for evaluation and False for training.
       use_staging: bool, when True use a staging area to prefetch the next
         training batch, speeding training up by about 30%.
       max_tf_checkpoints_to_keep: int, the number of TensorFlow checkpoints to
         keep.
       optimizer: `tf.train.Optimizer`, for training the value function.
+      summary_writer: SummaryWriter object for outputting training statistics.
+        Summary writing disabled if set to None.
+      summary_writing_frequency: int, frequency with which summaries will be
+        written. Lower values will result in slower training.
     """
-
+    assert isinstance(observation_shape, tuple)
     tf.logging.info('Creating %s agent with the following parameters:',
                     self.__class__.__name__)
     tf.logging.info('\t gamma: %f', gamma)
@@ -128,6 +159,10 @@ class DQNAgent(object):
     tf.logging.info('\t optimizer: %s', optimizer)
 
     self.num_actions = num_actions
+    self.observation_shape = tuple(observation_shape)
+    self.observation_dtype = observation_dtype
+    self.stack_size = stack_size
+    self.network = network
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -138,16 +173,19 @@ class DQNAgent(object):
     self.epsilon_eval = epsilon_eval
     self.epsilon_decay_period = epsilon_decay_period
     self.update_period = update_period
-    self.eval_mode = False
+    self.eval_mode = eval_mode
     self.training_steps = 0
     self.optimizer = optimizer
+    self.summary_writer = summary_writer
+    self.summary_writing_frequency = summary_writing_frequency
 
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
       # The last axis indicates the number of consecutive frames stacked.
-      state_shape = [1, OBSERVATION_SHAPE, OBSERVATION_SHAPE, STACK_SIZE]
+      state_shape = (1,) + self.observation_shape + (stack_size,)
       self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(tf.uint8, state_shape, name='state_ph')
+      self.state_ph = tf.placeholder(self.observation_dtype, state_shape,
+                                     name='state_ph')
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
@@ -155,6 +193,9 @@ class DQNAgent(object):
       self._train_op = self._build_train_op()
       self._sync_qt_ops = self._build_sync_op()
 
+    if self.summary_writer is not None:
+      # All tf.summaries should have been defined prior to running this.
+      self._merged_summaries = tf.summary.merge_all()
     self._sess = sess
     self._saver = tf.train.Saver(max_to_keep=max_tf_checkpoints_to_keep)
 
@@ -180,15 +221,7 @@ class DQNAgent(object):
     Returns:
       net: _network_type object containing the tensors output by the network.
     """
-    net = tf.cast(state, tf.float32)
-    net = tf.div(net, 255.)
-    net = slim.conv2d(net, 32, [8, 8], stride=4)
-    net = slim.conv2d(net, 64, [4, 4], stride=2)
-    net = slim.conv2d(net, 64, [3, 3], stride=1)
-    net = slim.flatten(net)
-    net = slim.fully_connected(net, 512)
-    q_values = slim.fully_connected(net, self.num_actions, activation_fn=None)
-    return self._get_network_type()(q_values)
+    return self.network(self.num_actions, self._get_network_type(), state)
 
   def _build_networks(self):
     """Builds the Q-value network computations needed for acting and training.
@@ -228,11 +261,12 @@ class DQNAgent(object):
       A WrapperReplayBuffer object.
     """
     return circular_replay_buffer.WrappedReplayBuffer(
-        observation_shape=OBSERVATION_SHAPE,
-        stack_size=STACK_SIZE,
+        observation_shape=self.observation_shape,
+        stack_size=self.stack_size,
         use_staging=use_staging,
         update_horizon=self.update_horizon,
-        gamma=self.gamma)
+        gamma=self.gamma,
+        observation_dtype=self.observation_dtype.as_numpy_dtype)
 
   def _build_target_q_op(self):
     """Build an op used as a target for the Q-value.
@@ -269,6 +303,9 @@ class DQNAgent(object):
     target = tf.stop_gradient(self._build_target_q_op())
     loss = tf.losses.huber_loss(
         target, replay_chosen_q, reduction=tf.losses.Reduction.NONE)
+    if self.summary_writer is not None:
+      with tf.variable_scope('Losses'):
+        tf.summary.scalar('HuberLoss', tf.reduce_mean(loss))
     return self.optimizer.minimize(tf.reduce_mean(loss))
 
   def _build_sync_op(self):
@@ -350,11 +387,14 @@ class DQNAgent(object):
     Returns:
        int, the selected action.
     """
-    epsilon = self.epsilon_eval if self.eval_mode else self.epsilon_fn(
-        self.epsilon_decay_period,
-        self.training_steps,
-        self.min_replay_history,
-        self.epsilon_train)
+    if self.eval_mode:
+      epsilon = self.epsilon_eval
+    else:
+      epsilon = self.epsilon_fn(
+          self.epsilon_decay_period,
+          self.training_steps,
+          self.min_replay_history,
+          self.epsilon_train)
     if random.random() <= epsilon:
       # Choose a random action with probability epsilon.
       return random.randint(0, self.num_actions - 1)
@@ -377,6 +417,11 @@ class DQNAgent(object):
     if self._replay.memory.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sess.run(self._train_op)
+        if (self.summary_writer is not None and
+            self.training_steps > 0 and
+            self.training_steps % self.summary_writing_frequency == 0):
+          summary = self._sess.run(self._merged_summaries)
+          self.summary_writer.add_summary(summary, self.training_steps)
 
       if self.training_steps % self.target_update_period == 0:
         self._sess.run(self._sync_qt_ops)
@@ -392,11 +437,12 @@ class DQNAgent(object):
     Args:
       observation: numpy array, an observation from the environment.
     """
-    # Set current observation. Represents an 84 x 84 x 1 image frame.
-    self._observation = observation[:, :, 0]
+    # Set current observation. We do the reshaping to handle environments
+    # without frame stacking.
+    self._observation = np.reshape(observation, self.observation_shape)
     # Swap out the oldest frame with the current frame.
-    self.state = np.roll(self.state, -1, axis=3)
-    self.state[0, :, :, -1] = self._observation
+    self.state = np.roll(self.state, -1, axis=-1)
+    self.state[0, ..., -1] = self._observation
 
   def _store_transition(self, last_observation, action, reward, is_terminal):
     """Stores an experienced transition.
@@ -447,7 +493,6 @@ class DQNAgent(object):
     self._replay.save(checkpoint_dir, iteration_number)
     bundle_dictionary = {}
     bundle_dictionary['state'] = self.state
-    bundle_dictionary['eval_mode'] = self.eval_mode
     bundle_dictionary['training_steps'] = self.training_steps
     return bundle_dictionary
 
@@ -461,7 +506,7 @@ class DQNAgent(object):
 
     Args:
       checkpoint_dir: str, path to the checkpoint saved by tf.Save.
-      iteration_number: int, checkpoint version, used when restoring replay
+      iteration_number: int, checkpoint version, used when restoring the replay
         buffer.
       bundle_dictionary: dict, containing additional Python objects owned by
         the agent.

@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="prioritized_replay_buffer" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 </div>
 
 # Module: prioritized_replay_buffer

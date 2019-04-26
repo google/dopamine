@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,14 +47,17 @@ class OutOfGraphPrioritizedReplayBuffer(
                batch_size,
                update_horizon=1,
                gamma=0.99,
-               max_sample_attempts=circular_replay_buffer.MAX_SAMPLE_ATTEMPTS,
+               max_sample_attempts=1000,
                extra_storage_types=None,
-               observation_dtype=np.uint8):
+               observation_dtype=np.uint8,
+               action_shape=(),
+               action_dtype=np.int32,
+               reward_shape=(),
+               reward_dtype=np.float32):
     """Initializes OutOfGraphPrioritizedReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square with sides equal to observation_shape.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       replay_capacity: int, number of transitions to keep in memory.
       batch_size: int.
@@ -65,6 +69,12 @@ class OutOfGraphPrioritizedReplayBuffer(
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      action_shape: tuple of ints, the shape for the action vector. Empty tuple
+        means the action is a scalar.
+      action_dtype: np.dtype, type of elements in the action.
+      reward_shape: tuple of ints, the shape of the reward vector. Empty tuple
+        means the reward is a scalar.
+      reward_dtype: np.dtype, type of elements in the reward.
     """
     super(OutOfGraphPrioritizedReplayBuffer, self).__init__(
         observation_shape=observation_shape,
@@ -75,7 +85,11 @@ class OutOfGraphPrioritizedReplayBuffer(
         gamma=gamma,
         max_sample_attempts=max_sample_attempts,
         extra_storage_types=extra_storage_types,
-        observation_dtype=observation_dtype)
+        observation_dtype=observation_dtype,
+        action_shape=action_shape,
+        action_dtype=action_dtype,
+        reward_shape=reward_shape,
+        reward_dtype=reward_dtype)
 
     self.sum_tree = sum_tree.SumTree(replay_capacity)
 
@@ -140,7 +154,7 @@ class OutOfGraphPrioritizedReplayBuffer(
       if not self.is_valid_transition(indices[i]):
         if allowed_attempts == 0:
           raise RuntimeError(
-              'Max saple attempsts: Tried {} times but only sampled {}'
+              'Max sample attempts: Tried {} times but only sampled {}'
               ' valid indices. Batch size is {}'.
               format(self._max_sample_attempts, i, batch_size))
         index = indices[i]
@@ -257,14 +271,17 @@ class WrappedPrioritizedReplayBuffer(
                batch_size=32,
                update_horizon=1,
                gamma=0.99,
-               max_sample_attempts=circular_replay_buffer.MAX_SAMPLE_ATTEMPTS,
+               max_sample_attempts=1000,
                extra_storage_types=None,
-               observation_dtype=np.uint8):
+               observation_dtype=np.uint8,
+               action_shape=(),
+               action_dtype=np.int32,
+               reward_shape=(),
+               reward_dtype=np.float32):
     """Initializes WrappedPrioritizedReplayBuffer.
 
     Args:
-      observation_shape: tuple or int. If int, the observation is
-        assumed to be a 2D square with sides equal to observation_shape.
+      observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
       use_staging: bool, when True it would use a staging area to prefetch
         the next sampling batch.
@@ -278,6 +295,12 @@ class WrappedPrioritizedReplayBuffer(
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      action_shape: tuple of ints, the shape for the action vector. Empty tuple
+        means the action is a scalar.
+      action_dtype: np.dtype, type of elements in the action.
+      reward_shape: tuple of ints, the shape of the reward vector. Empty tuple
+        means the reward is a scalar.
+      reward_dtype: np.dtype, type of elements in the reward.
 
     Raises:
       ValueError: If update_horizon is not positive.
@@ -286,7 +309,8 @@ class WrappedPrioritizedReplayBuffer(
     memory = OutOfGraphPrioritizedReplayBuffer(
         observation_shape, stack_size, replay_capacity, batch_size,
         update_horizon, gamma, max_sample_attempts,
-        extra_storage_types=extra_storage_types)
+        extra_storage_types=extra_storage_types,
+        observation_dtype=observation_dtype)
     super(WrappedPrioritizedReplayBuffer, self).__init__(
         observation_shape,
         stack_size,
@@ -296,7 +320,12 @@ class WrappedPrioritizedReplayBuffer(
         update_horizon,
         gamma,
         wrapped_memory=memory,
-        extra_storage_types=extra_storage_types)
+        extra_storage_types=extra_storage_types,
+        observation_dtype=observation_dtype,
+        action_shape=action_shape,
+        action_dtype=action_dtype,
+        reward_shape=reward_shape,
+        reward_dtype=reward_dtype)
 
   def tf_set_priority(self, indices, priorities):
     """Sets the priorities for the given indices.

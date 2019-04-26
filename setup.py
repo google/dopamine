@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,10 +32,10 @@ with codecs.open(path.join(here, 'README.md'), encoding='utf-8') as f:
   long_description = f.read()
 
 install_requires = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
-                    'tensorflow', 'opencv-python >= 3.4.1.15',
+                    'opencv-python >= 3.4.1.15',
                     'gym >= 0.10.5']
 tests_require = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
-                 'tensorflow >= 1.9.0', 'opencv-python >= 3.4.1.15',
+                 'opencv-python >= 3.4.1.15',
                  'gym >= 0.10.5', 'mock >= 1.0.0']
 
 dopamine_description = (
@@ -42,7 +43,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='1.0.2',
+    version='2.0.3',
     include_package_data=True,
     packages=find_packages(exclude=['docs']),  # Required
     package_data={'testdata': ['testdata/*.gin']},

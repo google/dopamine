@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="circular_replay_buffer.WrappedReplayBuffer" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="add"/>
 <meta itemprop="property" content="create_sampling_ops"/>
@@ -21,9 +21,7 @@ To sample a batch: Construct operations that depend on any of the tensors is the
 transition dictionary. Every sess.run that requires any of these tensors will
 sample a new transition.
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -36,8 +34,7 @@ Initializes WrappedReplayBuffer.
 
 #### Args:
 
-*   <b>`observation_shape`</b>: tuple or int. If int, the observation is assumed
-    to be a 2D square.
+*   <b>`observation_shape`</b>: tuple of ints.
 *   <b>`stack_size`</b>: int, number of frames to use in state stack.
 *   <b>`use_staging`</b>: bool, when True it would use a staging area to
     prefetch the next sampling batch.
@@ -54,11 +51,19 @@ Initializes WrappedReplayBuffer.
     sample_transition_batch.
 *   <b>`observation_dtype`</b>: np.dtype, type of the observations. Defaults to
     np.uint8 for Atari 2600.
+*   <b>`action_shape`</b>: tuple of ints, the shape for the action vector. Empty
+    tuple means the action is a scalar.
+*   <b>`action_dtype`</b>: np.dtype, type of elements in the action.
+*   <b>`reward_shape`</b>: tuple of ints, the shape of the reward vector. Empty
+    tuple means the reward is a scalar.
+*   <b>`reward_dtype`</b>: np.dtype, type of elements in the reward.
 
 #### Raises:
 
 *   <b>`ValueError`</b>: If update_horizon is not positive.
 *   <b>`ValueError`</b>: If discount factor is not in [0, 1].
+
+## Methods
 
 <h3 id="add"><code>add</code></h3>
 

@@ -1,7 +1,8 @@
-# Hyperparameters follow Dabney et al. (2018)
+# Hyperparameters follow Dabney et al. (2018).
 import dopamine.agents.implicit_quantile.implicit_quantile_agent
 import dopamine.agents.rainbow.rainbow_agent
-import dopamine.atari.run_experiment
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
 import dopamine.replay_memory.prioritized_replay_buffer
 import gin.tf.external_configurables
 
@@ -24,12 +25,15 @@ RainbowAgent.optimizer = @tf.train.AdamOptimizer()
 tf.train.AdamOptimizer.learning_rate = 0.00005
 tf.train.AdamOptimizer.epsilon = 0.0003125
 
-Runner.game_name = 'Pong'
-Runner.sticky_actions = False
+atari_lib.create_atari_environment.game_name = 'Pong'
+atari_lib.create_atari_environment.sticky_actions = False
+create_agent.agent_name = 'implicit_quantile'
 Runner.num_iterations = 200
 Runner.training_steps = 250000
 Runner.evaluation_steps = 125000
 Runner.max_steps_per_episode = 27000
+
+AtariPreprocessing.terminal_on_life_loss = True
 
 WrappedPrioritizedReplayBuffer.replay_capacity = 1000000
 WrappedPrioritizedReplayBuffer.batch_size = 32

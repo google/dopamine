@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="circular_replay_buffer.OutOfGraphReplayBuffer" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 <meta itemprop="property" content="__init__"/>
 <meta itemprop="property" content="add"/>
 <meta itemprop="property" content="cursor"/>
@@ -37,10 +37,10 @@ sample time.
 
 *   <b>`add_count`</b>: int, counter of how many transitions have been added
     (including the blank ones at the beginning of an episode).
+*   <b>`invalid_range`</b>: np.array, an array with the indices of
+    cursor-related invalid transitions
 
-## Methods
-
-<h3 id="__init__"><code>__init__</code></h3>
+<h2 id="__init__"><code>__init__</code></h2>
 
 ```python
 __init__(
@@ -52,7 +52,11 @@ __init__(
     gamma=0.99,
     max_sample_attempts=MAX_SAMPLE_ATTEMPTS,
     extra_storage_types=None,
-    observation_dtype=np.uint8
+    observation_dtype=np.uint8,
+    action_shape=(),
+    action_dtype=np.int32,
+    reward_shape=(),
+    reward_dtype=np.float32
 )
 ```
 
@@ -60,8 +64,7 @@ Initializes OutOfGraphReplayBuffer.
 
 #### Args:
 
-*   <b>`observation_shape`</b>: tuple or int. If int, the observation is assumed
-    to be a 2D square.
+*   <b>`observation_shape`</b>: tuple of ints.
 *   <b>`stack_size`</b>: int, number of frames to use in state stack.
 *   <b>`replay_capacity`</b>: int, number of transitions to keep in memory.
 *   <b>`batch_size`</b>: int.
@@ -74,11 +77,19 @@ Initializes OutOfGraphReplayBuffer.
     sample_transition_batch.
 *   <b>`observation_dtype`</b>: np.dtype, type of the observations. Defaults to
     np.uint8 for Atari 2600.
+*   <b>`action_shape`</b>: tuple of ints, the shape for the action vector. Empty
+    tuple means the action is a scalar.
+*   <b>`action_dtype`</b>: np.dtype, type of elements in the action.
+*   <b>`reward_shape`</b>: tuple of ints, the shape of the reward vector. Empty
+    tuple means the reward is a scalar.
+*   <b>`reward_dtype`</b>: np.dtype, type of elements in the reward.
 
 #### Raises:
 
 *   <b>`ValueError`</b>: If replay_capacity is too small to hold at least one
     transition.
+
+## Methods
 
 <h3 id="add"><code>add</code></h3>
 

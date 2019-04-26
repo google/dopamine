@@ -105,18 +105,18 @@ limitations under the License.
      "wizardofwor",
      "yarsrevenge",
      "zaxxon",
-    ]
+    ];
     function showGame(elem) {
-      var selected_game = elem.value;
-      var data_source = "data/" + selected_game + ".vg.json";
-      vegaEmbed("#" + selected_game + "_vg", data_source);
+      var selectedGame = elem.value;
+      var dataSource = "data/" + selectedGame + ".vg.json";
+      vegaEmbed("#" + selectedGame + "_vg", dataSource);
       $(".outer_div").attr("style","display:none");
       document.getElementById(elem.value).style.display = "block";
     }
     $(document).ready(function() {
       console.log("Document loaded.")
       // Add options to drop down.
-      var gameSelect = $("#game")
+      var gameSelect = $("#game");
       $.each(games, function(idx, game) {
         gameSelect.append(
             $("<option></option>").val(game).html(game)

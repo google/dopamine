@@ -1,6 +1,6 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
 <meta itemprop="name" content="rainbow_agent.project_distribution" />
-<meta itemprop="path" content="stable" />
+<meta itemprop="path" content="Stable" />
 </div>
 
 # rainbow_agent.project_distribution
