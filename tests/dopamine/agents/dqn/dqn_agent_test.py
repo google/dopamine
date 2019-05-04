@@ -52,7 +52,7 @@ class DQNAgentTest(tf.test.TestCase):
     self.zero_state = np.zeros(
         (1,) + self.observation_shape + (self.stack_size,))
 
-  def _create_test_agent(self, sess):
+  def _create_test_agent(self, sess, allow_partial_reload=False):
     stack_size = self.stack_size
 
     class MockDQNAgent(dqn_agent.DQNAgent):
@@ -84,7 +84,8 @@ class DQNAgentTest(tf.test.TestCase):
         epsilon_fn=lambda w, x, y, z: 0.0,  # No exploration.
         update_period=self.update_period,
         target_update_period=self.target_update_period,
-        epsilon_eval=0.0)  # No exploration during evaluation.
+        epsilon_eval=0.0,  # No exploration during evaluation.
+        allow_partial_reload=allow_partial_reload)
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -324,6 +325,25 @@ class DQNAgentTest(tf.test.TestCase):
       # the expected files, which will cause the unbundle() method to return
       # False.
       self.assertFalse(agent.unbundle(self._test_subdir, 1729, bundle))
+
+  def testUnbundlingWithNoBundleDictionary(self):
+    with tf.Session() as sess:
+      agent = self._create_test_agent(sess)
+      agent._replay = mock.Mock()
+      self.assertFalse(agent.unbundle(self._test_subdir, 1729, None))
+
+  def testPartialUnbundling(self):
+    with tf.Session() as sess:
+      agent = self._create_test_agent(sess, allow_partial_reload=True)
+      # These values don't reflect the actual types of these attributes, but are
+      # used merely for facility of testing.
+      agent.state = 'state'
+      agent.training_steps = 'training_steps'
+      iteration_number = 1729
+      _ = agent.bundle_and_checkpoint(self._test_subdir, iteration_number)
+      # Both the ReplayBuffer and bundle_dictionary checks will fail,
+      # but this will be ignored since we're allowing partial reloads.
+      self.assertTrue(agent.unbundle(self._test_subdir, 1729, None))
 
   def testBundling(self):
     with tf.Session() as sess:

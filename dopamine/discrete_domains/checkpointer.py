@@ -49,20 +49,28 @@ from __future__ import print_function
 
 import os
 import pickle
+
+import gin
 import tensorflow as tf
 
 CHECKPOINT_DURATION = 4
 
 
-def get_latest_checkpoint_number(base_directory):
+@gin.configurable
+def get_latest_checkpoint_number(base_directory, override_number=None):
   """Returns the version number of the latest completed checkpoint.
 
   Args:
     base_directory: str, directory in which to look for checkpoint files.
+    override_number: None or int, allows the user to manually override
+      the checkpoint number via a gin-binding.
 
   Returns:
     int, the iteration number of the latest checkpoint, or -1 if none was found.
   """
+  if override_number is not None:
+    return override_number
+
   glob = os.path.join(base_directory, 'sentinel_checkpoint_complete.*')
   def extract_iteration(x):
     return int(x[x.rfind('.') + 1:])

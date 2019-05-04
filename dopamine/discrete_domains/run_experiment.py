@@ -231,10 +231,11 @@ class Runner(object):
           latest_checkpoint_version)
       if self._agent.unbundle(
           self._checkpoint_dir, latest_checkpoint_version, experiment_data):
-        assert 'logs' in experiment_data
-        assert 'current_iteration' in experiment_data
-        self._logger.data = experiment_data['logs']
-        self._start_iteration = experiment_data['current_iteration'] + 1
+        if experiment_data is not None:
+          assert 'logs' in experiment_data
+          assert 'current_iteration' in experiment_data
+          self._logger.data = experiment_data['logs']
+          self._start_iteration = experiment_data['current_iteration'] + 1
         tf.logging.info('Reloaded checkpoint and will start from iteration %d',
                         self._start_iteration)
 
