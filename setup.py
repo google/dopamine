@@ -53,7 +53,6 @@ setup(
     long_description=long_description,
     url='https://github.com/google/dopamine',  # Optional
     author='The Dopamine Team',  # Optional
-    author_email='opensource@google.com',
     classifiers=[  # Optional
         'Development Status :: 4 - Beta',
 
