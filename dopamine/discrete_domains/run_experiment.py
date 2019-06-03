@@ -183,9 +183,12 @@ class Runner(object):
     self._summary_writer = tf.summary.FileWriter(self._base_dir)
 
     self._environment = create_environment_fn()
+    config = tf.ConfigProto(allow_soft_placement=True)
+    # Allocate only subset of the GPU memory as needed which allows for running
+    # multiple agents/workers on the same GPU.
+    config.gpu_options.allow_growth = True
     # Set up a session and initialize variables.
-    self._sess = tf.Session('',
-                            config=tf.ConfigProto(allow_soft_placement=True))
+    self._sess = tf.Session('', config=config)
     self._agent = create_agent_fn(self._sess, self._environment,
                                   summary_writer=self._summary_writer)
     self._summary_writer.add_graph(graph=tf.get_default_graph())
