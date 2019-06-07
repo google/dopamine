@@ -160,6 +160,8 @@ class DQNAgent(object):
     tf.logging.info('\t tf_device: %s', tf_device)
     tf.logging.info('\t use_staging: %s', use_staging)
     tf.logging.info('\t optimizer: %s', optimizer)
+    tf.logging.info('\t max_tf_checkpoints_to_keep: %d',
+                    max_tf_checkpoints_to_keep)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
