@@ -220,7 +220,7 @@ def create_runner(base_dir, trained_agent_ckpt_path, agent='dqn'):
   return MyRunner(base_dir, trained_agent_ckpt_path, create_agent)
 
 
-def run(agent, game, num_steps, root_dir, restore_ckpt=None):
+def run(agent, game, num_steps, root_dir, restore_ckpt):
   """Main entrypoint for running and generating visualizations.
 
   Args:
@@ -230,7 +230,6 @@ def run(agent, game, num_steps, root_dir, restore_ckpt=None):
     root_dir: str, root directory where files will be stored.
     restore_ckpt: str, path to the checkpoint to reload.
   """
-  assert restore_ckpt
   config = """
   atari_lib.create_atari_environment.game_name = '{}'
   WrappedReplayBuffer.replay_capacity = 300
