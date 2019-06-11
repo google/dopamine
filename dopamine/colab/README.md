@@ -20,6 +20,12 @@ In this
 [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/load_statistics.ipynb)
 we illustrate how to load and visualize the logs data produced by Dopamine.
 
+## Visualizing trained agents
+In this
+[colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/agent_visualizer.ipynb)
+we illustrate how to visualize a trained agent using the visualization utilities
+provided with Dopamine.
+
 ## Visualizing with Tensorboard
 In this
 [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/tensorboard.ipynb)
