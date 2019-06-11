@@ -29,8 +29,6 @@ import mock
 import numpy as np
 import tensorflow as tf
 
-slim = tf.contrib.slim
-
 FLAGS = flags.FLAGS
 
 
@@ -66,7 +64,7 @@ class DQNAgentTest(tf.test.TestCase):
         # that it gets picked by the argmax.
         weights_initializer = np.tile(
             np.arange(self.num_actions, 0, -1), (stack_size, 1))
-        q = slim.fully_connected(
+        q = tf.contrib.slim.fully_connected(
             inputs,
             self.num_actions,
             weights_initializer=tf.constant_initializer(weights_initializer),

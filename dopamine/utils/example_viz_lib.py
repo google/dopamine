@@ -43,8 +43,6 @@ import gin
 import numpy as np
 import tensorflow as tf
 
-slim = tf.contrib.slim
-
 
 class MyDQNAgent(dqn_agent.DQNAgent):
   """Sample DQN agent to visualize Q-values and rewards."""
@@ -74,7 +72,8 @@ class MyDQNAgent(dqn_agent.DQNAgent):
         for name, _ in tf.train.list_variables(checkpoint_path)
     ]
     include_vars = list(global_vars.intersection(set(ckpt_vars)))
-    variables_to_restore = slim.get_variables_to_restore(include=include_vars)
+    variables_to_restore = tf.contrib.slim.get_variables_to_restore(
+        include=include_vars)
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
@@ -108,7 +107,8 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
         for name, _ in tf.train.list_variables(checkpoint_path)
     ]
     include_vars = list(global_vars.intersection(set(ckpt_vars)))
-    variables_to_restore = slim.get_variables_to_restore(include=include_vars)
+    variables_to_restore = tf.contrib.slim.get_variables_to_restore(
+        include=include_vars)
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)

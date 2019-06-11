@@ -48,8 +48,6 @@ gin.constant('gym_lib.ACROBOT_OBSERVATION_SHAPE', (6, 1))
 gin.constant('gym_lib.ACROBOT_OBSERVATION_DTYPE', tf.float64)
 gin.constant('gym_lib.ACROBOT_STACK_SIZE', 1)
 
-slim = tf.contrib.slim
-
 
 @gin.configurable
 def create_gym_environment(environment_name=None, version='v0'):
@@ -90,19 +88,19 @@ def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
   net = tf.cast(state, tf.float32)
-  net = slim.flatten(net)
+  net = tf.contrib.slim.flatten(net)
   net -= min_vals
   net /= max_vals - min_vals
   net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
-  net = slim.fully_connected(net, 512)
-  net = slim.fully_connected(net, 512)
+  net = tf.contrib.slim.fully_connected(net, 512)
+  net = tf.contrib.slim.fully_connected(net, 512)
   if num_atoms is None:
     # We are constructing a DQN-style network.
-    return slim.fully_connected(net, num_actions, activation_fn=None)
+    return tf.contrib.slim.fully_connected(net, num_actions, activation_fn=None)
   else:
     # We are constructing a rainbow-style network.
-    return slim.fully_connected(net, num_actions * num_atoms,
-                                activation_fn=None)
+    return tf.contrib.slim.fully_connected(net, num_actions * num_atoms,
+                                           activation_fn=None)
 
 
 @gin.configurable
@@ -182,7 +180,7 @@ def fourier_dqn_network(min_vals,
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
   net = tf.cast(state, tf.float32)
-  net = slim.flatten(net)
+  net = tf.contrib.slim.flatten(net)
 
   # Feed state through Fourier basis.
   feature_generator = FourierBasis(
@@ -193,7 +191,7 @@ def fourier_dqn_network(min_vals,
   net = feature_generator.compute_features(net)
 
   # Q-values are always linear w.r.t. last layer.
-  q_values = slim.fully_connected(
+  q_values = tf.contrib.slim.fully_connected(
       net, num_actions, activation_fn=None, biases_initializer=None)
   return q_values
 

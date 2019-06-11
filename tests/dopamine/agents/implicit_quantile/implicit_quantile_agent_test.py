@@ -26,8 +26,6 @@ from dopamine.agents.implicit_quantile import implicit_quantile_agent
 import numpy as np
 import tensorflow as tf
 
-slim = tf.contrib.slim
-
 
 class ImplicitQuantileAgentTest(tf.test.TestCase):
 
@@ -50,7 +48,7 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
         # corresponding quantile inputs.
         # State/Quantile shapes will be k x 1, (N x batch_size) x 1,
         # or (N' x batch_size) x 1.
-        state_net = slim.flatten(state)
+        state_net = tf.contrib.slim.flatten(state)
         state_net = tf.ones(shape=state_net.shape)
         state_net = tf.cast(state_net[:, 0:self.num_actions], tf.float32)
         state_net_tiled = tf.tile(state_net, [num_quantiles, 1])
@@ -60,7 +58,7 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
         quantiles = tf.ones(quantiles_shape)
         quantile_net = tf.tile(quantiles, [1, self.num_actions])
         quantile_values = state_net_tiled * quantile_net
-        quantile_values = slim.fully_connected(
+        quantile_values = tf.contrib.slim.fully_connected(
             quantile_values, self.num_actions, activation_fn=None,
             weights_initializer=tf.ones_initializer(),
             biases_initializer=tf.zeros_initializer())

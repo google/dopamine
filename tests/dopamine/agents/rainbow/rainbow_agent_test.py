@@ -27,8 +27,6 @@ from dopamine.utils import test_utils
 import numpy as np
 import tensorflow as tf
 
-slim = tf.contrib.slim
-
 
 class ProjectDistributionTest(tf.test.TestCase):
 
@@ -325,7 +323,7 @@ class RainbowAgentTest(tf.test.TestCase):
         bottom_rows = np.tile(
             np.ones(self.num_actions * self._num_atoms), (stack_size - 1, 1))
         weights_initializer = np.concatenate(([first_row], bottom_rows))
-        net = slim.fully_connected(
+        net = tf.contrib.slim.fully_connected(
             inputs,
             self.num_actions * self._num_atoms,
             weights_initializer=tf.constant_initializer(weights_initializer),
