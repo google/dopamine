@@ -277,7 +277,7 @@ def read_experiment(log_path,
         experiment_path, iteration_number=iteration_number, verbose=verbose)
 
     summary = summarize_data(raw_data, summary_keys)
-    for iteration in range(last_iteration):
+    for iteration in range(last_iteration + 1):
       # The row contains all the parameters, the iteration, and finally the
       # requested values.
       row_data = (list(parameter_tuple) + [iteration] +

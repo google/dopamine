@@ -85,6 +85,13 @@ class CheckpointerTest(tf.test.TestCase):
     self.assertEqual(
         -1, checkpointer.get_latest_checkpoint_number(self._test_subdir))
 
+  def testLoadLatestCheckpointWithOverride(self):
+    override_number = 1729
+    self.assertEqual(
+        override_number,
+        checkpointer.get_latest_checkpoint_number(
+            '/ignored', override_number=override_number))
+
   def testLoadLatestCheckpoint(self):
     exp_checkpointer = checkpointer.Checkpointer(self._test_subdir)
     first_iter = 1729

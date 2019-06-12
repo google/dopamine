@@ -41,6 +41,10 @@ which demonstrate how to use Dopamine.
 This is not an official Google product.
 
 ## What's new
+*  **11/06/2019:** Visualization utilities added to generate videos and still
+   images of a trained agent interacting with its environment. See an example
+   colaboratory
+   [here](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/agent_visualizer.ipynb).
 *  **30/01/2019:** Dopamine 2.0 now supports general discrete-domain gym
    environments.
 *  **01/11/2018:** Download links for each individual checkpoint, to avoid

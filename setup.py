@@ -20,16 +20,11 @@ See: https://github.com/google/dopamine
 
 """
 
-import codecs
 from os import path
 from setuptools import find_packages
 from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
-
-# Get the long description from the README file.
-with codecs.open(path.join(here, 'README.md'), encoding='utf-8') as f:
-  long_description = f.read()
 
 install_requires = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
                     'opencv-python >= 3.4.1.15',
@@ -43,17 +38,16 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='2.0.3',
+    version='2.0.5',
     include_package_data=True,
     packages=find_packages(exclude=['docs']),  # Required
     package_data={'testdata': ['testdata/*.gin']},
     install_requires=install_requires,
     tests_require=tests_require,
     description=dopamine_description,
-    long_description=long_description,
+    long_description=dopamine_description,
     url='https://github.com/google/dopamine',  # Optional
     author='The Dopamine Team',  # Optional
-    author_email='opensource@google.com',
     classifiers=[  # Optional
         'Development Status :: 4 - Beta',
 
