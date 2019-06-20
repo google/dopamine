@@ -8,8 +8,10 @@
 Atari-specific utilities including Atari-specific network architectures.
 
 This includes a class implementing minimal Atari 2600 preprocessing, which is in
-charge of: . Emitting a terminal signal when losing a life (optional). . Frame
-skipping and color pooling. . Resizing the image before it is provided to the
+charge of: 
+* Emitting a terminal signal when losing a life (optional). 
+* Frame skipping and color pooling. 
+* Resizing the image before it is provided to the
 agent.
 
 ## Classes
