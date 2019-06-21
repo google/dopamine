@@ -21,15 +21,22 @@ Problems for General Agents".
 The created environment is the Gym wrapper around the Arcade Learning
 Environment.
 
-The main choice available to the user is whether to use sticky actions or not.
-Sticky actions, as prescribed by Machado et al., cause actions to persist with
-some probability (0.25) when a new command is sent to the ALE. This can be
-viewed as introducing a mild form of stochasticity in the environment. We use
-them by default.
+The user can choose from a variety of modes and difficulties built into
+some Atari 2600 games by default. These game flavours were introduced
+to the Arcade Learning Environment in Machado et al. (2017).
+
+The user can also choose whether to use sticky actions or not.
+Sticky actions, as prescribed by Machado et al., cause actions to persist
+with some probability (0.25) when a new command is sent to the ALE. This
+can be viewed as introducing a mild form of stochasticity in the environment.
+We use them by default.
+
 
 #### Args:
 
 *   <b>`game_name`</b>: str, the name of the Atari 2600 domain.
+*   <b>`game_mode`</b>: int, the mode of the Atari 2600 game.
+*   <b>`game_difficulty`</b>: int, the difficulty of the Atari 2600 game.
 *   <b>`sticky_actions`</b>: bool, whether to use sticky_actions as per Machado
     et al.
 

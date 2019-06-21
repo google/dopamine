@@ -48,7 +48,7 @@ NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
 
 
 @gin.configurable
-def create_atari_environment(game_name=None, sticky_actions=True):
+def create_atari_environment(game_name=None, sticky_actions=True, game_mode=0, game_difficulty=0):
   """Wraps an Atari 2600 Gym environment with some basic preprocessing.
 
   This preprocessing matches the guidelines proposed in Machado et al. (2017),
@@ -58,7 +58,11 @@ def create_atari_environment(game_name=None, sticky_actions=True):
   The created environment is the Gym wrapper around the Arcade Learning
   Environment.
 
-  The main choice available to the user is whether to use sticky actions or not.
+  The user can choose from a variety of modes and difficulties built into
+  some Atari 2600 games by default. These game flavours were introduced
+  to the Arcade Learning Environment in Machado et al. (2017).
+
+  The user can also choose whether to use sticky actions or not.
   Sticky actions, as prescribed by Machado et al., cause actions to persist
   with some probability (0.25) when a new command is sent to the ALE. This
   can be viewed as introducing a mild form of stochasticity in the environment.
@@ -66,6 +70,8 @@ def create_atari_environment(game_name=None, sticky_actions=True):
 
   Args:
     game_name: str, the name of the Atari 2600 domain.
+    game_mode: int, the mode of the Atari 2600 game.
+    game_difficulty: int, the difficulty of the Atari 2600 game.
     sticky_actions: bool, whether to use sticky_actions as per Machado et al.
 
   Returns:
@@ -74,7 +80,7 @@ def create_atari_environment(game_name=None, sticky_actions=True):
   assert game_name is not None
   game_version = 'v0' if sticky_actions else 'v4'
   full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
-  env = gym.make(full_game_name)
+  env = gym.make(full_game_name, mode=game_mode, difficulty=game_difficulty)
   # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
   # handle this time limit internally instead, which lets us cap at 108k frames
   # (30 minutes). The TimeLimit wrapper also plays poorly with saving and
