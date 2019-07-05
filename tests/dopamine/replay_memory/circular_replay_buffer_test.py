@@ -79,6 +79,14 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE)
     self.assertEqual(memory._observation_shape, (4, 20))
     self.assertEqual(memory.add_count, 0)
+    # Test with terminal datatype of np.int32
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        terminal_dtype=np.int32,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE)
+    self.assertEqual(memory._terminal_dtype, np.int32)
 
   def testAdd(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(

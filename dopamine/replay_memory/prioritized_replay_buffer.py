@@ -50,6 +50,7 @@ class OutOfGraphPrioritizedReplayBuffer(
                max_sample_attempts=1000,
                extra_storage_types=None,
                observation_dtype=np.uint8,
+               terminal_dtype=np.uint8,
                action_shape=(),
                action_dtype=np.int32,
                reward_shape=(),
@@ -69,6 +70,8 @@ class OutOfGraphPrioritizedReplayBuffer(
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      terminal_dtype: np.dtype, type of the terminals. Defaults to np.uint8 for
+        Atari 2600.
       action_shape: tuple of ints, the shape for the action vector. Empty tuple
         means the action is a scalar.
       action_dtype: np.dtype, type of elements in the action.
@@ -86,6 +89,7 @@ class OutOfGraphPrioritizedReplayBuffer(
         max_sample_attempts=max_sample_attempts,
         extra_storage_types=extra_storage_types,
         observation_dtype=observation_dtype,
+        terminal_dtype=terminal_dtype,
         action_shape=action_shape,
         action_dtype=action_dtype,
         reward_shape=reward_shape,
@@ -274,6 +278,7 @@ class WrappedPrioritizedReplayBuffer(
                max_sample_attempts=1000,
                extra_storage_types=None,
                observation_dtype=np.uint8,
+               terminal_dtype=np.uint8,
                action_shape=(),
                action_dtype=np.int32,
                reward_shape=(),
@@ -295,6 +300,8 @@ class WrappedPrioritizedReplayBuffer(
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      terminal_dtype: np.dtype, type of the terminals. Defaults to np.uint8 for
+        Atari 2600.
       action_shape: tuple of ints, the shape for the action vector. Empty tuple
         means the action is a scalar.
       action_dtype: np.dtype, type of elements in the action.
@@ -322,6 +329,7 @@ class WrappedPrioritizedReplayBuffer(
         wrapped_memory=memory,
         extra_storage_types=extra_storage_types,
         observation_dtype=observation_dtype,
+        terminal_dtype=terminal_dtype,
         action_shape=action_shape,
         action_dtype=action_dtype,
         reward_shape=reward_shape,

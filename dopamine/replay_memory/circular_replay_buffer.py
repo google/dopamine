@@ -105,6 +105,7 @@ class OutOfGraphReplayBuffer(object):
                max_sample_attempts=1000,
                extra_storage_types=None,
                observation_dtype=np.uint8,
+               terminal_dtype=np.uint8,
                action_shape=(),
                action_dtype=np.int32,
                reward_shape=(),
@@ -124,6 +125,8 @@ class OutOfGraphReplayBuffer(object):
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      terminal_dtype: np.dtype, type of the terminals. Defaults to np.uint8 for
+        Atari 2600.
       action_shape: tuple of ints, the shape for the action vector. Empty tuple
         means the action is a scalar.
       action_dtype: np.dtype, type of elements in the action.
@@ -145,6 +148,7 @@ class OutOfGraphReplayBuffer(object):
         self.__class__.__name__)
     tf.logging.info('\t observation_shape: %s', str(observation_shape))
     tf.logging.info('\t observation_dtype: %s', str(observation_dtype))
+    tf.logging.info('\t terminal_dtype: %s', str(terminal_dtype))
     tf.logging.info('\t stack_size: %d', stack_size)
     tf.logging.info('\t replay_capacity: %d', replay_capacity)
     tf.logging.info('\t batch_size: %d', batch_size)
@@ -163,6 +167,7 @@ class OutOfGraphReplayBuffer(object):
     self._update_horizon = update_horizon
     self._gamma = gamma
     self._observation_dtype = observation_dtype
+    self._terminal_dtype = terminal_dtype
     self._max_sample_attempts = max_sample_attempts
     if extra_storage_types:
       self._extra_storage_types = extra_storage_types
@@ -210,7 +215,7 @@ class OutOfGraphReplayBuffer(object):
                       self._observation_dtype),
         ReplayElement('action', self._action_shape, self._action_dtype),
         ReplayElement('reward', self._reward_shape, self._reward_dtype),
-        ReplayElement('terminal', (), np.uint8)
+        ReplayElement('terminal', (), self._terminal_dtype)
     ]
 
     for extra_replay_element in self._extra_storage_types:
@@ -241,7 +246,7 @@ class OutOfGraphReplayBuffer(object):
       observation: np.array with shape observation_shape.
       action: int, the action in the transition.
       reward: float, the reward received in the transition.
-      terminal: A uint8 acting as a boolean indicating whether the transition
+      terminal: np.dtype, acts as a boolean indicating whether the transition
                 was terminal (1) or not (0).
       *args: extra contents with shapes and dtypes according to
         extra_storage_types.
@@ -555,7 +560,7 @@ class OutOfGraphReplayBuffer(object):
                       self._action_dtype),
         ReplayElement('next_reward', (batch_size,) + self._reward_shape,
                       self._reward_dtype),
-        ReplayElement('terminal', (batch_size,), np.uint8),
+        ReplayElement('terminal', (batch_size,), self._terminal_dtype),
         ReplayElement('indices', (batch_size,), np.int32)
     ]
     for element in self._extra_storage_types:
@@ -687,6 +692,7 @@ class WrappedReplayBuffer(object):
                max_sample_attempts=1000,
                extra_storage_types=None,
                observation_dtype=np.uint8,
+               terminal_dtype=np.uint8,
                action_shape=(),
                action_dtype=np.int32,
                reward_shape=(),
@@ -710,6 +716,8 @@ class WrappedReplayBuffer(object):
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
         np.uint8 for Atari 2600.
+      terminal_dtype: np.dtype, type of the terminals. Defaults to np.uint8 for
+        Atari 2600.
       action_shape: tuple of ints, the shape for the action vector. Empty tuple
         means the action is a scalar.
       action_dtype: np.dtype, type of elements in the action.
@@ -745,6 +753,7 @@ class WrappedReplayBuffer(object):
           gamma,
           max_sample_attempts,
           observation_dtype=observation_dtype,
+          terminal_dtype=terminal_dtype,
           extra_storage_types=extra_storage_types,
           action_shape=action_shape,
           action_dtype=action_dtype,
@@ -765,7 +774,7 @@ class WrappedReplayBuffer(object):
       observation: np.array with shape observation_shape.
       action: int, the action in the transition.
       reward: float, the reward received in the transition.
-      terminal: A uint8 acting as a boolean indicating whether the transition
+      terminal: np.dtype, acts as a boolean indicating whether the transition
                 was terminal (1) or not (0).
       *args: extra contents with shapes and dtypes according to
         extra_storage_types.
