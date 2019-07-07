@@ -50,7 +50,7 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
       action: Integer.
       reward: Float.
       terminal: Integer (0 or 1).
-      priority: Float. Defults to standard priority of 1.
+      priority: Float. Defaults to standard priority of 1.
 
     Returns:
       Index of the transition just added.
