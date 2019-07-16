@@ -124,20 +124,20 @@ class OutOfGraphPrioritizedReplayBuffer(
     Args:
       *args: All the elements in a transition.
     """
+    self._check_args_length(*args)
+
     # Use Schaul et al.'s (2015) scheme of setting the priority of new elements
     # to the maximum priority so far.
-    parent_add_args = []
-    # Picks out 'priority' from arguments and passes the other arguments to the
-    # parent method.
+    # Picks out 'priority' from arguments and adds it to the sum_tree.
+    transition = {}
     for i, element in enumerate(self.get_add_args_signature()):
       if element.name == 'priority':
         priority = args[i]
       else:
-        parent_add_args.append(args[i])
+        transition[element.name] = args[i]
 
     self.sum_tree.set(self.cursor(), priority)
-
-    super(OutOfGraphPrioritizedReplayBuffer, self)._add(*parent_add_args)
+    super(OutOfGraphPrioritizedReplayBuffer, self)._add_transition(transition)
 
   def sample_index_batch(self, batch_size):
     """Returns a batch of valid indices sampled as in Schaul et al. (2015).

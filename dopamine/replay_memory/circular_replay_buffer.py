@@ -265,16 +265,39 @@ class OutOfGraphReplayBuffer(object):
     Args:
       *args: All the elements in a transition.
     """
-    cursor = self.cursor()
+    self._check_args_length(*args)
+    transition = {e.name: args[idx]
+                  for idx, e in enumerate(self.get_add_args_signature())}
+    self._add_transition(transition)
 
-    arg_names = [e.name for e in self.get_add_args_signature()]
-    for arg_name, arg in zip(arg_names, args):
-      self._store[arg_name][cursor] = arg
+  def _add_transition(self, transition):
+    """Internal add method to add transition dictionary to storage arrays.
+
+    Args:
+      transition: The dictionary of names and values of the transition
+                  to add to the storage.
+    """
+    cursor = self.cursor()
+    for arg_name in transition:
+      self._store[arg_name][cursor] = transition[arg_name]
 
     self.add_count += 1
     self.invalid_range = invalid_range(
         self.cursor(), self._replay_capacity, self._stack_size,
         self._update_horizon)
+
+  def _check_args_length(self, *args):
+    """Check if args passed to the add method have the same length as storage.
+
+    Args:
+      *args: Args for elements used in storage.
+
+    Raises:
+      ValueError: If args have wrong length.
+    """
+    if len(args) != len(self.get_add_args_signature()):
+      raise ValueError('Add expects {} elements, received {}'.format(
+          len(self.get_add_args_signature()), len(args)))
 
   def _check_add_types(self, *args):
     """Checks if args passed to the add method match those of the storage.
@@ -285,9 +308,7 @@ class OutOfGraphReplayBuffer(object):
     Raises:
       ValueError: If args have wrong shape or dtype.
     """
-    if len(args) != len(self.get_add_args_signature()):
-      raise ValueError('Add expects {} elements, received {}'.format(
-          len(self.get_add_args_signature()), len(args)))
+    self._check_args_length(*args)
     for arg_element, store_element in zip(args, self.get_add_args_signature()):
       if isinstance(arg_element, np.ndarray):
         arg_shape = arg_element.shape

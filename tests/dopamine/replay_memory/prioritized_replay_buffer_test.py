@@ -60,6 +60,20 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
     index = (memory.cursor() - 1) % REPLAY_CAPACITY
     return index
 
+  def testAddWithAndWithoutPriority(self):
+    memory = self.create_default_memory()
+    self.assertEqual(memory.cursor(), 0)
+    zeros = np.zeros(SCREEN_SIZE)
+
+    self.add_blank(memory)
+    self.assertEqual(memory.cursor(), STACK_SIZE)
+    self.assertEqual(memory.add_count, STACK_SIZE)
+
+    # Check that the prioritized replay buffer expects an additional argument
+    # for priority.
+    with self.assertRaisesRegexp(ValueError, 'Add expects'):
+      memory.add(zeros, 0, 0, 0)
+
   def testDummyScreensAddedToNewMemory(self):
     memory = self.create_default_memory()
     index = self.add_blank(memory)
