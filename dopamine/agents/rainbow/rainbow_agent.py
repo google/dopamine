@@ -38,7 +38,7 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-
+import os
 
 
 from dopamine.agents.dqn import dqn_agent
@@ -127,6 +127,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
     self._replay_scheme = replay_scheme
     # TODO(b/110897128): Make agent optimizer attribute private.
     self.optimizer = optimizer
+    if os.environ.get('TF_ENABLE_AUTO_MIXED_PRECISION', default='0') == '1':
+        self.optimizer = tf.train.experimental.enable_mixed_precision_graph_rewrite(optimizer)
 
     dqn_agent.DQNAgent.__init__(
         self,
