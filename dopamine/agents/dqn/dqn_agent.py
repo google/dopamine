@@ -181,6 +181,8 @@ class DQNAgent(object):
     self.eval_mode = eval_mode
     self.training_steps = 0
     self.optimizer = optimizer
+    if os.environ.get('TF_ENABLE_AUTO_MIXED_PRECISION', default='0') == '1':
+        self.optimizer = tf.train.experimental.enable_mixed_precision_graph_rewrite(optimizer)
     self.summary_writer = summary_writer
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
