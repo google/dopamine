@@ -29,8 +29,8 @@ import subprocess
 
 import gin
 import numpy as np
+from PIL import Image
 import pygame
-import scipy
 
 
 @gin.configurable
@@ -104,8 +104,8 @@ class AgentVisualizer(object):
         continue
       filename = (
           self.filename_format.format(frame_number) + '.{}'.format(file_type))
-      scipy.misc.imsave(os.path.join(self.record_path, filename),
-                        self.record_frame)
+      im = Image.fromarray(self.record_frame)
+      im.save(os.path.join(self.record_path, filename))
 
   def generate_video(self, video_file='video.mp4'):
     """Generates a video, requires 'png' be in file_types.
