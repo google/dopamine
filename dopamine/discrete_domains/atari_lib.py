@@ -32,6 +32,7 @@ import atari_py
 import gin
 import gym
 from gym.spaces.box import Box
+from gym.envs.registration import spec
 import numpy as np
 import tensorflow as tf
 
@@ -80,6 +81,11 @@ def create_atari_environment(game_name=None, sticky_actions=True, game_mode=0, g
   assert game_name is not None
   game_version = 'v0' if sticky_actions else 'v4'
   full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
+  entry_point = spec(full_game_name).entry_point
+  assert isinstance(entry_point, str) and entry_point.startswith('gym.envs.atari'), (
+    '{} seems to be an invalid Atari environment'.format(full_game_name)
+  )
+
   env = gym.make(full_game_name, mode=game_mode, difficulty=game_difficulty)
   # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
   # handle this time limit internally instead, which lets us cap at 108k frames
