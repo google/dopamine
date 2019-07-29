@@ -18,7 +18,7 @@ To run, point FLAGS.restore_checkpoint to the TensorFlow checkpoint of a
 trained agent. As an example, you can download to `/tmp/checkpoints` the files
 linked below:
   # pylint: disable=line-too-long
-  *  https://storage.cloud.google.com/download-dopamine-rl/colab/samples/rainbow/SpaceInvaders_v4/checkpoints/tf_ckpt-199.data-00000-of-00001
+  * https://storage.cloud.google.com/download-dopamine-rl/colab/samples/rainbow/SpaceInvaders_v4/checkpoints/tf_ckpt-199.data-00000-of-00001
   * https://storage.cloud.google.com/download-dopamine-rl/colab/samples/rainbow/SpaceInvaders_v4/checkpoints/tf_ckpt-199.index
   * https://storage.cloud.google.com/download-dopamine-rl/colab/samples/rainbow/SpaceInvaders_v4/checkpoints/tf_ckpt-199.meta
   # pylint: enable=line-too-long
@@ -31,7 +31,7 @@ python example_viz.py \
         --game='SpaceInvaders' \
         --num_steps=1000 \
         --root_dir='/tmp/dopamine' \
-        --restore_ckpt=/tmp/checkpoints/colab_samples_rainbow_SpaceInvaders_v4_checkpoints_tf_ckpt-199
+        --restore_checkpoint=/tmp/checkpoints/colab_samples_rainbow_SpaceInvaders_v4_checkpoints_tf_ckpt-199
 ```
 
 """
