@@ -28,10 +28,10 @@ here = path.abspath(path.dirname(__file__))
 
 install_requires = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
                     'opencv-python >= 3.4.1.15',
-                    'gym >= 0.10.5']
+                    'gym >= 0.10.5', 'Pillow >= 5.4.1']
 tests_require = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
                  'opencv-python >= 3.4.1.15',
-                 'gym >= 0.10.5', 'mock >= 1.0.0']
+                 'gym >= 0.10.5', 'mock >= 1.0.0', 'Pillow >= 5.4.1']
 
 dopamine_description = (
     'Dopamine: A framework for flexible Reinforcement Learning research')
