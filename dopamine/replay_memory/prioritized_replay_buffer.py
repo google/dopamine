@@ -275,6 +275,7 @@ class WrappedPrioritizedReplayBuffer(
                batch_size=32,
                update_horizon=1,
                gamma=0.99,
+               wrapped_memory=None,
                max_sample_attempts=1000,
                extra_storage_types=None,
                observation_dtype=np.uint8,
@@ -294,6 +295,8 @@ class WrappedPrioritizedReplayBuffer(
       batch_size: int.
       update_horizon: int, length of update ('n' in n-step update).
       gamma: int, the discount factor.
+      wrapped_memory: The 'inner' memory data structure. If None, use the
+        default prioritized replay.
       max_sample_attempts: int, the maximum number of attempts allowed to
         get a sample.
       extra_storage_types: list of ReplayElements defining the type of the extra
@@ -313,11 +316,13 @@ class WrappedPrioritizedReplayBuffer(
       ValueError: If update_horizon is not positive.
       ValueError: If discount factor is not in [0, 1].
     """
-    memory = OutOfGraphPrioritizedReplayBuffer(
-        observation_shape, stack_size, replay_capacity, batch_size,
-        update_horizon, gamma, max_sample_attempts,
-        extra_storage_types=extra_storage_types,
-        observation_dtype=observation_dtype)
+    if wrapped_memory is None:
+      wrapped_memory = OutOfGraphPrioritizedReplayBuffer(
+          observation_shape, stack_size, replay_capacity, batch_size,
+          update_horizon, gamma, max_sample_attempts,
+          extra_storage_types=extra_storage_types,
+          observation_dtype=observation_dtype)
+
     super(WrappedPrioritizedReplayBuffer, self).__init__(
         observation_shape,
         stack_size,
@@ -326,7 +331,7 @@ class WrappedPrioritizedReplayBuffer(
         batch_size,
         update_horizon,
         gamma,
-        wrapped_memory=memory,
+        wrapped_memory=wrapped_memory,
         extra_storage_types=extra_storage_types,
         observation_dtype=observation_dtype,
         terminal_dtype=terminal_dtype,
