@@ -23,6 +23,7 @@ from __future__ import print_function
 
 from dopamine.agents.dqn import dqn_agent
 from dopamine.agents.rainbow import rainbow_agent
+from dopamine.discrete_domains import atari_lib
 from dopamine.utils import test_utils
 import numpy as np
 import tensorflow as tf
@@ -288,6 +289,7 @@ class ProjectDistributionTest(tf.test.TestCase):
 class RainbowAgentTest(tf.test.TestCase):
 
   def setUp(self):
+    super(RainbowAgentTest, self).setUp()
     self._num_actions = 4
     self._num_atoms = 5
     self._vmax = 7.
@@ -301,41 +303,48 @@ class RainbowAgentTest(tf.test.TestCase):
 
   def _create_test_agent(self, sess):
     stack_size = self.stack_size
+    # This dummy network allows us to deterministically anticipate that
+    # action 0 will be selected by an argmax.
 
-    class MockRainbowAgent(rainbow_agent.RainbowAgent):
+    # In Rainbow we are dealing with a distribution over Q-values,
+    # which are represented as num_atoms bins, ranging from -vmax to vmax.
+    # The output layer will have num_actions * num_atoms elements,
+    # so each group of num_atoms weights represent the logits for a
+    # particular action. By setting 1s everywhere, except for the first
+    # num_atoms (representing the logits for the first action), which are
+    # set to np.arange(num_atoms), we are ensuring that the first action
+    # places higher weight on higher Q-values; this results in the first
+    # action being chosen.
+    class MockRainbowNetwork(tf.keras.Model):
+      """Custom tf.keras.Model used in tests."""
 
-      def _network_template(self, state):
-        # This dummy network allows us to deterministically anticipate that
-        # action 0 will be selected by an argmax.
+      def __init__(self, num_actions, num_atoms, support, **kwargs):
+        super(MockRainbowNetwork, self).__init__(**kwargs)
+        self.num_actions = num_actions
+        self.num_atoms = num_atoms
+        self.support = support
+        first_row = np.tile(np.ones(self.num_atoms), self.num_actions - 1)
+        first_row = np.concatenate((np.arange(self.num_atoms), first_row))
+        bottom_rows = np.tile(
+            np.ones(self.num_actions * self.num_atoms), (stack_size - 1, 1))
+        weights_initializer = np.concatenate(([first_row], bottom_rows))
+        self.layer = tf.keras.layers.Dense(
+            self.num_actions * self.num_atoms,
+            kernel_initializer=tf.constant_initializer(weights_initializer),
+            bias_initializer=tf.ones_initializer())
+
+      def call(self, state):
         inputs = tf.constant(
             np.zeros((state.shape[0], stack_size)), dtype=tf.float32)
-        # In Rainbow we are dealing with a distribution over Q-values,
-        # which are represented as num_atoms bins, ranging from -vmax to vmax.
-        # The output layer will have num_actions * num_atoms elements,
-        # so each group of num_atoms weights represent the logits for a
-        # particular action. By setting 1s everywhere, except for the first
-        # num_atoms (representing the logits for the first action), which are
-        # set to np.arange(num_atoms), we are ensuring that the first action
-        # places higher weight on higher Q-values; this results in the first
-        # action being chosen.
-        first_row = np.tile(np.ones(self._num_atoms), self.num_actions - 1)
-        first_row = np.concatenate((np.arange(self._num_atoms), first_row))
-        bottom_rows = np.tile(
-            np.ones(self.num_actions * self._num_atoms), (stack_size - 1, 1))
-        weights_initializer = np.concatenate(([first_row], bottom_rows))
-        net = tf.contrib.slim.fully_connected(
-            inputs,
-            self.num_actions * self._num_atoms,
-            weights_initializer=tf.constant_initializer(weights_initializer),
-            biases_initializer=tf.ones_initializer(),
-            activation_fn=None)
-        logits = tf.reshape(net, [-1, self.num_actions, self._num_atoms])
-        probabilities = tf.contrib.layers.softmax(logits)
-        qs = tf.reduce_sum(self._support * probabilities, axis=2)
-        return self._get_network_type()(qs, logits, probabilities)
+        net = self.layer(inputs)
+        logits = tf.reshape(net, [-1, self.num_actions, self.num_atoms])
+        probabilities = tf.keras.activations.softmax(logits)
+        qs = tf.reduce_sum(self.support * probabilities, axis=2)
+        return atari_lib.RainbowNetworkType(qs, logits, probabilities)
 
-    agent = MockRainbowAgent(
+    agent = rainbow_agent.RainbowAgent(
         sess=sess,
+        network=MockRainbowNetwork,
         num_actions=self._num_actions,
         num_atoms=self._num_atoms,
         vmax=self._vmax,

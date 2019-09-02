@@ -9,7 +9,7 @@ import gin.tf.external_configurables
 DQNAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
 DQNAgent.observation_dtype = %gym_lib.ACROBOT_OBSERVATION_DTYPE
 DQNAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
-DQNAgent.network = @gym_lib.acrobot_dqn_network
+DQNAgent.network = @gym_lib.AcrobotDQNNetwork
 DQNAgent.gamma = 0.99
 DQNAgent.update_horizon = 1
 DQNAgent.min_replay_history = 500

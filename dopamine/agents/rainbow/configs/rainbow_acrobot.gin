@@ -9,7 +9,7 @@ import gin.tf.external_configurables
 RainbowAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
 RainbowAgent.observation_dtype = %gym_lib.ACROBOT_OBSERVATION_DTYPE
 RainbowAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
-RainbowAgent.network = @gym_lib.acrobot_rainbow_network
+RainbowAgent.network = @gym_lib.AcrobotRainbowNetwork
 RainbowAgent.num_atoms = 51
 RainbowAgent.vmax = 10.
 RainbowAgent.gamma = 0.99

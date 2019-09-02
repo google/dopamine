@@ -18,7 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import collections
 import math
 import os
 import random
@@ -37,7 +36,7 @@ import gin.tf
 NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = atari_lib.NATURE_DQN_DTYPE
 NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE
-nature_dqn_network = atari_lib.nature_dqn_network
+nature_dqn_network = atari_lib.NatureDQNNetwork
 
 
 @gin.configurable
@@ -81,7 +80,7 @@ class DQNAgent(object):
                observation_shape=atari_lib.NATURE_DQN_OBSERVATION_SHAPE,
                observation_dtype=atari_lib.NATURE_DQN_DTYPE,
                stack_size=atari_lib.NATURE_DQN_STACK_SIZE,
-               network=atari_lib.nature_dqn_network,
+               network=atari_lib.NatureDQNNetwork,
                gamma=0.99,
                update_horizon=1,
                min_replay_history=20000,
@@ -113,11 +112,11 @@ class DQNAgent(object):
       observation_dtype: tf.DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to tf.float32.
       stack_size: int, number of frames to use in state stack.
-      network: function expecting three parameters:
-        (num_actions, network_type, state). This function will return the
-        network_type object containing the tensors output by the network.
-        See dopamine.discrete_domains.atari_lib.nature_dqn_network as
-        an example.
+      network: tf.Keras.Model, expecting 2 parameters: num_actions,
+        network_type. A call to this object will return an instantiation of the
+        network provided. The network returned can be run with different inputs
+        to create different outputs. See
+        dopamine.discrete_domains.atari_lib.NatureDQNNetwork as an example.
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -210,24 +209,17 @@ class DQNAgent(object):
     self._observation = None
     self._last_observation = None
 
-  def _get_network_type(self):
-    """Returns the type of the outputs of a Q value network.
-
-    Returns:
-      net_type: _network_type object defining the outputs of the network.
-    """
-    return collections.namedtuple('DQN_network', ['q_values'])
-
-  def _network_template(self, state):
+  def _create_network(self, name):
     """Builds the convolutional network used to compute the agent's Q-values.
 
     Args:
-      state: `tf.Tensor`, contains the agent's current state.
-
+      name: str, this name is passed to the tf.keras.Model and used to create
+        variable scope under the hood by the tf.keras.Model.
     Returns:
-      net: _network_type object containing the tensors output by the network.
+      network: tf.keras.Model, the network instantiated by the Keras model.
     """
-    return self.network(self.num_actions, self._get_network_type(), state)
+    network = self.network(self.num_actions, name=name)
+    return network
 
   def _build_networks(self):
     """Builds the Q-value network computations needed for acting and training.
@@ -241,17 +233,17 @@ class DQNAgent(object):
       self._replay_next_target_net_outputs: The replayed next states' target
         Q-values (see Mnih et al., 2015 for details).
     """
-    # Calling online_convnet will generate a new graph as defined in
-    # self._get_network_template using whatever input is passed, but will always
-    # share the same weights.
-    self.online_convnet = tf.make_template('Online', self._network_template)
-    self.target_convnet = tf.make_template('Target', self._network_template)
+
+    # _network_template instantiates the model and returns the network object.
+    # The network object can be used to generate different outputs in the graph.
+    # At each call to the network, the parameters will be reused.
+    self.online_convnet = self._create_network(name='Online')
+    self.target_convnet = self._create_network(name='Target')
     self._net_outputs = self.online_convnet(self.state_ph)
     # TODO(bellemare): Ties should be broken. They are unlikely to happen when
     # using a deep network, but may affect performance with a linear
     # approximation scheme.
     self._q_argmax = tf.argmax(self._net_outputs.q_values, axis=1)[0]
-
     self._replay_net_outputs = self.online_convnet(self._replay.states)
     self._replay_next_target_net_outputs = self.target_convnet(
         self._replay.next_states)

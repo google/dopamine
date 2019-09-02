@@ -41,6 +41,47 @@ which demonstrate how to use Dopamine.
 This is not an official Google product.
 
 ## What's new
+*  **02/09/2019:** Dopamine has switched its network definitions to use
+  tf.keras.Model. The previous `tf.contrib.slim` based networks are removed.
+  If your agents inherit from dopamine agents you need to update your code.
+   * `._get_network_type()` and `._network_template()` functions are replaced
+      with `._create_network()` and `network_type` definitions are moved inside
+      the model definition.
+
+      ```
+      # The following two functions are replaced with `_create_network()`.
+      # def _get_network_type(self):
+      #   return collections.namedtuple('DQN_network', ['q_values'])
+      # def _network_template(self, state):
+      #   return self.network(self.num_actions, self._get_network_type(), state)
+
+      def _create_network(self, name):
+        """Builds the convolutional network used to compute the agent's Q-values.
+
+        Args:
+          name: str, this name is passed to the tf.keras.Model and used to create
+            variable scope under the hood by the tf.keras.Model.
+        Returns:
+          network: tf.keras.Model, the network instantiated by the Keras model.
+        """
+        # `self.network` is set to `atari_lib.NatureDQNNetwork`.
+        network = self.network(self.num_actions, name=name)
+        return network
+
+      def _build_networks(self):
+        # The following two lines are replaced.
+        # self.online_convnet = tf.make_template('Online', self._network_template)
+        # self.target_convnet = tf.make_template('Target', self._network_template)
+        self.online_convnet = self._create_network(name='Online')
+        self.target_convnet = self._create_network(name='Target')
+      ```
+   * If your code overwrites `._network_template()`, `._get_network_type()` or
+     `._build_networks()` make sure you update your code to fit with the new
+     API. If your code overwrites `._build_networks()` you need to replace
+     `tf.make_template('Online', self._network_template)` with
+     `self._create_network(name='Online')`.
+   * The variables of each network can be obtained from the networks as follows:
+     `vars = self.online_convnet.variables`.
 *  **11/06/2019:** Visualization utilities added to generate videos and still
    images of a trained agent interacting with its environment. See an example
    colaboratory

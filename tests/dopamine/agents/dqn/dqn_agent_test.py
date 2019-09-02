@@ -24,6 +24,7 @@ import shutil
 
 from absl import flags
 from dopamine.agents.dqn import dqn_agent
+from dopamine.discrete_domains import atari_lib
 from dopamine.utils import test_utils
 import mock
 import numpy as np
@@ -35,6 +36,7 @@ FLAGS = flags.FLAGS
 class DQNAgentTest(tf.test.TestCase):
 
   def setUp(self):
+    super(DQNAgentTest, self).setUp()
     self._test_subdir = os.path.join('/tmp/dopamine_tests', 'ckpts')
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)
@@ -53,27 +55,30 @@ class DQNAgentTest(tf.test.TestCase):
   def _create_test_agent(self, sess, allow_partial_reload=False):
     stack_size = self.stack_size
 
-    class MockDQNAgent(dqn_agent.DQNAgent):
+    # This dummy network allows us to deterministically anticipate that
+    # action 0 will be selected by an argmax.
+    class MockDQNNetwork(tf.keras.Model):
+      """The Keras network used in tests."""
 
-      def _network_template(self, state):
-        # This dummy network allows us to deterministically anticipate that
-        # action 0 will be selected by an argmax.
-        inputs = tf.constant(
-            np.zeros((state.shape[0], stack_size)), dtype=tf.float32)
+      def __init__(self, num_actions, **kwargs):
         # This weights_initializer gives action 0 a higher weight, ensuring
         # that it gets picked by the argmax.
+        super(MockDQNNetwork, self).__init__(**kwargs)
         weights_initializer = np.tile(
-            np.arange(self.num_actions, 0, -1), (stack_size, 1))
-        q = tf.contrib.slim.fully_connected(
-            inputs,
-            self.num_actions,
-            weights_initializer=tf.constant_initializer(weights_initializer),
-            biases_initializer=tf.ones_initializer(),
-            activation_fn=None)
-        return self._get_network_type()(q)
+            np.arange(num_actions, 0, -1), (stack_size, 1))
+        self.layer = tf.keras.layers.Dense(
+            num_actions,
+            kernel_initializer=tf.constant_initializer(weights_initializer),
+            bias_initializer=tf.ones_initializer())
 
-    agent = MockDQNAgent(
+      def call(self, state):
+        inputs = tf.constant(
+            np.zeros((state.shape[0], stack_size)), dtype=tf.float32)
+        return atari_lib.DQNNetworkType(self.layer((inputs)))
+
+    agent = dqn_agent.DQNAgent(
         sess=sess,
+        network=MockDQNNetwork,
         observation_shape=self.observation_shape,
         observation_dtype=self.observation_dtype,
         stack_size=self.stack_size,
