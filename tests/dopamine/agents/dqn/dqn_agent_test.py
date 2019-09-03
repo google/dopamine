@@ -29,6 +29,7 @@ from dopamine.utils import test_utils
 import mock
 import numpy as np
 import tensorflow as tf
+import gin.tf
 
 FLAGS = flags.FLAGS
 
@@ -51,6 +52,7 @@ class DQNAgentTest(tf.test.TestCase):
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = np.zeros(
         (1,) + self.observation_shape + (self.stack_size,))
+    gin.bind_parameter('WrappedReplayBuffer.replay_capacity', 100)
 
   def _create_test_agent(self, sess, allow_partial_reload=False):
     stack_size = self.stack_size
