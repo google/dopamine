@@ -202,7 +202,10 @@ class DQNAgent(object):
       # All tf.summaries should have been defined prior to running this.
       self._merged_summaries = tf.summary.merge_all()
     self._sess = sess
-    self._saver = tf.train.Saver(max_to_keep=max_tf_checkpoints_to_keep)
+
+    var_map = atari_lib.maybe_transform_variable_names(tf.all_variables())
+    self._saver = tf.train.Saver(var_list=var_map,
+                                 max_to_keep=max_tf_checkpoints_to_keep)
 
     # Variables to be initialized by the agent once it interacts with the
     # environment.

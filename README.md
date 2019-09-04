@@ -82,6 +82,12 @@ This is not an official Google product.
      `self._create_network(name='Online')`.
    * The variables of each network can be obtained from the networks as follows:
      `vars = self.online_convnet.variables`.
+   * Baselines and older checkpoints can be loaded by adding the following line
+     to your gin file.
+
+     ```
+     atari_lib.maybe_transform_variable_names.legacy_checkpoint_load = True
+     ```
 *  **11/06/2019:** Visualization utilities added to generate videos and still
    images of a trained agent interacting with its environment. See an example
    colaboratory

@@ -221,6 +221,33 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
   return network_type(quantile_values=quantile_values, quantiles=quantiles)
 
 
+@gin.configurable(blacklist=['variables'])
+def maybe_transform_variable_names(variables, legacy_checkpoint_load=False):
+  """Maps old variable names to the new ones.
+
+  The resulting dictionary can be passed to the tf.train.Saver to load
+  legacy checkpoints into Keras models.
+
+  Args:
+    variables: list, of all variables to be transformed.
+    legacy_checkpoint_load: bool, if True the variable names are mapped to
+        the legacy names as appeared in `tf.slim` based agents. Use this if
+        you want to load checkpoints saved before tf.keras.Model upgrade.
+  Returns:
+    dict or None, of <new_names, var>.
+  """
+  tf.logging.info('legacy_checkpoint_load: %s', legacy_checkpoint_load)
+  if legacy_checkpoint_load:
+    name_map = {}
+    for var in variables:
+      new_name = var.op.name.replace('bias', 'biases')
+      new_name = new_name.replace('kernel', 'weights')
+      name_map[new_name] = var
+  else:
+    name_map = None
+  return name_map
+
+
 class NatureDQNNetwork(tf.keras.Model):
   """The convolutional network used to compute the agent's Q-values."""
 
@@ -236,15 +263,18 @@ class NatureDQNNetwork(tf.keras.Model):
     self.num_actions = num_actions
     # Defining layers.
     activation_fn = tf.keras.activations.relu
+    # Setting names of the layers manually to make variable names more similar
+    # with tf.slim variable names/checkpoints.
     self.conv1 = tf.keras.layers.Conv2D(32, [8, 8], strides=4, padding='same',
-                                        activation=activation_fn)
+                                        activation=activation_fn, name='Conv')
     self.conv2 = tf.keras.layers.Conv2D(64, [4, 4], strides=2, padding='same',
-                                        activation=activation_fn)
+                                        activation=activation_fn, name='Conv')
     self.conv3 = tf.keras.layers.Conv2D(64, [3, 3], strides=1, padding='same',
-                                        activation=activation_fn)
+                                        activation=activation_fn, name='Conv')
     self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn)
-    self.dense2 = tf.keras.layers.Dense(num_actions)
+    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
+                                        name='fully_connected')
+    self.dense2 = tf.keras.layers.Dense(num_actions, name='fully_connected')
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input.
@@ -293,19 +323,20 @@ class RainbowNetwork(tf.keras.Model):
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
         32, [8, 8], strides=4, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.conv2 = tf.keras.layers.Conv2D(
         64, [4, 4], strides=2, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.conv3 = tf.keras.layers.Conv2D(
         64, [3, 3], strides=1, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
         512, activation=activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='fully_connected')
     self.dense2 = tf.keras.layers.Dense(
-        num_actions * num_atoms, kernel_initializer=self.kernel_initializer)
+        num_actions * num_atoms, kernel_initializer=self.kernel_initializer,
+        name='fully_connected')
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input.
@@ -354,19 +385,20 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
         32, [8, 8], strides=4, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.conv2 = tf.keras.layers.Conv2D(
         64, [4, 4], strides=2, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.conv3 = tf.keras.layers.Conv2D(
         64, [3, 3], strides=1, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='Conv')
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
         512, activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer)
+        kernel_initializer=self.kernel_initializer, name='fully_connected')
     self.dense2 = tf.keras.layers.Dense(
-        num_actions, kernel_initializer=self.kernel_initializer)
+        num_actions, kernel_initializer=self.kernel_initializer,
+        name='fully_connected')
 
   def call(self, state, num_quantiles):
     """Creates the output tensor/op given the state tensor as input.

@@ -102,12 +102,16 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     self.max_vals = max_vals
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn)
-    self.dense2 = tf.keras.layers.Dense(512, activation=activation_fn)
+    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
+                                        name='fully_connected')
+    self.dense2 = tf.keras.layers.Dense(512, activation=activation_fn,
+                                        name='fully_connected')
     if num_atoms is None:
-      self.last_layer = tf.keras.layers.Dense(num_actions)
+      self.last_layer = tf.keras.layers.Dense(num_actions,
+                                              name='fully_connected')
     else:
-      self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms)
+      self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms,
+                                              name='fully_connected')
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
@@ -263,7 +267,8 @@ class FourierDQNNetwork(tf.keras.Model):
     self.max_vals = max_vals
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
-    self.last_layer = tf.keras.layers.Dense(num_actions, use_bias=False)
+    self.last_layer = tf.keras.layers.Dense(num_actions, use_bias=False,
+                                            name='fully_connected')
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
