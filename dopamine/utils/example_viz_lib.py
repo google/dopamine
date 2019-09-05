@@ -43,7 +43,6 @@ import gin
 import numpy as np
 import tensorflow as tf
 
-
 class MyDQNAgent(dqn_agent.DQNAgent):
   """Sample DQN agent to visualize Q-values and rewards."""
 
@@ -87,7 +86,6 @@ class MyDQNAgent(dqn_agent.DQNAgent):
   def get_rewards(self):
     return [np.cumsum(self.rewards)]
 
-
 class MyRainbowAgent(rainbow_agent.RainbowAgent):
   """Sample Rainbow agent to visualize Q-values and rewards."""
 
@@ -109,6 +107,7 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
     include_vars = list(global_vars.intersection(set(ckpt_vars)))
     variables_to_restore = tf.contrib.slim.get_variables_to_restore(
         include=include_vars)
+
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
@@ -118,6 +117,42 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
 
   def get_probabilities(self):
     return self._sess.run(tf.squeeze(self._net_outputs.probabilities),
+                          {self.state_ph: self.state})
+
+  def get_rewards(self):
+    return [np.cumsum(self.rewards)]
+
+from dopamine.agents.implicit_quantile import implicit_quantile_agent
+class MyIQNAgent(implicit_quantile_agent.ImplicitQuantileAgent):
+  def __init__(self, sess, num_actions, summary_writer=None):
+    super(MyIQNAgent, self).__init__(sess, num_actions,
+                                         summary_writer=summary_writer)
+    self.rewards = []
+
+  def step(self, reward, observation):
+    self.rewards.append(reward)
+    return super(MyIQNAgent, self).step(reward, observation)
+
+  def reload_checkpoint(self, checkpoint_path):
+    global_vars = set([x.name for x in tf.global_variables()])
+    ckpt_vars = [
+        '{}:0'.format(name)
+        for name, _ in tf.train.list_variables(checkpoint_path)
+    ]
+    include_vars = list(global_vars.intersection(set(ckpt_vars)))
+
+    variables_to_restore = tf.contrib.slim.get_variables_to_restore(
+        include=include_vars)
+
+    if variables_to_restore:
+      reloader = tf.train.Saver(var_list=variables_to_restore)
+      reloader.restore(self._sess, checkpoint_path)
+      tf.logging.info('Done restoring from %s', checkpoint_path)
+    else:
+      tf.logging.info('Nothing to restore!')
+
+  def get_quantile_values(self):
+    return self._sess.run(tf.squeeze(self._net_outputs.quantile_values),
                           {self.state_ph: self.state})
 
   def get_rewards(self):
@@ -162,12 +197,19 @@ class MyRunner(run_experiment.Runner):
     q_params = {'x': atari_plot.parameters['width'] // 2,
                 'y': atari_plot.parameters['height'],
                 'legend': action_names}
+
     if 'DQN' in self._agent.__class__.__name__:
       q_params['xlabel'] = 'Timestep'
       q_params['ylabel'] = 'Q-Value'
       q_params['title'] = 'Q-Values'
       q_params['get_line_data_fn'] = self._agent.get_q_values
       q_plot = line_plotter.LinePlotter(parameter_dict=q_params)
+    elif 'IQN' in self._agent.__class__.__name__:
+      q_params['xlabel'] = 'Timestep'
+      q_params['ylabel'] = 'Quantile Value'
+      q_params['title'] = 'Quantile Values'
+      q_params['get_bar_data_fn'] = self._agent.get_quantile_values
+      q_plot = bar_plotter.BarPlotter(parameter_dict=q_params)
     else:
       q_params['xlabel'] = 'Return'
       q_params['ylabel'] = 'Return probability'
@@ -204,19 +246,26 @@ class MyRunner(run_experiment.Runner):
       self._end_episode(reward)
     visualizer.generate_video()
 
-
 def create_dqn_agent(sess, environment, summary_writer=None):
   return MyDQNAgent(sess, num_actions=environment.action_space.n,
                     summary_writer=summary_writer)
-
 
 def create_rainbow_agent(sess, environment, summary_writer=None):
   return MyRainbowAgent(sess, num_actions=environment.action_space.n,
                         summary_writer=summary_writer)
 
+def create_iqn_agent(sess, environment, summary_writer=None):
+  return MyIQNAgent(sess, num_actions=environment.action_space.n,
+                    summary_writer=summary_writer)
 
 def create_runner(base_dir, trained_agent_ckpt_path, agent='dqn'):
-  create_agent = create_dqn_agent if agent == 'dqn' else create_rainbow_agent
+  if agent == 'dqn':
+      create_agent = create_dqn_agent
+  elif agent == 'iqn':
+      create_agent = create_iqn_agent
+  else:
+      create_agent = create_rainbow_agent
+
   return MyRunner(base_dir, trained_agent_ckpt_path, create_agent)
 
 
