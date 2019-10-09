@@ -369,6 +369,37 @@ class DQNAgentTest(tf.test.TestCase):
       for key in keys:
         self.assertEqual(key, agent.__dict__[key])
 
+  def testSyncOpWithNameScopes(self):
+    num_agents = 5
+    with tf.Session() as sess:
+      agents = []
+      for i in range(num_agents):
+        with tf.name_scope('agent_{}'.format(i)):
+          agents.append(self._create_test_agent(sess))
+
+      # Checks that the agents have two ops each.
+      ops = []
+      for agent in agents:
+        self.assertLen(agent._sync_qt_ops, 2)
+        ops.extend(agent._sync_qt_ops)
+
+      # Assigns the bias of the first agent to 0.
+      ops.append(agents[0].online_convnet.layer.bias.assign(tf.zeros(4)))
+      # Runs twice to make sure zeros are propagated to online and target.
+      sess.run(ops)
+      sess.run(ops)
+
+      biases_0 = sess.run([
+          agents[0].target_convnet.layer.bias,
+          agents[0].online_convnet.layer.bias])
+      self.assertAllEqual(biases_0[0], tf.zeros(4))
+      self.assertAllEqual(biases_0[1], biases_0[0])
+
+      # Checks that other agents have not been affected.
+      biases = sess.run([agt.target_convnet.layer.bias for agt in agents[1:]])
+      for bias in biases:
+        self.assertNotAllEqual(bias, biases_0[0])
+
 
 if __name__ == '__main__':
   tf.test.main()

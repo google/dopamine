@@ -317,10 +317,12 @@ class DQNAgent(object):
     """
     # Get trainable variables from online and target DQNs
     sync_qt_ops = []
+    scope = tf.get_default_graph().get_name_scope()
     trainables_online = tf.get_collection(
-        tf.GraphKeys.TRAINABLE_VARIABLES, scope='Online')
+        tf.GraphKeys.TRAINABLE_VARIABLES, scope=os.path.join(scope, 'Online'))
     trainables_target = tf.get_collection(
-        tf.GraphKeys.TRAINABLE_VARIABLES, scope='Target')
+        tf.GraphKeys.TRAINABLE_VARIABLES, scope=os.path.join(scope, 'Target'))
+
     for (w_online, w_target) in zip(trainables_online, trainables_target):
       # Assign weights from online to target network.
       sync_qt_ops.append(w_target.assign(w_online, use_locking=True))
