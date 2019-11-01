@@ -52,6 +52,8 @@ import numpy as np
 import tensorflow as tf
 
 import cv2
+from tensorflow.contrib import layers as contrib_layers
+from tensorflow.contrib import slim as contrib_slim
 
 
 NATURE_DQN_OBSERVATION_SHAPE = (84, 84)  # Size of downscaled Atari 2600 frame.
@@ -117,13 +119,12 @@ def nature_dqn_network(num_actions, network_type, state):
   """
   net = tf.cast(state, tf.float32)
   net = tf.div(net, 255.)
-  net = tf.contrib.slim.conv2d(net, 32, [8, 8], stride=4)
-  net = tf.contrib.slim.conv2d(net, 64, [4, 4], stride=2)
-  net = tf.contrib.slim.conv2d(net, 64, [3, 3], stride=1)
-  net = tf.contrib.slim.flatten(net)
-  net = tf.contrib.slim.fully_connected(net, 512)
-  q_values = tf.contrib.slim.fully_connected(
-      net, num_actions, activation_fn=None)
+  net = contrib_slim.conv2d(net, 32, [8, 8], stride=4)
+  net = contrib_slim.conv2d(net, 64, [4, 4], stride=2)
+  net = contrib_slim.conv2d(net, 64, [3, 3], stride=1)
+  net = contrib_slim.flatten(net)
+  net = contrib_slim.fully_connected(net, 512)
+  q_values = contrib_slim.fully_connected(net, num_actions, activation_fn=None)
   return network_type(q_values)
 
 
@@ -140,28 +141,28 @@ def rainbow_network(num_actions, num_atoms, support, network_type, state):
   Returns:
     net: _network_type object containing the tensors output by the network.
   """
-  weights_initializer = tf.contrib.slim.variance_scaling_initializer(
+  weights_initializer = contrib_slim.variance_scaling_initializer(
       factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
 
   net = tf.cast(state, tf.float32)
   net = tf.div(net, 255.)
-  net = tf.contrib.slim.conv2d(
+  net = contrib_slim.conv2d(
       net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)
-  net = tf.contrib.slim.conv2d(
+  net = contrib_slim.conv2d(
       net, 64, [4, 4], stride=2, weights_initializer=weights_initializer)
-  net = tf.contrib.slim.conv2d(
+  net = contrib_slim.conv2d(
       net, 64, [3, 3], stride=1, weights_initializer=weights_initializer)
-  net = tf.contrib.slim.flatten(net)
-  net = tf.contrib.slim.fully_connected(
+  net = contrib_slim.flatten(net)
+  net = contrib_slim.fully_connected(
       net, 512, weights_initializer=weights_initializer)
-  net = tf.contrib.slim.fully_connected(
+  net = contrib_slim.fully_connected(
       net,
       num_actions * num_atoms,
       activation_fn=None,
       weights_initializer=weights_initializer)
 
   logits = tf.reshape(net, [-1, num_actions, num_atoms])
-  probabilities = tf.contrib.layers.softmax(logits)
+  probabilities = contrib_layers.softmax(logits)
   q_values = tf.reduce_sum(support * probabilities, axis=2)
   return network_type(q_values, logits, probabilities)
 
@@ -180,18 +181,18 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
   Returns:
     net: _network_type object containing the tensors output by the network.
   """
-  weights_initializer = tf.contrib.slim.variance_scaling_initializer(
+  weights_initializer = contrib_slim.variance_scaling_initializer(
       factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
 
   state_net = tf.cast(state, tf.float32)
   state_net = tf.div(state_net, 255.)
-  state_net = tf.contrib.slim.conv2d(
+  state_net = contrib_slim.conv2d(
       state_net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)
-  state_net = tf.contrib.slim.conv2d(
+  state_net = contrib_slim.conv2d(
       state_net, 64, [4, 4], stride=2, weights_initializer=weights_initializer)
-  state_net = tf.contrib.slim.conv2d(
+  state_net = contrib_slim.conv2d(
       state_net, 64, [3, 3], stride=1, weights_initializer=weights_initializer)
-  state_net = tf.contrib.slim.flatten(state_net)
+  state_net = contrib_slim.flatten(state_net)
   state_net_size = state_net.get_shape().as_list()[-1]
   state_net_tiled = tf.tile(state_net, [num_quantiles, 1])
 
@@ -205,14 +206,14 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
   quantile_net = tf.cast(tf.range(
       1, quantile_embedding_dim + 1, 1), tf.float32) * pi * quantile_net
   quantile_net = tf.cos(quantile_net)
-  quantile_net = tf.contrib.slim.fully_connected(
+  quantile_net = contrib_slim.fully_connected(
       quantile_net, state_net_size, weights_initializer=weights_initializer)
   # Hadamard product.
   net = tf.multiply(state_net_tiled, quantile_net)
 
-  net = tf.contrib.slim.fully_connected(
+  net = contrib_slim.fully_connected(
       net, 512, weights_initializer=weights_initializer)
-  quantile_values = tf.contrib.slim.fully_connected(
+  quantile_values = contrib_slim.fully_connected(
       net,
       num_actions,
       activation_fn=None,

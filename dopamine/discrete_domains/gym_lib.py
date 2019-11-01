@@ -36,6 +36,8 @@ import numpy as np
 import tensorflow as tf
 
 import gin.tf
+from tensorflow.contrib import layers as contrib_layers
+from tensorflow.contrib import slim as contrib_slim
 
 
 CARTPOLE_MIN_VALS = np.array([-2.4, -5., -math.pi/12., -math.pi*2.])
@@ -143,19 +145,19 @@ def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
   net = tf.cast(state, tf.float32)
-  net = tf.contrib.slim.flatten(net)
+  net = contrib_slim.flatten(net)
   net -= min_vals
   net /= max_vals - min_vals
   net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
-  net = tf.contrib.slim.fully_connected(net, 512)
-  net = tf.contrib.slim.fully_connected(net, 512)
+  net = contrib_slim.fully_connected(net, 512)
+  net = contrib_slim.fully_connected(net, 512)
   if num_atoms is None:
     # We are constructing a DQN-style network.
-    return tf.contrib.slim.fully_connected(net, num_actions, activation_fn=None)
+    return contrib_slim.fully_connected(net, num_actions, activation_fn=None)
   else:
     # We are constructing a Rainbow-style network.
-    return tf.contrib.slim.fully_connected(net, num_actions * num_atoms,
-                                           activation_fn=None)
+    return contrib_slim.fully_connected(
+        net, num_actions * num_atoms, activation_fn=None)
 
 
 @gin.configurable
@@ -308,7 +310,7 @@ def fourier_dqn_network(min_vals,
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
   net = tf.cast(state, tf.float32)
-  net = tf.contrib.slim.flatten(net)
+  net = contrib_slim.flatten(net)
 
   # Feed state through Fourier basis.
   feature_generator = FourierBasis(
@@ -319,7 +321,7 @@ def fourier_dqn_network(min_vals,
   net = feature_generator.compute_features(net)
 
   # Q-values are always linear w.r.t. last layer.
-  q_values = tf.contrib.slim.fully_connected(
+  q_values = contrib_slim.fully_connected(
       net, num_actions, activation_fn=None, biases_initializer=None)
   return q_values
 
@@ -384,7 +386,7 @@ class CartpoleRainbowNetwork(tf.keras.Model):
   def call(self, state):
     x = self.net(state)
     logits = tf.reshape(x, [-1, self.num_actions, self.num_atoms])
-    probabilities = tf.contrib.layers.softmax(logits)
+    probabilities = contrib_layers.softmax(logits)
     q_values = tf.reduce_sum(self.support * probabilities, axis=2)
     return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
 
@@ -408,7 +410,7 @@ def cartpole_rainbow_network(num_actions, num_atoms, support, network_type,
       CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, state,
       num_atoms=num_atoms)
   logits = tf.reshape(net, [-1, num_actions, num_atoms])
-  probabilities = tf.contrib.layers.softmax(logits)
+  probabilities = contrib_layers.softmax(logits)
   q_values = tf.reduce_sum(support * probabilities, axis=2)
   return network_type(q_values, logits, probabilities)
 
@@ -516,7 +518,7 @@ class AcrobotRainbowNetwork(tf.keras.Model):
   def call(self, state):
     x = self.net(state)
     logits = tf.reshape(x, [-1, self.num_actions, self.num_atoms])
-    probabilities = tf.contrib.layers.softmax(logits)
+    probabilities = contrib_layers.softmax(logits)
     q_values = tf.reduce_sum(self.support * probabilities, axis=2)
     return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
 
@@ -540,7 +542,7 @@ def acrobot_rainbow_network(num_actions, num_atoms, support, network_type,
       ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, state,
       num_atoms=num_atoms)
   logits = tf.reshape(net, [-1, num_actions, num_atoms])
-  probabilities = tf.contrib.layers.softmax(logits)
+  probabilities = contrib_layers.softmax(logits)
   q_values = tf.reduce_sum(support * probabilities, axis=2)
   return network_type(q_values, logits, probabilities)
 

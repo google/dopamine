@@ -34,6 +34,7 @@ import numpy as np
 import tensorflow as tf
 
 import gin.tf
+from tensorflow.contrib import staging as contrib_staging
 
 # Defines a type describing part of the tuple returned by the replay
 # memory. Each element of the tuple is a tensor of shape [batch, ...] where
@@ -854,7 +855,7 @@ class WrappedReplayBuffer(object):
     transition_type = self.memory.get_transition_elements()
 
     # Create the staging area in CPU.
-    prefetch_area = tf.contrib.staging.StagingArea(
+    prefetch_area = contrib_staging.StagingArea(
         [shape_with_type.type for shape_with_type in transition_type])
 
     # Store prefetch op for tests, but keep it private -- users should not be

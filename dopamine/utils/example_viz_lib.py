@@ -42,6 +42,7 @@ from dopamine.utils import line_plotter
 import gin
 import numpy as np
 import tensorflow as tf
+from tensorflow.contrib import slim as contrib_slim
 
 
 class MyDQNAgent(dqn_agent.DQNAgent):
@@ -72,7 +73,7 @@ class MyDQNAgent(dqn_agent.DQNAgent):
         for name, _ in tf.train.list_variables(checkpoint_path)
     ]
     include_vars = list(global_vars.intersection(set(ckpt_vars)))
-    variables_to_restore = tf.contrib.slim.get_variables_to_restore(
+    variables_to_restore = contrib_slim.get_variables_to_restore(
         include=include_vars)
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
@@ -107,7 +108,7 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
         for name, _ in tf.train.list_variables(checkpoint_path)
     ]
     include_vars = list(global_vars.intersection(set(ckpt_vars)))
-    variables_to_restore = tf.contrib.slim.get_variables_to_restore(
+    variables_to_restore = contrib_slim.get_variables_to_restore(
         include=include_vars)
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
