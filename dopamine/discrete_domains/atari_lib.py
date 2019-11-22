@@ -44,7 +44,6 @@ import collections
 import math
 
 
-import atari_py
 import gin
 import gym
 from gym.spaces.box import Box
