@@ -151,16 +151,19 @@ git clone https://github.com/google/dopamine.git
 
 #### Ubuntu
 
+If you don't have access to a GPU, then replace `tensorflow-gpu` with
+`tensorflow` in the line below (see [Tensorflow
+instructions](https://www.tensorflow.org/install/pip?lang=python3) for details).
 ```
 sudo apt-get update && sudo apt-get install cmake zlib1g-dev
-pip install absl-py atari-py gin-config gym opencv-python tensorflow==1.15
+pip install absl-py atari-py gin-config gym opencv-python tensorflow-gpu
 ```
 
 #### Mac OS X
 
 ```
 brew install cmake zlib
-pip install absl-py atari-py gin-config gym opencv-python tensorflow==1.15
+pip install absl-py atari-py gin-config gym opencv-python tensorflow
 ```
 
 ### Running tests
