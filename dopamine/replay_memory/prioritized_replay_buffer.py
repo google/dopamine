@@ -28,7 +28,7 @@ from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import sum_tree
 from dopamine.replay_memory.circular_replay_buffer import ReplayElement
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import gin.tf
 

@@ -21,7 +21,7 @@ from __future__ import print_function
 
 from dopamine.replay_memory import prioritized_replay_buffer
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 # Default parameters used when creating the replay memory.

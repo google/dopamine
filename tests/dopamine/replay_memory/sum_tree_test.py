@@ -22,7 +22,7 @@ import random
 
 
 from dopamine.replay_memory import sum_tree
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 class SumTreeTest(tf.test.TestCase):

@@ -51,7 +51,7 @@ import os
 import pickle
 
 import gin
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 CHECKPOINT_DURATION = 4
 

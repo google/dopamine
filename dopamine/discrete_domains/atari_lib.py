@@ -48,7 +48,7 @@ import gin
 import gym
 from gym.spaces.box import Box
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import cv2
 from tensorflow.contrib import layers as contrib_layers

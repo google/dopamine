@@ -21,7 +21,7 @@ from __future__ import print_function
 
 
 from dopamine.discrete_domains import iteration_statistics
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 class IterationStatisticsTest(tf.test.TestCase):

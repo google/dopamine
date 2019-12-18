@@ -26,7 +26,7 @@ from dopamine.discrete_domains import atari_lib
 import gym
 import mock
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 FLAGS = flags.FLAGS
 

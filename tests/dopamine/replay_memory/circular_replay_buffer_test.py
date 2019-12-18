@@ -26,7 +26,7 @@ import shutil
 from absl import flags
 from dopamine.replay_memory import circular_replay_buffer
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 FLAGS = flags.FLAGS

@@ -33,7 +33,7 @@ import math
 from dopamine.discrete_domains import atari_lib
 import gym
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import gin.tf
 from tensorflow.contrib import layers as contrib_layers

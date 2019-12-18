@@ -27,7 +27,7 @@ from absl import flags
 
 from dopamine.discrete_domains import run_experiment
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 flags.DEFINE_string('base_dir', None,
