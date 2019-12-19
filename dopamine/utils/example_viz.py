@@ -51,6 +51,9 @@ flags.DEFINE_string('root_dir', '/tmp/dopamine/', 'Root directory.')
 flags.DEFINE_string('restore_checkpoint', None,
                     'Path to checkpoint to restore for visualizing.')
 flags.DEFINE_integer('num_steps', 2000, 'Number of steps to run.')
+flags.DEFINE_boolean(
+    'use_legacy_checkpoint', False,
+    'Set to true if loading from a legacy (pre-Keras) checkpoint.')
 
 FLAGS = flags.FLAGS
 
@@ -60,7 +63,8 @@ def main(_):
                       game=FLAGS.game,
                       num_steps=FLAGS.num_steps,
                       root_dir=FLAGS.root_dir,
-                      restore_ckpt=FLAGS.restore_checkpoint)
+                      restore_ckpt=FLAGS.restore_checkpoint,
+                      use_legacy_checkpoint=FLAGS.use_legacy_checkpoint)
 
 if __name__ == '__main__':
   app.run(main)
