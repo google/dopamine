@@ -234,7 +234,7 @@ python -um dopamine.discrete_domains.train \
 
 
 ### Install as a library
-An easy, alternative way to install Dopamine is as a Python library:
+An easy and alternate way to install Dopamine is as a Python library:
 
 ```
 # Alternatively brew install, see Mac OS X instructions above.
