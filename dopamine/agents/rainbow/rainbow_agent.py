@@ -71,6 +71,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
                epsilon_decay_period=250000,
                replay_scheme='prioritized',
                tf_device='/cpu:*',
+               eval_mode=False,
                use_staging=True,
                optimizer=tf.train.AdamOptimizer(
                    learning_rate=0.00025, epsilon=0.0003125),
@@ -110,6 +111,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
       replay_scheme: str, 'prioritized' or 'uniform', the sampling scheme of the
         replay memory.
       tf_device: str, Tensorflow device on which the agent's graph is executed.
+      eval_mode: bool, True for evaluation and False for training.
       use_staging: bool, when True use a staging area to prefetch the next
         training batch, speeding training up by about 30%.
       optimizer: `tf.train.Optimizer`, for training the value function.
@@ -144,6 +146,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
         epsilon_eval=epsilon_eval,
         epsilon_decay_period=epsilon_decay_period,
         tf_device=tf_device,
+        eval_mode=eval_mode,
         use_staging=use_staging,
         optimizer=self.optimizer,
         summary_writer=summary_writer,
