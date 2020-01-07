@@ -51,8 +51,14 @@ import numpy as np
 import tensorflow.compat.v1 as tf
 
 import cv2
-from tensorflow.contrib import layers as contrib_layers
-from tensorflow.contrib import slim as contrib_slim
+from tensorflow.compat.v1 import layers as contrib_layers
+
+# Allow failure on this import (not in tf2). This means atari won't be
+# available but other domains will.
+try:
+  from tensorflow.contrib import slim as contrib_slim
+except:
+  pass
 
 
 NATURE_DQN_OBSERVATION_SHAPE = (84, 84)  # Size of downscaled Atari 2600 frame.
