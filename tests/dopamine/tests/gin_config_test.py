@@ -18,9 +18,9 @@ import datetime
 import os
 import shutil
 
-
-
 from absl import flags
+from absl import logging
+
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import run_experiment
 import tensorflow.compat.v1 as tf
@@ -47,8 +47,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testDefaultGinDqn(self):
     """Test DQNAgent configuration using the default gin config."""
-    tf.logging.info('####### Training the DQN agent #####')
-    tf.logging.info('####### DQN base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the DQN agent #####')
+    logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     gin_bindings = [
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
@@ -63,8 +63,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testOverrideRunnerParams(self):
     """Test DQNAgent configuration using the default gin config."""
-    tf.logging.info('####### Training the DQN agent #####')
-    tf.logging.info('####### DQN base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the DQN agent #####')
+    logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     gin_bindings = [
         'TrainRunner.base_dir = "{}"'.format(self._base_dir),
@@ -82,8 +82,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testDefaultGinRmspropDqn(self):
     """Test DQNAgent configuration overridden with RMSPropOptimizer."""
-    tf.logging.info('####### Training the DQN agent #####')
-    tf.logging.info('####### DQN base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the DQN agent #####')
+    logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     gin_bindings = [
         'DQNAgent.optimizer = @tf.train.RMSPropOptimizer()',
@@ -100,8 +100,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testOverrideGinDqn(self):
     """Test DQNAgent configuration overridden with AdamOptimizer."""
-    tf.logging.info('####### Training the DQN agent #####')
-    tf.logging.info('####### DQN base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the DQN agent #####')
+    logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     gin_bindings = [
         'DQNAgent.optimizer = @tf.train.AdamOptimizer()',
@@ -119,8 +119,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testDefaultGinRainbow(self):
     """Test RainbowAgent default configuration using default gin."""
-    tf.logging.info('####### Training the RAINBOW agent #####')
-    tf.logging.info('####### RAINBOW base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the RAINBOW agent #####')
+    logging.info('####### RAINBOW base_dir: %s', self._base_dir)
     gin_files = [
         'dopamine/agents/rainbow/configs/rainbow.gin'
     ]
@@ -137,8 +137,8 @@ class GinConfigTest(tf.test.TestCase):
 
   def testOverrideGinRainbow(self):
     """Test RainbowAgent configuration overridden with RMSPropOptimizer."""
-    tf.logging.info('####### Training the RAINBOW agent #####')
-    tf.logging.info('####### RAINBOW base_dir: {}'.format(self._base_dir))
+    logging.info('####### Training the RAINBOW agent #####')
+    logging.info('####### RAINBOW base_dir: %s', self._base_dir)
     gin_files = [
         'dopamine/agents/rainbow/configs/rainbow.gin',
     ]
@@ -221,11 +221,11 @@ class GinConfigTest(tf.test.TestCase):
 
   def testDefaultGinImplicitQuantileIcml(self):
     """Test default ImplicitQuantile configuration using ICML gin."""
-    tf.logging.info('###### Training the Implicit Quantile agent #####')
+    logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
-    tf.logging.info('###### IQN base dir: {}'.format(self._base_dir))
+    logging.info('###### IQN base dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/'
                  'implicit_quantile/configs/implicit_quantile_icml.gin']
     gin_bindings = [
@@ -239,11 +239,11 @@ class GinConfigTest(tf.test.TestCase):
 
   def testOverrideGinImplicitQuantileIcml(self):
     """Test ImplicitQuantile configuration overriding using ICML gin."""
-    tf.logging.info('###### Training the Implicit Quantile agent #####')
+    logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
-    tf.logging.info('###### IQN base dir: {}'.format(self._base_dir))
+    logging.info('###### IQN base dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/implicit_quantile/configs/'
                  'implicit_quantile_icml.gin']
     gin_bindings = [
@@ -258,11 +258,11 @@ class GinConfigTest(tf.test.TestCase):
 
   def testOverrideGinImplicitQuantile(self):
     """Test ImplicitQuantile configuration overriding using IQN gin."""
-    tf.logging.info('###### Training the Implicit Quantile agent #####')
+    logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
-    tf.logging.info('###### IQN base dir: {}'.format(self._base_dir))
+    logging.info('###### IQN base dir: %s', self._base_dir)
     gin_files = ['dopamine/agents/implicit_quantile/configs/'
                  'implicit_quantile.gin']
     gin_bindings = [

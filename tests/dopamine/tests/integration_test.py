@@ -18,9 +18,9 @@ import datetime
 import os
 import shutil
 
-
-
 from absl import flags
+from absl import logging
+
 from dopamine.discrete_domains import train
 import tensorflow.compat.v1 as tf
 
@@ -88,8 +88,8 @@ class AtariIntegrationTest(tf.test.TestCase):
 
   def testIntegrationDqn(self):
     """Test the DQN agent."""
-    tf.logging.info('####### Training the DQN agent #####')
-    tf.logging.info('####### DQN base_dir: {}'.format(FLAGS.base_dir))
+    logging.info('####### Training the DQN agent #####')
+    logging.info('####### DQN base_dir: %s', FLAGS.base_dir)
     self.quickDqnFlags()
     train.main([])
     self.verifyFilesCreated(FLAGS.base_dir)
@@ -97,8 +97,8 @@ class AtariIntegrationTest(tf.test.TestCase):
 
   def testIntegrationRainbow(self):
     """Test the rainbow agent."""
-    tf.logging.info('####### Training the Rainbow agent #####')
-    tf.logging.info('####### Rainbow base_dir: {}'.format(FLAGS.base_dir))
+    logging.info('####### Training the Rainbow agent #####')
+    logging.info('####### Rainbow base_dir: %s', FLAGS.base_dir)
     self.quickRainbowFlags()
     train.main([])
     self.verifyFilesCreated(FLAGS.base_dir)

@@ -20,14 +20,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-
 from absl import app
 from absl import flags
+from absl import logging
+
 
 from dopamine.discrete_domains import run_experiment
-
-import tensorflow.compat.v1 as tf
 
 
 flags.DEFINE_string('base_dir', None,
@@ -50,7 +48,7 @@ def main(unused_argv):
   Args:
     unused_argv: Arguments (unused).
   """
-  tf.logging.set_verbosity(tf.logging.INFO)
+  logging.set_verbosity(logging.INFO)
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
   runner = run_experiment.create_runner(FLAGS.base_dir)
   runner.run_experiment()

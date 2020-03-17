@@ -22,6 +22,8 @@ import os
 import sys
 import time
 
+from absl import logging
+
 from dopamine.agents.dqn import dqn_agent
 from dopamine.agents.implicit_quantile import implicit_quantile_agent
 from dopamine.agents.rainbow import rainbow_agent
@@ -239,8 +241,8 @@ class Runner(object):
           assert 'current_iteration' in experiment_data
           self._logger.data = experiment_data['logs']
           self._start_iteration = experiment_data['current_iteration'] + 1
-        tf.logging.info('Reloaded checkpoint and will start from iteration %d',
-                        self._start_iteration)
+        logging.info('Reloaded checkpoint and will start from iteration %d',
+                     self._start_iteration)
 
   def _initialize_episode(self):
     """Initialization for a new episode.
@@ -339,7 +341,7 @@ class Runner(object):
       step_count += episode_length
       sum_returns += episode_return
       num_episodes += 1
-      # We use sys.stdout.write instead of tf.logging so as to flush frequently
+      # We use sys.stdout.write instead of logging so as to flush frequently
       # without generating a line break.
       sys.stdout.write('Steps executed: {} '.format(step_count) +
                        'Episode length: {} '.format(episode_length) +
@@ -366,10 +368,10 @@ class Runner(object):
     average_return = sum_returns / num_episodes if num_episodes > 0 else 0.0
     statistics.append({'train_average_return': average_return})
     time_delta = time.time() - start_time
-    tf.logging.info('Average undiscounted return per training episode: %.2f',
-                    average_return)
-    tf.logging.info('Average training steps per second: %.2f',
-                    number_steps / time_delta)
+    logging.info('Average undiscounted return per training episode: %.2f',
+                 average_return)
+    logging.info('Average training steps per second: %.2f',
+                 number_steps / time_delta)
     return num_episodes, average_return
 
   def _run_eval_phase(self, statistics):
@@ -388,8 +390,8 @@ class Runner(object):
     _, sum_returns, num_episodes = self._run_one_phase(
         self._evaluation_steps, statistics, 'eval')
     average_return = sum_returns / num_episodes if num_episodes > 0 else 0.0
-    tf.logging.info('Average undiscounted return per evaluation episode: %.2f',
-                    average_return)
+    logging.info('Average undiscounted return per evaluation episode: %.2f',
+                 average_return)
     statistics.append({'eval_average_return': average_return})
     return num_episodes, average_return
 
@@ -408,7 +410,7 @@ class Runner(object):
       A dict containing summary statistics for this iteration.
     """
     statistics = iteration_statistics.IterationStatistics()
-    tf.logging.info('Starting iteration %d', iteration)
+    logging.info('Starting iteration %d', iteration)
     num_episodes_train, average_reward_train = self._run_train_phase(
         statistics)
     num_episodes_eval, average_reward_eval = self._run_eval_phase(
@@ -471,10 +473,10 @@ class Runner(object):
 
   def run_experiment(self):
     """Runs a full experiment, spread over multiple iterations."""
-    tf.logging.info('Beginning training...')
+    logging.info('Beginning training...')
     if self._num_iterations <= self._start_iteration:
-      tf.logging.warning('num_iterations (%d) < start_iteration(%d)',
-                         self._num_iterations, self._start_iteration)
+      logging.warning('num_iterations (%d) < start_iteration(%d)',
+                      self._num_iterations, self._start_iteration)
       return
 
     for iteration in range(self._start_iteration, self._num_iterations):
@@ -503,7 +505,7 @@ class TrainRunner(Runner):
       create_environment_fn: A function which receives a problem name and
         creates a Gym environment for that problem (e.g. an Atari 2600 game).
     """
-    tf.logging.info('Creating TrainRunner ...')
+    logging.info('Creating TrainRunner ...')
     super(TrainRunner, self).__init__(base_dir, create_agent_fn,
                                       create_environment_fn)
     self._agent.eval_mode = False

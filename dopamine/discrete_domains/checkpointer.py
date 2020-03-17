@@ -50,6 +50,8 @@ from __future__ import print_function
 import os
 import pickle
 
+from absl import logging
+
 import gin
 import tensorflow.compat.v1 as tf
 
@@ -169,8 +171,7 @@ class Checkpointer(object):
         tf.gfile.Remove(stale_sentinel)
       except tf.errors.NotFoundError:
         # Ignore if file not found.
-        tf.logging.info('Unable to remove {} or {}.'.format(stale_file,
-                                                            stale_sentinel))
+        logging.info('Unable to remove %s or %s.', stale_file, stale_sentinel)
 
   def _load_data_from_file(self, filename):
     if not tf.gfile.Exists(filename):

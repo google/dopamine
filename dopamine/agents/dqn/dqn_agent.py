@@ -22,7 +22,7 @@ import math
 import os
 import random
 
-
+from absl import logging
 
 from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
@@ -146,21 +146,21 @@ class DQNAgent(object):
         (for instance, only the network parameters).
     """
     assert isinstance(observation_shape, tuple)
-    tf.logging.info('Creating %s agent with the following parameters:',
-                    self.__class__.__name__)
-    tf.logging.info('\t gamma: %f', gamma)
-    tf.logging.info('\t update_horizon: %f', update_horizon)
-    tf.logging.info('\t min_replay_history: %d', min_replay_history)
-    tf.logging.info('\t update_period: %d', update_period)
-    tf.logging.info('\t target_update_period: %d', target_update_period)
-    tf.logging.info('\t epsilon_train: %f', epsilon_train)
-    tf.logging.info('\t epsilon_eval: %f', epsilon_eval)
-    tf.logging.info('\t epsilon_decay_period: %d', epsilon_decay_period)
-    tf.logging.info('\t tf_device: %s', tf_device)
-    tf.logging.info('\t use_staging: %s', use_staging)
-    tf.logging.info('\t optimizer: %s', optimizer)
-    tf.logging.info('\t max_tf_checkpoints_to_keep: %d',
-                    max_tf_checkpoints_to_keep)
+    logging.info('Creating %s agent with the following parameters:',
+                 self.__class__.__name__)
+    logging.info('\t gamma: %f', gamma)
+    logging.info('\t update_horizon: %f', update_horizon)
+    logging.info('\t min_replay_history: %d', min_replay_history)
+    logging.info('\t update_period: %d', update_period)
+    logging.info('\t target_update_period: %d', target_update_period)
+    logging.info('\t epsilon_train: %f', epsilon_train)
+    logging.info('\t epsilon_eval: %f', epsilon_eval)
+    logging.info('\t epsilon_decay_period: %d', epsilon_decay_period)
+    logging.info('\t tf_device: %s', tf_device)
+    logging.info('\t use_staging: %s', use_staging)
+    logging.info('\t optimizer: %s', optimizer)
+    logging.info('\t max_tf_checkpoints_to_keep: %d',
+                 max_tf_checkpoints_to_keep)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
@@ -525,7 +525,7 @@ class DQNAgent(object):
       if not self.allow_partial_reload:
         # If we don't allow partial reloads, we will return False.
         return False
-      tf.logging.warning('Unable to reload replay buffer!')
+      logging.warning('Unable to reload replay buffer!')
     if bundle_dictionary is not None:
       for key in self.__dict__:
         if key in bundle_dictionary:
@@ -533,7 +533,7 @@ class DQNAgent(object):
     elif not self.allow_partial_reload:
       return False
     else:
-      tf.logging.warning("Unable to reload the agent's parameters!")
+      logging.warning("Unable to reload the agent's parameters!")
     # Restore the agent's TensorFlow graph.
     self._saver.restore(self._sess,
                         os.path.join(checkpoint_dir,

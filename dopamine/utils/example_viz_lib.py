@@ -31,6 +31,8 @@ from __future__ import print_function
 
 import os
 
+from absl import logging
+
 from dopamine.agents.dqn import dqn_agent
 from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import atari_lib
@@ -83,9 +85,9 @@ class MyDQNAgent(dqn_agent.DQNAgent):
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
-      tf.logging.info('Done restoring from %s', checkpoint_path)
+      logging.info('Done restoring from %s', checkpoint_path)
     else:
-      tf.logging.info('Nothing to restore!')
+      logging.info('Nothing to restore!')
 
   def get_q_values(self):
     return self.q_values
@@ -122,9 +124,9 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
     if variables_to_restore:
       reloader = tf.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
-      tf.logging.info('Done restoring from %s', checkpoint_path)
+      logging.info('Done restoring from %s', checkpoint_path)
     else:
-      tf.logging.info('Nothing to restore!')
+      logging.info('Nothing to restore!')
 
   def get_probabilities(self):
     return self._sess.run(tf.squeeze(self._net_outputs.probabilities),
@@ -150,7 +152,7 @@ class MyRunner(run_experiment.Runner):
 
   def _run_one_iteration(self, iteration):
     statistics = iteration_statistics.IterationStatistics()
-    tf.logging.info('Starting iteration %d', iteration)
+    logging.info('Starting iteration %d', iteration)
     _, _ = self._run_eval_phase(statistics)
     return statistics.data_lists
 

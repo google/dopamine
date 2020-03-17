@@ -20,6 +20,9 @@ from __future__ import print_function
 
 import os
 import pickle
+
+from absl import logging
+
 import tensorflow.compat.v1 as tf
 
 
@@ -40,7 +43,7 @@ class Logger(object):
     self._logging_enabled = True
 
     if not logging_dir:
-      tf.logging.info('Logging directory not specified, will not log.')
+      logging.info('Logging directory not specified, will not log.')
       self._logging_enabled = False
       return
     # Try to create logging directory.
@@ -50,7 +53,7 @@ class Logger(object):
       # If it already exists, ignore exception.
       pass
     if not tf.gfile.Exists(logging_dir):
-      tf.logging.warning(
+      logging.warning(
           'Could not create directory %s, logging will be disabled.',
           logging_dir)
       self._logging_enabled = False
@@ -83,7 +86,7 @@ class Logger(object):
         filename_prefix.
     """
     if not self._logging_enabled:
-      tf.logging.warning('Logging is disabled.')
+      logging.warning('Logging is disabled.')
       return
     log_file = self._generate_filename(filename_prefix, iteration_number)
     with tf.gfile.GFile(log_file, 'w') as fout:
