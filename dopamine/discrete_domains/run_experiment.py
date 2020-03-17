@@ -188,7 +188,7 @@ class Runner(object):
     # multiple agents/workers on the same GPU.
     config.gpu_options.allow_growth = True
     # Set up a session and initialize variables.
-    self._sess = tf.Session('', config=config)
+    self._sess = tf.Session('local', config=config)
     self._agent = create_agent_fn(self._sess, self._environment,
                                   summary_writer=self._summary_writer)
     self._summary_writer.add_graph(graph=tf.get_default_graph())
