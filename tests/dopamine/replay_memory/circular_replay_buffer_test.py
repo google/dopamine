@@ -47,6 +47,7 @@ class CheckpointableClass(object):
 class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
   def setUp(self):
+    super(OutOfGraphReplayBufferTest, self).setUp()
     self._test_subdir = os.path.join('/tmp/dopamine_tests', 'replay')
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)
@@ -650,6 +651,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 class WrappedReplayBufferTest(tf.test.TestCase):
 
   def setUp(self):
+    super(WrappedReplayBufferTest, self).setUp()
     self._test_subdir = os.path.join('/tmp/dopamine_tests', 'wrapped_replay')
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)

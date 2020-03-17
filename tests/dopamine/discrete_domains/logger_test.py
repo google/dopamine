@@ -33,6 +33,7 @@ FLAGS = flags.FLAGS
 class LoggerTest(tf.test.TestCase):
 
   def setUp(self):
+    super(LoggerTest, self).setUp()
     self._test_subdir = os.path.join('/tmp/dopamine_tests', 'logging')
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)

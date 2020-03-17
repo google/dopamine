@@ -33,6 +33,7 @@ FLAGS = flags.FLAGS
 class CheckpointerTest(tf.test.TestCase):
 
   def setUp(self):
+    super(CheckpointerTest, self).setUp()
     self._test_subdir = os.path.join('/tmp/dopamine_tests', 'checkpointing')
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)
