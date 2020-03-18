@@ -50,7 +50,7 @@ class AgentVisualizerTest(tf.test.TestCase):
     agent_visualizer.save_frame()
 
     frame_filename = os.path.join(self._test_subdir, 'frame_000000.png')
-    self.assertTrue(tf.gfile.Exists(frame_filename))
+    self.assertTrue(tf.io.gfile.exists(frame_filename))
 
     im = Image.open(frame_filename)
     im_arr = np.array(im)

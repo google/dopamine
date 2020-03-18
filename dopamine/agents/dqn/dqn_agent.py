@@ -485,7 +485,7 @@ class DQNAgent(object):
       A dict containing additional Python objects to be checkpointed by the
         experiment. If the checkpoint directory does not exist, returns None.
     """
-    if not tf.gfile.Exists(checkpoint_dir):
+    if not tf.io.gfile.exists(checkpoint_dir):
       return None
     # Call the Tensorflow saver to checkpoint the graph.
     self._saver.save(

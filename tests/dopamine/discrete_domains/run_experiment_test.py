@@ -432,7 +432,7 @@ class RunnerTest(tf.test.TestCase):
     self.assertEqual(num_iterations, experiment_logger._calls_to_set)
     self.assertEqual(num_iterations, experiment_logger._calls_to_log)
     glob_string = '{}/events.out.tfevents.*'.format(self._test_subdir)
-    self.assertGreater(len(tf.gfile.Glob(glob_string)), 0)
+    self.assertGreater(len(tf.io.gfile.glob(glob_string)), 0)
 
 
 if __name__ == '__main__':

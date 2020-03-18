@@ -157,8 +157,8 @@ class MyRunner(run_experiment.Runner):
     return statistics.data_lists
 
   def visualize(self, record_path, num_global_steps=500):
-    if not tf.gfile.Exists(record_path):
-      tf.gfile.MakeDirs(record_path)
+    if not tf.io.gfile.exists(record_path):
+      tf.io.gfile.makedirs(record_path)
     self._agent.eval_mode = True
 
     # Set up the game playback rendering.
