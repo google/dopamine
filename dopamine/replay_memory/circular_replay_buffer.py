@@ -32,6 +32,7 @@ import pickle
 
 from absl import logging
 import numpy as np
+import tensorflow.compat.v1 as tf1
 import tensorflow as tf
 
 import gin.tf
@@ -816,7 +817,7 @@ class WrappedReplayBuffer(object):
     with tf.name_scope('sample_replay'):
       with tf.device('/cpu:*'):
         transition_type = self.memory.get_transition_elements()
-        transition_tensors = tf.py_function(
+        transition_tensors = tf1.py_func(
             self.memory.sample_transition_batch, [],
             [return_entry.type for return_entry in transition_type],
             name='replay_sample_py_func')
