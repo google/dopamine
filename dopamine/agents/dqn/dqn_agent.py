@@ -94,7 +94,7 @@ class DQNAgent(object):
                eval_mode=False,
                use_staging=True,
                max_tf_checkpoints_to_keep=4,
-               optimizer=tf.train.RMSPropOptimizer(
+               optimizer=tf.compat.v1.train.RMSPropOptimizer(
                    learning_rate=0.00025,
                    decay=0.95,
                    momentum=0.0,

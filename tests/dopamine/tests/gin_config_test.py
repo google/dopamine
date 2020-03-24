@@ -57,7 +57,8 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(gin_files, gin_bindings)
     runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
                                    atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer, tf.train.RMSPropOptimizer)
+    self.assertIsInstance(runner._agent.optimizer,
+                          tf.compat.v1.train.RMSPropOptimizer)
     self.assertNear(0.00025, runner._agent.optimizer._learning_rate, 0.0001)
     shutil.rmtree(self._base_dir)
 
@@ -94,7 +95,8 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(gin_files, gin_bindings)
     runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
                                    atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer, tf.train.RMSPropOptimizer)
+    self.assertIsInstance(runner._agent.optimizer,
+                          tf.compat.v1.train.RMSPropOptimizer)
     self.assertEqual(100, runner._agent.optimizer._learning_rate)
     shutil.rmtree(self._base_dir)
 
@@ -153,7 +155,8 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(gin_files, gin_bindings)
     runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
                                    atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer, tf.train.RMSPropOptimizer)
+    self.assertIsInstance(runner._agent.optimizer,
+                          tf.compat.v1.train.RMSPropOptimizer)
     self.assertEqual(100, runner._agent.optimizer._learning_rate)
     shutil.rmtree(self._base_dir)
 
