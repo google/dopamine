@@ -83,7 +83,7 @@ class MyDQNAgent(dqn_agent.DQNAgent):
       variables_to_restore = contrib_slim.get_variables_to_restore(
           include=include_vars)
     if variables_to_restore:
-      reloader = tf.train.Saver(var_list=variables_to_restore)
+      reloader = tf.compat.v1.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
       logging.info('Done restoring from %s', checkpoint_path)
     else:
@@ -122,7 +122,7 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
       variables_to_restore = contrib_slim.get_variables_to_restore(
           include=include_vars)
     if variables_to_restore:
-      reloader = tf.train.Saver(var_list=variables_to_restore)
+      reloader = tf.compat.v1.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
       logging.info('Done restoring from %s', checkpoint_path)
     else:

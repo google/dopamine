@@ -226,7 +226,7 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
 def maybe_transform_variable_names(variables, legacy_checkpoint_load=False):
   """Maps old variable names to the new ones.
 
-  The resulting dictionary can be passed to the tf.train.Saver to load
+  The resulting dictionary can be passed to the tf.compat.v1.train.Saver to load
   legacy checkpoints into Keras models.
 
   Args:
