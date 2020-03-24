@@ -72,7 +72,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
                replay_scheme='prioritized',
                tf_device='/cpu:*',
                use_staging=True,
-               optimizer=tf.train.AdamOptimizer(
+               optimizer=tf.compat.v1.train.AdamOptimizer(
                    learning_rate=0.00025, epsilon=0.0003125),
                summary_writer=None,
                summary_writing_frequency=500):
