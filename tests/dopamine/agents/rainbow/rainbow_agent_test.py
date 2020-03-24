@@ -360,7 +360,7 @@ class RainbowAgentTest(tf.test.TestCase):
 
   def testCreateAgentWithDefaults(self):
     # Verifies that we can create and train an agent with the default values.
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = rainbow_agent.RainbowAgent(sess, num_actions=4)
       sess.run(tf.global_variables_initializer())
       observation = np.ones([84, 84, 1])
@@ -369,7 +369,7 @@ class RainbowAgentTest(tf.test.TestCase):
       agent.end_episode(reward=1)
 
   def testShapesAndValues(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       self.assertEqual(agent._support.shape[0], self._num_atoms)
       self.assertEqual(
@@ -395,7 +395,7 @@ class RainbowAgentTest(tf.test.TestCase):
 
     Specifically, the action returned and its effect on the state.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       # We fill up the state with 9s. On calling agent.begin_episode the state
       # should be reset to all 0s.
@@ -431,7 +431,7 @@ class RainbowAgentTest(tf.test.TestCase):
 
     Specifically, the action returned, and confirms that no training happens.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       base_observation = np.ones(self.observation_shape + (1,))
       # This will reset state and choose a first action.
@@ -466,7 +466,7 @@ class RainbowAgentTest(tf.test.TestCase):
 
     Specifically, the action returned, and confirms training is happening.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       agent.eval_mode = False
       base_observation = np.ones(self.observation_shape + (1,))
@@ -500,7 +500,7 @@ class RainbowAgentTest(tf.test.TestCase):
       self.assertEqual(agent._replay.add.call_count, num_steps + 1)
 
   def testStoreTransitionWithUniformSampling(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = rainbow_agent.RainbowAgent(
           sess, num_actions=4, replay_scheme='uniform')
       dummy_frame = np.zeros((84, 84))
@@ -514,7 +514,7 @@ class RainbowAgentTest(tf.test.TestCase):
       self.assertAllEqual(returned_priorities, expected_priorities)
 
   def testStoreTransitionWithPrioritizedSamplingy(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = rainbow_agent.RainbowAgent(
           sess, num_actions=4, replay_scheme='prioritized')
       dummy_frame = np.zeros((84, 84))

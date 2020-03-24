@@ -16,7 +16,7 @@ Creates an agent.
 
 #### Args:
 
-*   <b>`sess`</b>: A `tf.Session` object for running associated ops.
+*   <b>`sess`</b>: A `tf.compat.v1.Session` object for running associated ops.
 *   <b>`environment`</b>: An Atari 2600 Gym environment.
 *   <b>`agent_name`</b>: str, name of the agent to create.
 *   <b>`summary_writer`</b>: A Tensorflow summary writer to pass to the agent

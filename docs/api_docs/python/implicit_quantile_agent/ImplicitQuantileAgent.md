@@ -33,7 +33,7 @@ values are taken from Dabney et al. (2018).
 
 #### Args:
 
-*   <b>`sess`</b>: `tf.Session` object for running associated ops.
+*   <b>`sess`</b>: `tf.compat.v1.Session` object for running associated ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
 *   <b>`network`</b>: function expecting three parameters: (num_actions,

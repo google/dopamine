@@ -99,7 +99,7 @@ class DQNAgentTest(tf.test.TestCase):
 
   def testCreateAgentWithDefaults(self):
     # Verifies that we can create and train an agent with the default values.
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = dqn_agent.DQNAgent(sess, num_actions=4)
       sess.run(tf.global_variables_initializer())
       observation = np.ones([84, 84, 1])
@@ -112,7 +112,7 @@ class DQNAgentTest(tf.test.TestCase):
 
     Specifically, the action returned and its effect on state.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       # We fill up the state with 9s. On calling agent.begin_episode the state
       # should be reset to all 0s.
@@ -148,7 +148,7 @@ class DQNAgentTest(tf.test.TestCase):
 
     Specifically, the action returned, and confirm no training is happening.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       base_observation = np.ones(self.observation_shape + (1,))
       # This will reset state and choose a first action.
@@ -183,7 +183,7 @@ class DQNAgentTest(tf.test.TestCase):
 
     Specifically, the action returned, and confirm training is happening.
     """
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       agent.eval_mode = False
       base_observation = np.ones(self.observation_shape + (1,))
@@ -232,7 +232,7 @@ class DQNAgentTest(tf.test.TestCase):
   def testNonTupleObservationShape(self):
     with self.assertRaises(AssertionError):
       self.observation_shape = 84
-      with tf.Session() as sess:
+      with tf.compat.v1.Session() as sess:
         _ = self._create_test_agent(sess)
 
   def _testCustomShapes(self, shape, dtype, stack_size):
@@ -240,7 +240,7 @@ class DQNAgentTest(tf.test.TestCase):
     self.observation_dtype = dtype
     self.stack_size = stack_size
     self.zero_state = np.zeros((1,) + shape + (stack_size,))
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       agent.eval_mode = False
       base_observation = np.ones(self.observation_shape + (1,))
@@ -318,12 +318,12 @@ class DQNAgentTest(tf.test.TestCase):
                       expected_epsilon, 0.01)
 
   def testBundlingWithNonexistentDirectory(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       self.assertEqual(None, agent.bundle_and_checkpoint('/does/not/exist', 1))
 
   def testUnbundlingWithFailingReplayBuffer(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       bundle = {}
       # The ReplayBuffer will throw an exception since it is not able to load
@@ -332,13 +332,13 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertFalse(agent.unbundle(self._test_subdir, 1729, bundle))
 
   def testUnbundlingWithNoBundleDictionary(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       agent._replay = mock.Mock()
       self.assertFalse(agent.unbundle(self._test_subdir, 1729, None))
 
   def testPartialUnbundling(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess, allow_partial_reload=True)
       # These values don't reflect the actual types of these attributes, but are
       # used merely for facility of testing.
@@ -351,7 +351,7 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertTrue(agent.unbundle(self._test_subdir, 1729, None))
 
   def testBundling(self):
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
       # These values don't reflect the actual types of these attributes, but are
       # used merely for facility of testing.
@@ -371,7 +371,7 @@ class DQNAgentTest(tf.test.TestCase):
 
   def testSyncOpWithNameScopes(self):
     num_agents = 5
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
       agents = []
       for i in range(num_agents):
         with tf.name_scope('agent_{}'.format(i)):

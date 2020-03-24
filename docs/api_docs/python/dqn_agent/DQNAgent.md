@@ -28,7 +28,7 @@ Initializes the agent and constructs the components of its graph.
 
 #### Args:
 
-*   <b>`sess`</b>: `tf.Session`, for executing ops.
+*   <b>`sess`</b>: `tf.compat.v1.Session`, for executing ops.
 *   <b>`num_actions`</b>: int, number of actions the agent can take at any
     state.
 *   <b>`observation_shape`</b>: tuple of ints describing the observation shape.

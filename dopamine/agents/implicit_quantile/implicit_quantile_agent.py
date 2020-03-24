@@ -53,7 +53,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     values are taken from Dabney et al. (2018).
 
     Args:
-      sess: `tf.Session` object for running associated ops.
+      sess: `tf.compat.v1.Session` object for running associated ops.
       num_actions: int, number of actions the agent can take at any state.
       network: tf.Keras.Model, expects three parameters:
         (num_actions, quantile_embedding_dim, network_type). This class is used

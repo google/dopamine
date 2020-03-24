@@ -16,7 +16,7 @@ Creates a DQN agent.
 
 #### Args:
 
-*   <b>`sess`</b>: A `tf.Session` object for running associated ops.
+*   <b>`sess`</b>: A `tf.compat.v1.Session` object for running associated ops.
 *   <b>`environment`</b>: An Atari 2600 Gym environment.
 
 #### Returns:

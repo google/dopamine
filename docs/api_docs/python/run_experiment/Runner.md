@@ -57,7 +57,7 @@ Initialize the Runner object in charge of running a full experiment.
     episode terminates.
 
 This constructor will take the following actions: - Initialize an environment. -
-Initialize a `tf.Session`. - Initialize a logger. - Initialize an agent. -
+Initialize a `tf.compat.v1.Session`. - Initialize a logger. - Initialize an agent. -
 Reload from the latest checkpoint, if available, and initialize the Checkpointer
 object.
 

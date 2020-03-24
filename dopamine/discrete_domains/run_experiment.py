@@ -58,7 +58,7 @@ def create_agent(sess, environment, agent_name=None, summary_writer=None,
   """Creates an agent.
 
   Args:
-    sess: A `tf.Session` object for running associated ops.
+    sess: A `tf.compat.v1.Session` object for running associated ops.
     environment: A gym environment (e.g. Atari 2600).
     agent_name: str, name of the agent to create.
     summary_writer: A Tensorflow summary writer to pass to the agent
@@ -167,7 +167,7 @@ class Runner(object):
 
     This constructor will take the following actions:
     - Initialize an environment.
-    - Initialize a `tf.Session`.
+    - Initialize a `tf.compat.v1.Session`.
     - Initialize a logger.
     - Initialize an agent.
     - Reload from the latest checkpoint, if available, and initialize the
@@ -190,7 +190,7 @@ class Runner(object):
     # multiple agents/workers on the same GPU.
     config.gpu_options.allow_growth = True
     # Set up a session and initialize variables.
-    self._sess = tf.Session('local', config=config)
+    self._sess = tf.compat.v1.Session('', config=config)
     self._agent = create_agent_fn(self._sess, self._environment,
                                   summary_writer=self._summary_writer)
     self._summary_writer.add_graph(graph=tf.get_default_graph())
