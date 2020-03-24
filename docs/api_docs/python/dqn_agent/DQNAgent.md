@@ -60,7 +60,7 @@ Initializes the agent and constructs the components of its graph.
     next training batch, speeding training up by about 30%.
 *   <b>`max_tf_checkpoints_to_keep`</b>: int, the number of TensorFlow
     checkpoints to keep.
-*   <b>`optimizer`</b>: `tf.train.Optimizer`, for training the value function.
+*   <b>`optimizer`</b>: `tf.compat.v1.train.Optimizer`, for training the value function.
 *   <b>`summary_writer`</b>: SummaryWriter object for outputting training
     statistics. Summary writing disabled if set to None.
 *   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will

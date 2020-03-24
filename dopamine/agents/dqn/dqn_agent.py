@@ -137,7 +137,8 @@ class DQNAgent(object):
         training batch, speeding training up by about 30%.
       max_tf_checkpoints_to_keep: int, the number of TensorFlow checkpoints to
         keep.
-      optimizer: `tf.train.Optimizer`, for training the value function.
+      optimizer: `tf.compat.v1.train.Optimizer`, for training the value
+        function.
       summary_writer: SummaryWriter object for outputting training statistics.
         Summary writing disabled if set to None.
       summary_writing_frequency: int, frequency with which summaries will be

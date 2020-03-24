@@ -66,7 +66,7 @@ Initializes the agent and constructs the components of its graph.
     executed.
 *   <b>`use_staging`</b>: bool, when True use a staging area to prefetch the
     next training batch, speeding training up by about 30%.
-*   <b>`optimizer`</b>: `tf.train.Optimizer`, for training the value function.
+*   <b>`optimizer`</b>: `tf.compat.v1.train.Optimizer`, for training the value function.
 *   <b>`summary_writer`</b>: SummaryWriter object for outputting training
     statistics. Summary writing disabled if set to None.
 *   <b>`summary_writing_frequency`</b>: int, frequency with which summaries will
