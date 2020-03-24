@@ -318,7 +318,7 @@ class DQNAgent(object):
     """
     # Get trainable variables from online and target DQNs
     sync_qt_ops = []
-    scope = tf.get_default_graph().get_name_scope()
+    scope = tf.compat.v1.get_default_graph().get_name_scope()
     trainables_online = tf.get_collection(
         tf.GraphKeys.TRAINABLE_VARIABLES, scope=os.path.join(scope, 'Online'))
     trainables_target = tf.get_collection(
