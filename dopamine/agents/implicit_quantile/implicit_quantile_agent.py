@@ -182,7 +182,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     rewards = self._replay.rewards[:, None]
     rewards = tf.tile(rewards, [self.num_tau_prime_samples, 1])
 
-    is_terminal_multiplier = 1. - tf.to_float(self._replay.terminals)
+    is_terminal_multiplier = 1. - tf.cast(self._replay.terminals, tf.float32)
     # Incorporate terminal state to discount factor.
     # size of gamma_with_terminal: (num_tau_prime_samples x batch_size) x 1.
     gamma_with_terminal = self.cumulative_gamma * is_terminal_multiplier
@@ -267,11 +267,12 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     # The huber loss (see Section 2.3 of the paper) is defined via two cases:
     # case_one: |bellman_errors| <= kappa
     # case_two: |bellman_errors| > kappa
-    huber_loss_case_one = tf.to_float(
-        tf.abs(bellman_errors) <= self.kappa) * 0.5 * bellman_errors ** 2
-    huber_loss_case_two = tf.to_float(
-        tf.abs(bellman_errors) > self.kappa) * self.kappa * (
-            tf.abs(bellman_errors) - 0.5 * self.kappa)
+    huber_loss_case_one = (
+        tf.cast(tf.abs(bellman_errors) <= self.kappa, tf.float32) *
+        0.5 * bellman_errors ** 2)
+    huber_loss_case_two = (
+        tf.cast(tf.abs(bellman_errors) > self.kappa, tf.float32) *
+        self.kappa * (tf.abs(bellman_errors) - 0.5 * self.kappa))
     huber_loss = huber_loss_case_one + huber_loss_case_two
 
     # Reshape replay_quantiles to batch_size x num_tau_samples x 1
@@ -283,11 +284,12 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     # batch_size x num_tau_prime_samples x num_tau_samples x 1.
     # These quantiles will be used for computation of the quantile huber loss
     # below (see section 2.3 of the paper).
-    replay_quantiles = tf.to_float(tf.tile(
-        replay_quantiles[:, None, :, :], [1, self.num_tau_prime_samples, 1, 1]))
+    replay_quantiles = tf.cast(
+        tf.tile(replay_quantiles[:, None, :, :],
+                [1, self.num_tau_prime_samples, 1, 1]), tf.float32)
     # Shape: batch_size x num_tau_prime_samples x num_tau_samples x 1.
     quantile_huber_loss = (tf.abs(replay_quantiles - tf.stop_gradient(
-        tf.to_float(bellman_errors < 0))) * huber_loss) / self.kappa
+        tf.cast(bellman_errors < 0, tf.float32))) * huber_loss) / self.kappa
     # Sum over current quantile value (num_tau_samples) dimension,
     # average over target quantile value (num_tau_prime_samples) dimension.
     # Shape: batch_size x num_tau_prime_samples x 1.
