@@ -435,15 +435,15 @@ class Runner(object):
       num_episodes_eval: int, number of evaluation episodes run.
       average_reward_eval: float, The average evaluation reward.
     """
-    summary = tf.Summary(value=[
-        tf.Summary.Value(tag='Train/NumEpisodes',
-                         simple_value=num_episodes_train),
-        tf.Summary.Value(tag='Train/AverageReturns',
-                         simple_value=average_reward_train),
-        tf.Summary.Value(tag='Eval/NumEpisodes',
-                         simple_value=num_episodes_eval),
-        tf.Summary.Value(tag='Eval/AverageReturns',
-                         simple_value=average_reward_eval)
+    summary = tf.compat.v1.Summary(value=[
+        tf.compat.v1.Summary.Value(
+            tag='Train/NumEpisodes', simple_value=num_episodes_train),
+        tf.compat.v1.Summary.Value(
+            tag='Train/AverageReturns', simple_value=average_reward_train),
+        tf.compat.v1.Summary.Value(
+            tag='Eval/NumEpisodes', simple_value=num_episodes_eval),
+        tf.compat.v1.Summary.Value(
+            tag='Eval/AverageReturns', simple_value=average_reward_eval)
     ])
     self._summary_writer.add_summary(summary, iteration)
 
@@ -535,9 +535,10 @@ class TrainRunner(Runner):
   def _save_tensorboard_summaries(self, iteration, num_episodes,
                                   average_reward):
     """Save statistics as tensorboard summaries."""
-    summary = tf.Summary(value=[
-        tf.Summary.Value(tag='Train/NumEpisodes', simple_value=num_episodes),
-        tf.Summary.Value(
+    summary = tf.compat.v1.Summary(value=[
+        tf.compat.v1.Summary.Value(
+            tag='Train/NumEpisodes', simple_value=num_episodes),
+        tf.compat.v1.Summary.Value(
             tag='Train/AverageReturns', simple_value=average_reward),
     ])
     self._summary_writer.add_summary(summary, iteration)
