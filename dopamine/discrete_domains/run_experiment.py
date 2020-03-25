@@ -182,7 +182,7 @@ class Runner(object):
     self._max_steps_per_episode = max_steps_per_episode
     self._base_dir = base_dir
     self._create_directories()
-    self._summary_writer = tf.summary.FileWriter(self._base_dir)
+    self._summary_writer = tf.compat.v1.summary.FileWriter(self._base_dir)
 
     self._environment = create_environment_fn()
     config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
