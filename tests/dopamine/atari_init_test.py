@@ -31,6 +31,7 @@ FLAGS = flags.FLAGS
 class AtariInitTest(tf.test.TestCase):
 
   def setUp(self):
+    super(AtariInitTest, self).setUp()
     FLAGS.base_dir = os.path.join(
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))

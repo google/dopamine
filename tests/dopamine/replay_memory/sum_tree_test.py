@@ -28,6 +28,7 @@ import tensorflow.compat.v1 as tf
 class SumTreeTest(tf.test.TestCase):
 
   def setUp(self):
+    super(SumTreeTest, self).setUp()
     self._tree = sum_tree.SumTree(capacity=100)
 
   def testNegativeCapacity(self):

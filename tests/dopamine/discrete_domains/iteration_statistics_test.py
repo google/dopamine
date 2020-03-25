@@ -26,9 +26,6 @@ import tensorflow.compat.v1 as tf
 
 class IterationStatisticsTest(tf.test.TestCase):
 
-  def setUp(self):
-    pass
-
   def testMissingValue(self):
     statistics = iteration_statistics.IterationStatistics()
     with self.assertRaises(KeyError):
