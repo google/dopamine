@@ -118,7 +118,7 @@ def nature_dqn_network(num_actions, network_type, state):
     net: _network_type object containing the tensors output by the network.
   """
   net = tf.cast(state, tf.float32)
-  net = tf.div(net, 255.)
+  net = net / 255
   net = contrib_slim.conv2d(net, 32, [8, 8], stride=4)
   net = contrib_slim.conv2d(net, 64, [4, 4], stride=2)
   net = contrib_slim.conv2d(net, 64, [3, 3], stride=1)
@@ -145,7 +145,7 @@ def rainbow_network(num_actions, num_atoms, support, network_type, state):
       factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
 
   net = tf.cast(state, tf.float32)
-  net = tf.div(net, 255.)
+  net = net / 255
   net = contrib_slim.conv2d(
       net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)
   net = contrib_slim.conv2d(
@@ -185,7 +185,7 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
       factor=1.0 / np.sqrt(3.0), mode='FAN_IN', uniform=True)
 
   state_net = tf.cast(state, tf.float32)
-  state_net = tf.div(state_net, 255.)
+  state_net = state_net / 255
   state_net = contrib_slim.conv2d(
       state_net, 32, [8, 8], stride=4, weights_initializer=weights_initializer)
   state_net = contrib_slim.conv2d(
@@ -292,7 +292,7 @@ class NatureDQNNetwork(tf.keras.Model):
       collections.namedtuple, output ops (graph mode) or output tensors (eager).
     """
     x = tf.cast(state, tf.float32)
-    x = tf.div(x, 255.)
+    x = x / 255
     x = self.conv1(x)
     x = self.conv2(x)
     x = self.conv3(x)
@@ -352,7 +352,7 @@ class RainbowNetwork(tf.keras.Model):
       collections.namedtuple, output ops (graph mode) or output tensors (eager).
     """
     x = tf.cast(state, tf.float32)
-    x = tf.div(x, 255.)
+    x = x / 255
     x = self.conv1(x)
     x = self.conv2(x)
     x = self.conv3(x)
@@ -416,7 +416,7 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     """
     batch_size = state.get_shape().as_list()[0]
     x = tf.cast(state, tf.float32)
-    x = tf.div(x, 255.)
+    x = x / 255
     x = self.conv1(x)
     x = self.conv2(x)
     x = self.conv3(x)
