@@ -299,7 +299,7 @@ class DQNAgent(object):
         self._replay.actions, self.num_actions, 1., 0., name='action_one_hot')
     replay_chosen_q = tf.reduce_sum(
         self._replay_net_outputs.q_values * replay_action_one_hot,
-        reduction_indices=1,
+        axis=1,
         name='replay_chosen_q')
 
     target = tf.stop_gradient(self._build_target_q_op())
