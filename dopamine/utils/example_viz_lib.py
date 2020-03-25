@@ -72,9 +72,9 @@ class MyDQNAgent(dqn_agent.DQNAgent):
   def reload_checkpoint(self, checkpoint_path, use_legacy_checkpoint=False):
     if use_legacy_checkpoint:
       variables_to_restore = atari_lib.maybe_transform_variable_names(
-          tf.all_variables(), legacy_checkpoint_load=True)
+          tf.compat.v1.global_variables(), legacy_checkpoint_load=True)
     else:
-      global_vars = set([x.name for x in tf.global_variables()])
+      global_vars = set([x.name for x in tf.compat.v1.global_variables()])
       ckpt_vars = [
           '{}:0'.format(name)
           for name, _ in tf.train.list_variables(checkpoint_path)
@@ -111,9 +111,9 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
   def reload_checkpoint(self, checkpoint_path, use_legacy_checkpoint=False):
     if use_legacy_checkpoint:
       variables_to_restore = atari_lib.maybe_transform_variable_names(
-          tf.all_variables(), legacy_checkpoint_load=True)
+          tf.compat.v1.global_variables(), legacy_checkpoint_load=True)
     else:
-      global_vars = set([x.name for x in tf.global_variables()])
+      global_vars = set([x.name for x in tf.compat.v1.global_variables()])
       ckpt_vars = [
           '{}:0'.format(name)
           for name, _ in tf.train.list_variables(checkpoint_path)

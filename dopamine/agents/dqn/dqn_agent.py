@@ -204,7 +204,8 @@ class DQNAgent(object):
       self._merged_summaries = tf.summary.merge_all()
     self._sess = sess
 
-    var_map = atari_lib.maybe_transform_variable_names(tf.all_variables())
+    var_map = atari_lib.maybe_transform_variable_names(
+        tf.compat.v1.global_variables())
     self._saver = tf.compat.v1.train.Saver(
         var_list=var_map, max_to_keep=max_tf_checkpoints_to_keep)
 
