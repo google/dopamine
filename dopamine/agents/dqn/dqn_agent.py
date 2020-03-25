@@ -201,7 +201,7 @@ class DQNAgent(object):
 
     if self.summary_writer is not None:
       # All tf.summaries should have been defined prior to running this.
-      self._merged_summaries = tf.summary.merge_all()
+      self._merged_summaries = tf.compat.v1.summary.merge_all()
     self._sess = sess
 
     var_map = atari_lib.maybe_transform_variable_names(
@@ -308,7 +308,7 @@ class DQNAgent(object):
         target, replay_chosen_q, reduction=tf.losses.Reduction.NONE)
     if self.summary_writer is not None:
       with tf.compat.v1.variable_scope('Losses'):
-        tf.summary.scalar('HuberLoss', tf.reduce_mean(loss))
+        tf.compat.v1.summary.scalar('HuberLoss', tf.reduce_mean(loss))
     return self.optimizer.minimize(tf.reduce_mean(loss))
 
   def _build_sync_op(self):
