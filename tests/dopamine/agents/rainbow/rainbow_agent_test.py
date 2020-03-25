@@ -41,11 +41,11 @@ class ProjectDistributionTest(tf.test.TestCase):
 
   def testInconsistentSupportsAndWeightsWithPlaceholders(self):
     supports = [[0, 2, 4, 6, 8], [3, 4, 5, 6, 7]]
-    supports_ph = tf.placeholder(tf.float32, None)
+    supports_ph = tf.compat.v1.placeholder(tf.float32, None)
     weights = [[0.1, 0.2, 0.3, 0.2], [0.1, 0.2, 0.3, 0.2]]
-    weights_ph = tf.placeholder(tf.float32, None)
+    weights_ph = tf.compat.v1.placeholder(tf.float32, None)
     target_support = [4, 5, 6, 7, 8]
-    target_support_ph = tf.placeholder(tf.float32, None)
+    target_support_ph = tf.compat.v1.placeholder(tf.float32, None)
     projection = rainbow_agent.project_distribution(
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
@@ -71,11 +71,11 @@ class ProjectDistributionTest(tf.test.TestCase):
 
   def testInconsistentSupportsAndTargetSupportWithPlaceholders(self):
     supports = [[0, 2, 4, 6, 8], [3, 4, 5, 6, 7]]
-    supports_ph = tf.placeholder(tf.float32, None)
+    supports_ph = tf.compat.v1.placeholder(tf.float32, None)
     weights = [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]]
-    weights_ph = tf.placeholder(tf.float32, None)
+    weights_ph = tf.compat.v1.placeholder(tf.float32, None)
     target_support = [4, 5, 6]
-    target_support_ph = tf.placeholder(tf.float32, None)
+    target_support_ph = tf.compat.v1.placeholder(tf.float32, None)
     projection = rainbow_agent.project_distribution(
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
@@ -101,11 +101,11 @@ class ProjectDistributionTest(tf.test.TestCase):
 
   def testZeroDimensionalTargetSupportWithPlaceholders(self):
     supports = [[0, 2, 4, 6, 8], [3, 4, 5, 6, 7]]
-    supports_ph = tf.placeholder(tf.float32, None)
+    supports_ph = tf.compat.v1.placeholder(tf.float32, None)
     weights = [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]]
-    weights_ph = tf.placeholder(tf.float32, None)
+    weights_ph = tf.compat.v1.placeholder(tf.float32, None)
     target_support = 3
-    target_support_ph = tf.placeholder(tf.float32, None)
+    target_support_ph = tf.compat.v1.placeholder(tf.float32, None)
     projection = rainbow_agent.project_distribution(
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
@@ -130,11 +130,11 @@ class ProjectDistributionTest(tf.test.TestCase):
 
   def testMultiDimensionalTargetSupportWithPlaceholders(self):
     supports = [[0, 2, 4, 6, 8], [3, 4, 5, 6, 7]]
-    supports_ph = tf.placeholder(tf.float32, None)
+    supports_ph = tf.compat.v1.placeholder(tf.float32, None)
     weights = [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]]
-    weights_ph = tf.placeholder(tf.float32, None)
+    weights_ph = tf.compat.v1.placeholder(tf.float32, None)
     target_support = [[3]]
-    target_support_ph = tf.placeholder(tf.float32, None)
+    target_support_ph = tf.compat.v1.placeholder(tf.float32, None)
     projection = rainbow_agent.project_distribution(
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
@@ -247,12 +247,12 @@ class ProjectDistributionTest(tf.test.TestCase):
 
   def testUsingPlaceholders(self):
     supports = [[0, 2, 4, 6, 8], [0, 1, 2, 3, 4], [3, 4, 5, 6, 7]]
-    supports_ph = tf.placeholder(tf.float32, None)
+    supports_ph = tf.compat.v1.placeholder(tf.float32, None)
     weights = [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.1, 0.3, 0.3],
                [0.1, 0.2, 0.3, 0.2, 0.2]]
-    weights_ph = tf.placeholder(tf.float32, None)
+    weights_ph = tf.compat.v1.placeholder(tf.float32, None)
     target_support = [3, 4, 5, 6, 7]
-    target_support_ph = tf.placeholder(tf.float32, None)
+    target_support_ph = tf.compat.v1.placeholder(tf.float32, None)
     projection = rainbow_agent.project_distribution(supports_ph, weights_ph,
                                                     target_support_ph)
     expected_projections = [[0.3, 0.3, 0.0, 0.2,

@@ -190,8 +190,8 @@ class DQNAgent(object):
       # The last axis indicates the number of consecutive frames stacked.
       state_shape = (1,) + self.observation_shape + (stack_size,)
       self.state = np.zeros(state_shape)
-      self.state_ph = tf.placeholder(self.observation_dtype, state_shape,
-                                     name='state_ph')
+      self.state_ph = tf.compat.v1.placeholder(
+          self.observation_dtype, state_shape, name='state_ph')
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
