@@ -94,14 +94,14 @@ class DQNAgentTest(tf.test.TestCase):
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
     return agent
 
   def testCreateAgentWithDefaults(self):
     # Verifies that we can create and train an agent with the default values.
     with tf.compat.v1.Session() as sess:
       agent = dqn_agent.DQNAgent(sess, num_actions=4)
-      sess.run(tf.global_variables_initializer())
+      sess.run(tf.compat.v1.global_variables_initializer())
       observation = np.ones([84, 84, 1])
       agent.begin_episode(observation)
       agent.step(reward=1, observation=observation)
@@ -155,7 +155,7 @@ class DQNAgentTest(tf.test.TestCase):
       agent.begin_episode(base_observation)
       # We mock the replay buffer to verify how the agent interacts with it.
       agent._replay = test_utils.MockReplayBuffer()
-      self.evaluate(tf.global_variables_initializer())
+      self.evaluate(tf.compat.v1.global_variables_initializer())
 
       expected_state = self.zero_state
       num_steps = 10
@@ -189,7 +189,7 @@ class DQNAgentTest(tf.test.TestCase):
       base_observation = np.ones(self.observation_shape + (1,))
       # We mock the replay buffer to verify how the agent interacts with it.
       agent._replay = test_utils.MockReplayBuffer()
-      self.evaluate(tf.global_variables_initializer())
+      self.evaluate(tf.compat.v1.global_variables_initializer())
       # This will reset state and choose a first action.
       agent.begin_episode(base_observation)
       observation = base_observation
@@ -246,7 +246,7 @@ class DQNAgentTest(tf.test.TestCase):
       base_observation = np.ones(self.observation_shape + (1,))
       # We mock the replay buffer to verify how the agent interacts with it.
       agent._replay = test_utils.MockReplayBuffer()
-      self.evaluate(tf.global_variables_initializer())
+      self.evaluate(tf.compat.v1.global_variables_initializer())
       # This will reset state and choose a first action.
       agent.begin_episode(base_observation)
       observation = base_observation
