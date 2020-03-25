@@ -301,6 +301,6 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
     update_priorities_op = tf.no_op()
     with tf.control_dependencies([update_priorities_op]):
       if self.summary_writer is not None:
-        with tf.variable_scope('Losses'):
+        with tf.compat.v1.variable_scope('Losses'):
           tf.summary.scalar('QuantileLoss', tf.reduce_mean(loss))
       return self.optimizer.minimize(tf.reduce_mean(loss)), tf.reduce_mean(loss)

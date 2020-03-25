@@ -28,7 +28,7 @@ class MockReplayBuffer(object):
   """Mock ReplayBuffer to verify the way the agent interacts with it."""
 
   def __init__(self):
-    with tf.variable_scope('MockReplayBuffer', reuse=tf.AUTO_REUSE):
+    with tf.compat.v1.variable_scope('MockReplayBuffer', reuse=tf.AUTO_REUSE):
       self.add = mock.Mock()
       self.memory = mock.Mock()
       self.memory.add_count = 0
