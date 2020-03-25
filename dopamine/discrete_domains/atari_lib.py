@@ -198,7 +198,7 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
 
   batch_size = state_net.get_shape().as_list()[0]
   quantiles_shape = [num_quantiles * batch_size, 1]
-  quantiles = tf.random_uniform(
+  quantiles = tf.random.uniform(
       quantiles_shape, minval=0, maxval=1, dtype=tf.float32)
 
   quantile_net = tf.tile(quantiles, [1, quantile_embedding_dim])
@@ -424,7 +424,7 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     state_vector_length = x.get_shape().as_list()[-1]
     state_net_tiled = tf.tile(x, [num_quantiles, 1])
     quantiles_shape = [num_quantiles * batch_size, 1]
-    quantiles = tf.random_uniform(
+    quantiles = tf.random.uniform(
         quantiles_shape, minval=0, maxval=1, dtype=tf.float32)
     quantile_net = tf.tile(quantiles, [1, self.quantile_embedding_dim])
     pi = tf.constant(math.pi)
