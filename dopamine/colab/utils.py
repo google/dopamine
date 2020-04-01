@@ -27,7 +27,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 FILE_PREFIX = 'log'
 ITERATION_PREFIX = 'iteration_'

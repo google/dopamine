@@ -22,7 +22,7 @@ from absl import flags
 from absl import logging
 
 from dopamine.discrete_domains import train
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 import gin.tf
 

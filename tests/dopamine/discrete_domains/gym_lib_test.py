@@ -21,7 +21,7 @@ from __future__ import print_function
 
 
 from dopamine.discrete_domains import gym_lib
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 class MockGymEnvironment(object):

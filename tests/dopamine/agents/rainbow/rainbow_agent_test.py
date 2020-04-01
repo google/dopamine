@@ -26,7 +26,7 @@ from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.utils import test_utils
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 class ProjectDistributionTest(tf.test.TestCase):

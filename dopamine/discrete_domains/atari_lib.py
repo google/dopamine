@@ -50,7 +50,7 @@ import gin
 import gym
 from gym.spaces.box import Box
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 from tensorflow.contrib import layers as contrib_layers
 from tensorflow.contrib import slim as contrib_slim

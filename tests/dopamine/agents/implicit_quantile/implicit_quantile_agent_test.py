@@ -25,7 +25,7 @@ from dopamine.agents.dqn import dqn_agent
 from dopamine.agents.implicit_quantile import implicit_quantile_agent
 from dopamine.discrete_domains import atari_lib
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 class ImplicitQuantileAgentTest(tf.test.TestCase):

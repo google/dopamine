@@ -23,7 +23,7 @@ from absl import logging
 
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import run_experiment
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 import gin.tf
 

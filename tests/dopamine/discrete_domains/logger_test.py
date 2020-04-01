@@ -25,7 +25,7 @@ import shutil
 
 from absl import flags
 from dopamine.discrete_domains import logger
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 FLAGS = flags.FLAGS
 

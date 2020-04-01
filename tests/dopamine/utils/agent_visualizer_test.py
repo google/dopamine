@@ -27,7 +27,7 @@ from dopamine.utils.agent_visualizer import AgentVisualizer
 from dopamine.utils.line_plotter import LinePlotter
 import numpy as np
 from PIL import Image
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 FLAGS = flags.FLAGS

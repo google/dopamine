@@ -21,7 +21,7 @@ from __future__ import print_function
 
 
 import mock
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 
 
 class MockReplayBuffer(object):
