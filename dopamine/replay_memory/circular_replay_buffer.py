@@ -38,7 +38,7 @@ from tensorflow.contrib import staging as contrib_staging
 
 # Defines a type describing part of the tuple returned by the replay
 # memory. Each element of the tuple is a tensor of shape [batch, ...] where
-# ... is defined the 'shape' field of ReplayElement. The tensor type is
+# ... is defined as the 'shape' field of ReplayElement. The tensor type is
 # given by the 'type' field. The 'name' field is for convenience and ease of
 # debugging.
 ReplayElement = (
