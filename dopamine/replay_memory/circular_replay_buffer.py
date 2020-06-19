@@ -79,6 +79,7 @@ def invalid_range(cursor, replay_capacity, stack_size, update_horizon):
        for i in range(stack_size + update_horizon)])
 
 
+@gin.configurable
 class OutOfGraphReplayBuffer(object):
   """A simple out-of-graph Replay Buffer.
 

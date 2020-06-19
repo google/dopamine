@@ -27,9 +27,13 @@ import tensorflow as tf
 class MockReplayBuffer(object):
   """Mock ReplayBuffer to verify the way the agent interacts with it."""
 
-  def __init__(self):
-    with tf.compat.v1.variable_scope(
-        'MockReplayBuffer', reuse=tf.compat.v1.AUTO_REUSE):
+  def __init__(self, is_jax=False):
+    if is_jax:
       self.add = mock.Mock()
-      self.memory = mock.Mock()
-      self.memory.add_count = 0
+      self.add_count = 0
+    else:
+      with tf.compat.v1.variable_scope(
+          'MockReplayBuffer', reuse=tf.compat.v1.AUTO_REUSE):
+        self.add = mock.Mock()
+        self.memory = mock.Mock()
+        self.memory.add_count = 0
