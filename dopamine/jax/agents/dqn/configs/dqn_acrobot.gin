@@ -23,14 +23,14 @@ create_optimizer.eps = 3.125e-4
 
 create_gym_environment.environment_name = 'Acrobot'
 create_gym_environment.version = 'v1'
-create_runner.schedule = 'jax_train'  # To have flax.metrics.tensorboard.
+create_runner.schedule = 'continuous_train'
 create_agent.agent_name = 'jax_dqn'
 create_agent.debug_mode = True
-JaxRunner.create_environment_fn = @gym_lib.create_gym_environment
-JaxRunner.num_iterations = 500
-JaxRunner.training_steps = 1000
-JaxRunner.evaluation_steps = 1000
-JaxRunner.max_steps_per_episode = 500
+TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
+Runner.num_iterations = 500
+Runner.training_steps = 1000
+Runner.evaluation_steps = 1000
+Runner.max_steps_per_episode = 500
 
 OutOfGraphReplayBuffer.replay_capacity = 50000
 OutOfGraphReplayBuffer.batch_size = 128

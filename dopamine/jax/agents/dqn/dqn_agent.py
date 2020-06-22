@@ -231,8 +231,9 @@ class JaxDQNAgent(object):
     if (self.summary_writer is not None and
         self.training_steps > 0 and
         self.training_steps % self.summary_writing_frequency == 0):
-      self.summary_writer.scalar('HuberLoss', loss, self.training_steps)
-      self.summary_writer.flush()
+      summary = tf.compat.v1.Summary(value=[
+          tf.compat.v1.Summary.Value(tag='HuberLoss', simple_value=loss)])
+      self.summary_writer.add_summary(summary, self.training_steps)
 
   def _sync_weights(self):
     """Syncs the target_network weights with the online_network weights."""
