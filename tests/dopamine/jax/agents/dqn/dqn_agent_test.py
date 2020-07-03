@@ -29,11 +29,11 @@ from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.utils import test_utils
 from flax import nn
+import gin
 import jax
 import jax.numpy as jnp
 import mock
 import numpy as onp
-import gin.tf
 
 FLAGS = flags.FLAGS
 

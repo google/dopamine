@@ -33,6 +33,7 @@ import tensorflow as tf
 import gin.tf
 
 
+@gin.configurable
 class OutOfGraphPrioritizedReplayBuffer(
     circular_replay_buffer.OutOfGraphReplayBuffer):
   """An out-of-graph Replay Buffer for Prioritized Experience Replay.

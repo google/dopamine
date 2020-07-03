@@ -12,14 +12,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Compact implementation of a DQN agent in JAX."""
+"""Compact implementation of a DQN agent in JAx."""
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import collections
 import math
-import random
 
 from absl import logging
 
@@ -35,6 +35,12 @@ import numpy as onp
 import tensorflow as tf
 
 
+NATURE_DQN_OBSERVATION_SHAPE = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
+NATURE_DQN_DTYPE = jnp.uint8
+NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
+linearly_decaying_epsilon = dqn_agent.linearly_decaying_epsilon
+
+
 @gin.configurable
 def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
                      eps=1.5e-4):
@@ -45,22 +51,45 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     raise ValueError(f'Unknown optimizer {name}')
 
 
+def huber_loss(targets, predictions, delta=1.0):
+  x = jnp.abs(targets - predictions)
+  return jnp.where(x <= delta,
+                   0.5 * x**2,
+                   0.5 * delta**2 + delta * (x - delta))
+
+
+@jax.jit
+def train(online_network, target, replay_elements, optimizer):
+  """Run the training step."""
+  def loss_fn(model):
+    batch_size = replay_elements['state'].shape[0]
+    q_values = model(replay_elements['state']).q_values
+    replay_chosen_q = q_values[jnp.arange(batch_size),
+                               replay_elements['action']]
+    loss = jnp.mean(huber_loss(target, replay_chosen_q))
+    return loss
+  grad_fn = jax.value_and_grad(loss_fn)
+  loss, grad = grad_fn(online_network)
+  optimizer = optimizer.apply_gradient(grad)
+  return optimizer, loss
+
+
 @gin.configurable
 class JaxDQNAgent(object):
   """A JAX implementation of the DQN agent."""
 
   def __init__(self,
                num_actions,
-               observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=jnp.uint8,
-               stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+               observation_shape=NATURE_DQN_OBSERVATION_SHAPE,
+               observation_dtype=NATURE_DQN_DTYPE,
+               stack_size=NATURE_DQN_STACK_SIZE,
                network=networks.NatureDQNNetwork,
                gamma=0.99,
                update_horizon=1,
                min_replay_history=20000,
                update_period=4,
                target_update_period=8000,
-               epsilon_fn=dqn_agent.linearly_decaying_epsilon,
+               epsilon_fn=linearly_decaying_epsilon,
                epsilon_train=0.01,
                epsilon_eval=0.001,
                epsilon_decay_period=250000,
@@ -70,7 +99,7 @@ class JaxDQNAgent(object):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False):
-    """Initializes the agent and constructs the components of its graph.
+    """Initializes the agent and constructs the necessary components.
 
     Args:
       num_actions: int, number of actions the agent can take at any state.
@@ -121,7 +150,7 @@ class JaxDQNAgent(object):
     self.observation_shape = tuple(observation_shape)
     self.observation_dtype = observation_dtype
     self.stack_size = stack_size
-    self.network = network
+    self.network = network.partial(num_actions=num_actions)
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -138,6 +167,7 @@ class JaxDQNAgent(object):
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
 
+    self._rng = jax.random.PRNGKey(0)
     state_shape = (1,) + self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
     self._replay = self._build_replay_buffer()
@@ -147,6 +177,10 @@ class JaxDQNAgent(object):
     # environment.
     self._observation = None
     self._last_observation = None
+
+  def _rng_input(self):
+    self._rng, rng_input = jax.random.split(self._rng)
+    return rng_input
 
   def _create_network(self, name):
     """Builds the convolutional network used to compute the agent's Q-values.
@@ -158,9 +192,8 @@ class JaxDQNAgent(object):
       network: Jax Model, the network instantiated by Jax.
     """
     _, initial_params = self.network.init_by_shape(
-        jax.random.PRNGKey(0), name=name,
-        input_specs=[(self.state.shape, self.observation_dtype)],
-        num_actions=self.num_actions)
+        self._rng, name=name,
+        input_specs=[(self.state.shape, self.observation_dtype)])
     return nn.Model(self.network, initial_params)
 
   def _build_networks_and_optimizer(self, optimizer_name):
@@ -187,7 +220,7 @@ class JaxDQNAgent(object):
   def _sample_from_replay_buffer(self):
     samples = self._replay.sample_transition_batch()
     types = self._replay.get_transition_elements()
-    self.replay_elements = {}
+    self.replay_elements = collections.OrderedDict()
     for element, element_type in zip(samples, types):
       self.replay_elements[element_type.name] = element
 
@@ -195,8 +228,7 @@ class JaxDQNAgent(object):
     """Compute the target Q-value."""
     # Get the maximum Q-value across the actions dimension.
     replay_next_qt_max = jnp.max(
-        self.target_network(self.replay_elements['next_state'],
-                            self.num_actions).q_values, 1)
+        self.target_network(self.replay_elements['next_state']).q_values, 1)
     # Calculate the Bellman target value.
     #   Q_t = R_t + \gamma^N * Q'_t+1
     # where,
@@ -207,33 +239,6 @@ class JaxDQNAgent(object):
     return (self.replay_elements['reward'] +
             self.cumulative_gamma * replay_next_qt_max *
             (1. - self.replay_elements['terminal']))
-
-  def _huber_loss(self, targets, predictions, delta=1.0):
-    x = jnp.abs(targets - predictions)
-    return jnp.where(x <= delta,
-                     0.5 * x**2,
-                     0.5 * delta**2 + delta * (x - delta))
-
-  def _train(self):
-    """Run the training step."""
-    self._sample_from_replay_buffer()
-    def loss_fn(model):
-      replay_action_one_hot = jax.nn.one_hot(self.replay_elements['action'],
-                                             self.num_actions)
-      q_values = model(self.replay_elements['state'], self.num_actions).q_values
-      replay_chosen_q = jnp.sum(q_values * replay_action_one_hot, axis=1)
-      target = jax.lax.stop_gradient(self._target_q())
-      loss = jnp.mean(self._huber_loss(target, replay_chosen_q))
-      return loss
-    grad_fn = jax.value_and_grad(loss_fn)
-    loss, grad = grad_fn(self.online_network)
-    self.optimizer = self.optimizer.apply_gradient(grad)
-    if (self.summary_writer is not None and
-        self.training_steps > 0 and
-        self.training_steps % self.summary_writing_frequency == 0):
-      summary = tf.compat.v1.Summary(value=[
-          tf.compat.v1.Summary.Value(tag='HuberLoss', simple_value=loss)])
-      self.summary_writer.add_summary(summary, self.training_steps)
 
   def _sync_weights(self):
     """Syncs the target_network weights with the online_network weights."""
@@ -277,13 +282,12 @@ class JaxDQNAgent(object):
           self.training_steps,
           self.min_replay_history,
           self.epsilon_train)
-    if random.random() <= epsilon:
+    if jax.random.uniform(self._rng_input()) <= epsilon:
       # Choose a random action with probability epsilon.
-      return random.randint(0, self.num_actions - 1)
+      return jax.random.randint(self._rng_input(), (), 0, self.num_actions)
     else:
       # Choose the action with highest Q-value at the current state.
-      return jnp.argmax(
-          self.online_network(self.state, self.num_actions).q_values, axis=1)[0]
+      return jnp.argmax(self.online_network(self.state).q_values, axis=1)[0]
 
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.
@@ -352,7 +356,18 @@ class JaxDQNAgent(object):
     # have been run. This matches the Nature DQN behaviour.
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
-        self._train()
+        self._sample_from_replay_buffer()
+        self.optimizer, loss = train(
+            online_network=self.online_network,
+            target=jax.lax.stop_gradient(self._target_q()),
+            replay_elements=self.replay_elements,
+            optimizer=self.optimizer)
+        if (self.summary_writer is not None and
+            self.training_steps > 0 and
+            self.training_steps % self.summary_writing_frequency == 0):
+          summary = tf.compat.v1.Summary(value=[
+              tf.compat.v1.Summary.Value(tag='HuberLoss', simple_value=loss)])
+          self.summary_writer.add_summary(summary, self.training_steps)
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 

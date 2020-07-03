@@ -31,6 +31,7 @@ class MockReplayBuffer(object):
     if is_jax:
       self.add = mock.Mock()
       self.add_count = 0
+      self.sum_tree = mock.Mock()
     else:
       with tf.compat.v1.variable_scope(
           'MockReplayBuffer', reuse=tf.compat.v1.AUTO_REUSE):

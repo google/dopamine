@@ -1,0 +1,33 @@
+# Hyperparameters follow the settings from Bellemare et al. (2017), but we
+# modify as necessary to match those used in Rainbow (Hessel et al., 2018), to
+# ensure apples-to-apples comparison.
+import dopamine.jax.agents.rainbow.rainbow_agent
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+
+JaxRainbowAgent.num_atoms = 51
+JaxRainbowAgent.vmax = 10.
+JaxRainbowAgent.gamma = 0.99
+JaxRainbowAgent.update_horizon = 1
+JaxRainbowAgent.min_replay_history = 20000  # agent steps
+JaxRainbowAgent.update_period = 4
+JaxRainbowAgent.target_update_period = 8000  # agent steps
+JaxRainbowAgent.epsilon_train = 0.01
+JaxRainbowAgent.epsilon_eval = 0.001
+JaxRainbowAgent.epsilon_decay_period = 250000  # agent steps
+JaxRainbowAgent.replay_scheme = 'uniform'
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
+atari_lib.create_atari_environment.sticky_actions = True
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_rainbow'
+create_agent.debug_mode = True
+Runner.num_iterations = 200
+Runner.training_steps = 250000  # agent steps
+Runner.evaluation_steps = 125000  # agent steps
+Runner.max_steps_per_episode = 27000  # agent steps
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 1000000
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32

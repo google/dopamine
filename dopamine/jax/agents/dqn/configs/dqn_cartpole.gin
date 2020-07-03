@@ -33,4 +33,4 @@ Runner.evaluation_steps = 1000
 Runner.max_steps_per_episode = 200  # Default max episode length.
 
 OutOfGraphReplayBuffer.replay_capacity = 50000
-OutOfGraphReplayBuffer.batch_size = 1#28
+OutOfGraphReplayBuffer.batch_size = 128
