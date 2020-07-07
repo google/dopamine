@@ -9,7 +9,7 @@ import dopamine.replay_memory.prioritized_replay_buffer
 JaxRainbowAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
 JaxRainbowAgent.observation_dtype = %jax_networks.ACROBOT_OBSERVATION_DTYPE
 JaxRainbowAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
-JaxRainbowAgent.network = @networks.AcrobatRainbowNetwork
+JaxRainbowAgent.network = @networks.AcrobotRainbowNetwork
 JaxRainbowAgent.num_atoms = 51
 JaxRainbowAgent.vmax = 10.
 JaxRainbowAgent.gamma = 0.99

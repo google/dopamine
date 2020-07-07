@@ -55,12 +55,9 @@ def train(online_network, target, replay_elements, optimizer):
   def loss_fn(model, mean_loss=True):
     # size of indices: batch_size x 1.
     logits = model(replay_elements['state']).logits
-    indices = jnp.arange(logits.shape[0])[:, None]
-    # size of reshaped_actions: batch_size x 2.
-    reshaped_actions = jnp.concatenate(
-        [indices, replay_elements['action'][:, None]], 1)
+    indices = jnp.arange(logits.shape[0])
     # For each element of the batch, fetch the logits for its selected action.
-    chosen_action_logits = logits[reshaped_actions]
+    chosen_action_logits = logits[indices, replay_elements['action'], :]
     loss = networks.softmax_cross_entropy_loss_with_logits(
         target,
         chosen_action_logits)

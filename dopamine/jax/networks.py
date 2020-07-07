@@ -89,9 +89,8 @@ class AcrobotDQNNetwork(nn.Module):
 
 
 ### Rainbow Networks ###
-@jax.vmap
 def softmax_cross_entropy_loss_with_logits(labels, logits):
-  return -jnp.sum(labels * jax.nn.log_softmax(logits))
+  return -jnp.sum(labels * jax.nn.log_softmax(logits), axis=1)
 
 
 @gin.configurable
