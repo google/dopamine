@@ -42,6 +42,8 @@ flags.DEFINE_multi_string(
 FLAGS = flags.FLAGS
 
 
+
+
 def main(unused_argv):
   """Main method.
 
@@ -49,6 +51,7 @@ def main(unused_argv):
     unused_argv: Arguments (unused).
   """
   logging.set_verbosity(logging.INFO)
+
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
   runner = run_experiment.create_runner(FLAGS.base_dir)
   runner.run_experiment()
