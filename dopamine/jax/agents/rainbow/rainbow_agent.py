@@ -244,7 +244,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
   def _train_step(self):
     """Runs a single training step.
 
-    Runs a training op if both:
+    Runs training if both:
       (1) A minimum number of frames have been added to the replay buffer.
       (2) `training_steps` is a multiple of `update_period`.
 

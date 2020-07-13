@@ -24,7 +24,6 @@ import shutil
 
 from absl import flags
 from absl.testing import absltest
-from dopamine.agents.dqn import dqn_agent as original_dqn_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.utils import test_utils
@@ -51,9 +50,9 @@ class DQNAgentTest(absltest.TestCase):
     self.target_update_period = 4
     self.epsilon_decay_period = 90
     self.epsilon_train = 0.05
-    self.observation_shape = original_dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
+    self.observation_shape = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
     self.observation_dtype = jnp.uint8
-    self.stack_size = original_dqn_agent.NATURE_DQN_STACK_SIZE
+    self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = onp.zeros(
         (1,) + self.observation_shape + (self.stack_size,))
     gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)

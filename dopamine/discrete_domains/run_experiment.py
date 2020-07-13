@@ -32,6 +32,7 @@ from dopamine.discrete_domains import checkpointer
 from dopamine.discrete_domains import iteration_statistics
 from dopamine.discrete_domains import logger
 from dopamine.jax.agents.dqn import dqn_agent as jax_dqn_agent
+from dopamine.jax.agents.implicit_quantile import implicit_quantile_agent as jax_implicit_quantile_agent
 from dopamine.jax.agents.rainbow import rainbow_agent as jax_rainbow_agent
 
 import numpy as np
@@ -94,6 +95,10 @@ def create_agent(sess, environment, agent_name=None, summary_writer=None,
                                      summary_writer=summary_writer)
   elif agent_name == 'jax_rainbow':
     return jax_rainbow_agent.JaxRainbowAgent(
+        num_actions=environment.action_space.n,
+        summary_writer=summary_writer)
+  elif agent_name == 'jax_implicit_quantile':
+    return jax_implicit_quantile_agent.JaxImplicitQuantileAgent(
         num_actions=environment.action_space.n,
         summary_writer=summary_writer)
   else:
