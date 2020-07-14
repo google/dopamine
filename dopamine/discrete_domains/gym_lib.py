@@ -31,13 +31,10 @@ import math
 
 
 from dopamine.discrete_domains import atari_lib
+import gin
 import gym
 import numpy as np
 import tensorflow as tf
-
-import gin.tf
-from tensorflow.contrib import layers as contrib_layers
-from tensorflow.contrib import slim as contrib_slim
 
 
 CARTPOLE_MIN_VALS = np.array([-2.4, -5., -math.pi/12., -math.pi*2.])
@@ -129,38 +126,6 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
 
 
 @gin.configurable
-def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
-                                   num_atoms=None):
-  """Builds a basic network for discrete domains, rescaling inputs to [-1, 1].
-
-  Args:
-    min_vals: float, minimum attainable values (must be same shape as `state`).
-    max_vals: float, maximum attainable values (must be same shape as `state`).
-    num_actions: int, number of actions.
-    state: `tf.Tensor`, the state input.
-    num_atoms: int or None, if None will construct a DQN-style network,
-      otherwise will construct a Rainbow-style network.
-
-  Returns:
-    The Q-values for DQN-style agents or logits for Rainbow-style agents.
-  """
-  net = tf.cast(state, tf.float32)
-  net = contrib_slim.flatten(net)
-  net -= min_vals
-  net /= max_vals - min_vals
-  net = 2.0 * net - 1.0  # Rescale in range [-1, 1].
-  net = contrib_slim.fully_connected(net, 512)
-  net = contrib_slim.fully_connected(net, 512)
-  if num_atoms is None:
-    # We are constructing a DQN-style network.
-    return contrib_slim.fully_connected(net, num_actions, activation_fn=None)
-  else:
-    # We are constructing a Rainbow-style network.
-    return contrib_slim.fully_connected(
-        net, num_actions * num_atoms, activation_fn=None)
-
-
-@gin.configurable
 class CartpoleDQNNetwork(tf.keras.Model):
   """Keras DQN network for Cartpole."""
 
@@ -181,25 +146,6 @@ class CartpoleDQNNetwork(tf.keras.Model):
     """Creates the output tensor/op given the state tensor as input."""
     x = self.net(state)
     return atari_lib.DQNNetworkType(x)
-
-
-@gin.configurable
-def cartpole_dqn_network(num_actions, network_type, state):
-  """Builds the deep network used to compute the agent's Q-values.
-
-  It rescales the input features to a range that yields improved performance.
-
-  Args:
-    num_actions: int, number of actions.
-    network_type: namedtuple, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  q_values = _basic_discrete_domain_network(
-      CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, state)
-  return network_type(q_values)
 
 
 class FourierBasis(object):
@@ -290,43 +236,6 @@ class FourierDQNNetwork(tf.keras.Model):
 
 
 @gin.configurable
-def fourier_dqn_network(min_vals,
-                        max_vals,
-                        num_actions,
-                        state,
-                        fourier_basis_order=3):
-  """Builds the function approximator used to compute the agent's Q-values.
-
-  It uses FourierBasis features and a linear layer.
-
-  Args:
-    min_vals: float, minimum attainable values (must be same shape as `state`).
-    max_vals: float, maximum attainable values (must be same shape as `state`).
-    num_actions: int, number of actions.
-    state: `tf.Tensor`, contains the agent's current state.
-    fourier_basis_order: int, order of the Fourier basis functions.
-
-  Returns:
-    The Q-values for DQN-style agents or logits for Rainbow-style agents.
-  """
-  net = tf.cast(state, tf.float32)
-  net = contrib_slim.flatten(net)
-
-  # Feed state through Fourier basis.
-  feature_generator = FourierBasis(
-      net.get_shape().as_list()[-1],
-      min_vals,
-      max_vals,
-      order=fourier_basis_order)
-  net = feature_generator.compute_features(net)
-
-  # Q-values are always linear w.r.t. last layer.
-  q_values = contrib_slim.fully_connected(
-      net, num_actions, activation_fn=None, biases_initializer=None)
-  return q_values
-
-
-@gin.configurable
 class CartpoleFourierDQNNetwork(FourierDQNNetwork):
   """Keras network for fourier Cartpole."""
 
@@ -341,24 +250,6 @@ class CartpoleFourierDQNNetwork(FourierDQNNetwork):
     """
     super(CartpoleFourierDQNNetwork, self).__init__(
         CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, name=name)
-
-
-def cartpole_fourier_dqn_network(num_actions, network_type, state):
-  """Builds the function approximator used to compute the agent's Q-values.
-
-  It uses the Fourier basis features and a linear function approximator.
-
-  Args:
-    num_actions: int, number of actions.
-    network_type: namedtuple, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  q_values = fourier_dqn_network(CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS,
-                                 num_actions, state)
-  return network_type(q_values)
 
 
 @gin.configurable
@@ -386,33 +277,9 @@ class CartpoleRainbowNetwork(tf.keras.Model):
   def call(self, state):
     x = self.net(state)
     logits = tf.reshape(x, [-1, self.num_actions, self.num_atoms])
-    probabilities = contrib_layers.softmax(logits)
+    probabilities = tf.keras.activations.softmax(logits)
     q_values = tf.reduce_sum(self.support * probabilities, axis=2)
     return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
-
-
-@gin.configurable
-def cartpole_rainbow_network(num_actions, num_atoms, support, network_type,
-                             state):
-  """Build the deep network used to compute the agent's Q-value distributions.
-
-  Args:
-    num_actions: int, number of actions.
-    num_atoms: int, the number of buckets of the value function distribution.
-    support: tf.linspace, the support of the Q-value distribution.
-    network_type: `namedtuple`, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  net = _basic_discrete_domain_network(
-      CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, state,
-      num_atoms=num_atoms)
-  logits = tf.reshape(net, [-1, num_actions, num_atoms])
-  probabilities = contrib_layers.softmax(logits)
-  q_values = tf.reduce_sum(support * probabilities, axis=2)
-  return network_type(q_values, logits, probabilities)
 
 
 @gin.configurable
@@ -438,25 +305,6 @@ class AcrobotDQNNetwork(tf.keras.Model):
 
 
 @gin.configurable
-def acrobot_dqn_network(num_actions, network_type, state):
-  """Builds the deep network used to compute the agent's Q-values.
-
-  It rescales the input features to a range that yields improved performance.
-
-  Args:
-    num_actions: int, number of actions.
-    network_type: namedtuple, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  q_values = _basic_discrete_domain_network(
-      ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, state)
-  return network_type(q_values)
-
-
-@gin.configurable
 class AcrobotFourierDQNNetwork(FourierDQNNetwork):
   """Keras fourier DQN network for Acrobot."""
 
@@ -472,25 +320,6 @@ class AcrobotFourierDQNNetwork(FourierDQNNetwork):
 
     super(AcrobotFourierDQNNetwork, self).__init__(
         ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, name=name)
-
-
-@gin.configurable
-def acrobot_fourier_dqn_network(num_actions, network_type, state):
-  """Builds the function approximator used to compute the agent's Q-values.
-
-  It uses the Fourier basis features and a linear function approximator.
-
-  Args:
-    num_actions: int, number of actions.
-    network_type: namedtuple, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  q_values = fourier_dqn_network(ACROBOT_MIN_VALS, ACROBOT_MAX_VALS,
-                                 num_actions, state)
-  return network_type(q_values)
 
 
 @gin.configurable
@@ -518,33 +347,9 @@ class AcrobotRainbowNetwork(tf.keras.Model):
   def call(self, state):
     x = self.net(state)
     logits = tf.reshape(x, [-1, self.num_actions, self.num_atoms])
-    probabilities = contrib_layers.softmax(logits)
+    probabilities = tf.keras.activations.softmax(logits)
     q_values = tf.reduce_sum(self.support * probabilities, axis=2)
     return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
-
-
-@gin.configurable
-def acrobot_rainbow_network(num_actions, num_atoms, support, network_type,
-                            state):
-  """Build the deep network used to compute the agent's Q-value distributions.
-
-  Args:
-    num_actions: int, number of actions.
-    num_atoms: int, the number of buckets of the value function distribution.
-    support: tf.linspace, the support of the Q-value distribution.
-    network_type: `namedtuple`, collection of expected values to return.
-    state: `tf.Tensor`, contains the agent's current state.
-
-  Returns:
-    net: _network_type object containing the tensors output by the network.
-  """
-  net = _basic_discrete_domain_network(
-      ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, state,
-      num_atoms=num_atoms)
-  logits = tf.reshape(net, [-1, num_actions, num_atoms])
-  probabilities = contrib_layers.softmax(logits)
-  q_values = tf.reduce_sum(support * probabilities, axis=2)
-  return network_type(q_values, logits, probabilities)
 
 
 @gin.configurable
