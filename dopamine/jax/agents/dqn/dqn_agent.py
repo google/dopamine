@@ -117,8 +117,8 @@ def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   return epsilon + bonus
 
 
-@functools.partial(jax.jit, static_argnums=(4, 5, 6, 7, 8, 10, 11))
-def select_action(network, state, rng1, rng2, num_actions, eval_mode,
+@functools.partial(jax.jit, static_argnums=(3, 4, 5, 6, 7, 9, 10))
+def select_action(network, state, rng, num_actions, eval_mode,
                   epsilon_eval, epsilon_train, epsilon_decay_period,
                   training_steps, min_replay_history, epsilon_fn):
   """Select an action from the set of available actions.
@@ -129,8 +129,7 @@ def select_action(network, state, rng1, rng2, num_actions, eval_mode,
   Args:
     network: Jax Module to use for inference.
     state: input state to use for inference.
-    rng1: Jax random number generator.
-    rng2: Jax random number generator.
+    rng: Jax random number generator.
     num_actions: int, number of actions (static_argnum).
     eval_mode: bool, whether we are in eval mode (static_argnum).
     epsilon_eval: float, epsilon value to use in eval mode (static_argnum).
@@ -143,7 +142,8 @@ def select_action(network, state, rng1, rng2, num_actions, eval_mode,
     epsilon_fn: function used to calculate epsilon value (static_argnum).
 
   Returns:
-     int, the selected action.
+    rng: Jax random number generator.
+    action: int, the selected action.
   """
   epsilon = jnp.where(eval_mode,
                       epsilon_eval,
@@ -152,10 +152,11 @@ def select_action(network, state, rng1, rng2, num_actions, eval_mode,
                                  min_replay_history,
                                  epsilon_train))
 
+  rng, rng1, rng2 = jax.random.split(rng, num=3)
   p = jax.random.uniform(rng1)
-  return jnp.where(p <= epsilon,
-                   jax.random.randint(rng2, (), 0, num_actions),
-                   jnp.argmax(network(state).q_values, axis=1)[0])
+  return rng, jnp.where(p <= epsilon,
+                        jax.random.randint(rng2, (), 0, num_actions),
+                        jnp.argmax(network(state).q_values, axis=1)[0])
 
 
 @gin.configurable
@@ -262,10 +263,6 @@ class JaxDQNAgent(object):
     self._observation = None
     self._last_observation = None
 
-  def _rng_input(self):
-    self._rng, rng_input = jax.random.split(self._rng)
-    return rng_input
-
   def _create_network(self, name):
     """Builds the convolutional network used to compute the agent's Q-values.
 
@@ -348,19 +345,18 @@ class JaxDQNAgent(object):
     if not self.eval_mode:
       self._train_step()
 
-    self.action = onp.asarray(
-        select_action(self.online_network,
-                      self.state,
-                      self._rng_input(),  # rng1
-                      self._rng_input(),  # rng2
-                      self.num_actions,
-                      self.eval_mode,
-                      self.epsilon_eval,
-                      self.epsilon_train,
-                      self.epsilon_decay_period,
-                      self.training_steps,
-                      self.min_replay_history,
-                      self.epsilon_fn))
+    self._rng, self.action = select_action(self.online_network,
+                                           self.state,
+                                           self._rng,
+                                           self.num_actions,
+                                           self.eval_mode,
+                                           self.epsilon_eval,
+                                           self.epsilon_train,
+                                           self.epsilon_decay_period,
+                                           self.training_steps,
+                                           self.min_replay_history,
+                                           self.epsilon_fn)
+    self.action = onp.asarray(self.action)
     return self.action
 
   def step(self, reward, observation):
@@ -383,19 +379,18 @@ class JaxDQNAgent(object):
       self._store_transition(self._last_observation, self.action, reward, False)
       self._train_step()
 
-    self.action = onp.asarray(
-        select_action(self.online_network,
-                      self.state,
-                      self._rng_input(),  # rng1
-                      self._rng_input(),  # rng2
-                      self.num_actions,
-                      self.eval_mode,
-                      self.epsilon_eval,
-                      self.epsilon_train,
-                      self.epsilon_decay_period,
-                      self.training_steps,
-                      self.min_replay_history,
-                      self.epsilon_fn))
+    self._rng, self.action = select_action(self.online_network,
+                                           self.state,
+                                           self._rng,
+                                           self.num_actions,
+                                           self.eval_mode,
+                                           self.epsilon_eval,
+                                           self.epsilon_train,
+                                           self.epsilon_decay_period,
+                                           self.training_steps,
+                                           self.min_replay_history,
+                                           self.epsilon_fn)
+    self.action = onp.asarray(self.action)
     return self.action
 
   def end_episode(self, reward):

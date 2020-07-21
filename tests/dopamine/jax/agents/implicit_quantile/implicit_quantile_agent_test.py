@@ -95,9 +95,10 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     # Replay buffer batch size:
     self.assertEqual(agent._replay._batch_size, 2)
     for network in [agent.online_network, agent.target_network]:
+      agent._rng, rng_input = jax.random.split(agent._rng)
       output = network(self.ones_state,
                        num_quantiles=agent.num_quantile_samples,
-                       rng=agent._rng_input())
+                       rng=rng_input)
       self.assertEqual(output.quantile_values.shape[0], 1)
       self.assertEqual(output.quantile_values.shape[1],
                        agent.num_quantile_samples)
@@ -114,9 +115,10 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     quantiles = quantiles.reshape([agent.num_quantile_samples, 1])
     expected_q_values = onp.ones([agent.num_actions]) * q_value
     for network in [agent.online_network, agent.target_network]:
+      agent._rng, rng_input = jax.random.split(agent._rng)
       q_values = jnp.mean(
           network(self.ones_state, num_quantiles=agent.num_quantile_samples,
-                  rng=agent._rng_input()).quantile_values, axis=0)
+                  rng=rng_input).quantile_values, axis=0)
       onp.array_equal(q_values, expected_q_values)
       self.assertEqual(jnp.argmax(q_values, axis=0), 0)
 
@@ -126,9 +128,10 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     batch_states = onp.ones(
         (batch_size,) + self.observation_shape + (self.stack_size,))
     for network in [agent.online_network, agent.target_network]:
+      agent._rng, rng_input = jax.random.split(agent._rng)
       model_output = network(
           batch_states, num_quantiles=agent.num_tau_samples,
-          rng=agent._rng_input())
+          rng=rng_input)
       quantile_values = model_output.quantile_values
       self.assertEqual(quantile_values.shape[0], batch_size)
       self.assertEqual(quantile_values.shape[1], agent.num_actions)
