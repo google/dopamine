@@ -1,0 +1,38 @@
+# Hyperparameters follow the settings from Bellemare et al. (2017), but we
+# modify as necessary to match those used in Rainbow (Hessel et al., 2018), to
+# ensure apples-to-apples comparison.
+import dopamine.agents.rainbow.rainbow_agent
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import gin.tf.external_configurables
+
+RainbowAgent.num_atoms = 51
+RainbowAgent.vmax = 10.
+RainbowAgent.gamma = 0.99
+RainbowAgent.update_horizon = 1
+RainbowAgent.min_replay_history = 100  # agent steps
+RainbowAgent.update_period = 4
+RainbowAgent.target_update_period = 8000  # agent steps
+RainbowAgent.epsilon_fn = @dqn_agent.identity_epsilon
+RainbowAgent.epsilon_train = 0.0
+RainbowAgent.epsilon_eval = 0.0
+RainbowAgent.replay_scheme = 'uniform'
+RainbowAgent.tf_device = '/gpu:0'  # use '/cpu:*' for non-GPU version
+RainbowAgent.optimizer = @tf.train.AdamOptimizer()
+
+tf.train.AdamOptimizer.learning_rate = 0.00025
+tf.train.AdamOptimizer.epsilon = 0.0003125
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
+atari_lib.create_atari_environment.sticky_actions = True
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'rainbow'
+Runner.num_iterations = 200
+Runner.training_steps = 250000  # agent steps
+Runner.evaluation_steps = 125000  # agent steps
+Runner.max_steps_per_episode = 27000  # agent steps
+
+WrappedPrioritizedReplayBuffer.replay_capacity = 1000000
+WrappedPrioritizedReplayBuffer.batch_size = 32

@@ -11,7 +11,7 @@ JaxDQNAgent.update_horizon = 1
 JaxDQNAgent.min_replay_history = 100  # agent steps
 JaxDQNAgent.update_period = 4
 JaxDQNAgent.target_update_period = 8000  # agent steps
-DQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
+JaxDQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
 JaxDQNAgent.epsilon_train = 0.0
 JaxDQNAgent.epsilon_eval = 0.0
 
