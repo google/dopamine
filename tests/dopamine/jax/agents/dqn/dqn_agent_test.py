@@ -342,6 +342,23 @@ class DQNAgentTest(absltest.TestCase):
       if 'params' not in key:
         self.assertEqual(key, agent.__dict__[key])
 
+  def testLinearlyDecayingEpsilon(self):
+    """Test the functionality of the linearly_decaying_epsilon function."""
+    decay_period = 100
+    warmup_steps = 6
+    epsilon = 0.1
+    steps_schedule = [
+        (0, 1.0),  # step < warmup_steps
+        (16, 0.91),  # bonus = 0.9 * 90 / 100 = 0.81
+        (decay_period + warmup_steps + 1, epsilon)]  # step > decay+warmup
+    for step, expected_epsilon in steps_schedule:
+      onp.testing.assert_almost_equal(
+          dqn_agent.linearly_decaying_epsilon(decay_period,
+                                              step,
+                                              warmup_steps,
+                                              epsilon),
+          expected_epsilon, 0.01)
+
 
 if __name__ == '__main__':
   absltest.main()

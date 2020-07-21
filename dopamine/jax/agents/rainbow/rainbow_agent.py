@@ -37,6 +37,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import functools
+
 
 
 from dopamine.jax import networks
@@ -70,6 +72,64 @@ def train(online_network, target, replay_elements, optimizer):
   loss = loss_fn(online_network, mean_loss=False)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss, mean_loss
+
+
+@functools.partial(jax.jit, static_argnums=(2, 3, 4))
+def target_distribution(target_network, replay_elements, support, num_atoms,
+                        cumulative_gamma):
+  """Builds the C51 target distribution as per Bellemare et al. (2017).
+
+  First, we compute the support of the Bellman target, r + gamma Z'. Where Z'
+  is the support of the next state distribution:
+
+    * Evenly spaced in [-vmax, vmax] if the current state is nonterminal;
+    * 0 otherwise (duplicated num_atoms times).
+
+  Second, we compute the next-state probabilities, corresponding to the action
+  with highest expected value.
+
+  Finally we project the Bellman target (support + probabilities) onto the
+  original support.
+
+  Args:
+    target_network: Jax Module used for the target network.
+    replay_elements: dict containing data sampled from replay buffer.
+    support: support for the distribution (static_argnum).
+    num_atoms: int, number of atoms (static_argnum).
+    cumulative_gamma: float, cumulative gamma to use (static_argnum).
+
+  Returns:
+    The target distribution from the replay.
+  """
+  batch_size = replay_elements['reward'].shape[0]
+
+  # size of rewards: batch_size x 1
+  rewards = replay_elements['reward'][:, None]
+
+  # size of tiled_support: batch_size x num_atoms
+  tiled_support = jnp.tile(support, [batch_size])
+  tiled_support = jnp.reshape(tiled_support, [batch_size, num_atoms])
+
+  # size of target_support: batch_size x num_atoms
+  is_terminal_multiplier = 1. - replay_elements['terminal'].astype(jnp.float32)
+  # Incorporate terminal state to discount factor.
+  # size of gamma_with_terminal: batch_size x 1
+  gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
+  gamma_with_terminal = gamma_with_terminal[:, None]
+  target_support = rewards + gamma_with_terminal * tiled_support
+
+  # size of next_qt_argmax: batch_size x 1
+  next_state_target_outputs = target_network(replay_elements['next_state'])
+  next_qt_argmax = jnp.argmax(next_state_target_outputs.q_values,
+                              axis=1)[:, None]
+  batch_indices = jnp.arange(batch_size)[:, None]
+
+  # size of next_probabilities: batch_size x num_atoms
+  next_probabilities = next_state_target_outputs.probabilities[
+      batch_indices, next_qt_argmax, :].squeeze()
+
+  return jax.lax.stop_gradient(
+      project_distribution(target_support, next_probabilities, support))
 
 
 @gin.configurable
@@ -191,56 +251,6 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         gamma=self.gamma,
         observation_dtype=self.observation_dtype)
 
-  def _build_target_distribution(self):
-    """Builds the C51 target distribution as per Bellemare et al. (2017).
-
-    First, we compute the support of the Bellman target, r + gamma Z'. Where Z'
-    is the support of the next state distribution:
-
-      * Evenly spaced in [-vmax, vmax] if the current state is nonterminal;
-      * 0 otherwise (duplicated num_atoms times).
-
-    Second, we compute the next-state probabilities, corresponding to the action
-    with highest expected value.
-
-    Finally we project the Bellman target (support + probabilities) onto the
-    original support.
-
-    Returns:
-      The target distribution from the replay.
-    """
-    batch_size = self.replay_elements['reward'].shape[0]
-
-    # size of rewards: batch_size x 1
-    rewards = self.replay_elements['reward'][:, None]
-
-    # size of tiled_support: batch_size x num_atoms
-    tiled_support = jnp.tile(self._support, [batch_size])
-    tiled_support = jnp.reshape(tiled_support, [batch_size, self._num_atoms])
-
-    # size of target_support: batch_size x num_atoms
-    is_terminal_multiplier = (
-        1. - self.replay_elements['terminal'].astype(jnp.float32))
-    # Incorporate terminal state to discount factor.
-    # size of gamma_with_terminal: batch_size x 1
-    gamma_with_terminal = self.cumulative_gamma * is_terminal_multiplier
-    gamma_with_terminal = gamma_with_terminal[:, None]
-    target_support = rewards + gamma_with_terminal * tiled_support
-
-    # size of next_qt_argmax: batch_size x 1
-    next_state_target_outputs = self.target_network(
-        self.replay_elements['next_state'])
-    next_qt_argmax = jnp.argmax(next_state_target_outputs.q_values,
-                                axis=1)[:, None]
-    batch_indices = jnp.arange(batch_size)[:, None]
-
-    # size of next_probabilities: batch_size x num_atoms
-    next_probabilities = next_state_target_outputs.probabilities[
-        batch_indices, next_qt_argmax, :].squeeze()
-
-    return project_distribution(target_support, next_probabilities,
-                                self._support)
-
   def _train_step(self):
     """Runs a single training step.
 
@@ -256,7 +266,11 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         self._sample_from_replay_buffer()
         self.optimizer, loss, mean_loss = train(
             online_network=self.online_network,
-            target=jax.lax.stop_gradient(self._build_target_distribution()),
+            target=target_distribution(self.target_network,
+                                       self.replay_elements,
+                                       self._support,
+                                       self._num_atoms,
+                                       self.cumulative_gamma),
             replay_elements=self.replay_elements,
             optimizer=self.optimizer)
         if self._replay_scheme == 'prioritized':

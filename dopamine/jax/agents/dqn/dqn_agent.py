@@ -19,6 +19,7 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
+import functools
 import math
 
 from absl import logging
@@ -38,7 +39,6 @@ import tensorflow as tf
 NATURE_DQN_OBSERVATION_SHAPE = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = jnp.uint8
 NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
-linearly_decaying_epsilon = dqn_agent.linearly_decaying_epsilon
 
 
 @gin.configurable
@@ -72,6 +72,90 @@ def train(online_network, target, replay_elements, optimizer):
   loss, grad = grad_fn(online_network)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss
+
+
+@functools.partial(jax.jit, static_argnums=(2))
+def target_q(target_network, replay_elements, cumulative_gamma):
+  """Compute the target Q-value."""
+  # Get the maximum Q-value across the actions dimension.
+  replay_next_qt_max = jnp.max(
+      target_network(replay_elements['next_state']).q_values, 1)
+  # Calculate the Bellman target value.
+  #   Q_t = R_t + \gamma^N * Q'_t+1
+  # where,
+  #   Q'_t+1 = \argmax_a Q(S_t+1, a)
+  #          (or) 0 if S_t is a terminal state,
+  # and
+  #   N is the update horizon (by default, N=1).
+  return jax.lax.stop_gradient(replay_elements['reward'] +
+                               cumulative_gamma * replay_next_qt_max *
+                               (1. - replay_elements['terminal']))
+
+
+@functools.partial(jax.jit, static_argnums=(0, 2, 3))
+def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
+  """Returns the current epsilon for the agent's epsilon-greedy policy.
+
+  This follows the Nature DQN schedule of a linearly decaying epsilon (Mnih et
+  al., 2015). The schedule is as follows:
+    Begin at 1. until warmup_steps steps have been taken; then
+    Linearly decay epsilon from 1. to epsilon in decay_period steps; and then
+    Use epsilon from there on.
+
+  Args:
+    decay_period: float, the period over which epsilon is decayed.
+    step: int, the number of training steps completed so far.
+    warmup_steps: int, the number of steps taken before epsilon is decayed.
+    epsilon: float, the final value to which to decay the epsilon parameter.
+
+  Returns:
+    A float, the current epsilon value computed according to the schedule.
+  """
+  steps_left = decay_period + warmup_steps - step
+  bonus = (1.0 - epsilon) * steps_left / decay_period
+  bonus = jnp.clip(bonus, 0., 1. - epsilon)
+  return epsilon + bonus
+
+
+@functools.partial(jax.jit, static_argnums=(4, 5, 6, 7, 8, 10, 11))
+def select_action(network, state, rng1, rng2, num_actions, eval_mode,
+                  epsilon_eval, epsilon_train, epsilon_decay_period,
+                  training_steps, min_replay_history, epsilon_fn):
+  """Select an action from the set of available actions.
+
+  Chooses an action randomly with probability self._calculate_epsilon(), and
+  otherwise acts greedily according to the current Q-value estimates.
+
+  Args:
+    network: Jax Module to use for inference.
+    state: input state to use for inference.
+    rng1: Jax random number generator.
+    rng2: Jax random number generator.
+    num_actions: int, number of actions (static_argnum).
+    eval_mode: bool, whether we are in eval mode (static_argnum).
+    epsilon_eval: float, epsilon value to use in eval mode (static_argnum).
+    epsilon_train: float, epsilon value to use in train mode (static_argnum).
+    epsilon_decay_period: float, decay period for epsilon value for certain
+      epsilon functions, such as linearly_decaying_epsilon, (static_argnum).
+    training_steps: int, number of training steps so far.
+    min_replay_history: int, minimum number of steps in replay buffer
+      (static_argnum).
+    epsilon_fn: function used to calculate epsilon value (static_argnum).
+
+  Returns:
+     int, the selected action.
+  """
+  epsilon = jnp.where(eval_mode,
+                      epsilon_eval,
+                      epsilon_fn(epsilon_decay_period,
+                                 training_steps,
+                                 min_replay_history,
+                                 epsilon_train))
+
+  p = jax.random.uniform(rng1)
+  return jnp.where(p <= epsilon,
+                   jax.random.randint(rng2, (), 0, num_actions),
+                   jnp.argmax(network(state).q_values, axis=1)[0])
 
 
 @gin.configurable
@@ -224,22 +308,6 @@ class JaxDQNAgent(object):
     for element, element_type in zip(samples, types):
       self.replay_elements[element_type.name] = element
 
-  def _target_q(self):
-    """Compute the target Q-value."""
-    # Get the maximum Q-value across the actions dimension.
-    replay_next_qt_max = jnp.max(
-        self.target_network(self.replay_elements['next_state']).q_values, 1)
-    # Calculate the Bellman target value.
-    #   Q_t = R_t + \gamma^N * Q'_t+1
-    # where,
-    #   Q'_t+1 = \argmax_a Q(S_t+1, a)
-    #          (or) 0 if S_t is a terminal state,
-    # and
-    #   N is the update horizon (by default, N=1).
-    return (self.replay_elements['reward'] +
-            self.cumulative_gamma * replay_next_qt_max *
-            (1. - self.replay_elements['terminal']))
-
   def _sync_weights(self):
     """Syncs the target_network weights with the online_network weights."""
     self.target_network = self.target_network.replace(
@@ -265,30 +333,6 @@ class JaxDQNAgent(object):
     self.state = onp.roll(self.state, -1, axis=-1)
     self.state[0, ..., -1] = self._observation
 
-  def _select_action(self):
-    """Select an action from the set of available actions.
-
-    Chooses an action randomly with probability self._calculate_epsilon(), and
-    otherwise acts greedily according to the current Q-value estimates.
-
-    Returns:
-       int, the selected action.
-    """
-    if self.eval_mode:
-      epsilon = self.epsilon_eval
-    else:
-      epsilon = self.epsilon_fn(
-          self.epsilon_decay_period,
-          self.training_steps,
-          self.min_replay_history,
-          self.epsilon_train)
-    if jax.random.uniform(self._rng_input()) <= epsilon:
-      # Choose a random action with probability epsilon.
-      return jax.random.randint(self._rng_input(), (), 0, self.num_actions)
-    else:
-      # Choose the action with highest Q-value at the current state.
-      return jnp.argmax(self.online_network(self.state).q_values, axis=1)[0]
-
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.
 
@@ -304,7 +348,19 @@ class JaxDQNAgent(object):
     if not self.eval_mode:
       self._train_step()
 
-    self.action = onp.asarray(self._select_action())
+    self.action = onp.asarray(
+        select_action(self.online_network,
+                      self.state,
+                      self._rng_input(),  # rng1
+                      self._rng_input(),  # rng2
+                      self.num_actions,
+                      self.eval_mode,
+                      self.epsilon_eval,
+                      self.epsilon_train,
+                      self.epsilon_decay_period,
+                      self.training_steps,
+                      self.min_replay_history,
+                      self.epsilon_fn))
     return self.action
 
   def step(self, reward, observation):
@@ -327,7 +383,19 @@ class JaxDQNAgent(object):
       self._store_transition(self._last_observation, self.action, reward, False)
       self._train_step()
 
-    self.action = onp.asarray(self._select_action())
+    self.action = onp.asarray(
+        select_action(self.online_network,
+                      self.state,
+                      self._rng_input(),  # rng1
+                      self._rng_input(),  # rng2
+                      self.num_actions,
+                      self.eval_mode,
+                      self.epsilon_eval,
+                      self.epsilon_train,
+                      self.epsilon_decay_period,
+                      self.training_steps,
+                      self.min_replay_history,
+                      self.epsilon_fn))
     return self.action
 
   def end_episode(self, reward):
@@ -359,7 +427,9 @@ class JaxDQNAgent(object):
         self._sample_from_replay_buffer()
         self.optimizer, loss = train(
             online_network=self.online_network,
-            target=jax.lax.stop_gradient(self._target_q()),
+            target=target_q(self.target_network,
+                            self.replay_elements,
+                            self.cumulative_gamma),
             replay_elements=self.replay_elements,
             optimizer=self.optimizer)
         if (self.summary_writer is not None and

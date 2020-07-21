@@ -133,14 +133,6 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
       self.assertEqual(quantile_values.shape[0], batch_size)
       self.assertEqual(quantile_values.shape[1], agent.num_actions)
 
-  def test_exploration(self):
-    agent = self._create_test_agent()
-    # Setting epsilon_eval to 1.0 will force exploration.
-    agent.epsilon_eval = 1.0
-    action = agent._select_action()
-    self.assertGreaterEqual(action, 0)
-    self.assertLess(action, agent.num_actions)
-
   def testBeginEpisode(self):
     """Test the functionality of agent.begin_episode.
 
