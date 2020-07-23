@@ -328,7 +328,12 @@ class RunnerTest(tf.test.TestCase):
         'eval_episode_returns': [-1 for _ in range(eval_calls)],
         'eval_average_return': [-1]
     }
-    self.assertDictEqual(expected_dictionary, dictionary)
+    for k in expected_dictionary:
+      self.assertEqual(expected_dictionary[k], dictionary[k])
+    # Also verify that average number of steps per second is present and
+    # positive.
+    self.assertEqual(len(dictionary['train_average_steps_per_second']), 1)
+    self.assertGreater(dictionary['train_average_steps_per_second'][0], 0)
 
   @mock.patch.object(logger, 'Logger')
   def testLogExperiment(self, mock_logger_constructor):

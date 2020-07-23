@@ -372,7 +372,8 @@ class Runner(object):
 
     Returns:
       num_episodes: int, The number of episodes run in this phase.
-      average_reward: The average reward generated in this phase.
+      average_reward: float, The average reward generated in this phase.
+      average_steps_per_second: float, The average number of steps per second.
     """
     # Perform the training phase, during which the agent learns.
     self._agent.eval_mode = False
@@ -382,11 +383,14 @@ class Runner(object):
     average_return = sum_returns / num_episodes if num_episodes > 0 else 0.0
     statistics.append({'train_average_return': average_return})
     time_delta = time.time() - start_time
+    average_steps_per_second = number_steps / time_delta
+    statistics.append(
+        {'train_average_steps_per_second': average_steps_per_second})
     logging.info('Average undiscounted return per training episode: %.2f',
                  average_return)
     logging.info('Average training steps per second: %.2f',
-                 number_steps / time_delta)
-    return num_episodes, average_return
+                 average_steps_per_second)
+    return num_episodes, average_return, average_steps_per_second
 
   def _run_eval_phase(self, statistics):
     """Run evaluation phase.
@@ -425,21 +429,23 @@ class Runner(object):
     """
     statistics = iteration_statistics.IterationStatistics()
     logging.info('Starting iteration %d', iteration)
-    num_episodes_train, average_reward_train = self._run_train_phase(
-        statistics)
+    num_episodes_train, average_reward_train, average_steps_per_second = (
+        self._run_train_phase(statistics))
     num_episodes_eval, average_reward_eval = self._run_eval_phase(
         statistics)
 
     self._save_tensorboard_summaries(iteration, num_episodes_train,
                                      average_reward_train, num_episodes_eval,
-                                     average_reward_eval)
+                                     average_reward_eval,
+                                     average_steps_per_second)
     return statistics.data_lists
 
   def _save_tensorboard_summaries(self, iteration,
                                   num_episodes_train,
                                   average_reward_train,
                                   num_episodes_eval,
-                                  average_reward_eval):
+                                  average_reward_eval,
+                                  average_steps_per_second):
     """Save statistics as tensorboard summaries.
 
     Args:
@@ -448,12 +454,16 @@ class Runner(object):
       average_reward_train: float, The average training reward.
       num_episodes_eval: int, number of evaluation episodes run.
       average_reward_eval: float, The average evaluation reward.
+      average_steps_per_second: float, The average number of steps per second.
     """
     summary = tf.compat.v1.Summary(value=[
         tf.compat.v1.Summary.Value(
             tag='Train/NumEpisodes', simple_value=num_episodes_train),
         tf.compat.v1.Summary.Value(
             tag='Train/AverageReturns', simple_value=average_reward_train),
+        tf.compat.v1.Summary.Value(
+            tag='Train/AverageStepsPerSecond',
+            simple_value=average_steps_per_second),
         tf.compat.v1.Summary.Value(
             tag='Eval/NumEpisodes', simple_value=num_episodes_eval),
         tf.compat.v1.Summary.Value(
@@ -539,20 +549,24 @@ class TrainRunner(Runner):
       A dict containing summary statistics for this iteration.
     """
     statistics = iteration_statistics.IterationStatistics()
-    num_episodes_train, average_reward_train = self._run_train_phase(
-        statistics)
+    num_episodes_train, average_reward_train, average_steps_per_second = (
+        self._run_train_phase(statistics))
 
     self._save_tensorboard_summaries(iteration, num_episodes_train,
-                                     average_reward_train)
+                                     average_reward_train,
+                                     average_steps_per_second)
     return statistics.data_lists
 
   def _save_tensorboard_summaries(self, iteration, num_episodes,
-                                  average_reward):
+                                  average_reward, average_steps_per_second):
     """Save statistics as tensorboard summaries."""
     summary = tf.compat.v1.Summary(value=[
         tf.compat.v1.Summary.Value(
             tag='Train/NumEpisodes', simple_value=num_episodes),
         tf.compat.v1.Summary.Value(
             tag='Train/AverageReturns', simple_value=average_reward),
+        tf.compat.v1.Summary.Value(
+            tag='Train/AverageStepsPerSecond',
+            simple_value=average_steps_per_second),
     ])
     self._summary_writer.add_summary(summary, iteration)
