@@ -150,4 +150,5 @@ class CheckpointerTest(tf.test.TestCase):
             self.assertFalse(tf.io.gfile.exists(checkpoint_file))
 
 if __name__ == '__main__':
+  tf.compat.v1.disable_v2_behavior()
   tf.test.main()

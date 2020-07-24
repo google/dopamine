@@ -44,6 +44,7 @@ from __future__ import print_function
 from absl import app
 from absl import flags
 from dopamine.utils import example_viz_lib
+import tensorflow as tf
 
 flags.DEFINE_string('agent', 'dqn', 'Agent to visualize.')
 flags.DEFINE_string('game', 'Breakout', 'Game to visualize.')

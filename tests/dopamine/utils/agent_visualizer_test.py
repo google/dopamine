@@ -57,4 +57,5 @@ class AgentVisualizerTest(tf.test.TestCase):
     self.assertTrue(np.array_equal(im_arr, agent_visualizer.record_frame))
 
 if __name__ == '__main__':
+  tf.compat.v1.disable_v2_behavior()
   tf.test.main()

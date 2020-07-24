@@ -148,4 +148,5 @@ class AtariPreprocessingTest(tf.test.TestCase):
     self.assertTrue((observation == 8).all())
 
 if __name__ == '__main__':
+  tf.compat.v1.disable_v2_behavior()
   tf.test.main()

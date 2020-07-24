@@ -24,8 +24,8 @@ from absl import app
 from absl import flags
 from absl import logging
 
-
 from dopamine.discrete_domains import run_experiment
+import tensorflow as tf
 
 
 flags.DEFINE_string('base_dir', None,
@@ -51,6 +51,7 @@ def main(unused_argv):
     unused_argv: Arguments (unused).
   """
   logging.set_verbosity(logging.INFO)
+  tf.compat.v1.disable_v2_behavior()
 
   run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
   runner = run_experiment.create_runner(FLAGS.base_dir)

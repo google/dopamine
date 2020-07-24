@@ -79,4 +79,5 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
 
 
 if __name__ == '__main__':
+  tf.compat.v1.disable_v2_behavior()
   tf.test.main()
