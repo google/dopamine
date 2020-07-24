@@ -63,8 +63,7 @@ class CheckpointerTest(tf.test.TestCase):
     exp_checkpointer.save_checkpoint(iteration_number, data)
     loaded_data = exp_checkpointer.load_checkpoint(iteration_number)
     self.assertEqual(data, loaded_data)
-    self.assertEqual(None,
-                     exp_checkpointer.load_checkpoint(iteration_number + 1))
+    self.assertIsNone(exp_checkpointer.load_checkpoint(iteration_number + 1))
 
   def testLogToFileWithValidDirectoryCustomPrefix(self):
     prefix = 'custom_prefix'
@@ -75,8 +74,7 @@ class CheckpointerTest(tf.test.TestCase):
     exp_checkpointer.save_checkpoint(iteration_number, data)
     loaded_data = exp_checkpointer.load_checkpoint(iteration_number)
     self.assertEqual(data, loaded_data)
-    self.assertEqual(None,
-                     exp_checkpointer.load_checkpoint(iteration_number + 1))
+    self.assertIsNone(exp_checkpointer.load_checkpoint(iteration_number + 1))
 
   def testLoadLatestCheckpointWithInvalidDir(self):
     self.assertEqual(

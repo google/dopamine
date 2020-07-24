@@ -110,7 +110,7 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with (self.assertRaises(tf.errors.InvalidArgumentError)):
+      with self.assertRaises(tf.errors.InvalidArgumentError):
         sess.run(
             projection,
             feed_dict={
@@ -139,7 +139,7 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with (self.assertRaises(tf.errors.InvalidArgumentError)):
+      with self.assertRaises(tf.errors.InvalidArgumentError):
         sess.run(
             projection,
             feed_dict={

@@ -320,7 +320,7 @@ class DQNAgentTest(tf.test.TestCase):
   def testBundlingWithNonexistentDirectory(self):
     with tf.compat.v1.Session() as sess:
       agent = self._create_test_agent(sess)
-      self.assertEqual(None, agent.bundle_and_checkpoint('/does/not/exist', 1))
+      self.assertIsNone(agent.bundle_and_checkpoint('/does/not/exist', 1))
 
   def testUnbundlingWithFailingReplayBuffer(self):
     with tf.compat.v1.Session() as sess:
