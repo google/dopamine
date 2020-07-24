@@ -53,8 +53,7 @@ class DQNAgentTest(absltest.TestCase):
     self.observation_shape = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
     self.observation_dtype = jnp.uint8
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
-    self.zero_state = onp.zeros(
-        (1,) + self.observation_shape + (self.stack_size,))
+    self.zero_state = onp.zeros(self.observation_shape + (self.stack_size,))
     gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)
     gin.bind_parameter('OutOfGraphReplayBuffer.batch_size', 2)
 
@@ -74,6 +73,7 @@ class DQNAgentTest(absltest.TestCase):
           to_pick_first_action[:, 0] = 1
           return to_pick_first_action
 
+        x = x[None, :]
         x = x.astype(jnp.float32)
         x = x.reshape((x.shape[0], -1))  # flatten
         x = nn.Dense(x, features=num_actions, kernel_init=custom_init,
@@ -119,7 +119,7 @@ class DQNAgentTest(absltest.TestCase):
     # When the all-1s observation is received, it will be placed at the end of
     # the state.
     expected_state = self.zero_state
-    expected_state[:, :, :, -1] = onp.ones((1,) + self.observation_shape)
+    expected_state[..., -1] = onp.ones(self.observation_shape)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
     self.assertTrue(onp.array_equal(agent._observation,
                                     first_observation[:, :, 0]))
@@ -135,7 +135,7 @@ class DQNAgentTest(absltest.TestCase):
     agent.begin_episode(second_observation)
     # The agent's state will be reset, so we will only be left with the all-2s
     # observation.
-    expected_state[:, :, :, -1] = onp.full((1,) + self.observation_shape, 2)
+    expected_state[:, :, -1] = onp.full(self.observation_shape, 2)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
     self.assertTrue(onp.array_equal(agent._observation,
                                     second_observation[:, :, 0]))
@@ -163,8 +163,7 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+        expected_state[:, :, stack_pos] = onp.full(self.observation_shape, step)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
     self.assertTrue(onp.array_equal(
         agent._last_observation,
@@ -199,8 +198,7 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+        expected_state[:, :, stack_pos] = onp.full(self.observation_shape, step)
       self.assertEqual(agent._replay.add.call_count, step)
       mock_args, _ = agent._replay.add.call_args
       self.assertTrue(onp.array_equal(last_observation[:, :, 0], mock_args[0]))
@@ -233,7 +231,7 @@ class DQNAgentTest(absltest.TestCase):
     self.observation_shape = shape
     self.observation_dtype = dtype
     self.stack_size = stack_size
-    self.zero_state = onp.zeros((1,) + shape + (stack_size,))
+    self.zero_state = onp.zeros(shape + (stack_size,))
     agent = self._create_test_agent()
     agent.eval_mode = False
     base_observation = onp.ones(self.observation_shape + (1,))
@@ -253,8 +251,7 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[..., stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+        expected_state[..., stack_pos] = onp.full(self.observation_shape, step)
       self.assertEqual(agent._replay.add.call_count, step)
       mock_args, _ = agent._replay.add.call_args
       self.assertTrue(onp.array_equal(last_observation[..., 0], mock_args[0]))

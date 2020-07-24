@@ -34,6 +34,9 @@ class NatureDQNNetwork(nn.Module):
 
   def apply(self, x, num_actions):
     initializer = nn.initializers.xavier_uniform()
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32) / 255.
     x = nn.Conv(x, features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)
@@ -57,6 +60,9 @@ class CartpoleDQNNetwork(nn.Module):
 
   def apply(self, x, num_actions):
     initializer = nn.initializers.xavier_uniform()
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
     x -= gym_lib.CARTPOLE_MIN_VALS
@@ -76,6 +82,9 @@ class AcrobotDQNNetwork(nn.Module):
 
   def apply(self, x, num_actions):
     initializer = nn.initializers.xavier_uniform()
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
     x -= gym_lib.ACROBOT_MIN_VALS
@@ -91,7 +100,7 @@ class AcrobotDQNNetwork(nn.Module):
 
 ### Rainbow Networks ###
 def softmax_cross_entropy_loss_with_logits(labels, logits):
-  return -jnp.sum(labels * jax.nn.log_softmax(logits), axis=1)
+  return -jnp.sum(labels * jax.nn.log_softmax(logits))
 
 
 @gin.configurable
@@ -103,6 +112,9 @@ class RainbowNetwork(nn.Module):
         scale=1.0 / jnp.sqrt(3.0),
         mode='fan_in',
         distribution='uniform')
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32) / 255.
     x = nn.Conv(x, features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)
@@ -129,6 +141,9 @@ class CartpoleRainbowNetwork(nn.Module):
 
   def apply(self, x, num_actions, num_atoms, support):
     initializer = nn.initializers.xavier_uniform()
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
     x -= gym_lib.CARTPOLE_MIN_VALS
@@ -151,6 +166,9 @@ class AcrobotRainbowNetwork(nn.Module):
 
   def apply(self, x, num_actions, num_atoms, support):
     initializer = nn.initializers.xavier_uniform()
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
     x -= gym_lib.ACROBOT_MIN_VALS
@@ -172,11 +190,13 @@ class ImplicitQuantileNetwork(nn.Module):
   """The Implicit Quantile Network (Dabney et al., 2018).."""
 
   def apply(self, x, num_actions, quantile_embedding_dim, num_quantiles, rng):
-    batch_size = x.shape[0]
     initializer = jax.nn.initializers.variance_scaling(
         scale=1.0 / jnp.sqrt(3.0),
         mode='fan_in',
         distribution='uniform')
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
     x = x.astype(jnp.float32) / 255.
     x = nn.Conv(x, features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)
@@ -190,7 +210,7 @@ class ImplicitQuantileNetwork(nn.Module):
     x = x.reshape((x.shape[0], -1))  # flatten
     state_vector_length = x.shape[-1]
     state_net_tiled = jnp.tile(x, [num_quantiles, 1])
-    quantiles_shape = [num_quantiles * batch_size, 1]
+    quantiles_shape = [num_quantiles, 1]
     quantiles = jax.random.uniform(rng, shape=quantiles_shape)
     quantile_net = jnp.tile(quantiles, [1, quantile_embedding_dim])
     quantile_net = (

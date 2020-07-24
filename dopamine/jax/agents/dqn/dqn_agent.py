@@ -58,28 +58,30 @@ def huber_loss(targets, predictions, delta=1.0):
                    0.5 * delta**2 + delta * (x - delta))
 
 
-@jax.jit
-def train(online_network, target, replay_elements, optimizer):
+@functools.partial(jax.jit, static_argnums=(7))
+def train(target_network, optimizer, states, actions, next_states, rewards,
+          terminals, cumulative_gamma):
   """Run the training step."""
-  def loss_fn(model):
-    batch_size = replay_elements['state'].shape[0]
-    q_values = model(replay_elements['state']).q_values
-    replay_chosen_q = q_values[jnp.arange(batch_size),
-                               replay_elements['action']]
-    loss = jnp.mean(huber_loss(target, replay_chosen_q))
+  def loss_fn(model, target):
+    q_values = jax.vmap(model, in_axes=(0))(states).q_values
+    replay_chosen_q = q_values[actions]
+    loss = jnp.mean(jax.vmap(huber_loss)(target, replay_chosen_q))
     return loss
   grad_fn = jax.value_and_grad(loss_fn)
-  loss, grad = grad_fn(online_network)
+  target = target_q(target_network,
+                    next_states,
+                    rewards,
+                    terminals,
+                    cumulative_gamma)
+  loss, grad = grad_fn(optimizer.target, target)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss
 
 
-@functools.partial(jax.jit, static_argnums=(2))
-def target_q(target_network, replay_elements, cumulative_gamma):
+def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
   """Compute the target Q-value."""
-  # Get the maximum Q-value across the actions dimension.
-  replay_next_qt_max = jnp.max(
-      target_network(replay_elements['next_state']).q_values, 1)
+  q_vals = jax.vmap(target_network, in_axes=(0))(next_states).q_values
+  replay_next_qt_max = jnp.max(q_vals)
   # Calculate the Bellman target value.
   #   Q_t = R_t + \gamma^N * Q'_t+1
   # where,
@@ -87,9 +89,8 @@ def target_q(target_network, replay_elements, cumulative_gamma):
   #          (or) 0 if S_t is a terminal state,
   # and
   #   N is the update horizon (by default, N=1).
-  return jax.lax.stop_gradient(replay_elements['reward'] +
-                               cumulative_gamma * replay_next_qt_max *
-                               (1. - replay_elements['terminal']))
+  return jax.lax.stop_gradient(rewards + cumulative_gamma * replay_next_qt_max *
+                               (1. - terminals))
 
 
 @functools.partial(jax.jit, static_argnums=(0, 2, 3))
@@ -253,7 +254,7 @@ class JaxDQNAgent(object):
     self.allow_partial_reload = allow_partial_reload
 
     self._rng = jax.random.PRNGKey(0)
-    state_shape = (1,) + self.observation_shape + (stack_size,)
+    state_shape = self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
     self._replay = self._build_replay_buffer()
     self._build_networks_and_optimizer(optimizer)
@@ -272,9 +273,9 @@ class JaxDQNAgent(object):
     Returns:
       network: Jax Model, the network instantiated by Jax.
     """
-    _, initial_params = self.network.init_by_shape(
-        self._rng, name=name,
-        input_specs=[(self.state.shape, self.observation_dtype)])
+    _, initial_params = self.network.init(self._rng, name=name,
+                                          x=self.state,
+                                          num_actions=self.num_actions)
     return nn.Model(self.network, initial_params)
 
   def _build_networks_and_optimizer(self, optimizer_name):
@@ -328,7 +329,7 @@ class JaxDQNAgent(object):
     self._observation = onp.reshape(observation, self.observation_shape)
     # Swap out the oldest frame with the current frame.
     self.state = onp.roll(self.state, -1, axis=-1)
-    self.state[0, ..., -1] = self._observation
+    self.state[..., -1] = self._observation
 
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.
@@ -420,13 +421,14 @@ class JaxDQNAgent(object):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
-        self.optimizer, loss = train(
-            online_network=self.online_network,
-            target=target_q(self.target_network,
-                            self.replay_elements,
-                            self.cumulative_gamma),
-            replay_elements=self.replay_elements,
-            optimizer=self.optimizer)
+        self.optimizer, loss = train(self.target_network,
+                                     self.optimizer,
+                                     self.replay_elements['state'],
+                                     self.replay_elements['action'],
+                                     self.replay_elements['next_state'],
+                                     self.replay_elements['reward'],
+                                     self.replay_elements['terminal'],
+                                     self.cumulative_gamma)
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):

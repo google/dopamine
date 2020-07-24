@@ -61,6 +61,7 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
         # This weights_initializer gives action 0 a higher weight, ensuring
         # that it gets picked by the argmax.
         batch_size = x.shape[0]
+        x = x[None, :]
         x = x.astype(jnp.float32)
         x = x.reshape((x.shape[0], -1))  # flatten
         quantile_values = nn.Dense(x, features=num_actions,
@@ -129,10 +130,12 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
         (batch_size,) + self.observation_shape + (self.stack_size,))
     for network in [agent.online_network, agent.target_network]:
       agent._rng, rng_input = jax.random.split(agent._rng)
-      model_output = network(
-          batch_states, num_quantiles=agent.num_tau_samples,
-          rng=rng_input)
+      model_output = jax.vmap(
+          lambda n, x, y, z: n(x=x, num_quantiles=y, rng=z),
+          in_axes=(None, 0, None, None))(
+              network, batch_states, agent.num_tau_samples, rng_input)
       quantile_values = model_output.quantile_values
+      quantile_values = jnp.squeeze(quantile_values)
       self.assertEqual(quantile_values.shape[0], batch_size)
       self.assertEqual(quantile_values.shape[1], agent.num_actions)
 
@@ -149,9 +152,8 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     self.assertEqual(agent.begin_episode(first_observation), 0)
     # When the all-1s observation is received, it will be placed at the end of
     # the state.
-    expected_state = onp.zeros(
-        (1,) + self.observation_shape + (self.stack_size,))
-    expected_state[:, :, :, -1] = onp.ones((1,) + self.observation_shape)
+    expected_state = onp.zeros(self.observation_shape + (self.stack_size,))
+    expected_state[:, :, -1] = onp.ones(self.observation_shape)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
     self.assertTrue(onp.array_equal(agent._observation,
                                     first_observation[:, :, 0]))
@@ -166,7 +168,7 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     agent.begin_episode(second_observation)
     # The agent's state will be reset, so we will only be left with the all-2s
     # observation.
-    expected_state[:, :, :, -1] = onp.full((1,) + self.observation_shape, 2)
+    expected_state[:, :, -1] = onp.full(self.observation_shape, 2)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
     self.assertTrue(onp.array_equal(agent._observation,
                                     second_observation[:, :, 0]))

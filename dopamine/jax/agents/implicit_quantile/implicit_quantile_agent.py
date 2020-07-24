@@ -36,33 +36,82 @@ import numpy as onp
 import tensorflow as tf
 
 
-@functools.partial(jax.jit, static_argnums=(3, 4, 5))
-def train(online_network, target_quantile_vals, replay_elements,
-          num_tau_samples, num_tau_prime_samples, kappa, rng, optimizer):
+@functools.partial(
+    jax.vmap,
+    in_axes=(None, None, 0, 0, 0, None, None, None, None, None),
+    out_axes=(None, 0))
+def target_quantile_values(online_network, target_network,
+                           next_states, rewards, terminals,
+                           num_tau_prime_samples, num_quantile_samples,
+                           cumulative_gamma, double_dqn, rng):
+  """Build the target for return values at given quantiles.
+
+  Args:
+    online_network: Jax Module used for the online network.
+    target_network: Jax Module used for the target network.
+    next_states: numpy array of batched next states.
+    rewards: numpy array of batched rewards.
+    terminals: numpy array of batched terminals.
+    num_tau_prime_samples: int, number of tau' samples (static_argnum).
+    num_quantile_samples: int, number of quantile samples (static_argnum).
+    cumulative_gamma: float, cumulative gamma to use (static_argnum).
+    double_dqn: bool, whether to use double DQN (static_argnum).
+    rng: Jax random number generator.
+
+  Returns:
+    Jax random number generator.
+    The target quantile values.
+  """
+  rewards = jnp.tile(rewards, [num_tau_prime_samples])
+  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
+  # Incorporate terminal state to discount factor.
+  gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
+  gamma_with_terminal = jnp.tile(gamma_with_terminal, [num_tau_prime_samples])
+  rng, rng1, rng2 = jax.random.split(rng, num=3)
+  # Compute Q-values which are used for action selection for the next states
+  # in the replay buffer. Compute the argmax over the Q-values.
+  if double_dqn:
+    outputs_action = online_network(next_states,
+                                    num_quantiles=num_quantile_samples,
+                                    rng=rng1)
+  else:
+    outputs_action = target_network(next_states,
+                                    num_quantiles=num_quantile_samples,
+                                    rng=rng1)
+  target_quantile_values_action = outputs_action.quantile_values
+  target_q_values = jnp.squeeze(
+      jnp.mean(target_quantile_values_action, axis=0))
+  # Shape: batch_size.
+  next_qt_argmax = jnp.argmax(target_q_values)
+  # Get the indices of the maximium Q-value across the action dimension.
+  # Shape of next_qt_argmax: (num_tau_prime_samples x batch_size).
+  next_state_target_outputs = target_network(
+      next_states,
+      num_quantiles=num_tau_prime_samples,
+      rng=rng2)
+  next_qt_argmax = jnp.tile(next_qt_argmax, [num_tau_prime_samples])
+  target_quantile_vals = (
+      jax.vmap(lambda x, y: x[y])(next_state_target_outputs.quantile_values,
+                                  next_qt_argmax))
+  target_quantile_vals = rewards + gamma_with_terminal * target_quantile_vals
+  # We return with an extra dimension, which is expected by train.
+  return rng, jax.lax.stop_gradient(target_quantile_vals[:, None])
+
+
+@functools.partial(jax.jit, static_argnums=(7, 8, 9, 10, 11, 12))
+def train(target_network, optimizer, states, actions, next_states, rewards,
+          terminals, num_tau_samples, num_tau_prime_samples,
+          num_quantile_samples, cumulative_gamma, double_dqn, kappa, rng):
   """Run a training step."""
-  def loss_fn(model, rng_input):
-    batch_size = replay_elements['reward'].shape[0]
-    # Shape: (num_tau_samples x batch_size) x num_actions.
-    model_output = model(replay_elements['state'],
-                         num_quantiles=num_tau_samples,
-                         rng=rng_input)
+  def loss_fn(model, rng_input, target_quantile_vals):
+    model_output = jax.vmap(
+        lambda m, x, y, z: m(x=x, num_quantiles=y, rng=z),
+        in_axes=(None, 0, None, None))(
+            model, states, num_tau_samples, rng_input)
     quantile_values = model_output.quantile_values
     quantiles = model_output.quantiles
-    indices = jnp.arange(num_tau_samples * batch_size)
-    reshaped_actions = jnp.tile(replay_elements['action'], [num_tau_samples])
-    chosen_action_quantile_values = quantile_values[indices, reshaped_actions]
-    # Reshape to num_tau_samples x batch_size x 1 since this is the manner
-    # in which the quantile values are tiled.
-    chosen_action_quantile_values = jnp.reshape(chosen_action_quantile_values,
-                                                [num_tau_samples,
-                                                 batch_size, 1])
-    # Transpose dimensions so that the dimensionality is batch_size x
-    # num_tau_samples x 1 to prepare for computation of
-    # Bellman errors.
-    # Final shape of chosen_action_quantile_values:
-    # batch_size x num_tau_samples x 1.
-    chosen_action_quantile_values = jnp.transpose(
-        chosen_action_quantile_values, [1, 0, 2])
+    chosen_action_quantile_values = jax.vmap(lambda x, y: x[:, y][:, None])(
+        quantile_values, actions)
     # Shape of bellman_erors and huber_loss:
     # batch_size x num_tau_prime_samples x num_tau_samples x 1.
     bellman_errors = (target_quantile_vals[:, :, None, :] -
@@ -77,16 +126,12 @@ def train(online_network, target_quantile_vals, replay_elements,
         (jnp.abs(bellman_errors) > kappa).astype(jnp.float32) *
         kappa * (jnp.abs(bellman_errors) - 0.5 * kappa))
     huber_loss = huber_loss_case_one + huber_loss_case_two
-    # Reshape quantiles to batch_size x num_tau_samples x 1
-    quantiles = jnp.reshape(quantiles, [num_tau_samples, batch_size, 1])
-    quantiles = jnp.transpose(quantiles, [1, 0, 2])
     # Tile by num_tau_prime_samples along a new dimension. Shape is now
     # batch_size x num_tau_prime_samples x num_tau_samples x 1.
     # These quantiles will be used for computation of the quantile huber loss
     # below (see section 2.3 of the paper).
-    quantiles = jnp.tile(
-        quantiles[:, None, :, :],
-        [1, num_tau_prime_samples, 1, 1]).astype(jnp.float32)
+    quantiles = jnp.tile(quantiles[:, None, :, :],
+                         [1, num_tau_prime_samples, 1, 1]).astype(jnp.float32)
     # Shape: batch_size x num_tau_prime_samples x num_tau_samples x 1.
     quantile_huber_loss = (jnp.abs(quantiles - jax.lax.stop_gradient(
         (bellman_errors < 0).astype(jnp.float32))) * huber_loss) / kappa
@@ -94,98 +139,25 @@ def train(online_network, target_quantile_vals, replay_elements,
     # average over target quantile value (num_tau_prime_samples) dimension.
     # Shape: batch_size x num_tau_prime_samples x 1.
     loss = jnp.sum(quantile_huber_loss, axis=2)
-    # Shape: batch_size x 1.
     loss = jnp.mean(loss, axis=1)
     return jnp.mean(loss)
+
+  rng, target_quantile_vals = target_quantile_values(
+      optimizer.target,
+      target_network,
+      next_states,
+      rewards,
+      terminals,
+      num_tau_prime_samples,
+      num_quantile_samples,
+      cumulative_gamma,
+      double_dqn,
+      rng)
   grad_fn = jax.value_and_grad(loss_fn)
   rng, rng_input = jax.random.split(rng)
-  loss, grad = grad_fn(online_network, rng_input)
+  loss, grad = grad_fn(optimizer.target, rng_input, target_quantile_vals)
   optimizer = optimizer.apply_gradient(grad)
   return rng, optimizer, loss
-
-
-@functools.partial(jax.jit, static_argnums=(3, 4, 5, 6, 7))
-def target_quantile_values(online_network, target_network, replay_elements,
-                           num_tau_prime_samples, num_quantile_samples,
-                           num_actions, cumulative_gamma, double_dqn,
-                           rng):
-  """Build the target for return values at given quantiles.
-
-  Args:
-    online_network: Jax Module used for the online network.
-    target_network: Jax Module used for the target network.
-    replay_elements: dict containing data sampled from replay buffer.
-    num_tau_prime_samples: int, number of tau' samples (static_argnum).
-    num_quantile_samples: int, number of quantile samples (static_argnum).
-    num_actions: int, number of actions (static_argnum).
-    cumulative_gamma: float, cumulative gamma to use (static_argnum).
-    double_dqn: bool, whether to use double DQN (static_argnum).
-    rng: Jax random number generator.
-
-  Returns:
-    Jax random number generator.
-    The target quantile values.
-  """
-  batch_size = replay_elements['reward'].shape[0]
-  # Shape of rewards: (num_tau_prime_samples x batch_size).
-  rewards = replay_elements['reward'][:, None]
-  rewards = jnp.tile(rewards, [num_tau_prime_samples, 1])
-  rewards = jnp.squeeze(rewards)
-  is_terminal_multiplier = 1. - replay_elements['terminal'].astype(jnp.float32)
-  # Incorporate terminal state to discount factor.
-  # size of gamma_with_terminal: (num_tau_prime_samples x batch_size).
-  gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
-  gamma_with_terminal = jnp.tile(gamma_with_terminal[:, None],
-                                 [num_tau_prime_samples, 1])
-  gamma_with_terminal = jnp.squeeze(gamma_with_terminal)
-  rng, rng1, rng2 = jax.random.split(rng, num=3)
-  # Compute Q-values which are used for action selection for the next states
-  # in the replay buffer. Compute the argmax over the Q-values.
-  if double_dqn:
-    outputs_action = online_network(replay_elements['next_state'],
-                                    num_quantiles=num_quantile_samples,
-                                    rng=rng1)
-  else:
-    outputs_action = target_network(replay_elements['next_state'],
-                                    num_quantiles=num_quantile_samples,
-                                    rng=rng1)
-  # Shape: (num_quantile_samples x batch_size) x num_actions.
-  target_quantile_values_action = outputs_action.quantile_values
-  # Shape: num_quantile_samples x batch_size x num_actions.
-  target_quantile_values_action = jnp.reshape(target_quantile_values_action,
-                                              [num_quantile_samples,
-                                               batch_size,
-                                               num_actions])
-  target_q_values = jnp.squeeze(
-      jnp.mean(target_quantile_values_action, axis=0))
-  # Shape: batch_size.
-  next_qt_argmax = jnp.argmax(target_q_values, axis=1)
-  rng, rng2 = jax.random.split(rng)
-  # Get the indices of the maximium Q-value across the action dimension.
-  # Shape of next_qt_argmax: (num_tau_prime_samples x batch_size).
-  next_state_target_outputs = target_network(
-      replay_elements['next_state'],
-      num_quantiles=num_tau_prime_samples,
-      rng=rng2)
-  next_qt_argmax = jnp.tile(
-      next_qt_argmax[:, None], [num_tau_prime_samples, 1])
-  next_qt_argmax = jnp.squeeze(next_qt_argmax)
-  batch_indices = jnp.arange(num_tau_prime_samples * batch_size)
-  target_quantile_vals = next_state_target_outputs.quantile_values[
-      batch_indices, next_qt_argmax]
-  target_quantile_vals = (
-      rewards + gamma_with_terminal * target_quantile_vals)
-  # Reshape to self.num_tau_prime_samples x batch_size x 1 since this is
-  # the manner in which the target_quantile_values are tiled.
-  target_quantile_vals = jnp.reshape(target_quantile_vals,
-                                     [num_tau_prime_samples, batch_size, 1])
-  # Transpose dimensions so that the dimensionality is batch_size x
-  # self.num_tau_prime_samples x 1 to prepare for computation of
-  # Bellman errors.
-  # Final shape of target_quantile_values:
-  # batch_size x num_tau_prime_samples x 1.
-  return rng, jax.lax.stop_gradient(
-      jnp.transpose(target_quantile_vals, [1, 0, 2]))
 
 
 @functools.partial(jax.jit, static_argnums=(3, 4, 5, 6, 7, 8, 10, 11))
@@ -350,11 +322,11 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
     Returns:
       network: Jax Model, the network instantiated by Jax.
     """
-    _, initial_params = self.network.init_by_shape(
-        self._rng, name=name,
-        input_specs=[(self.state.shape, self.observation_dtype)],
-        num_quantiles=self.num_tau_samples,
-        rng=self._rng)
+    _, initial_params = self.network.init(self._rng,
+                                          name=name,
+                                          x=self.state,
+                                          num_quantiles=self.num_tau_samples,
+                                          rng=self._rng)
     return nn.Model(self.network, initial_params)
 
   def begin_episode(self, observation):
@@ -435,24 +407,21 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
-        self._rng, target_quantile_vals = target_quantile_values(
-            self.online_network,
+        self._rng, self.optimizer, loss = train(
             self.target_network,
-            self.replay_elements,
+            self.optimizer,
+            self.replay_elements['state'],
+            self.replay_elements['action'],
+            self.replay_elements['next_state'],
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            self.num_tau_samples,
             self.num_tau_prime_samples,
             self.num_quantile_samples,
-            self.num_actions,
             self.cumulative_gamma,
             self.double_dqn,
+            self.kappa,
             self._rng)
-        self._rng, self.optimizer, loss = train(self.online_network,
-                                                target_quantile_vals,
-                                                self.replay_elements,
-                                                self.num_tau_samples,
-                                                self.num_tau_prime_samples,
-                                                self.kappa,
-                                                self._rng,
-                                                self.optimizer)
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):

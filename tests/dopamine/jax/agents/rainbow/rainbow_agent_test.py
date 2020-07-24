@@ -35,21 +35,23 @@ import numpy as onp
 
 class ProjectDistributionTest(absltest.TestCase):
 
+  def _vmapped_projection(self, supports, weights, target_support):
+    return jax.vmap(rainbow_agent.project_distribution, in_axes=(0, 0, None))(
+        supports, weights, target_support)
+
   def testProjectSingleIdenticalDistribution(self):
     supports = jnp.array([[0, 1, 2, 3, 4]], dtype=jnp.float32)
     expected_weights = [0.1, 0.2, 0.1, 0.3, 0.3]
     weights = jnp.array([expected_weights], dtype=jnp.float32)
     target_support = jnp.array([0, 1, 2, 3, 4], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     onp.testing.assert_allclose([expected_weights], projection)
 
   def testProjectSingleDifferentDistribution(self):
     supports = jnp.array([[0, 1, 2, 3, 4]], dtype=jnp.float32)
     weights = jnp.array([[0.1, 0.2, 0.1, 0.3, 0.3]], dtype=jnp.float32)
     target_support = jnp.array([3, 4, 5, 6, 7], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projection = [[0.7, 0.3, 0.0, 0.0, 0.0]]
     onp.testing.assert_allclose(expected_projection, projection)
 
@@ -57,8 +59,7 @@ class ProjectDistributionTest(absltest.TestCase):
     supports = jnp.array([[4, 3, 2, 1, 0]], dtype=jnp.float32)
     weights = jnp.array([[0.1, 0.2, 0.1, 0.3, 0.3]], dtype=jnp.float32)
     target_support = jnp.array([3, 4, 5, 6, 7], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projection = [[0.9, 0.1, 0.0, 0.0, 0.0]]
     onp.testing.assert_allclose(expected_projection, projection)
 
@@ -68,8 +69,7 @@ class ProjectDistributionTest(absltest.TestCase):
         [[0.1, 0.6, 0.1, 0.1, 0.1], [0.1, 0.2, 0.5, 0.1, 0.1]],
         dtype=jnp.float32)
     target_support = jnp.array([4, 5, 6, 7, 8], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projections = [[0.8, 0.0, 0.1, 0.0, 0.1],
                             [0.8, 0.1, 0.1, 0.0, 0.0]]
     onp.testing.assert_allclose(expected_projections, projection)
@@ -82,8 +82,7 @@ class ProjectDistributionTest(absltest.TestCase):
          [0.1, 0.2, 0.3, 0.2, 0.2]],
         dtype=jnp.float32)
     target_support = jnp.array([3, 4, 5, 6, 7], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projections = [[0.3, 0.3, 0.0, 0.2,
                              0.2], [0.7, 0.3, 0.0, 0.0, 0.0],
                             [0.1, 0.2, 0.3, 0.2, 0.2]]
@@ -94,8 +93,7 @@ class ProjectDistributionTest(absltest.TestCase):
     weights = jnp.array([[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.1, 0.3, 0.3],
                          [0.1, 0.2, 0.3, 0.2, 0.2]])
     target_support = jnp.array([3, 4, 5, 6, 7])
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projections = [[0.3, 0.3, 0.0, 0.2,
                              0.2], [0.7, 0.3, 0.0, 0.0, 0.0],
                             [0.1, 0.2, 0.3, 0.2, 0.2]]
@@ -108,8 +106,7 @@ class ProjectDistributionTest(absltest.TestCase):
         [[0.1, 0.2, 0.2, 0.2, 0.3], [0.1, 0.2, 0.4, 0.1, 0.2]],
         dtype=jnp.float32)
     target_support = jnp.array([0, 4, 8, 12, 16], dtype=jnp.float32)
-    projection = rainbow_agent.project_distribution(supports, weights,
-                                                    target_support)
+    projection = self._vmapped_projection(supports, weights, target_support)
     expected_projections = [[0.2, 0.4, 0.4, 0.0, 0.0],
                             [0.0, 0.0, 0.45, 0.45, 0.1]]
     onp.testing.assert_allclose(expected_projections, projection)
@@ -155,6 +152,7 @@ class RainbowAgentTest(absltest.TestCase):
           to_pick_first_action[:, :num_atoms] = onp.arange(1, num_atoms + 1)
           return to_pick_first_action
 
+        x = x[None, :]
         x = x.astype(jnp.float32)
         x = x.reshape((x.shape[0], -1))  # flatten
         x = nn.Dense(x, features=num_actions * num_atoms,

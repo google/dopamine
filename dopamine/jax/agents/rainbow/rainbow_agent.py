@@ -51,32 +51,39 @@ import jax.numpy as jnp
 import tensorflow as tf
 
 
-@jax.jit
-def train(online_network, target, replay_elements, optimizer):
+@functools.partial(jax.jit, static_argnums=(7, 8))
+def train(target_network, optimizer, states, actions, next_states, rewards,
+          terminals, support, cumulative_gamma):
   """Run a training step."""
-  def loss_fn(model, mean_loss=True):
-    # size of indices: batch_size x 1.
-    logits = model(replay_elements['state']).logits
-    indices = jnp.arange(logits.shape[0])
-    # For each element of the batch, fetch the logits for its selected action.
-    chosen_action_logits = logits[indices, replay_elements['action'], :]
-    loss = networks.softmax_cross_entropy_loss_with_logits(
+  def loss_fn(model, target, mean_loss=True):
+    logits = jax.vmap(model)(states).logits
+    logits = jnp.squeeze(logits)
+    # Fetch the logits for its selected action. We use vmap to perform this
+    # indexing across the batch.
+    chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
+    loss = jax.vmap(networks.softmax_cross_entropy_loss_with_logits)(
         target,
         chosen_action_logits)
     if mean_loss:
       loss = jnp.mean(loss)
     return loss
   grad_fn = jax.value_and_grad(loss_fn)
-  mean_loss, grad = grad_fn(online_network)
+  target = target_distribution(target_network,
+                               next_states,
+                               rewards,
+                               terminals,
+                               support,
+                               cumulative_gamma)
+  mean_loss, grad = grad_fn(optimizer.target, target)
   # Get the loss without taking its mean.
-  loss = loss_fn(online_network, mean_loss=False)
+  loss = loss_fn(optimizer.target, target, mean_loss=False)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss, mean_loss
 
 
-@functools.partial(jax.jit, static_argnums=(2, 3, 4))
-def target_distribution(target_network, replay_elements, support, num_atoms,
-                        cumulative_gamma):
+@functools.partial(jax.vmap, in_axes=(None, 0, 0, 0, None, None))
+def target_distribution(target_network, next_states, rewards, terminals,
+                        support, cumulative_gamma):
   """Builds the C51 target distribution as per Bellemare et al. (2017).
 
   First, we compute the support of the Bellman target, r + gamma Z'. Where Z'
@@ -93,41 +100,24 @@ def target_distribution(target_network, replay_elements, support, num_atoms,
 
   Args:
     target_network: Jax Module used for the target network.
-    replay_elements: dict containing data sampled from replay buffer.
+    next_states: numpy array of batched next states.
+    rewards: numpy array of batched rewards.
+    terminals: numpy array of batched terminals.
     support: support for the distribution (static_argnum).
-    num_atoms: int, number of atoms (static_argnum).
     cumulative_gamma: float, cumulative gamma to use (static_argnum).
 
   Returns:
     The target distribution from the replay.
   """
-  batch_size = replay_elements['reward'].shape[0]
-
-  # size of rewards: batch_size x 1
-  rewards = replay_elements['reward'][:, None]
-
-  # size of tiled_support: batch_size x num_atoms
-  tiled_support = jnp.tile(support, [batch_size])
-  tiled_support = jnp.reshape(tiled_support, [batch_size, num_atoms])
-
-  # size of target_support: batch_size x num_atoms
-  is_terminal_multiplier = 1. - replay_elements['terminal'].astype(jnp.float32)
+  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
   # Incorporate terminal state to discount factor.
-  # size of gamma_with_terminal: batch_size x 1
   gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
-  gamma_with_terminal = gamma_with_terminal[:, None]
-  target_support = rewards + gamma_with_terminal * tiled_support
-
-  # size of next_qt_argmax: batch_size x 1
-  next_state_target_outputs = target_network(replay_elements['next_state'])
-  next_qt_argmax = jnp.argmax(next_state_target_outputs.q_values,
-                              axis=1)[:, None]
-  batch_indices = jnp.arange(batch_size)[:, None]
-
-  # size of next_probabilities: batch_size x num_atoms
-  next_probabilities = next_state_target_outputs.probabilities[
-      batch_indices, next_qt_argmax, :].squeeze()
-
+  target_support = rewards + gamma_with_terminal * support
+  next_state_target_outputs = target_network(next_states)
+  q_values = jnp.squeeze(next_state_target_outputs.q_values)
+  next_qt_argmax = jnp.argmax(q_values)
+  probabilities = jnp.squeeze(next_state_target_outputs.probabilities)
+  next_probabilities = probabilities[next_qt_argmax]
   return jax.lax.stop_gradient(
       project_distribution(target_support, next_probabilities, support))
 
@@ -230,12 +220,12 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
     Returns:
       network: Jax Model, the network instantiated by Jax.
     """
-    _, initial_params = self.network.init_by_shape(
-        self._rng, name=name,
-        input_specs=[(self.state.shape, self.observation_dtype)],
-        num_actions=self.num_actions,
-        num_atoms=self._num_atoms,
-        support=self._support)
+    _, initial_params = self.network.init(self._rng,
+                                          name=name,
+                                          x=self.state,
+                                          num_actions=self.num_actions,
+                                          num_atoms=self._num_atoms,
+                                          support=self._support)
     return nn.Model(self.network, initial_params)
 
   def _build_replay_buffer(self):
@@ -265,14 +255,15 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
         self.optimizer, loss, mean_loss = train(
-            online_network=self.online_network,
-            target=target_distribution(self.target_network,
-                                       self.replay_elements,
-                                       self._support,
-                                       self._num_atoms,
-                                       self.cumulative_gamma),
-            replay_elements=self.replay_elements,
-            optimizer=self.optimizer)
+            self.target_network,
+            self.optimizer,
+            self.replay_elements['state'],
+            self.replay_elements['action'],
+            self.replay_elements['next_state'],
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            self._support,
+            self.cumulative_gamma)
         if self._replay_scheme == 'prioritized':
           # The original prioritized experience replay uses a linear exponent
           # schedule 0.4 -> 1.0. Comparing the schedule to a fixed exponent of
@@ -294,6 +285,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
 
           # Weight the loss by the inverse priorities.
           loss = loss_weights * loss
+          mean_loss = jnp.mean(loss)
         if self.summary_writer is not None:
           summary = tf.compat.v1.Summary(value=[
               tf.compat.v1.Summary.Value(tag='CrossEntropyLoss',
@@ -343,22 +335,10 @@ def project_distribution(supports, weights, target_support):
     https://arxiv.org/abs/1707.06887
   In the rest of the comments we will refer to this equation simply as Eq7.
 
-  This code is not easy to digest, so we will use a running example to clarify
-  what is going on, with the following sample inputs:
-
-    * supports =       [[0, 2, 4, 6, 8],
-                        [1, 3, 4, 5, 6]]
-    * weights =        [[0.1, 0.6, 0.1, 0.1, 0.1],
-                        [0.1, 0.2, 0.5, 0.1, 0.1]]
-    * target_support = [4, 5, 6, 7, 8]
-
-  In the code below, comments preceded with 'Ex:' will be referencing the above
-  values.
-
   Args:
-    supports: Jax array of shape (batch_size, num_dims) defining supports for
+    supports: Jax array of shape (num_dims) defining supports for
       the distribution.
-    weights: Jax array of shape (batch_size, num_dims) defining weights on the
+    weights: Jax array of shape (num_dims) defining weights on the
       original support points. Although for the CategoricalDQN agent these
       weights are probabilities, it is not required that they are.
     target_support: Jax array of shape (num_dims) defining support of the
@@ -367,94 +347,25 @@ def project_distribution(supports, weights, target_support):
       array, respectively. The values in this Jax array must be equally spaced.
 
   Returns:
-    A Jax array of shape (batch_size, num_dims) with the projection of a batch
+    A Jax array of shape (num_dims) with the projection of a batch
     of (support, weights) onto target_support.
 
   Raises:
     ValueError: If target_support has no dimensions, or if shapes of supports,
       weights, and target_support are incompatible.
   """
-  target_support_deltas = target_support[1:] - target_support[:-1]
-  # delta_z = `\Delta z` in Eq7.
-  delta_z = target_support_deltas[0]
-  # Ex: `v_min, v_max = 4, 8`.
   v_min, v_max = target_support[0], target_support[-1]
-  # Ex: `batch_size = 2`.
-  batch_size = supports.shape[0]
   # `N` in Eq7.
-  # Ex: `num_dims = 5`.
   num_dims = target_support.shape[0]
+  # delta_z = `\Delta z` in Eq7.
+  delta_z = (v_max - v_min) / (num_dims - 1)
   # clipped_support = `[\hat{T}_{z_j}]^{V_max}_{V_min}` in Eq7.
-  # Ex: `clipped_support = [[[ 4.  4.  4.  6.  8.]]
-  #                         [[ 4.  4.  4.  5.  6.]]]`.
-  clipped_support = jnp.clip(supports, v_min, v_max)[:, None, :]
-  # Ex: `tiled_support = [[[[ 4.  4.  4.  6.  8.]
-  #                         [ 4.  4.  4.  6.  8.]
-  #                         [ 4.  4.  4.  6.  8.]
-  #                         [ 4.  4.  4.  6.  8.]
-  #                         [ 4.  4.  4.  6.  8.]]
-  #                        [[ 4.  4.  4.  5.  6.]
-  #                         [ 4.  4.  4.  5.  6.]
-  #                         [ 4.  4.  4.  5.  6.]
-  #                         [ 4.  4.  4.  5.  6.]
-  #                         [ 4.  4.  4.  5.  6.]]]]`.
-  tiled_support = jnp.tile([clipped_support], [1, 1, num_dims, 1])
-  # Ex: `reshaped_target_support = [[[ 4.]
-  #                                  [ 5.]
-  #                                  [ 6.]
-  #                                  [ 7.]
-  #                                  [ 8.]]
-  #                                 [[ 4.]
-  #                                  [ 5.]
-  #                                  [ 6.]
-  #                                  [ 7.]
-  #                                  [ 8.]]]`.
-  reshaped_target_support = jnp.tile(target_support[:, None], [batch_size, 1])
-  reshaped_target_support = jnp.reshape(reshaped_target_support,
-                                        [batch_size, num_dims, 1])
+  clipped_support = jnp.clip(supports, v_min, v_max)
   # numerator = `|clipped_support - z_i|` in Eq7.
-  # Ex: `numerator = [[[[ 0.  0.  0.  2.  4.]
-  #                     [ 1.  1.  1.  1.  3.]
-  #                     [ 2.  2.  2.  0.  2.]
-  #                     [ 3.  3.  3.  1.  1.]
-  #                     [ 4.  4.  4.  2.  0.]]
-  #                    [[ 0.  0.  0.  1.  2.]
-  #                     [ 1.  1.  1.  0.  1.]
-  #                     [ 2.  2.  2.  1.  0.]
-  #                     [ 3.  3.  3.  2.  1.]
-  #                     [ 4.  4.  4.  3.  2.]]]]`.
-  numerator = jnp.abs(tiled_support - reshaped_target_support)
+  numerator = jnp.abs(clipped_support - target_support[:, None])
   quotient = 1 - (numerator / delta_z)
   # clipped_quotient = `[1 - numerator / (\Delta z)]_0^1` in Eq7.
-  # Ex: `clipped_quotient = [[[[ 1.  1.  1.  0.  0.]
-  #                            [ 0.  0.  0.  0.  0.]
-  #                            [ 0.  0.  0.  1.  0.]
-  #                            [ 0.  0.  0.  0.  0.]
-  #                            [ 0.  0.  0.  0.  1.]]
-  #                           [[ 1.  1.  1.  0.  0.]
-  #                            [ 0.  0.  0.  1.  0.]
-  #                            [ 0.  0.  0.  0.  1.]
-  #                            [ 0.  0.  0.  0.  0.]
-  #                            [ 0.  0.  0.  0.  0.]]]]`.
   clipped_quotient = jnp.clip(quotient, 0, 1)
-  # Ex: `weights = [[ 0.1  0.6  0.1  0.1  0.1]
-  #                 [ 0.1  0.2  0.5  0.1  0.1]]`.
-  weights = weights[:, None, :]
-  # inner_prod = `\sum_{j=0}^{N-1} clipped_quotient * p_j(x', \pi(x'))`
-  # in Eq7.
-  # Ex: `inner_prod = [[[[ 0.1  0.6  0.1  0.  0. ]
-  #                      [ 0.   0.   0.   0.  0. ]
-  #                      [ 0.   0.   0.   0.1 0. ]
-  #                      [ 0.   0.   0.   0.  0. ]
-  #                      [ 0.   0.   0.   0.  0.1]]
-  #                     [[ 0.1  0.2  0.5  0.  0. ]
-  #                      [ 0.   0.   0.   0.1 0. ]
-  #                      [ 0.   0.   0.   0.  0.1]
-  #                      [ 0.   0.   0.   0.  0. ]
-  #                      [ 0.   0.   0.   0.  0. ]]]]`.
+  # inner_prod = `\sum_{j=0}^{N-1} clipped_quotient * p_j(x', \pi(x'))` in Eq7.
   inner_prod = clipped_quotient * weights
-  # Ex: `projection = [[ 0.8 0.0 0.1 0.0 0.1]
-  #                    [ 0.8 0.1 0.1 0.0 0.0]]`.
-  projection = jnp.sum(inner_prod, 3)
-  projection = jnp.reshape(projection, [batch_size, num_dims])
-  return projection
+  return jnp.squeeze(jnp.sum(inner_prod, -1))
