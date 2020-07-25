@@ -35,7 +35,6 @@ import numpy as np
 import tensorflow as tf
 
 import gin.tf
-from tensorflow.contrib import staging as contrib_staging
 
 # Defines a type describing part of the tuple returned by the replay
 # memory. Each element of the tuple is a tensor of shape [batch, ...] where
@@ -707,7 +706,7 @@ class WrappedReplayBuffer(object):
   def __init__(self,
                observation_shape,
                stack_size,
-               use_staging=True,
+               use_staging=False,
                replay_capacity=1000000,
                batch_size=32,
                update_horizon=1,
@@ -814,6 +813,8 @@ class WrappedReplayBuffer(object):
       use_staging: bool, when True it would use a staging area to prefetch
         the next sampling batch.
     """
+    if use_staging:
+      logging.warning('use_staging=True is no longer supported')
     with tf.name_scope('sample_replay'):
       with tf.device('/cpu:*'):
         transition_type = self.memory.get_transition_elements()
@@ -822,10 +823,6 @@ class WrappedReplayBuffer(object):
             [return_entry.type for return_entry in transition_type],
             name='replay_sample_py_func')
         self._set_transition_shape(transition_tensors, transition_type)
-        if use_staging:
-          transition_tensors = self._set_up_staging(transition_tensors)
-          self._set_transition_shape(transition_tensors, transition_type)
-
         # Unpack sample transition into member variables.
         self.unpack_transition(transition_tensors, transition_type)
 
@@ -854,25 +851,8 @@ class WrappedReplayBuffer(object):
       prefetched_transition: tuple of tf.Tensors with shape
         memory.get_transition_elements() that have been previously prefetched.
     """
-    transition_type = self.memory.get_transition_elements()
-
-    # Create the staging area in CPU.
-    prefetch_area = contrib_staging.StagingArea(
-        [shape_with_type.type for shape_with_type in transition_type])
-
-    # Store prefetch op for tests, but keep it private -- users should not be
-    # calling _prefetch_batch.
-    self._prefetch_batch = prefetch_area.put(transition)
-    initial_prefetch = tf.cond(
-        tf.equal(prefetch_area.size(), 0),
-        lambda: prefetch_area.put(transition), tf.no_op)
-
-    # Every time a transition is sampled self.prefetch_batch will be
-    # called. If the staging area is empty, two put ops will be called.
-    with tf.control_dependencies([self._prefetch_batch, initial_prefetch]):
-      prefetched_transition = prefetch_area.get()
-
-    return prefetched_transition
+    del transition  # Unused.
+    raise NotImplementedError
 
   def unpack_transition(self, transition_tensors, transition_type):
     """Unpacks the given transition into member variables.

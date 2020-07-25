@@ -271,7 +271,7 @@ class WrappedPrioritizedReplayBuffer(
   def __init__(self,
                observation_shape,
                stack_size,
-               use_staging=True,
+               use_staging=False,
                replay_capacity=1000000,
                batch_size=32,
                update_horizon=1,

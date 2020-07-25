@@ -744,17 +744,10 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         replay_capacity=100,
         batch_size=BATCH_SIZE,
         use_staging=True)
-    # When staging is on, replay._prefetch_batch tries to prefetch transitions
-    # for efficient sampling. Since no transitions have been added, this raises
-    # an error.
-    with self.assertRaisesOpError(
-        'Cannot sample a batch with fewer than stack size'):
-      self.evaluate(replay._prefetch_batch)
     with self.test_session() as sess:
       for i in range(BATCH_SIZE * 2):
         observation = np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE)
         replay.add(observation, 2, 1, 0)
-      sess.run(replay._prefetch_batch)
     self._verify_sampled_trajectories(sess.run(replay.transition))
 
   def testWrapperSave(self):

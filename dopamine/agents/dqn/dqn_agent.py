@@ -92,7 +92,7 @@ class DQNAgent(object):
                epsilon_decay_period=250000,
                tf_device='/cpu:*',
                eval_mode=False,
-               use_staging=True,
+               use_staging=False,
                max_tf_checkpoints_to_keep=4,
                optimizer=tf.compat.v1.train.RMSPropOptimizer(
                    learning_rate=0.00025,
