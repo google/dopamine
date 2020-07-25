@@ -817,7 +817,7 @@ class WrappedReplayBuffer(object):
     with tf.name_scope('sample_replay'):
       with tf.device('/cpu:*'):
         transition_type = self.memory.get_transition_elements()
-        transition_tensors = tf.compat.v1.py_func(
+        transition_tensors = tf.numpy_function(
             self.memory.sample_transition_batch, [],
             [return_entry.type for return_entry in transition_type],
             name='replay_sample_py_func')
