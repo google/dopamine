@@ -41,6 +41,17 @@ which demonstrate how to use Dopamine.
 This is not an official Google product.
 
 ## What's new
+* **27/07/2020:** Dopamine now run on TensorFlow 2. However, Dopamine is still
+  written as TensorFlow 1.X code. This means your project may need to explicity
+  disable TensorFlow 2 behaviors with:
+
+  ```
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+  ```
+  if you are using custom entry-point for training your agent. The migration to
+  TensorFlow 2 also means that Dopamine no longer supports Python 2.
+
 *  **02/09/2019:** Dopamine has switched its network definitions to use
   tf.keras.Model. The previous `tf.contrib.slim` based networks are removed.
   If your agents inherit from dopamine agents you need to update your code.
