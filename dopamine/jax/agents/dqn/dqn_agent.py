@@ -81,7 +81,8 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
 def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
   """Compute the target Q-value."""
   q_vals = jax.vmap(target_network, in_axes=(0))(next_states).q_values
-  replay_next_qt_max = jnp.max(q_vals)
+  q_vals = jnp.squeeze(q_vals)
+  replay_next_qt_max = jnp.max(q_vals, 1)
   # Calculate the Bellman target value.
   #   Q_t = R_t + \gamma^N * Q'_t+1
   # where,
