@@ -17,56 +17,58 @@
 This script will install Dopamine as a Python module.
 
 See: https://github.com/google/dopamine
-
 """
 
-from os import path
+import pathlib
 from setuptools import find_packages
 from setuptools import setup
 
-here = path.abspath(path.dirname(__file__))
+here = pathlib.Path(__file__).parent.resolve()
 
-install_requires = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
-                    'opencv-python >= 3.4.1.15',
-                    'gym >= 0.10.5', 'Pillow >= 5.4.1']
-tests_require = ['gin-config >= 0.1.1', 'absl-py >= 0.2.2',
-                 'opencv-python >= 3.4.1.15',
-                 'gym >= 0.10.5', 'mock >= 1.0.0', 'Pillow >= 5.4.1']
+long_description = (here / 'README.md').read_text(encoding='utf-8')
+
+install_requires = [
+    'tensorflow >= 2.2.0',
+    'gin-config >= 0.3.0',
+    'absl-py >= 0.9.0',
+    'opencv-python >= 3.4.8.29',
+    'gym[atari] >= 0.13.1',
+    'flax >= 0.2.0',
+    'jax >= 0.1.73',
+    'jaxlib >= 0.1.52',
+    'Pillow >= 7.2.0',
+    'numpy >= 1.16.4',
+    'pygame >= 1.9.2',
+    'pandas >= 0.24.2',
+    'tf_slim >= 1.0',
+]
 
 dopamine_description = (
     'Dopamine: A framework for flexible Reinforcement Learning research')
 
 setup(
     name='dopamine_rl',
-    version='3.0.1',
-    include_package_data=True,
-    packages=find_packages(exclude=['docs']),  # Required
-    package_data={'testdata': ['testdata/*.gin']},
-    install_requires=install_requires,
-    tests_require=tests_require,
+    version='3.1.0',
     description=dopamine_description,
-    long_description=dopamine_description,
-    url='https://github.com/google/dopamine',  # Optional
-    author='The Dopamine Team',  # Optional
-    classifiers=[  # Optional
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/google/dopamine',
+    author='The Dopamine Team',
+    classifiers=[
         'Development Status :: 4 - Beta',
 
-        # Indicate who your project is intended for
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
 
-        # Pick your license as you wish
         'License :: OSI Approved :: Apache Software License',
 
-        # Specify the Python versions you support here. In particular, ensure
-        # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3 :: Only',
 
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Mathematics',
@@ -76,11 +78,15 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
 
     ],
+    keywords='dopamine, reinforcement, machine, learning, research',
+    include_package_data=True,
+    packages=find_packages(exclude=['docs']),
+    package_data={'testdata': ['testdata/*.gin']},
+    install_requires=install_requires,
     project_urls={  # Optional
         'Documentation': 'https://github.com/google/dopamine',
         'Bug Reports': 'https://github.com/google/dopamine/issues',
         'Source': 'https://github.com/google/dopamine',
     },
     license='Apache 2.0',
-    keywords='dopamine reinforcement-learning python machine learning'
 )
