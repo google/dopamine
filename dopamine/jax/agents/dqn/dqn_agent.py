@@ -64,7 +64,8 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
   """Run the training step."""
   def loss_fn(model, target):
     q_values = jax.vmap(model, in_axes=(0))(states).q_values
-    replay_chosen_q = q_values[actions]
+    q_values = jnp.squeeze(q_values)
+    replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
     loss = jnp.mean(jax.vmap(huber_loss)(target, replay_chosen_q))
     return loss
   grad_fn = jax.value_and_grad(loss_fn)
