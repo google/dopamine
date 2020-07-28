@@ -237,7 +237,8 @@ def create_runner(base_dir, trained_agent_ckpt_path, agent='dqn',
                   use_legacy_checkpoint)
 
 
-def run(agent, game, num_steps, root_dir, restore_ckpt, use_legacy_checkpoint):
+def run(agent, game, num_steps, root_dir, restore_ckpt,
+        use_legacy_checkpoint=False):
   """Main entrypoint for running and generating visualizations.
 
   Args:
