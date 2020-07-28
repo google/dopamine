@@ -43,7 +43,7 @@ This is not an official Google product.
 ## What's new
 * **27/07/2020:** Dopamine now run on TensorFlow 2. However, Dopamine is still
   written as TensorFlow 1.X code. This means your project may need to explicity
-  disable TensorFlow 2 behaviors with:
+  disable TensorFlow 2 behaviours with:
 
   ```
   import tensorflow.compat.v1 as tf
@@ -124,54 +124,34 @@ This is not an official Google product.
 ## Instructions
 ### Install via source
 Installing from source allows you to modify the agents and experiments as
-you please, and is likely to be the pathway of choice for long-term use.
-These instructions assume that you've already set up your favourite package
-manager (e.g. `apt` on Ubuntu, `homebrew` on Mac OS X), and that a C++ compiler
-is available from the command-line (almost certainly the case if your favourite
-package manager works).
-
-The instructions below assume that you will be running Dopamine in a *virtual
+you please, and is likely to be the pathway of choice for long-term use. The
+instructions below assume that you will be running Dopamine in a *virtual
 environment*. A virtual environment lets you control which dependencies are
-installed for which program; however, this step is optional and you may choose
-to ignore it.
+installed for which program.
 
 Dopamine is a Tensorflow-based framework, and we recommend you also consult
 the [Tensorflow documentation](https://www.tensorflow.org/install)
-for additional details.
+for additional details. Finally, these instructions are for Python 3.6 and
+above.
 
-Finally, these instructions are for Python 2.7. While Dopamine is Python 3
-compatible, there may be some additional steps needed during installation.
-
-First install [Anaconda](https://docs.anaconda.com/anaconda/install/), which
-we will use as the environment manager, then proceed below.
-
-```
-conda create --name dopamine-env python=3.6
-conda activate dopamine-env
-```
-
-This will create a directory called `dopamine-env` in which your virtual
-environment lives. The last command activates the environment.
-
-Install the dependencies below, based on your operating system, and then
-finally download the Dopamine source, e.g.
+First download the Dopamine source.
 
 ```
 git clone https://github.com/google/dopamine.git
 ```
 
-#### Ubuntu
+Then create a virtual environment and activate it.
 
 ```
-sudo apt-get update && sudo apt-get install cmake zlib1g-dev
-pip install absl-py atari-py gin-config gym opencv-python tensorflow==1.15
+python3 -m venv ./dopamine-venv
+source dopamine-venv/bin/activate
 ```
 
-#### Mac OS X
+Finally setup the environment and install Dopamine's dependencies
 
 ```
-brew install cmake zlib
-pip install absl-py atari-py gin-config gym opencv-python tensorflow==1.15
+pip install -U pip
+pip install -r dopamine/requirements.txt
 ```
 
 ### Running tests
@@ -180,12 +160,9 @@ You can test whether the installation was successful by running the following:
 
 ```
 cd dopamine
-export PYTHONPATH=${PYTHONPATH}:.
-python tests/dopamine/atari_init_test.py
+export PYTHONPATH=$PYTHONPATH:$PWD
+python -m tests.dopamine.atari_init_test
 ```
-
-If you want to run some of the other tests you will need to `pip install mock`.
-
 
 ### Training agents
 
@@ -197,8 +174,8 @@ To run the basic DQN agent,
 
 ```
 python -um dopamine.discrete_domains.train \
-  --base_dir=/tmp/dopamine \
-  --gin_files='dopamine/agents/dqn/configs/dqn.gin'
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/dqn/configs/dqn.gin
 ```
 
 By default, this will kick off an experiment lasting 200 million frames.
@@ -231,16 +208,16 @@ following command:
 
 ```
 python -um dopamine.discrete_domains.train \
-  --base_dir=/tmp/dopamine \
-  --gin_files='dopamine/agents/rainbow/configs/c51_cartpole.gin'
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/rainbow/configs/c51_cartpole.gin
 ```
 
 You can train Rainbow on Acrobot with the following command:
 
 ```
 python -um dopamine.discrete_domains.train \
-  --base_dir=/tmp/dopamine \
-  --gin_files='dopamine/agents/rainbow/configs/rainbow_acrobot.gin'
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/rainbow/configs/rainbow_acrobot.gin
 ```
 
 
@@ -248,20 +225,7 @@ python -um dopamine.discrete_domains.train \
 An easy, alternative way to install Dopamine is as a Python library:
 
 ```
-# Alternatively brew install, see Mac OS X instructions above.
-sudo apt-get update && sudo apt-get install cmake
 pip install dopamine-rl
-pip install atari-py
-```
-
-Depending on your particular system configuration, you may also need to install
-zlib (see "Install via source" above).
-
-#### Running tests
-From the root directory, tests can be run with a command such as:
-
-```
-python -um tests.agents.rainbow.rainbow_agent_test
 ```
 
 ### References
