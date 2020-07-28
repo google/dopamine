@@ -188,6 +188,8 @@ class Runner(object):
       Checkpointer object.
     """
     assert base_dir is not None
+    tf.compat.v1.disable_v2_behavior()
+
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations
