@@ -1,0 +1,36 @@
+# Hyperparameters follow Dabney et al. (2017) but we modify as necessary to
+# match those used in Rainbow (Hessel et al., 2018), to ensure apples-to-apples
+# comparison.
+import dopamine.jax.agents.quantile.quantile_agent
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+
+JaxQuantileAgent.kappa = 1.0
+JaxQuantileAgent.num_atoms = 200
+JaxQuantileAgent.gamma = 0.99
+JaxQuantileAgent.update_horizon = 3
+JaxQuantileAgent.min_replay_history = 20000 # agent steps
+JaxQuantileAgent.update_period = 4
+JaxQuantileAgent.target_update_period = 8000 # agent steps
+JaxQuantileAgent.epsilon_train = 0.01
+JaxQuantileAgent.epsilon_eval = 0.001
+JaxQuantileAgent.epsilon_decay_period = 250000 # agent steps
+JaxQuantileAgent.replay_scheme = 'prioritized'
+JaxQuantileAgent.optimizer = 'adam'
+
+create_optimizer.learning_rate = 0.00005
+create_optimizer.eps = 0.0003125
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+atari_lib.create_atari_environment.sticky_actions = True
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_quantile'
+create_agent.debug_mode = True
+Runner.num_iterations = 200
+Runner.training_steps = 250000
+Runner.evaluation_steps = 125000
+Runner.max_steps_per_episode = 27000
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 1000000
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32

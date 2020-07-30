@@ -227,3 +227,36 @@ class ImplicitQuantileNetwork(nn.Module):
     x = jax.nn.relu(x)
     quantile_values = nn.Dense(x, features=num_actions, kernel_init=initializer)
     return atari_lib.ImplicitQuantileNetworkType(quantile_values, quantiles)
+
+
+### Quantile Networks ###
+@gin.configurable
+class QuantileNetwork(nn.Module):
+  """Convolutional network used to compute the agent's return quantiles."""
+
+  def apply(self, x, num_actions, num_atoms):
+    initializer = jax.nn.initializers.variance_scaling(
+        scale=1.0 / jnp.sqrt(3.0),
+        mode='fan_in',
+        distribution='uniform')
+    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
+    # have removed the true batch dimension.
+    x = x[None, ...]
+    x = x.astype(jnp.float32) / 255.
+    x = nn.Conv(x, features=32, kernel_size=(8, 8), strides=(4, 4),
+                kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = nn.Conv(x, features=64, kernel_size=(4, 4), strides=(2, 2),
+                kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = nn.Conv(x, features=64, kernel_size=(3, 3), strides=(1, 1),
+                kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = x.reshape((x.shape[0], -1))  # flatten
+    x = nn.Dense(x, features=512, kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = nn.Dense(x, features=num_actions * num_atoms, kernel_init=initializer)
+    logits = x.reshape((x.shape[0], num_actions, num_atoms))
+    probabilities = nn.softmax(logits)
+    q_values = jnp.mean(logits, axis=2)
+    return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
