@@ -183,7 +183,7 @@ class MyRunner(run_experiment.Runner):
       q_params['title'] = 'Q-Values'
       q_params['get_line_data_fn'] = self._agent.get_q_values
       q_plot = line_plotter.LinePlotter(parameter_dict=q_params)
-    if 'Implicit' in self._agent.__class__.__name__:
+    elif 'Implicit' in self._agent.__class__.__name__:
       q_params['xlabel'] = 'Timestep'
       q_params['ylabel'] = 'Quantile Value'
       q_params['title'] = 'Quantile Values'
