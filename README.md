@@ -41,8 +41,9 @@ which demonstrate how to use Dopamine.
 This is not an official Google product.
 
 ## What's new
-* **03/08/2020:** Dopamine now supports [Jax](https://github.com/google/jax)
-  agents! Find out more in our
+* **03/08/2020:** Dopamine now supports [JAX](https://github.com/google/jax)
+  agents! This includes an implementation of the Quantile Regression agent (QR-DQN)
+  which has been a common request. Find out more in our
   [jax](https://github.com/google/dopamine/tree/master/dopamine/jax)
   subdirectory, which includes trained agent checkpoints.
 
