@@ -259,7 +259,8 @@ class JaxDQNAgent(object):
     state_shape = self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
     self._replay = self._build_replay_buffer()
-    self._build_networks_and_optimizer(optimizer)
+    self._optimizer_name = optimizer
+    self._build_networks_and_optimizer()
 
     # Variables to be initialized by the agent once it interacts with the
     # environment.
@@ -280,9 +281,9 @@ class JaxDQNAgent(object):
                                           num_actions=self.num_actions)
     return nn.Model(self.network, initial_params)
 
-  def _build_networks_and_optimizer(self, optimizer_name):
+  def _build_networks_and_optimizer(self):
     online_network = self._create_network(name='Online')
-    optimizer_def = create_optimizer(optimizer_name)
+    optimizer_def = create_optimizer(self._optimizer_name)
     self.optimizer = optimizer_def.create(online_network)
     self.target_network = self._create_network(name='Target')
 
@@ -514,8 +515,13 @@ class JaxDQNAgent(object):
     if bundle_dictionary is not None:
       self.state = bundle_dictionary['state']
       self.training_steps = bundle_dictionary['training_steps']
-      self.online_network.replace(params=bundle_dictionary['online_params'])
-      self.target_network.replace(params=bundle_dictionary['target_params'])
+      online_network = self.online_network.replace(
+          params=bundle_dictionary['online_params'])
+      # We recreate the optimizer with the new online weights.
+      optimizer_def = create_optimizer(self._optimizer_name)
+      self.optimizer = optimizer_def.create(online_network)
+      self.target_network = self.target_network.replace(
+          params=bundle_dictionary['target_params'])
     elif not self.allow_partial_reload:
       return False
     else:
