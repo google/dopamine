@@ -41,7 +41,12 @@ which demonstrate how to use Dopamine.
 This is not an official Google product.
 
 ## What's new
-* **27/07/2020:** Dopamine now run on TensorFlow 2. However, Dopamine is still
+* **03/08/2020:** Dopamine now supports [Jax](https://github.com/google/jax)
+  agents! Find out more in our
+  [jax](https://github.com/google/dopamine/tree/master/dopamine/jax)
+  subdirectory, which includes trained agent checkpoints.
+
+* **27/07/2020:** Dopamine now runs on TensorFlow 2. However, Dopamine is still
   written as TensorFlow 1.X code. This means your project may need to explicity
   disable TensorFlow 2 behaviours with:
 
