@@ -46,3 +46,8 @@ where the possible values are:
 *  `AGENT`: `['dqn', 'c51', 'rainbow', 'quantile', 'implicit_quantile']`
 *  `GAME`: `['Pong', 'SpaceInvaders', 'Seaquest', 'Qbert', 'Breakout', 'Asterix']`
 *  `RUN`: `[1, 2, 3, 4, 5]`
+
+## Colaboratory notebook
+We've also added a
+[colab notebook](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/jax_agent_visualizer.ipynb)
+to visualize trained JAX agents.
