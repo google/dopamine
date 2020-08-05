@@ -44,11 +44,28 @@ NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
 @gin.configurable
 def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
                      eps=1.5e-4):
+  """Create an optimizer for training.
+
+  Currently, only the Adam optimizer is supported.
+
+  Args:
+    name: str, name of the optimizer to create.
+    learning_rate: float, learning rate to use in the optimizer.
+    beta1: float, beta1 parameter for the optimizer.
+    beta2: float, beta2 parameter for the optimizer.
+    eps: float, epsilon parameter for the optimizer.
+
+  Returns:
+    A flax optimizer.
+  """
   if name == 'adam':
     return optim.Adam(
         learning_rate=learning_rate, beta1=beta1, beta2=beta2, eps=eps)
+  elif name == 'rmsprop':
+    raise ValueError(
+        'RMSProp is not an available optimizer in the Flax library.')
   else:
-    raise ValueError(f'Unknown optimizer {name}')
+    raise ValueError('Unsupported optimizer {}'.format(name))
 
 
 def huber_loss(targets, predictions, delta=1.0):
@@ -188,6 +205,12 @@ class JaxDQNAgent(object):
                summary_writing_frequency=500,
                allow_partial_reload=False):
     """Initializes the agent and constructs the necessary components.
+
+    Note: Jax does not provide an implementation of RMSProp, so we are using
+          the Adam optimizer. This optimizer choice means the JAX DQN agent
+          differs from the original NatureDQN and the dopamine TensorFlow
+          version. However, in the experiments we have ran, we have found that
+          using Adam yields improved training performance.
 
     Args:
       num_actions: int, number of actions the agent can take at any state.
