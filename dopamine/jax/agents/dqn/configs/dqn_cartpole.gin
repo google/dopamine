@@ -17,7 +17,7 @@ JaxDQNAgent.min_replay_history = 500
 JaxDQNAgent.update_period = 4
 JaxDQNAgent.target_update_period = 100
 JaxDQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
-create_optimizer.name = 'adam'
+JaxDQNAgent.optimizer = 'adam'
 create_optimizer.learning_rate = 0.001
 create_optimizer.eps = 3.125e-4
 

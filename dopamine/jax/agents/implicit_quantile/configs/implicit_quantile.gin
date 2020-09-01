@@ -18,7 +18,7 @@ JaxImplicitQuantileAgent.target_update_period = 8000 # agent steps
 JaxImplicitQuantileAgent.epsilon_train = 0.01
 JaxImplicitQuantileAgent.epsilon_eval = 0.001
 JaxImplicitQuantileAgent.epsilon_decay_period = 250000  # agent steps
-create_optimizer.name = 'adam'
+JaxImplicitQuantileAgent.optimizer = 'adam'
 create_optimizer.learning_rate = 0.00005
 create_optimizer.eps = 0.0003125
 

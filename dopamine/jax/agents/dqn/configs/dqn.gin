@@ -14,12 +14,11 @@ JaxDQNAgent.target_update_period = 8000  # agent steps
 JaxDQNAgent.epsilon_train = 0.01
 JaxDQNAgent.epsilon_eval = 0.001
 JaxDQNAgent.epsilon_decay_period = 250000  # agent steps
-# Note: Jax does not provide an implementation of RMSProp, so we are using
-#       the Adam optimizer, which differs from both the original DQN algorithm
-#       and the dopamine TensorFlow version. However, in the experiments we
-#       have ran, we have found that using Adam yields improved training
-#       performance.
-create_optimizer.name = 'adam'
+# Note: We are using the Adam optimizer by default for JaxDQN, which differs
+#       from the original NatureDQN and the dopamine TensorFlow version. In
+#       the experiments we have ran, we have found that using Adam yields
+#       improved training performance.
+JaxDQNAgent.optimizer = 'adam'
 create_optimizer.learning_rate = 6.25e-5
 create_optimizer.eps = 1.5e-4
 
