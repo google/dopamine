@@ -1,118 +1,185 @@
-# Automatically generated file; please do not edit
 toc:
-  - title: atari_lib
+- title: dopamine
+  section:
+  - title: Overview
+    path: /dopamine
+- title: dopamine.agents
+  section:
+  - title: Overview
+    path: /dopamine/agents
+  - title: dqn
     section:
     - title: Overview
-      path: /dopamine/api_docs/python/atari_lib
-    - title: AtariPreprocessing
-      path: /dopamine/api_docs/python/atari_lib/AtariPreprocessing
-    - title: create_atari_environment
-      path: /dopamine/api_docs/python/atari_lib/create_atari_environment
-    - title: implicit_quantile_network
-      path: /dopamine/api_docs/python/atari_lib/implicit_quantile_network
-    - title: nature_dqn_network
-      path: /dopamine/api_docs/python/atari_lib/nature_dqn_network
-    - title: rainbow_network
-      path: /dopamine/api_docs/python/atari_lib/rainbow_network
-  - title: checkpointer
+      path: /dopamine/agents/dqn
+    - title: dqn_agent
+      section:
+      - title: Overview
+        path: /dopamine/agents/dqn/dqn_agent
+      - title: DQNAgent
+        path: /dopamine/agents/dqn/dqn_agent/DQNAgent
+  - title: implicit_quantile
     section:
     - title: Overview
-      path: /dopamine/api_docs/python/checkpointer
-    - title: Checkpointer
-      path: /dopamine/api_docs/python/checkpointer/Checkpointer
-  - title: circular_replay_buffer
+      path: /dopamine/agents/implicit_quantile
+    - title: implicit_quantile_agent
+      section:
+      - title: Overview
+        path: /dopamine/agents/implicit_quantile/implicit_quantile_agent
+      - title: ImplicitQuantileAgent
+        path: /dopamine/agents/implicit_quantile/implicit_quantile_agent/ImplicitQuantileAgent
+  - title: rainbow
     section:
     - title: Overview
-      path: /dopamine/api_docs/python/circular_replay_buffer
-    - title: OutOfGraphReplayBuffer
-      path: /dopamine/api_docs/python/circular_replay_buffer/OutOfGraphReplayBuffer
-    - title: WrappedReplayBuffer
-      path: /dopamine/api_docs/python/circular_replay_buffer/WrappedReplayBuffer
-  - title: dqn_agent
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/dqn_agent
-    - title: DQNAgent
-      path: /dopamine/api_docs/python/dqn_agent/DQNAgent
-  - title: gym_lib
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/gym_lib
-    - title: acrobot_dqn_network
-      path: /dopamine/api_docs/python/gym_lib/acrobot_dqn_network
-    - title: acrobot_rainbow_network
-      path: /dopamine/api_docs/python/gym_lib/acrobot_rainbow_network
-    - title: cartpole_dqn_network
-      path: /dopamine/api_docs/python/gym_lib/cartpole_dqn_network
-    - title: cartpole_rainbow_network
-      path: /dopamine/api_docs/python/gym_lib/cartpole_rainbow_network
-    - title: create_gym_environment
-      path: /dopamine/api_docs/python/gym_lib/create_gym_environment
-    - title: GymPreprocessing
-      path: /dopamine/api_docs/python/gym_lib/GymPreprocessing
-  - title: implicit_quantile_agent
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/implicit_quantile_agent
-    - title: ImplicitQuantileAgent
-      path: /dopamine/api_docs/python/implicit_quantile_agent/ImplicitQuantileAgent
-  - title: iteration_statistics
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/iteration_statistics
-    - title: IterationStatistics
-      path: /dopamine/api_docs/python/iteration_statistics/IterationStatistics
-  - title: logger
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/logger
-    - title: Logger
-      path: /dopamine/api_docs/python/logger/Logger
-  - title: prioritized_replay_buffer
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/prioritized_replay_buffer
-    - title: OutOfGraphPrioritizedReplayBuffer
-      path: /dopamine/api_docs/python/prioritized_replay_buffer/OutOfGraphPrioritizedReplayBuffer
-    - title: WrappedPrioritizedReplayBuffer
-      path: /dopamine/api_docs/python/prioritized_replay_buffer/WrappedPrioritizedReplayBuffer
-  - title: rainbow_agent
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/rainbow_agent
-    - title: project_distribution
-      path: /dopamine/api_docs/python/rainbow_agent/project_distribution
-    - title: RainbowAgent
-      path: /dopamine/api_docs/python/rainbow_agent/RainbowAgent
-  - title: run_experiment
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/run_experiment
-    - title: create_agent
-      path: /dopamine/api_docs/python/run_experiment/create_agent
-    - title: create_runner
-      path: /dopamine/api_docs/python/run_experiment/create_runner
-    - title: Runner
-      path: /dopamine/api_docs/python/run_experiment/Runner
-    - title: TrainRunner
-      path: /dopamine/api_docs/python/run_experiment/TrainRunner
-  - title: train
-    section:
-    - title: Overview
-      path: /dopamine/api_docs/python/train
+      path: /dopamine/agents/rainbow
+    - title: rainbow_agent
+      section:
+      - title: Overview
+        path: /dopamine/agents/rainbow/rainbow_agent
+      - title: project_distribution
+        path: /dopamine/agents/rainbow/rainbow_agent/project_distribution
+      - title: RainbowAgent
+        path: /dopamine/agents/rainbow/rainbow_agent/RainbowAgent
+- title: dopamine.colab
+  section:
+  - title: Overview
+    path: /dopamine/colab
   - title: utils
     section:
     - title: Overview
-      path: /dopamine/api_docs/python/utils
+      path: /dopamine/colab/utils
     - title: get_latest_file
-      path: /dopamine/api_docs/python/utils/get_latest_file
+      path: /dopamine/colab/utils/get_latest_file
     - title: get_latest_iteration
-      path: /dopamine/api_docs/python/utils/get_latest_iteration
+      path: /dopamine/colab/utils/get_latest_iteration
     - title: load_baselines
-      path: /dopamine/api_docs/python/utils/load_baselines
+      path: /dopamine/colab/utils/load_baselines
     - title: load_statistics
-      path: /dopamine/api_docs/python/utils/load_statistics
+      path: /dopamine/colab/utils/load_statistics
     - title: read_experiment
-      path: /dopamine/api_docs/python/utils/read_experiment
+      path: /dopamine/colab/utils/read_experiment
     - title: summarize_data
-      path: /dopamine/api_docs/python/utils/summarize_data
+      path: /dopamine/colab/utils/summarize_data
+- title: dopamine.discrete_domains
+  section:
+  - title: Overview
+    path: /dopamine/discrete_domains
+  - title: atari_lib
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/atari_lib
+    - title: AtariPreprocessing
+      path: /dopamine/discrete_domains/atari_lib/AtariPreprocessing
+    - title: create_atari_environment
+      path: /dopamine/discrete_domains/atari_lib/create_atari_environment
+  - title: checkpointer
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/checkpointer
+    - title: Checkpointer
+      path: /dopamine/discrete_domains/checkpointer/Checkpointer
+  - title: gym_lib
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/gym_lib
+    - title: create_gym_environment
+      path: /dopamine/discrete_domains/gym_lib/create_gym_environment
+    - title: GymPreprocessing
+      path: /dopamine/discrete_domains/gym_lib/GymPreprocessing
+  - title: iteration_statistics
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/iteration_statistics
+    - title: IterationStatistics
+      path: /dopamine/discrete_domains/iteration_statistics/IterationStatistics
+  - title: logger
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/logger
+    - title: Logger
+      path: /dopamine/discrete_domains/logger/Logger
+  - title: run_experiment
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/run_experiment
+    - title: create_agent
+      path: /dopamine/discrete_domains/run_experiment/create_agent
+    - title: create_runner
+      path: /dopamine/discrete_domains/run_experiment/create_runner
+    - title: Runner
+      path: /dopamine/discrete_domains/run_experiment/Runner
+    - title: TrainRunner
+      path: /dopamine/discrete_domains/run_experiment/TrainRunner
+  - title: train
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/train
+- title: dopamine.jax
+  section:
+  - title: Overview
+    path: /dopamine/jax
+  - title: agents
+    section:
+    - title: Overview
+      path: /dopamine/jax/agents
+    - title: dqn
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/dqn
+      - title: dqn_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/dqn/dqn_agent
+    - title: implicit_quantile
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/implicit_quantile
+      - title: implicit_quantile_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/implicit_quantile/implicit_quantile_agent
+    - title: quantile
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/quantile
+      - title: quantile_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/quantile/quantile_agent
+    - title: rainbow
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/rainbow
+      - title: rainbow_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/rainbow/rainbow_agent
+        - title: project_distribution
+          path: /dopamine/jax/agents/rainbow/rainbow_agent/project_distribution
+  - title: networks
+    section:
+    - title: Overview
+      path: /dopamine/jax/networks
+- title: dopamine.replay_memory
+  section:
+  - title: Overview
+    path: /dopamine/replay_memory
+  - title: circular_replay_buffer
+    section:
+    - title: Overview
+      path: /dopamine/replay_memory/circular_replay_buffer
+    - title: OutOfGraphReplayBuffer
+      path: /dopamine/replay_memory/circular_replay_buffer/OutOfGraphReplayBuffer
+    - title: WrappedReplayBuffer
+      path: /dopamine/replay_memory/circular_replay_buffer/WrappedReplayBuffer
+  - title: prioritized_replay_buffer
+    section:
+    - title: Overview
+      path: /dopamine/replay_memory/prioritized_replay_buffer
+    - title: OutOfGraphPrioritizedReplayBuffer
+      path: /dopamine/replay_memory/prioritized_replay_buffer/OutOfGraphPrioritizedReplayBuffer
+    - title: WrappedPrioritizedReplayBuffer
+      path: /dopamine/replay_memory/prioritized_replay_buffer/WrappedPrioritizedReplayBuffer
+  - title: sum_tree
+    section:
+    - title: Overview
+      path: /dopamine/replay_memory/sum_tree
