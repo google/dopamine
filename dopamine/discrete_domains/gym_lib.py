@@ -47,6 +47,9 @@ gin.constant('gym_lib.CARTPOLE_STACK_SIZE', 1)
 gin.constant('gym_lib.ACROBOT_OBSERVATION_SHAPE', (6, 1))
 gin.constant('gym_lib.ACROBOT_OBSERVATION_DTYPE', tf.float64)
 gin.constant('gym_lib.ACROBOT_STACK_SIZE', 1)
+gin.constant('gym_lib.LUNAR_OBSERVATION_SHAPE', (8, 1))
+gin.constant('gym_lib.LUNAR_OBSERVATION_DTYPE', tf.float64)
+gin.constant('gym_lib.LUNAR_STACK_SIZE', 1)
 
 
 @gin.configurable
