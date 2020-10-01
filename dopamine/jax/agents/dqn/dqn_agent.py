@@ -115,6 +115,7 @@ def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
                                (1. - terminals))
 
 
+@gin.configurable
 @functools.partial(jax.jit, static_argnums=(0, 2, 3))
 def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   """Returns the current epsilon for the agent's epsilon-greedy policy.
