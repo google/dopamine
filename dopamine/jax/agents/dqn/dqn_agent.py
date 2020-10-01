@@ -39,6 +39,7 @@ import tensorflow as tf
 NATURE_DQN_OBSERVATION_SHAPE = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = jnp.uint8
 NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
+identity_epsilon = dqn_agent.identity_epsilon
 
 
 @gin.configurable
