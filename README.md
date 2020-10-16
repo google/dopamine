@@ -38,9 +38,18 @@ We provide a set of [Colaboratory
 notebooks](https://github.com/google/dopamine/tree/master/dopamine/colab)
 which demonstrate how to use Dopamine.
 
+We provide a [website](https://google.github.io/dopamine/baselines/plots.html)
+which displays the learning curves for all the provided agents, on all the
+games.
+
 This is not an official Google product.
 
 ## What's new
+* **16/102020:** Learning curves for the [QR-DQN JAX
+  agent](https://github.com/google/dopamine/blob/master/dopamine/jax/agents/quantile/quantile_agent.py)
+  have been added to the [baseline
+  plots](https://google.github.io/dopamine/baselines/plots.html)!
+
 * **03/08/2020:** Dopamine now supports [JAX](https://github.com/google/jax)
   agents! This includes an implementation of the Quantile Regression agent (QR-DQN)
   which has been a common request. Find out more in our
