@@ -33,6 +33,7 @@ import math
 from dopamine.discrete_domains import atari_lib
 import gin
 import gym
+from gym.wrappers.time_limit import TimeLimit
 import numpy as np
 import tensorflow as tf
 
@@ -67,7 +68,8 @@ def create_gym_environment(environment_name=None, version='v0'):
   full_game_name = '{}-{}'.format(environment_name, version)
   env = gym.make(full_game_name)
   # Strip out the TimeLimit wrapper from Gym, which caps us at 200 steps.
-  env = env.env
+  if isinstance(env, TimeLimit):
+    env = env.env
   # Wrap the returned environment in a class which conforms to the API expected
   # by Dopamine.
   env = GymPreprocessing(env)
