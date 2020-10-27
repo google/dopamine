@@ -514,6 +514,7 @@ class Runner(object):
       statistics = self._run_one_iteration(iteration)
       self._log_experiment(iteration, statistics)
       self._checkpoint_experiment(iteration)
+    self._summary_writer.flush()
 
 
 @gin.configurable
