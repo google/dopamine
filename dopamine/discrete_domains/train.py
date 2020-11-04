@@ -1,4 +1,5 @@
 # coding=utf-8
+# Lint as: python3
 # Copyright 2018 The Dopamine Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +16,6 @@
 r"""The entry point for running a Dopamine agent.
 
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 from absl import app
 from absl import flags
@@ -39,6 +36,7 @@ flags.DEFINE_multi_string(
     '(e.g. "DQNAgent.epsilon_train=0.1",'
     '      "create_environment.game_name="Pong"").')
 
+
 FLAGS = flags.FLAGS
 
 
@@ -53,8 +51,8 @@ def main(unused_argv):
   logging.set_verbosity(logging.INFO)
   tf.compat.v1.disable_v2_behavior()
 
-  run_experiment.load_gin_configs(FLAGS.gin_files, FLAGS.gin_bindings)
-  runner = run_experiment.create_runner(FLAGS.base_dir)
+  run_experiment.load_gin_configs(gin_files, gin_bindings)
+  runner = run_experiment.create_runner(base_dir)
   runner.run_experiment()
 
 
