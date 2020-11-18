@@ -59,6 +59,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
                stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
                network=atari_lib.RainbowNetwork,
                num_atoms=51,
+               vmin=None,
                vmax=10.,
                gamma=0.99,
                update_horizon=1,
@@ -92,7 +93,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
         instantiation would have different set of variables. See
         dopamine.discrete_domains.atari_lib.RainbowNetwork as an example.
       num_atoms: int, the number of buckets of the value function distribution.
-      vmax: float, the value distribution support is [-vmax, vmax].
+      vmin: float, the value distribution support is [vmin, vmax]. If None, we
+        set it to be -vmax.
+      vmax: float, the value distribution support is [vmin, vmax].
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -122,7 +125,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
     # We need this because some tools convert round floats into ints.
     vmax = float(vmax)
     self._num_atoms = num_atoms
-    self._support = tf.linspace(-vmax, vmax, num_atoms)
+    # If vmin is not specified, set it to -vmax similar to C51.
+    vmin = vmin if vmin else -vmax
+    self._support = tf.linspace(vmin, vmax, num_atoms)
     self._replay_scheme = replay_scheme
     # TODO(b/110897128): Make agent optimizer attribute private.
     self.optimizer = optimizer
