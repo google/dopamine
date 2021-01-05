@@ -39,11 +39,12 @@ import tensorflow as tf
 NATURE_DQN_OBSERVATION_SHAPE = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = jnp.uint8
 NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
+identity_epsilon = dqn_agent.identity_epsilon
 
 
 @gin.configurable
 def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
-                     eps=1.5e-4):
+                     eps=1.5e-4, centered=False):
   """Create an optimizer for training.
 
   Currently, only the Adam optimizer is supported.
@@ -54,6 +55,7 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     beta1: float, beta1 parameter for the optimizer.
     beta2: float, beta2 parameter for the optimizer.
     eps: float, epsilon parameter for the optimizer.
+    centered: bool, centered parameter for RMSProp.
 
   Returns:
     A flax optimizer.
@@ -66,7 +68,8 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
   elif name == 'rmsprop':
     logging.info('Creating RMSProp optimizer with settings lr=%f, beta2=%f, '
                  'eps=%f', learning_rate, beta2, eps)
-    return optim.RMSProp(learning_rate=learning_rate, beta2=beta2, eps=eps)
+    return optim.RMSProp(learning_rate=learning_rate, beta2=beta2, eps=eps,
+                         centered=centered)
   else:
     raise ValueError('Unsupported optimizer {}'.format(name))
 
@@ -115,6 +118,7 @@ def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
                                (1. - terminals))
 
 
+@gin.configurable
 @functools.partial(jax.jit, static_argnums=(0, 2, 3))
 def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   """Returns the current epsilon for the agent's epsilon-greedy policy.

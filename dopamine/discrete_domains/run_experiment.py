@@ -165,7 +165,8 @@ class Runner(object):
                num_iterations=200,
                training_steps=250000,
                evaluation_steps=125000,
-               max_steps_per_episode=27000):
+               max_steps_per_episode=27000,
+               clip_rewards=True):
     """Initialize the Runner object in charge of running a full experiment.
 
     Args:
@@ -183,6 +184,7 @@ class Runner(object):
       evaluation_steps: int, the number of evaluation steps to perform.
       max_steps_per_episode: int, maximum number of steps after which an episode
         terminates.
+      clip_rewards: bool, whether to clip rewards in [-1, 1].
 
     This constructor will take the following actions:
     - Initialize an environment.
@@ -202,6 +204,7 @@ class Runner(object):
     self._evaluation_steps = evaluation_steps
     self._max_steps_per_episode = max_steps_per_episode
     self._base_dir = base_dir
+    self._clip_rewards = clip_rewards
     self._create_directories()
     self._summary_writer = tf.compat.v1.summary.FileWriter(self._base_dir)
 
@@ -314,8 +317,9 @@ class Runner(object):
       total_reward += reward
       step_number += 1
 
-      # Perform reward clipping.
-      reward = np.clip(reward, -1, 1)
+      if self._clip_rewards:
+        # Perform reward clipping.
+        reward = np.clip(reward, -1, 1)
 
       if (self._environment.game_over or
           step_number == self._max_steps_per_episode):
@@ -514,6 +518,7 @@ class Runner(object):
       statistics = self._run_one_iteration(iteration)
       self._log_experiment(iteration, statistics)
       self._checkpoint_experiment(iteration)
+    self._summary_writer.flush()
 
 
 @gin.configurable
