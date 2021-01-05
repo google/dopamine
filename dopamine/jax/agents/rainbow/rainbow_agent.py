@@ -51,7 +51,7 @@ import jax.numpy as jnp
 import tensorflow as tf
 
 
-@functools.partial(jax.jit, static_argnums=(7, 8))
+@functools.partial(jax.jit, static_argnums=(8))
 def train(target_network, optimizer, states, actions, next_states, rewards,
           terminals, support, cumulative_gamma):
   """Run a training step."""
