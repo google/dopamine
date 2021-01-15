@@ -25,6 +25,8 @@ import numpy as onp
 
 gin.constant('jax_networks.CARTPOLE_OBSERVATION_DTYPE', jnp.float64)
 gin.constant('jax_networks.ACROBOT_OBSERVATION_DTYPE', jnp.float64)
+gin.constant('jax_networks.LUNAR_OBSERVATION_DTYPE', jnp.float64)
+gin.constant('jax_networks.MOUNTAINCAR_OBSERVATION_DTYPE', jnp.float64)
 
 
 ### DQN Networks ###
@@ -60,8 +62,6 @@ class CartpoleDQNNetwork(nn.Module):
 
   def apply(self, x, num_actions):
     initializer = nn.initializers.xavier_uniform()
-    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
-    # have removed the true batch dimension.
     x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
@@ -82,13 +82,48 @@ class AcrobotDQNNetwork(nn.Module):
 
   def apply(self, x, num_actions):
     initializer = nn.initializers.xavier_uniform()
-    # We need to add a "batch dimension" as nn.Conv expects it, yet vmap will
-    # have removed the true batch dimension.
     x = x[None, ...]
     x = x.astype(jnp.float32)
     x = x.reshape((x.shape[0], -1))  # flatten
     x -= gym_lib.ACROBOT_MIN_VALS
     x /= gym_lib.ACROBOT_MAX_VALS - gym_lib.ACROBOT_MIN_VALS
+    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
+    x = nn.Dense(x, features=512, kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = nn.Dense(x, features=512, kernel_init=initializer)
+    x = jax.nn.relu(x)
+    q_values = nn.Dense(x, features=num_actions, kernel_init=initializer)
+    return atari_lib.DQNNetworkType(q_values)
+
+
+@gin.configurable
+class LunarLanderDQNNetwork(nn.Module):
+  """Jax DQN network for LunarLander."""
+
+  def apply(self, x, num_actions):
+    initializer = nn.initializers.xavier_uniform()
+    x = x[None, ...]
+    x = x.astype(jnp.float32)
+    x = x.reshape((x.shape[0], -1))  # flatten
+    x = nn.Dense(x, features=512, kernel_init=initializer)
+    x = jax.nn.relu(x)
+    x = nn.Dense(x, features=512, kernel_init=initializer)
+    x = jax.nn.relu(x)
+    q_values = nn.Dense(x, features=num_actions, kernel_init=initializer)
+    return atari_lib.DQNNetworkType(q_values)
+
+
+@gin.configurable
+class MountainCarDQNNetwork(nn.Module):
+  """Jax DQN network for MountainCar."""
+
+  def apply(self, x, num_actions):
+    initializer = nn.initializers.xavier_uniform()
+    x = x[None, ...]
+    x = x.astype(jnp.float32)
+    x = x.reshape((x.shape[0], -1))  # flatten
+    x -= gym_lib.MOUNTAINCAR_MIN_VALS
+    x /= gym_lib.MOUNTAINCAR_MAX_VALS - gym_lib.MOUNTAINCAR_MIN_VALS
     x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
     x = nn.Dense(x, features=512, kernel_init=initializer)
     x = jax.nn.relu(x)
