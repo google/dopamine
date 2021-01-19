@@ -103,7 +103,7 @@ def create_atari_environment(game_name=None, sticky_actions=True):
   return env
 
 
-@gin.configurable(blacklist=['variables'])
+@gin.configurable(denylist=['variables'])
 def maybe_transform_variable_names(variables, legacy_checkpoint_load=False):
   """Maps old variable names to the new ones.
 

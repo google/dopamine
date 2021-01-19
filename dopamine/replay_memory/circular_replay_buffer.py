@@ -689,8 +689,8 @@ class OutOfGraphReplayBuffer(object):
             self.__dict__[attr] = pickle.load(infile)
 
 
-@gin.configurable(blacklist=['observation_shape', 'stack_size',
-                             'update_horizon', 'gamma'])
+@gin.configurable(
+    denylist=['observation_shape', 'stack_size', 'update_horizon', 'gamma'])
 class WrappedReplayBuffer(object):
   """Wrapper of OutOfGraphReplayBuffer with an in graph sampling mechanism.
 
