@@ -51,6 +51,11 @@ STORE_FILENAME_PREFIX = '$store$_'
 CHECKPOINT_DURATION = 4
 
 
+def modulo_range(start, length, modulo):
+  for i in range(length):
+    yield (start + i) % modulo
+
+
 def invalid_range(cursor, replay_capacity, stack_size, update_horizon):
   """Returns a array with the indices of cursor-related invalid transitions.
 
@@ -183,6 +188,8 @@ class OutOfGraphReplayBuffer(object):
     self._cumulative_discount_vector = np.array(
         [math.pow(self._gamma, n) for n in range(update_horizon)],
         dtype=np.float32)
+    self._next_experience_is_episode_start = True
+    self._episode_end_indices = set()
 
   def _create_storage(self):
     """Creates the numpy arrays used to store transitions.
@@ -231,9 +238,17 @@ class OutOfGraphReplayBuffer(object):
     for element_type in self.get_add_args_signature():
       zero_transition.append(
           np.zeros(element_type.shape, dtype=element_type.type))
+    self._episode_end_indices.discard(self.cursor())  # If present
     self._add(*zero_transition)
 
-  def add(self, observation, action, reward, terminal, *args):
+  def add(self,
+          observation,
+          action,
+          reward,
+          terminal,
+          *args,
+          priority=None,
+          episode_end=False):
     """Adds a transition to the replay memory.
 
     This function checks the types and handles the padding at the beginning of
@@ -252,13 +267,32 @@ class OutOfGraphReplayBuffer(object):
                 was terminal (1) or not (0).
       *args: extra contents with shapes and dtypes according to
         extra_storage_types.
+      priority: float, unused in the circular replay buffer, but may be used
+        in child classes like PrioritizedReplayBuffer.
+      episode_end: bool, whether this experience is the last experience in
+        the episode. This is useful for tasks that terminate due to time-out,
+        but do not end on a terminal state. Overloading 'terminal' may not
+        be sufficient in this case, since 'terminal' is passed to the agent
+        for training. 'episode_end' allows the replay buffer to determine
+        episode boundaries without passing that information to the agent.
     """
+    if priority is not None:
+      args = (priority,) + args
+
     self._check_add_types(observation, action, reward, terminal, *args)
-    if self.is_empty() or self._store['terminal'][self.cursor() - 1] == 1:
+    if self._next_experience_is_episode_start:
       for _ in range(self._stack_size - 1):
         # Child classes can rely on the padding transitions being filled with
         # zeros. This is useful when there is a priority argument.
         self._add_zero_transition()
+      self._next_experience_is_episode_start = False
+
+    if episode_end or terminal:
+      self._episode_end_indices.add(self.cursor())
+      self._next_experience_is_episode_start = True
+    else:
+      self._episode_end_indices.discard(self.cursor())  # If present
+
     self._add(observation, action, reward, terminal, *args)
 
   def _add(self, *args):
@@ -412,6 +446,12 @@ class OutOfGraphReplayBuffer(object):
     # the stack is not valid, so don't sample it.
     if self.get_terminal_stack(index)[:-1].any():
       return False
+
+    # If the episode ends before the update horizon, without a terminal signal,
+    # it is invalid.
+    for i in modulo_range(index, self._update_horizon, self._replay_capacity):
+      if i in self._episode_end_indices and not self._store['terminal'][i]:
+        return False
 
     return True
 

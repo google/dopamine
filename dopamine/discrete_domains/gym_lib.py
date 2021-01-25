@@ -433,5 +433,7 @@ class GymPreprocessing(object):
 
   def step(self, action):
     observation, reward, game_over, info = self.environment.step(action)
+    was_truncated = info.get('TimeLimit.truncated', False)
+    game_over = game_over and not was_truncated
     self.game_over = game_over
     return observation, reward, game_over, info

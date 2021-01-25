@@ -37,7 +37,7 @@ class MockGymEnvironment(object):
     return 'reset'
 
   def step(self, unused_action):
-    return 'obs', 'rew', 'game_over', 'info'
+    return 'obs', 'rew', False, {}
 
 
 class GymPreprocessingTest(tf.test.TestCase):
@@ -49,7 +49,7 @@ class GymPreprocessingTest(tf.test.TestCase):
     self.assertEqual('reward_range', env.reward_range)
     self.assertEqual('metadata', env.metadata)
     self.assertEqual('reset', env.reset())
-    self.assertAllEqual(['obs', 'rew', 'game_over', 'info'], env.step(0))
+    self.assertAllEqual(['obs', 'rew', False, {}], env.step(0))
 
 
 if __name__ == '__main__':

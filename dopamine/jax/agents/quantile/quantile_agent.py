@@ -282,34 +282,3 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         self._sync_weights()
 
     self.training_steps += 1
-
-  def _store_transition(self,
-                        last_observation,
-                        action,
-                        reward,
-                        is_terminal,
-                        priority=None):
-    """Stores a transition when in training mode.
-
-    Stores the following tuple in the replay buffer (last_observation, action,
-    reward, is_terminal, priority).
-
-    Args:
-      last_observation: Last observation, type determined via observation_type
-        parameter in the replay_memory constructor.
-      action: An integer, the action taken.
-      reward: A float, the reward.
-      is_terminal: Boolean indicating if the current state is a terminal state.
-      priority: Float. Priority of sampling the transition. If None, the default
-        priority will be used. If replay scheme is uniform, the default priority
-        is 1. If the replay scheme is prioritized, the default priority is the
-        maximum ever seen [Schaul et al., 2015].
-    """
-    if priority is None:
-      if self._replay_scheme == 'uniform':
-        priority = 1.
-      else:
-        priority = self._replay.sum_tree.max_recorded_priority
-
-    if not self.eval_mode:
-      self._replay.add(last_observation, action, reward, is_terminal, priority)

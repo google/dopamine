@@ -290,13 +290,18 @@ class Runner(object):
     observation, reward, is_terminal, _ = self._environment.step(action)
     return observation, reward, is_terminal
 
-  def _end_episode(self, reward):
+  def _end_episode(self, reward, terminal=True):
     """Finalizes an episode run.
 
     Args:
       reward: float, the last reward from the environment.
+      terminal: bool, whether the last state-action led to a terminal state.
     """
-    self._agent.end_episode(reward)
+    if isinstance(self._agent, jax_dqn_agent.JaxDQNAgent):
+      self._agent.end_episode(reward, terminal)
+    else:
+      # TODO(joshgreaves): Add terminal signal to TF dopamine agents
+      self._agent.end_episode(reward)
 
   def _run_one_episode(self):
     """Executes a full trajectory of the agent interacting with the environment.
@@ -328,12 +333,12 @@ class Runner(object):
       elif is_terminal:
         # If we lose a life but the episode is not over, signal an artificial
         # end of episode to the agent.
-        self._agent.end_episode(reward)
+        self._end_episode(reward, is_terminal)
         action = self._agent.begin_episode(observation)
       else:
         action = self._agent.step(reward, observation)
 
-    self._end_episode(reward)
+    self._end_episode(reward, is_terminal)
 
     return step_number, total_reward
 

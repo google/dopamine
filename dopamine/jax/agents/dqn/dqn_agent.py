@@ -27,6 +27,7 @@ from absl import logging
 from dopamine.agents.dqn import dqn_agent
 from dopamine.jax import networks
 from dopamine.replay_memory import circular_replay_buffer
+from dopamine.replay_memory import prioritized_replay_buffer
 from flax import nn
 from flax import optim
 import gin
@@ -426,7 +427,7 @@ class JaxDQNAgent(object):
     self.action = onp.asarray(self.action)
     return self.action
 
-  def end_episode(self, reward):
+  def end_episode(self, reward, terminal=True):
     """Signals the end of the episode to the agent.
 
     We store the observation of the current time step, which is the last
@@ -434,9 +435,11 @@ class JaxDQNAgent(object):
 
     Args:
       reward: float, the last reward from the environment.
+      terminal: bool, whether the last state-action led to a terminal state.
     """
     if not self.eval_mode:
-      self._store_transition(self._observation, self.action, reward, True)
+      self._store_transition(
+          self._observation, self.action, reward, terminal, episode_end=True)
 
   def _train_step(self):
     """Runs a single training step.
@@ -472,19 +475,49 @@ class JaxDQNAgent(object):
 
     self.training_steps += 1
 
-  def _store_transition(self, last_observation, action, reward, is_terminal):
-    """Stores an experienced transition.
+  def _store_transition(self,
+                        last_observation,
+                        action,
+                        reward,
+                        is_terminal,
+                        priority=None,
+                        episode_end=False):
+    """Stores a transition when in training mode.
 
-    Pedantically speaking, this does not actually store an entire transition
-    since the next state is recorded on the following time step.
+    Stores the following tuple in the replay buffer (last_observation, action,
+    reward, is_terminal, priority).
 
     Args:
-      last_observation: numpy array, last observation.
-      action: int, the action taken.
-      reward: float, the reward.
-      is_terminal: bool, indicating if the current state is a terminal state.
+      last_observation: Last observation, type determined via observation_type
+        parameter in the replay_memory constructor.
+      action: An integer, the action taken.
+      reward: A float, the reward.
+      is_terminal: Boolean indicating if the current state is a terminal state.
+      priority: Float. Priority of sampling the transition. If None, the default
+        priority will be used. If replay scheme is uniform, the default priority
+        is 1. If the replay scheme is prioritized, the default priority is the
+        maximum ever seen [Schaul et al., 2015].
+      episode_end: bool, whether this transition is the last for the episode.
+        This can be different than terminal when ending the episode because
+        of a timeout, for example.
     """
-    self._replay.add(last_observation, action, reward, is_terminal)
+    is_prioritized = isinstance(
+        self._replay,
+        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer)
+    if is_prioritized and priority is None:
+      if self._replay_scheme == 'uniform':
+        priority = 1.
+      else:
+        priority = self._replay.sum_tree.max_recorded_priority
+
+    if not self.eval_mode:
+      self._replay.add(
+          last_observation,
+          action,
+          reward,
+          is_terminal,
+          priority=priority,
+          episode_end=episode_end)
 
   def bundle_and_checkpoint(self, checkpoint_dir, iteration_number):
     """Returns a self-contained bundle of the agent's state.
