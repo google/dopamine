@@ -277,7 +277,7 @@ class OutOfGraphReplayBuffer(object):
         episode boundaries without passing that information to the agent.
     """
     if priority is not None:
-      args = (priority,) + args
+      args = args + (priority,)
 
     self._check_add_types(observation, action, reward, terminal, *args)
     if self._next_experience_is_episode_start:

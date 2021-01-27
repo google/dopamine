@@ -480,6 +480,7 @@ class JaxDQNAgent(object):
                         action,
                         reward,
                         is_terminal,
+                        *args,
                         priority=None,
                         episode_end=False):
     """Stores a transition when in training mode.
@@ -493,6 +494,7 @@ class JaxDQNAgent(object):
       action: An integer, the action taken.
       reward: A float, the reward.
       is_terminal: Boolean indicating if the current state is a terminal state.
+      *args: Any, other items to be added to the replay buffer.
       priority: Float. Priority of sampling the transition. If None, the default
         priority will be used. If replay scheme is uniform, the default priority
         is 1. If the replay scheme is prioritized, the default priority is the
@@ -516,6 +518,7 @@ class JaxDQNAgent(object):
           action,
           reward,
           is_terminal,
+          *args,
           priority=priority,
           episode_end=episode_end)
 

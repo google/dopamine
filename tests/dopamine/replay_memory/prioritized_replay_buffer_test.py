@@ -19,6 +19,7 @@ from __future__ import print_function
 
 
 
+from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
 import numpy as np
 import tensorflow as tf
@@ -33,12 +34,13 @@ REPLAY_CAPACITY = 100
 
 class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
 
-  def create_default_memory(self):
+  def create_default_memory(self, extra_storage_types=None):
     return prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer(
         SCREEN_SIZE,
         STACK_SIZE,
         REPLAY_CAPACITY,
         BATCH_SIZE,
+        extra_storage_types=extra_storage_types,
         max_sample_attempts=10)  # For faster tests.
 
   def add_blank(self, memory, action=0, reward=0.0, terminal=0, priority=1.0):
@@ -56,7 +58,7 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
       Index of the transition just added.
     """
     dummy = np.zeros(SCREEN_SIZE)
-    memory.add(dummy, action, reward, terminal, priority)
+    memory.add(dummy, action, reward, terminal, priority=priority)
     index = (memory.cursor() - 1) % REPLAY_CAPACITY
     return index
 
@@ -73,6 +75,22 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
     # for priority.
     with self.assertRaisesRegexp(ValueError, 'Add expects'):
       memory.add(zeros, 0, 0, 0)
+
+  def testAddWithAdditionalArgsAndPriority(self):
+    memory = self.create_default_memory(extra_storage_types=[
+        circular_replay_buffer.ReplayElement('test_item', (), np.float32)
+    ])
+    self.assertEqual(memory.cursor(), 0)
+    zeros = np.zeros(SCREEN_SIZE)
+
+    memory.add(zeros, 0, 0.0, 0, 0.0, priority=1.0)
+    self.assertEqual(memory.cursor(), STACK_SIZE)
+    self.assertEqual(memory.add_count, STACK_SIZE)
+
+    # Check that the prioritized replay buffer expects an additional argument
+    # for test_item.
+    with self.assertRaisesRegexp(ValueError, 'Add expects'):
+      memory.add(zeros, 0, 0, 0, priority=1.0)
 
   def testDummyScreensAddedToNewMemory(self):
     memory = self.create_default_memory()

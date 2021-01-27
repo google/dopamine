@@ -311,7 +311,7 @@ class RainbowAgentTest(absltest.TestCase):
     dummy_frame = onp.zeros((84, 84))
     # Adding transitions with default, 10., default priorities.
     agent._store_transition(dummy_frame, 0, 0, False)
-    agent._store_transition(dummy_frame, 0, 0, False, 10.)
+    agent._store_transition(dummy_frame, 0, 0, False, priority=10.)
     agent._store_transition(dummy_frame, 0, 0, False)
     returned_priorities = agent._replay.get_priority(
         onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32))
@@ -324,7 +324,7 @@ class RainbowAgentTest(absltest.TestCase):
     dummy_frame = onp.zeros((84, 84))
     # Adding transitions with default, 10., default priorities.
     agent._store_transition(dummy_frame, 0, 0, False)
-    agent._store_transition(dummy_frame, 0, 0, False, 10.)
+    agent._store_transition(dummy_frame, 0, 0, False, priority=10.)
     agent._store_transition(dummy_frame, 0, 0, False)
     returned_priorities = agent._replay.get_priority(
         onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32))
