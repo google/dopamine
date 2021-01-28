@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import collections
 import functools
+import inspect
 import math
 
 from absl import logging
@@ -438,8 +439,13 @@ class JaxDQNAgent(object):
       terminal: bool, whether the last state-action led to a terminal state.
     """
     if not self.eval_mode:
-      self._store_transition(
-          self._observation, self.action, reward, terminal, episode_end=True)
+      if 'episode_end' in inspect.getfullargspec(self._store_transition)[0]:
+        self._store_transition(
+            self._observation, self.action, reward, terminal, episode_end=True)
+      else:
+        logging.warning(
+            '_store_transition function doesn\'t have episode_end arg.')
+        self._store_transition(self._observation, self.action, reward, terminal)
 
   def _train_step(self):
     """Runs a single training step.
