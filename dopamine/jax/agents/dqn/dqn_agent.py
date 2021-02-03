@@ -22,6 +22,7 @@ import collections
 import functools
 import inspect
 import math
+import time
 
 from absl import logging
 
@@ -212,7 +213,8 @@ class JaxDQNAgent(object):
                optimizer='adam',
                summary_writer=None,
                summary_writing_frequency=500,
-               allow_partial_reload=False):
+               allow_partial_reload=False,
+               seed=None):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -249,8 +251,11 @@ class JaxDQNAgent(object):
         written. Lower values will result in slower training.
       allow_partial_reload: bool, whether we allow reloading a partial agent
         (for instance, only the network parameters).
+      seed: int, a seed for DQN's internal RNG, used for initialization and
+        sampling actions. If None, will use the current time in nanoseconds.
     """
     assert isinstance(observation_shape, tuple)
+    seed = int(time.time() * 1e6) if seed is None else seed
     logging.info('Creating %s agent with the following parameters:',
                  self.__class__.__name__)
     logging.info('\t gamma: %f', gamma)
@@ -264,6 +269,7 @@ class JaxDQNAgent(object):
     logging.info('\t optimizer: %s', optimizer)
     logging.info('\t max_tf_checkpoints_to_keep: %d',
                  max_tf_checkpoints_to_keep)
+    logging.info('\t seed: %d', seed)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
@@ -286,7 +292,7 @@ class JaxDQNAgent(object):
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
 
-    self._rng = jax.random.PRNGKey(0)
+    self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
     self._replay = self._build_replay_buffer()
