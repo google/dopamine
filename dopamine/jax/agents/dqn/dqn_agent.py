@@ -445,7 +445,8 @@ class JaxDQNAgent(object):
       terminal: bool, whether the last state-action led to a terminal state.
     """
     if not self.eval_mode:
-      if 'episode_end' in inspect.getfullargspec(self._store_transition)[0]:
+      argspec = inspect.getfullargspec(self._store_transition)
+      if 'episode_end' in argspec.args or 'epsiode_end' in argspec.kwonlyargs:
         self._store_transition(
             self._observation, self.action, reward, terminal, episode_end=True)
       else:
