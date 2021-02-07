@@ -446,7 +446,7 @@ class JaxDQNAgent(object):
     """
     if not self.eval_mode:
       argspec = inspect.getfullargspec(self._store_transition)
-      if 'episode_end' in argspec.args or 'epsiode_end' in argspec.kwonlyargs:
+      if 'episode_end' in argspec.args or 'episode_end' in argspec.kwonlyargs:
         self._store_transition(
             self._observation, self.action, reward, terminal, episode_end=True)
       else:
