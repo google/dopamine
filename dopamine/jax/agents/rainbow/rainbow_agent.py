@@ -51,11 +51,11 @@ import jax.numpy as jnp
 import tensorflow as tf
 
 
-@functools.partial(jax.jit, static_argnums=(8))
+@functools.partial(jax.jit, static_argnums=(9))
 def train(target_network, optimizer, states, actions, next_states, rewards,
-          terminals, support, cumulative_gamma):
+          terminals, loss_weights, support, cumulative_gamma):
   """Run a training step."""
-  def loss_fn(model, target, mean_loss=True):
+  def loss_fn(model, target, loss_multipliers):
     logits = jax.vmap(model)(states).logits
     logits = jnp.squeeze(logits)
     # Fetch the logits for its selected action. We use vmap to perform this
@@ -64,19 +64,19 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
     loss = jax.vmap(networks.softmax_cross_entropy_loss_with_logits)(
         target,
         chosen_action_logits)
-    if mean_loss:
-      loss = jnp.mean(loss)
-    return loss
-  grad_fn = jax.value_and_grad(loss_fn)
+    mean_loss = jnp.mean(loss_multipliers * loss)
+    return mean_loss, loss
+  # Use the weighted mean loss for gradient computation.
+  grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
   target = target_distribution(target_network,
                                next_states,
                                rewards,
                                terminals,
                                support,
                                cumulative_gamma)
-  mean_loss, grad = grad_fn(optimizer.target, target)
-  # Get the loss without taking its mean.
-  loss = loss_fn(optimizer.target, target, mean_loss=False)
+
+  # Get the unweighted loss without taking its mean for updating priorities.
+  (mean_loss, loss), grad = grad_fn(optimizer.target, target, loss_weights)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss, mean_loss
 
@@ -259,6 +259,19 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
+
+        if self._replay_scheme == 'prioritized':
+          # The original prioritized experience replay uses a linear exponent
+          # schedule 0.4 -> 1.0. Comparing the schedule to a fixed exponent of
+          # 0.5 on 5 games (Asterix, Pong, Q*Bert, Seaquest, Space Invaders)
+          # suggested a fixed exponent actually performs better, except on Pong.
+          probs = self.replay_elements['sampling_probabilities']
+          # Weight the loss by the inverse priorities.
+          loss_weights = 1.0 / jnp.sqrt(probs + 1e-10)
+          loss_weights /= jnp.max(loss_weights)
+        else:
+          loss_weights = jnp.ones(self.replay_elements['state'].shape[0])
+
         self.optimizer, loss, mean_loss = train(
             self.target_network,
             self.optimizer,
@@ -267,17 +280,11 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
             self.replay_elements['next_state'],
             self.replay_elements['reward'],
             self.replay_elements['terminal'],
+            loss_weights,
             self._support,
             self.cumulative_gamma)
-        if self._replay_scheme == 'prioritized':
-          # The original prioritized experience replay uses a linear exponent
-          # schedule 0.4 -> 1.0. Comparing the schedule to a fixed exponent of
-          # 0.5 on 5 games (Asterix, Pong, Q*Bert, Seaquest, Space Invaders)
-          # suggested a fixed exponent actually performs better, except on Pong.
-          probs = self.replay_elements['sampling_probabilities']
-          loss_weights = 1.0 / jnp.sqrt(probs + 1e-10)
-          loss_weights /= jnp.max(loss_weights)
 
+        if self._replay_scheme == 'prioritized':
           # Rainbow and prioritized replay are parametrized by an exponent
           # alpha, but in both cases it is set to 0.5 - for simplicity's sake we
           # leave it as is here, using the more direct sqrt(). Taking the square
@@ -288,9 +295,6 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
           self._replay.set_priority(self.replay_elements['indices'],
                                     jnp.sqrt(loss + 1e-10))
 
-          # Weight the loss by the inverse priorities.
-          loss = loss_weights * loss
-          mean_loss = jnp.mean(loss)
         if self.summary_writer is not None:
           summary = tf.compat.v1.Summary(value=[
               tf.compat.v1.Summary.Value(tag='CrossEntropyLoss',
