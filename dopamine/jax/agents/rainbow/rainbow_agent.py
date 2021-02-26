@@ -37,27 +37,29 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import copy
 import functools
-
-
 
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.replay_memory import prioritized_replay_buffer
-from flax import nn
 import gin
 import jax
 import jax.numpy as jnp
+import numpy as onp
 import tensorflow as tf
 
 
-@functools.partial(jax.jit, static_argnums=(9))
-def train(target_network, optimizer, states, actions, next_states, rewards,
-          terminals, loss_weights, support, cumulative_gamma):
+@functools.partial(jax.jit, static_argnums=(0, 10))
+def train(network_def, target_params, optimizer, states, actions, next_states,
+          rewards, terminals, loss_weights, support, cumulative_gamma):
   """Run a training step."""
-  def loss_fn(model, target, loss_multipliers):
-    logits = jax.vmap(model)(states).logits
-    logits = jnp.squeeze(logits)
+  online_params = optimizer.target
+  def loss_fn(params, target, loss_multipliers):
+    def q_online(state):
+      return network_def.apply(params, state, support)
+
+    logits = jax.vmap(q_online)(states).logits
     # Fetch the logits for its selected action. We use vmap to perform this
     # indexing across the batch.
     chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
@@ -66,9 +68,12 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
         chosen_action_logits)
     mean_loss = jnp.mean(loss_multipliers * loss)
     return mean_loss, loss
-  # Use the weighted mean loss for gradient computation.
+
+  def q_target(state):
+    return network_def.apply(target_params, state, support)
+
   grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
-  target = target_distribution(target_network,
+  target = target_distribution(q_target,
                                next_states,
                                rewards,
                                terminals,
@@ -76,7 +81,7 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
                                cumulative_gamma)
 
   # Get the unweighted loss without taking its mean for updating priorities.
-  (mean_loss, loss), grad = grad_fn(optimizer.target, target, loss_weights)
+  (mean_loss, loss), grad = grad_fn(online_params, target, loss_weights)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss, mean_loss
 
@@ -103,8 +108,8 @@ def target_distribution(target_network, next_states, rewards, terminals,
     next_states: numpy array of batched next states.
     rewards: numpy array of batched rewards.
     terminals: numpy array of batched terminals.
-    support: support for the distribution (static_argnum).
-    cumulative_gamma: float, cumulative gamma to use (static_argnum).
+    support: support for the distribution.
+    cumulative_gamma: float, cumulative gamma to use.
 
   Returns:
     The target distribution from the replay.
@@ -120,6 +125,51 @@ def target_distribution(target_network, next_states, rewards, terminals,
   next_probabilities = probabilities[next_qt_argmax]
   return jax.lax.stop_gradient(
       project_distribution(target_support, next_probabilities, support))
+
+
+@functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 10, 11))
+def select_action(network_def, params, state, rng, num_actions, eval_mode,
+                  epsilon_eval, epsilon_train, epsilon_decay_period,
+                  training_steps, min_replay_history, epsilon_fn, support):
+  """Select an action from the set of available actions.
+
+  Chooses an action randomly with probability self._calculate_epsilon(), and
+  otherwise acts greedily according to the current Q-value estimates.
+
+  Args:
+    network_def: Linen Module to use for inference.
+    params: Linen params (frozen dict) to use for inference.
+    state: input state to use for inference.
+    rng: Jax random number generator.
+    num_actions: int, number of actions (static_argnum).
+    eval_mode: bool, whether we are in eval mode (static_argnum).
+    epsilon_eval: float, epsilon value to use in eval mode (static_argnum).
+    epsilon_train: float, epsilon value to use in train mode (static_argnum).
+    epsilon_decay_period: float, decay period for epsilon value for certain
+      epsilon functions, such as linearly_decaying_epsilon, (static_argnum).
+    training_steps: int, number of training steps so far.
+    min_replay_history: int, minimum number of steps in replay buffer
+      (static_argnum).
+    epsilon_fn: function used to calculate epsilon value (static_argnum).
+    support: support for the distribution.
+
+  Returns:
+    rng: Jax random number generator.
+    action: int, the selected action.
+  """
+  epsilon = jnp.where(eval_mode,
+                      epsilon_eval,
+                      epsilon_fn(epsilon_decay_period,
+                                 training_steps,
+                                 min_replay_history,
+                                 epsilon_train))
+
+  rng, rng1, rng2 = jax.random.split(rng, num=3)
+  p = jax.random.uniform(rng1)
+  return rng, jnp.where(
+      p <= epsilon,
+      jax.random.randint(rng2, (), 0, num_actions),
+      jnp.argmax(network_def.apply(params, state, support).q_values))
 
 
 @gin.configurable
@@ -158,7 +208,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
       observation_dtype: DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to jnp.float32.
       stack_size: int, number of frames to use in state stack.
-      network: flax.nn Module that is initialized by shape in _create_network
+      network: flax.linen Module that is initialized by shape in _create_network
         below. See dopamine.jax.networks.RainbowNetwork as an example.
       num_atoms: int, the number of buckets of the value function distribution.
       vmin: float, the value distribution support is [vmin, vmax]. If None, we
@@ -201,8 +251,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         observation_shape=observation_shape,
         observation_dtype=observation_dtype,
         stack_size=stack_size,
-        network=network.partial(num_atoms=num_atoms,
-                                support=self._support),
+        network=functools.partial(network,
+                                  num_atoms=num_atoms),
         gamma=gamma,
         update_horizon=update_horizon,
         min_replay_history=min_replay_history,
@@ -217,21 +267,13 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         summary_writing_frequency=summary_writing_frequency,
         allow_partial_reload=allow_partial_reload)
 
-  def _create_network(self, name):
-    """Builds a convolutional network that outputs Q-value distributions.
-
-    Args:
-      name: str, this name is passed to the Jax Module.
-    Returns:
-      network: Jax Model, the network instantiated by Jax.
-    """
-    _, initial_params = self.network.init(self._rng,
-                                          name=name,
-                                          x=self.state,
-                                          num_actions=self.num_actions,
-                                          num_atoms=self._num_atoms,
-                                          support=self._support)
-    return nn.Model(self.network, initial_params)
+  def _build_networks_and_optimizer(self):
+    self._rng, rng = jax.random.split(self._rng)
+    online_network_params = self.network_def.init(rng, x=self.state,
+                                                  support=self._support)
+    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer = optimizer_def.create(online_network_params)
+    self.target_network_params = copy.deepcopy(online_network_params)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -246,6 +288,77 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         gamma=self.gamma,
         observation_dtype=self.observation_dtype)
 
+  # TODO(psc): Refactor this so we have a class _select_action that calls
+  # select_action with the right parameters. This will allow us to avoid
+  # overriding begin_episode.
+  def begin_episode(self, observation):
+    """Returns the agent's first action for this episode.
+
+    Args:
+      observation: numpy array, the environment's initial observation.
+
+    Returns:
+      int, the selected action.
+    """
+    self._reset_state()
+    self._record_observation(observation)
+
+    if not self.eval_mode:
+      self._train_step()
+
+    self._rng, self.action = select_action(self.network_def,
+                                           self.online_params,
+                                           self.state,
+                                           self._rng,
+                                           self.num_actions,
+                                           self.eval_mode,
+                                           self.epsilon_eval,
+                                           self.epsilon_train,
+                                           self.epsilon_decay_period,
+                                           self.training_steps,
+                                           self.min_replay_history,
+                                           self.epsilon_fn,
+                                           self._support)
+    # TODO(psc): Why a numpy array? Why not an int?
+    self.action = onp.asarray(self.action)
+    return self.action
+
+  def step(self, reward, observation):
+    """Records the most recent transition and returns the agent's next action.
+
+    We store the observation of the last time step since we want to store it
+    with the reward.
+
+    Args:
+      reward: float, the reward received from the agent's most recent action.
+      observation: numpy array, the most recent observation.
+
+    Returns:
+      int, the selected action.
+    """
+    self._last_observation = self._observation
+    self._record_observation(observation)
+
+    if not self.eval_mode:
+      self._store_transition(self._last_observation, self.action, reward, False)
+      self._train_step()
+
+    self._rng, self.action = select_action(self.network_def,
+                                           self.online_params,
+                                           self.state,
+                                           self._rng,
+                                           self.num_actions,
+                                           self.eval_mode,
+                                           self.epsilon_eval,
+                                           self.epsilon_train,
+                                           self.epsilon_decay_period,
+                                           self.training_steps,
+                                           self.min_replay_history,
+                                           self.epsilon_fn,
+                                           self._support)
+    self.action = onp.asarray(self.action)
+    return self.action
+
   def _train_step(self):
     """Runs a single training step.
 
@@ -253,8 +366,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
       (1) A minimum number of frames have been added to the replay buffer.
       (2) `training_steps` is a multiple of `update_period`.
 
-    Also, syncs weights from online_network to target_network if training steps
-    is a multiple of target update period.
+    Also, syncs weights from online_params to target_network_params if training
+    steps is a multiple of target update period.
     """
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
@@ -273,7 +386,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
           loss_weights = jnp.ones(self.replay_elements['state'].shape[0])
 
         self.optimizer, loss, mean_loss = train(
-            self.target_network,
+            self.network_def,
+            self.target_network_params,
             self.optimizer,
             self.replay_elements['state'],
             self.replay_elements['action'],

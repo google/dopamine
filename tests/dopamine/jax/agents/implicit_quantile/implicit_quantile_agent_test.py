@@ -25,7 +25,7 @@ from absl.testing import absltest
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.jax.agents.implicit_quantile import implicit_quantile_agent
-from flax import nn
+from flax import linen
 import gin
 import jax
 import jax.numpy as jnp
@@ -52,22 +52,21 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     # State/Quantile shapes will be k x 1, (N x batch_size) x 1,
     # or (N' x batch_size) x 1.
 
-    class MockImplicitQuantileNetwork(nn.Module):
+    class MockImplicitQuantileNetwork(linen.Module):
       """Custom Jax model used in tests."""
+      num_actions: int
+      quantile_embedding_dim: int
 
-      def apply(self, x, num_actions, quantile_embedding_dim, num_quantiles,
-                rng):
+      @linen.compact
+      def __call__(self, x, num_quantiles, rng):
         del rng
-        # This weights_initializer gives action 0 a higher weight, ensuring
-        # that it gets picked by the argmax.
-        batch_size = x.shape[0]
-        x = x[None, :]
-        x = x.astype(jnp.float32)
-        x = x.reshape((x.shape[0], -1))  # flatten
-        quantile_values = nn.Dense(x, features=num_actions,
-                                   kernel_init=jax.nn.initializers.ones,
-                                   bias_init=jax.nn.initializers.zeros)
-        quantiles = jnp.ones([num_quantiles * batch_size, 1])
+        x = x.reshape((-1))  # flatten
+        state_net_tiled = jnp.tile(x, [num_quantiles, 1])
+        x *= state_net_tiled
+        quantile_values = linen.Dense(features=self.num_actions,
+                                      kernel_init=linen.initializers.ones,
+                                      bias_init=linen.initializers.zeros)(x)
+        quantiles = jnp.ones([num_quantiles, 1])
         return atari_lib.ImplicitQuantileNetworkType(quantile_values, quantiles)
 
     agent = implicit_quantile_agent.JaxImplicitQuantileAgent(
@@ -95,13 +94,13 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     agent = self._create_test_agent()
     # Replay buffer batch size:
     self.assertEqual(agent._replay._batch_size, 2)
-    for network in [agent.online_network, agent.target_network]:
+    for params in [agent.online_params, agent.target_network_params]:
       agent._rng, rng_input = jax.random.split(agent._rng)
-      output = network(self.ones_state,
-                       num_quantiles=agent.num_quantile_samples,
-                       rng=rng_input)
-      self.assertEqual(output.quantile_values.shape[0], 1)
-      self.assertEqual(output.quantile_values.shape[1],
+      output = agent.network_def.apply(params,
+                                       self.ones_state,
+                                       num_quantiles=agent.num_quantile_samples,
+                                       rng=rng_input)
+      self.assertEqual(output.quantile_values.shape[0],
                        agent.num_quantile_samples)
       self.assertEqual(output.quantiles.shape[0],
                        agent.num_quantile_samples)
@@ -109,35 +108,38 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     # Check the setting of num_actions.
     self.assertEqual(self._num_actions, agent.num_actions)
 
-  def test_q_value_computation(self):
+  def testQValueComputation(self):
     agent = self._create_test_agent()
     quantiles = onp.ones(agent.num_quantile_samples)
     q_value = onp.sum(quantiles)
     quantiles = quantiles.reshape([agent.num_quantile_samples, 1])
     expected_q_values = onp.ones([agent.num_actions]) * q_value
-    for network in [agent.online_network, agent.target_network]:
+    for params in [agent.online_params, agent.target_network_params]:
       agent._rng, rng_input = jax.random.split(agent._rng)
       q_values = jnp.mean(
-          network(self.ones_state, num_quantiles=agent.num_quantile_samples,
-                  rng=rng_input).quantile_values, axis=0)
+          agent.network_def.apply(
+              params, self.ones_state, num_quantiles=agent.num_quantile_samples,
+              rng=rng_input).quantile_values, axis=0)
       onp.array_equal(q_values, expected_q_values)
       self.assertEqual(jnp.argmax(q_values, axis=0), 0)
 
-  def test_replay_quantile_value_shape(self):
+  def testReplayQuantileValueShape(self):
     agent = self._create_test_agent()
     batch_size = 32
     batch_states = onp.ones(
         (batch_size,) + self.observation_shape + (self.stack_size,))
-    for network in [agent.online_network, agent.target_network]:
+    for params in [agent.online_params, agent.target_network_params]:
       agent._rng, rng_input = jax.random.split(agent._rng)
       model_output = jax.vmap(
-          lambda n, x, y, z: n(x=x, num_quantiles=y, rng=z),
-          in_axes=(None, 0, None, None))(
-              network, batch_states, agent.num_tau_samples, rng_input)
+          lambda n, p, x, y, z: n.apply(p, x=x, num_quantiles=y, rng=z),
+          in_axes=(None, None, 0, None, None))(
+              agent.network_def, params, batch_states, agent.num_tau_samples,
+              rng_input)
       quantile_values = model_output.quantile_values
       quantile_values = jnp.squeeze(quantile_values)
       self.assertEqual(quantile_values.shape[0], batch_size)
-      self.assertEqual(quantile_values.shape[1], agent.num_actions)
+      self.assertEqual(quantile_values.shape[1], agent.num_tau_samples)
+      self.assertEqual(quantile_values.shape[2], agent.num_actions)
 
   def testBeginEpisode(self):
     """Test the functionality of agent.begin_episode.

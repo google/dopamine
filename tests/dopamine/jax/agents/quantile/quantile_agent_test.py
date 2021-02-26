@@ -26,9 +26,8 @@ from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.jax.agents.quantile import quantile_agent
 from dopamine.utils import test_utils
-from flax import nn
+from flax import linen
 import gin
-import jax
 import jax.numpy as jnp
 import numpy as onp
 
@@ -63,25 +62,28 @@ class JaxQuantileAgentTest(absltest.TestCase):
     # are set to onp.arange(num_atoms), we are ensuring that the first action
     # has a higher expected Q-value; this results in the first
     # action being chosen.
-    class MockQuantileNetwork(nn.Module):
+    class MockQuantileNetwork(linen.Module):
       """Custom Jax network used in tests."""
+      num_actions: int
+      num_atoms: int
 
-      def apply(self, x, num_actions, num_atoms):
+      @linen.compact
+      def __call__(self, x):
         def custom_init(key, shape, dtype=jnp.float32):
           del key
           to_pick_first_action = onp.ones(shape, dtype)
-          to_pick_first_action[:, :num_atoms] = onp.arange(1, num_atoms + 1)
+          to_pick_first_action[:, :self.num_atoms] = onp.arange(
+              1, self.num_atoms + 1)
           return to_pick_first_action
 
-        x = x[None, :]
         x = x.astype(jnp.float32)
-        x = x.reshape((x.shape[0], -1))  # flatten
-        x = nn.Dense(x, features=num_actions * num_atoms,
-                     kernel_init=custom_init,
-                     bias_init=jax.nn.initializers.ones)
-        logits = x.reshape((-1, num_actions, num_atoms))
-        probabilities = nn.softmax(logits)
-        qs = jnp.mean(logits, axis=2)
+        x = x.reshape((-1))  # flatten
+        x = linen.Dense(features=self.num_actions * self.num_atoms,
+                        kernel_init=custom_init,
+                        bias_init=linen.initializers.ones)(x)
+        logits = x.reshape((self.num_actions, self.num_atoms))
+        probabilities = linen.softmax(logits)
+        qs = jnp.mean(logits, axis=1)
         return atari_lib.RainbowNetworkType(qs, logits, probabilities)
 
     agent = quantile_agent.JaxQuantileAgent(
@@ -108,21 +110,21 @@ class JaxQuantileAgentTest(absltest.TestCase):
   def testShapesAndValues(self):
     agent = self._create_test_agent()
     state = onp.ones((1, 28224))
-    net_outputs = agent.online_network(state)
+    net_outputs = agent.network_def.apply(agent.online_params, state)
     self.assertEqual(net_outputs.logits.shape,
-                     (1, self.num_actions, self._num_atoms))
+                     (self.num_actions, self._num_atoms))
     self.assertEqual(net_outputs.probabilities.shape,
                      net_outputs.logits.shape)
     self.assertEqual(net_outputs.q_values.shape,
-                     (1, self.num_actions))
+                     (self.num_actions,))
     # Check probabilities are uniform for all except the first action.
     expected_probabilities = (
         onp.ones_like(net_outputs.probabilities) * 1.0 / self._num_atoms)
     # The first action will have probability 1.0 at the highest quantile (it is
     # set this way by design in the mock network to guarantee that action 1 is
     # always selected).
-    expected_probabilities[0, 0] = onp.zeros(self._num_atoms)
-    expected_probabilities[0, 0, -1] = 1.0
+    expected_probabilities[0] = onp.zeros(self._num_atoms)
+    expected_probabilities[0, -1] = 1.0
     onp.testing.assert_allclose(net_outputs.probabilities,
                                 expected_probabilities)
 

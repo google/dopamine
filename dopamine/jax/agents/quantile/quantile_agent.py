@@ -22,14 +22,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import copy
 import functools
-
-
 
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.replay_memory import prioritized_replay_buffer
-from flax import nn
 import gin
 import jax
 import jax.numpy as jnp
@@ -46,7 +44,7 @@ def target_distribution(target_network, next_states, rewards, terminals,
     next_states: numpy array of batched next states.
     rewards: numpy array of batched rewards.
     terminals: numpy array of batched terminals.
-    cumulative_gamma: float, cumulative gamma to use (static_argnum).
+    cumulative_gamma: float, cumulative gamma to use.
 
   Returns:
     The target distribution from the replay.
@@ -62,12 +60,16 @@ def target_distribution(target_network, next_states, rewards, terminals,
   return jax.lax.stop_gradient(rewards + gamma_with_terminal * next_logits)
 
 
-@functools.partial(jax.jit, static_argnums=(7, 8, 9))
-def train(target_network, optimizer, states, actions, next_states, rewards,
-          terminals, kappa, num_atoms, cumulative_gamma):
+@functools.partial(jax.jit, static_argnums=(0, 8, 9, 10))
+def train(network_def, target_params, optimizer, states, actions,
+          next_states, rewards, terminals, kappa, num_atoms, cumulative_gamma):
   """Run a training step."""
-  def loss_fn(model, target, mean_loss=True):
-    logits = jax.vmap(model)(states).logits
+  online_params = optimizer.target
+  def loss_fn(params, target):
+    def q_online(state):
+      return network_def.apply(params, state)
+
+    logits = jax.vmap(q_online)(states).logits
     logits = jnp.squeeze(logits)
     # Fetch the logits for its selected action. We use vmap to perform this
     # indexing across the batch.
@@ -89,18 +91,18 @@ def train(target_network, optimizer, states, actions, next_states, rewards,
     quantile_huber_loss = tau_bellman_diff * huber_loss
     # Sum over tau dimension, average over target value dimension.
     loss = jnp.sum(jnp.mean(quantile_huber_loss, 2), 1)
-    if mean_loss:
-      loss = jnp.mean(loss)
-    return loss
-  grad_fn = jax.value_and_grad(loss_fn)
-  target = target_distribution(target_network,
+    return jnp.mean(loss), loss
+
+  def q_target(state):
+    return network_def.apply(target_params, state)
+
+  grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
+  target = target_distribution(q_target,
                                next_states,
                                rewards,
                                terminals,
                                cumulative_gamma)
-  mean_loss, grad = grad_fn(optimizer.target, target)
-  # Get the loss without taking its mean.
-  loss = loss_fn(optimizer.target, target, mean_loss=False)
+  (mean_loss, loss), grad = grad_fn(online_params, target)
   optimizer = optimizer.apply_gradient(grad)
   return optimizer, loss, mean_loss
 
@@ -140,11 +142,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
       observation_dtype: DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to jnp.float32.
       stack_size: int, number of frames to use in state stack.
-      network: tf.Keras.Model, expects 3 parameters: num_actions, num_atoms,
-        network_type. A call to this object will return an instantiation of the
-        network provided. The network returned can be run with different inputs
-        to create different outputs. See
-        dopamine.discrete_domains.jax.networks.QuantileNetwork as an example.
+      network: flax.linen Module, expects 3 parameters: num_actions, num_atoms,
+        network_type.
       kappa: Float, Huber loss cutoff.
       num_atoms: Int, the number of buckets for the value function distribution.
       gamma: Float, exponential decay factor as commonly used in the RL
@@ -181,7 +180,7 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         observation_shape=observation_shape,
         observation_dtype=observation_dtype,
         stack_size=stack_size,
-        network=network.partial(num_atoms=num_atoms),
+        network=functools.partial(network, num_atoms=num_atoms),
         gamma=gamma,
         update_horizon=update_horizon,
         min_replay_history=min_replay_history,
@@ -196,23 +195,12 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         summary_writing_frequency=summary_writing_frequency,
         allow_partial_reload=allow_partial_reload)
 
-  def _create_network(self, name):
-    r"""Builds a Quantile ConvNet.
-
-    Equivalent to Rainbow ConvNet, only now the output logits are interpreted
-    as quantiles.
-
-    Args:
-      name: str, this name is passed to the Jax Module.
-    Returns:
-      network: Jax Model, the network instantiated by Jax.
-    """
-    _, initial_params = self.network.init(self._rng,
-                                          name=name,
-                                          x=self.state,
-                                          num_actions=self.num_actions,
-                                          num_atoms=self._num_atoms)
-    return nn.Model(self.network, initial_params)
+  def _build_networks_and_optimizer(self):
+    self._rng, rng = jax.random.split(self._rng)
+    online_network_params = self.network_def.init(rng, x=self.state)
+    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer = optimizer_def.create(online_network_params)
+    self.target_network_params = copy.deepcopy(online_network_params)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -234,14 +222,15 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
       (1) A minimum number of frames have been added to the replay buffer.
       (2) `training_steps` is a multiple of `update_period`.
 
-    Also, syncs weights from online_network to target_network if training steps
-    is a multiple of target update period.
+    Also, syncs weights from online_params to target_network_params if training
+    steps is a multiple of target update period.
     """
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
         self.optimizer, loss, mean_loss = train(
-            self.target_network,
+            self.network_def,
+            self.target_network_params,
             self.optimizer,
             self.replay_elements['state'],
             self.replay_elements['action'],

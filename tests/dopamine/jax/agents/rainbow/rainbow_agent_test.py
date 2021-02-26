@@ -26,7 +26,7 @@ from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.jax.agents.rainbow import rainbow_agent
 from dopamine.utils import test_utils
-from flax import nn
+from flax import linen
 import gin
 import jax
 import jax.numpy as jnp
@@ -142,25 +142,27 @@ class RainbowAgentTest(absltest.TestCase):
     # set to onp.arange(num_atoms), we are ensuring that the first action
     # places higher weight on higher Q-values; this results in the first
     # action being chosen.
-    class MockRainbowNetwork(nn.Module):
+    class MockRainbowNetwork(linen.Module):
       """Custom Jax network used in tests."""
+      num_actions: int
+      num_atoms: int
 
-      def apply(self, x, num_actions, num_atoms, support):
+      @linen.compact
+      def __call__(self, x, support):
         def custom_init(key, shape, dtype=jnp.float32):
           del key
           to_pick_first_action = onp.ones(shape, dtype)
-          to_pick_first_action[:, :num_atoms] = onp.arange(1, num_atoms + 1)
+          to_pick_first_action[:, :self.num_atoms] = onp.arange(
+              1, self.num_atoms + 1)
           return to_pick_first_action
-
-        x = x[None, :]
         x = x.astype(jnp.float32)
-        x = x.reshape((x.shape[0], -1))  # flatten
-        x = nn.Dense(x, features=num_actions * num_atoms,
-                     kernel_init=custom_init,
-                     bias_init=jax.nn.initializers.ones)
-        logits = x.reshape((-1, num_actions, num_atoms))
-        probabilities = nn.softmax(logits)
-        qs = jnp.sum(support * probabilities, axis=2)
+        x = x.reshape((-1))  # flatten
+        x = linen.Dense(features=self.num_actions * self.num_atoms,
+                        kernel_init=custom_init,
+                        bias_init=linen.initializers.ones)(x)
+        logits = x.reshape((self.num_actions, self.num_atoms))
+        probabilities = linen.softmax(logits)
+        qs = jnp.sum(support * probabilities, axis=1)
         return atari_lib.RainbowNetworkType(qs, logits, probabilities)
 
     agent = rainbow_agent.JaxRainbowAgent(
@@ -191,17 +193,18 @@ class RainbowAgentTest(absltest.TestCase):
     self.assertEqual(jnp.min(agent._support), -self._vmax)
     self.assertEqual(jnp.max(agent._support), self._vmax)
     state = onp.ones((1, 28224))
-    net_output = agent.online_network(state)
+    net_output = agent.network_def.apply(agent.online_params, state,
+                                         agent._support)
     self.assertEqual(net_output.logits.shape,
-                     (1, self._num_actions, self._num_atoms))
+                     (self._num_actions, self._num_atoms))
     self.assertEqual(net_output.probabilities.shape,
                      net_output.logits.shape)
-    self.assertEqual(net_output.logits.shape[1],
+    self.assertEqual(net_output.logits.shape[0],
                      self._num_actions)
-    self.assertEqual(net_output.logits.shape[2],
+    self.assertEqual(net_output.logits.shape[1],
                      self._num_atoms)
     self.assertEqual(net_output.q_values.shape,
-                     (1, self._num_actions))
+                     (self._num_actions,))
 
   def testBeginEpisode(self):
     """Tests the functionality of agent.begin_episode.

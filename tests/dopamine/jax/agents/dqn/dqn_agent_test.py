@@ -27,9 +27,8 @@ from absl.testing import absltest
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.utils import test_utils
-from flax import nn
+from flax import linen
 import gin
-import jax
 import jax.numpy as jnp
 import mock
 import numpy as onp
@@ -61,10 +60,12 @@ class DQNAgentTest(absltest.TestCase):
 
     # This dummy network allows us to deterministically anticipate that
     # action 0 will be selected by an argmax.
-    class MockDQNNetwork(nn.Module):
+    class MockDQNNetwork(linen.Module):
       """The Jax network used in tests."""
+      num_actions: int
 
-      def apply(self, x, num_actions):
+      @linen.compact
+      def __call__(self, x):
         # This weights_initializer gives action 0 a higher weight, ensuring
         # that it gets picked by the argmax.
         def custom_init(key, shape, dtype=jnp.float32):
@@ -72,12 +73,11 @@ class DQNAgentTest(absltest.TestCase):
           to_pick_first_action = onp.zeros(shape, dtype)
           to_pick_first_action[:, 0] = 1
           return to_pick_first_action
-
-        x = x[None, :]
         x = x.astype(jnp.float32)
-        x = x.reshape((x.shape[0], -1))  # flatten
-        x = nn.Dense(x, features=num_actions, kernel_init=custom_init,
-                     bias_init=jax.nn.initializers.ones)
+        x = x.reshape((-1))  # flatten
+        x = linen.Dense(features=self.num_actions,
+                        kernel_init=custom_init,
+                        bias_init=linen.initializers.ones)(x)
         return atari_lib.DQNNetworkType(x)
 
     agent = dqn_agent.JaxDQNAgent(
