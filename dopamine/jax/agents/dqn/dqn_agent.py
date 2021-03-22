@@ -483,6 +483,7 @@ class JaxDQNAgent(object):
           summary = tf.compat.v1.Summary(value=[
               tf.compat.v1.Summary.Value(tag='HuberLoss', simple_value=loss)])
           self.summary_writer.add_summary(summary, self.training_steps)
+          self.summary_writer.flush()
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 
