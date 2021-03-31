@@ -17,8 +17,8 @@ grpcio==1.30.0
 gym==0.17.2
 h5py==2.10.0
 idna==2.10
-jax==0.1.73
-jaxlib==0.1.52
+jax
+jaxlib
 Keras-Preprocessing==1.1.2
 kiwisolver==1.2.0
 Markdown==3.2.2
@@ -44,10 +44,10 @@ rsa==4.6
 scipy==1.4.1
 six==1.15.0
 setuptools==49.2.01
-tensorboard==2.3.0
-tensorboard-plugin-wit==1.7.0
-tensorflow==2.3.0
-tensorflow-estimator==2.3.0
+tensorboard
+tensorboard-plugin-wit
+tensorflow
+tensorflow-estimator
 termcolor==1.1.0
 tf-slim==1.1.0
 urllib3==1.25.10
