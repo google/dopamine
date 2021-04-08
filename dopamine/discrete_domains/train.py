@@ -51,6 +51,9 @@ def main(unused_argv):
   logging.set_verbosity(logging.INFO)
   tf.compat.v1.disable_v2_behavior()
 
+  base_dir = FLAGS.base_dir
+  gin_files = FLAGS.gin_files
+  gin_bindings = FLAGS.gin_bindings
   run_experiment.load_gin_configs(gin_files, gin_bindings)
   runner = run_experiment.create_runner(base_dir)
   runner.run_experiment()
