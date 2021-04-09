@@ -14,8 +14,9 @@
 # limitations under the License.
 """Various networks for Jax Dopamine agents."""
 
+from typing import Tuple, Union
+
 from dopamine.discrete_domains import atari_lib
-from dopamine.discrete_domains import gym_lib
 from flax import linen as nn
 import gin
 import jax
@@ -24,9 +25,19 @@ import numpy as onp
 
 
 gin.constant('jax_networks.CARTPOLE_OBSERVATION_DTYPE', jnp.float64)
+gin.constant('jax_networks.CARTPOLE_MIN_VALS',
+             (-2.4, -5., -onp.pi/12., -onp.pi*2.))
+gin.constant('jax_networks.CARTPOLE_MAX_VALS',
+             (2.4, 5., onp.pi/12., onp.pi*2.))
 gin.constant('jax_networks.ACROBOT_OBSERVATION_DTYPE', jnp.float64)
+gin.constant('jax_networks.ACROBOT_MIN_VALS',
+             (-1., -1., -1., -1., -5., -5.))
+gin.constant('jax_networks.ACROBOT_MAX_VALS',
+             (1., 1., 1., 1., 5., 5.))
 gin.constant('jax_networks.LUNAR_OBSERVATION_DTYPE', jnp.float64)
 gin.constant('jax_networks.MOUNTAINCAR_OBSERVATION_DTYPE', jnp.float64)
+gin.constant('jax_networks.MOUNTAINCAR_MIN_VALS', (-1.2, -0.07))
+gin.constant('jax_networks.MOUNTAINCAR_MAX_VALS', (0.6, 0.07))
 
 
 ### DQN Networks ###
@@ -56,85 +67,36 @@ class NatureDQNNetwork(nn.Module):
     return atari_lib.DQNNetworkType(q_values)
 
 
-# TODO(psc): Consolidate the classic control networks to avoid code duplication.
 @gin.configurable
-class CartpoleDQNNetwork(nn.Module):
-  """Jax DQN network for Cartpole."""
+class ClassicControlDQNNetwork(nn.Module):
+  """Jax DQN network for classic control environments."""
   num_actions: int
+  num_layers: int = 2
+  hidden_units: int = 512
+  min_vals: Union[None, Tuple[float, ...]] = None
+  max_vals: Union[None, Tuple[float, ...]] = None
 
-  @nn.compact
-  def __call__(self, x):
+  def setup(self):
+    self._min_vals = jnp.array(self.min_vals)
+    self._max_vals = jnp.array(self.max_vals)
     initializer = nn.initializers.xavier_uniform()
+    self.layers = [
+        nn.Dense(features=self.hidden_units, kernel_init=initializer)
+        for _ in range(self.num_layers)]
+    self.final_layer = nn.Dense(features=self.num_actions,
+                                kernel_init=initializer)
+
+  def __call__(self, x):
     x = x.astype(jnp.float32)
     x = x.reshape((-1))  # flatten
-    x -= gym_lib.CARTPOLE_MIN_VALS
-    x /= gym_lib.CARTPOLE_MAX_VALS - gym_lib.CARTPOLE_MIN_VALS
-    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
-    return atari_lib.DQNNetworkType(q_values)
-
-
-@gin.configurable
-class AcrobotDQNNetwork(nn.Module):
-  """Jax DQN network for Acrobot."""
-  num_actions: int
-
-  @nn.compact
-  def __call__(self, x):
-    initializer = nn.initializers.xavier_uniform()
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    x -= gym_lib.ACROBOT_MIN_VALS
-    x /= gym_lib.ACROBOT_MAX_VALS - gym_lib.ACROBOT_MIN_VALS
-    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
-    return atari_lib.DQNNetworkType(q_values)
-
-
-@gin.configurable
-class LunarLanderDQNNetwork(nn.Module):
-  """Jax DQN network for LunarLander."""
-  num_actions: int
-
-  @nn.compact
-  def __call__(self, x):
-    initializer = nn.initializers.xavier_uniform()
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
-    return atari_lib.DQNNetworkType(q_values)
-
-
-@gin.configurable
-class MountainCarDQNNetwork(nn.Module):
-  """Jax DQN network for MountainCar."""
-  num_actions: int
-
-  @nn.compact
-  def __call__(self, x):
-    initializer = nn.initializers.xavier_uniform()
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    x -= gym_lib.MOUNTAINCAR_MIN_VALS
-    x /= gym_lib.MOUNTAINCAR_MAX_VALS - gym_lib.MOUNTAINCAR_MIN_VALS
-    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
+    if self.min_vals is not None:
+      x -= self._min_vals
+      x /= self._max_vals - self._min_vals
+      x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
+    for layer in self.layers:
+      x = layer(x)
+      x = nn.relu(x)
+    q_values = self.final_layer(x)
     return atari_lib.DQNNetworkType(q_values)
 
 
@@ -177,51 +139,36 @@ class RainbowNetwork(nn.Module):
 
 
 @gin.configurable
-class CartpoleRainbowNetwork(nn.Module):
-  """Jax Rainbow network for Cartpole."""
+class ClassicControlRainbowNetwork(nn.Module):
+  """Jax Rainbow network for classic control environments."""
   num_actions: int
   num_atoms: int
+  num_layers: int = 2
+  hidden_units: int = 512
+  min_vals: Union[None, Tuple[float, ...]] = None
+  max_vals: Union[None, Tuple[float, ...]] = None
 
-  @nn.compact
-  def __call__(self, x, support):
+  def setup(self):
+    self._min_vals = jnp.array(self.min_vals)
+    self._max_vals = jnp.array(self.max_vals)
     initializer = nn.initializers.xavier_uniform()
+    self.layers = [
+        nn.Dense(features=self.hidden_units, kernel_init=initializer)
+        for _ in range(self.num_layers)]
+    self.final_layer = nn.Dense(features=self.num_actions * self.num_atoms,
+                                kernel_init=initializer)
+
+  def __call__(self, x, support):
     x = x.astype(jnp.float32)
     x = x.reshape((-1))  # flatten
-    x -= gym_lib.CARTPOLE_MIN_VALS
-    x /= gym_lib.CARTPOLE_MAX_VALS - gym_lib.CARTPOLE_MIN_VALS
-    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
-    logits = x.reshape((self.num_actions, self.num_atoms))
-    probabilities = nn.softmax(logits)
-    q_values = jnp.sum(support * probabilities, axis=1)
-    return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
-
-
-@gin.configurable
-class AcrobotRainbowNetwork(nn.Module):
-  """Jax Rainbow network for Acrobot."""
-  num_actions: int
-  num_atoms: int
-
-  @nn.compact
-  def __call__(self, x, support):
-    initializer = nn.initializers.xavier_uniform()
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    x -= gym_lib.ACROBOT_MIN_VALS
-    x /= gym_lib.ACROBOT_MAX_VALS - gym_lib.ACROBOT_MIN_VALS
-    x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=512, kernel_init=initializer)(x)
-    x = nn.relu(x)
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
+    if self.min_vals is not None:
+      x -= self._min_vals
+      x /= self._max_vals - self._min_vals
+      x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
+    for layer in self.layers:
+      x = layer(x)
+      x = nn.relu(x)
+    x = self.final_layer(x)
     logits = x.reshape((self.num_actions, self.num_atoms))
     probabilities = nn.softmax(logits)
     q_values = jnp.sum(support * probabilities, axis=1)

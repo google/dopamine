@@ -9,7 +9,7 @@ import dopamine.replay_memory.prioritized_replay_buffer
 JaxRainbowAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
 JaxRainbowAgent.observation_dtype = %jax_networks.ACROBOT_OBSERVATION_DTYPE
 JaxRainbowAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
-JaxRainbowAgent.network = @networks.AcrobotRainbowNetwork
+JaxRainbowAgent.network = @networks.ClassicControlRainbowNetwork
 JaxRainbowAgent.num_atoms = 51
 JaxRainbowAgent.vmax = 10.
 JaxRainbowAgent.gamma = 0.99
@@ -21,6 +21,9 @@ JaxRainbowAgent.epsilon_fn = @dqn_agent.identity_epsilon
 JaxRainbowAgent.replay_scheme = 'uniform'
 create_optimizer.learning_rate = 0.1
 create_optimizer.eps = 0.0003125
+
+ClassicControlRainbowNetwork.min_vals = %jax_networks.ACROBOT_MIN_VALS
+ClassicControlRainbowNetwork.max_vals = %jax_networks.ACROBOT_MAX_VALS
 
 create_gym_environment.environment_name = 'Acrobot'
 create_gym_environment.version = 'v1'

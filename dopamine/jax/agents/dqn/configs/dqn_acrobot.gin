@@ -10,7 +10,7 @@ import flax
 JaxDQNAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
 JaxDQNAgent.observation_dtype = %jax_networks.ACROBOT_OBSERVATION_DTYPE
 JaxDQNAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
-JaxDQNAgent.network = @networks.AcrobotDQNNetwork
+JaxDQNAgent.network = @networks.ClassicControlDQNNetwork
 JaxDQNAgent.gamma = 0.99
 JaxDQNAgent.update_horizon = 1
 JaxDQNAgent.min_replay_history = 500
@@ -20,6 +20,9 @@ JaxDQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
 JaxDQNAgent.optimizer = 'adam'
 create_optimizer.learning_rate = 0.001
 create_optimizer.eps = 3.125e-4
+
+ClassicControlDQNNetwork.min_vals = %jax_networks.ACROBOT_MIN_VALS
+ClassicControlDQNNetwork.max_vals = %jax_networks.ACROBOT_MAX_VALS
 
 create_gym_environment.environment_name = 'Acrobot'
 create_gym_environment.version = 'v1'
