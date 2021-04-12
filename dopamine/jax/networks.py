@@ -77,8 +77,10 @@ class ClassicControlDQNNetwork(nn.Module):
   max_vals: Union[None, Tuple[float, ...]] = None
 
   def setup(self):
-    self._min_vals = jnp.array(self.min_vals)
-    self._max_vals = jnp.array(self.max_vals)
+    if self.min_vals is not None:
+      assert self.max_vals is not None
+      self._min_vals = jnp.array(self.min_vals)
+      self._max_vals = jnp.array(self.max_vals)
     initializer = nn.initializers.xavier_uniform()
     self.layers = [
         nn.Dense(features=self.hidden_units, kernel_init=initializer)
@@ -149,8 +151,9 @@ class ClassicControlRainbowNetwork(nn.Module):
   max_vals: Union[None, Tuple[float, ...]] = None
 
   def setup(self):
-    self._min_vals = jnp.array(self.min_vals)
-    self._max_vals = jnp.array(self.max_vals)
+    if self.min_vals is not None:
+      self._min_vals = jnp.array(self.min_vals)
+      self._max_vals = jnp.array(self.max_vals)
     initializer = nn.initializers.xavier_uniform()
     self.layers = [
         nn.Dense(features=self.hidden_units, kernel_init=initializer)
