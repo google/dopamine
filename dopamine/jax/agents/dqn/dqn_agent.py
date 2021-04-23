@@ -79,6 +79,7 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     raise ValueError('Unsupported optimizer {}'.format(name))
 
 
+# TODO(psc): Refactor into a separato losses module.
 def huber_loss(targets, predictions, delta=1.0):
   x = jnp.abs(targets - predictions)
   return jnp.where(x <= delta,
@@ -86,9 +87,13 @@ def huber_loss(targets, predictions, delta=1.0):
                    0.5 * delta**2 + delta * (x - delta))
 
 
-@functools.partial(jax.jit, static_argnums=(0, 8))
+def mse_loss(targets, predictions):
+  return jnp.power((targets - predictions), 2)
+
+
+@functools.partial(jax.jit, static_argnums=(0, 8, 9))
 def train(network_def, target_params, optimizer, states, actions, next_states,
-          rewards, terminals, cumulative_gamma):
+          rewards, terminals, cumulative_gamma, loss_type='huber'):
   """Run the training step."""
   online_params = optimizer.target
   def loss_fn(params, target):
@@ -98,7 +103,9 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
     q_values = jax.vmap(q_online)(states).q_values
     q_values = jnp.squeeze(q_values)
     replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
-    loss = jnp.mean(jax.vmap(huber_loss)(target, replay_chosen_q))
+    loss = jnp.where(loss_type == 'huber',
+                     jnp.mean(jax.vmap(huber_loss)(target, replay_chosen_q)),
+                     jnp.mean(jax.vmap(mse_loss)(target, replay_chosen_q)))
     return loss
 
   def q_target(state):
@@ -225,7 +232,8 @@ class JaxDQNAgent(object):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False,
-               seed=None):
+               seed=None,
+               loss_type='huber'):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -264,6 +272,7 @@ class JaxDQNAgent(object):
         (for instance, only the network parameters).
       seed: int, a seed for DQN's internal RNG, used for initialization and
         sampling actions. If None, will use the current time in nanoseconds.
+      loss_type: str, whether to use Huber or MSE loss during training.
     """
     assert isinstance(observation_shape, tuple)
     seed = int(time.time() * 1e6) if seed is None else seed
@@ -281,6 +290,7 @@ class JaxDQNAgent(object):
     logging.info('\t max_tf_checkpoints_to_keep: %d',
                  max_tf_checkpoints_to_keep)
     logging.info('\t seed: %d', seed)
+    logging.info('\t loss_type: %s', loss_type)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
@@ -302,6 +312,7 @@ class JaxDQNAgent(object):
     self.summary_writer = summary_writer
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
+    self._loss_type = loss_type
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
@@ -476,7 +487,8 @@ class JaxDQNAgent(object):
                                      self.replay_elements['next_state'],
                                      self.replay_elements['reward'],
                                      self.replay_elements['terminal'],
-                                     self.cumulative_gamma)
+                                     self.cumulative_gamma,
+                                     self._loss_type)
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
