@@ -24873,5 +24873,4980 @@
   "Iteration": 198,
   "Value": 4888.253477588872,
   "Agent": "Quantile (JAX)"
+ },
+ {
+  "Iteration": 0,
+  "Value": 695.257048092869,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 1,
+  "Value": 686.9565217391304,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 2,
+  "Value": 855.3846153846154,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 3,
+  "Value": 1131.4689265536724,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 4,
+  "Value": 1091.0249307479223,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 5,
+  "Value": 1290.5487804878048,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 6,
+  "Value": 1205.4966887417218,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 7,
+  "Value": 1308.1904761904761,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 8,
+  "Value": 1096.7532467532467,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 9,
+  "Value": 1418.888888888889,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 10,
+  "Value": 1453.102310231023,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 11,
+  "Value": 1516.774193548387,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 12,
+  "Value": 1776.9310344827586,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 13,
+  "Value": 2007.25,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 14,
+  "Value": 2417.9804560260586,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 15,
+  "Value": 2473.190789473684,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 16,
+  "Value": 2880.8626198083066,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 17,
+  "Value": 3242.683615819209,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 18,
+  "Value": 3302.872340425532,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 19,
+  "Value": 3838.945945945946,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 20,
+  "Value": 4124.456233421751,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 21,
+  "Value": 4277.466960352423,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 22,
+  "Value": 4210.9276018099545,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 23,
+  "Value": 4155.196687370601,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 24,
+  "Value": 4197.408088235294,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 25,
+  "Value": 4368.426966292135,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 26,
+  "Value": 4349.704347826087,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 27,
+  "Value": 4534.58904109589,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 28,
+  "Value": 4531.4331210191085,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 29,
+  "Value": 4596.12426035503,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 30,
+  "Value": 4718.917293233083,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 31,
+  "Value": 4706.4046579330425,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 32,
+  "Value": 4778.737446197992,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 33,
+  "Value": 4833.423295454545,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 34,
+  "Value": 4806.907073509015,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 35,
+  "Value": 4694.664948453608,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 36,
+  "Value": 4709.97442455243,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 37,
+  "Value": 4828.671875,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 38,
+  "Value": 4798.412903225806,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 39,
+  "Value": 4857.602108036891,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 40,
+  "Value": 4846.558197747184,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 41,
+  "Value": 4675.175438596491,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 42,
+  "Value": 4613.137055837564,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 43,
+  "Value": 4582.858555885262,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 44,
+  "Value": 4551.179624664879,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 45,
+  "Value": 4566.199134199134,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 46,
+  "Value": 4580.683760683761,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 47,
+  "Value": 4621.818936877076,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 48,
+  "Value": 4677.689110556941,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 49,
+  "Value": 4671.131147540984,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 50,
+  "Value": 4693.607085346216,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 51,
+  "Value": 4711.662688941925,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 52,
+  "Value": 4720.751582278481,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 53,
+  "Value": 4711.727912431587,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 54,
+  "Value": 4692.258320126783,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 55,
+  "Value": 4754.0870240870245,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 56,
+  "Value": 4766.896012509773,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 57,
+  "Value": 4746.3046875,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 58,
+  "Value": 4777.786438035853,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 59,
+  "Value": 4797.283950617284,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 60,
+  "Value": 4766.425796425797,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 61,
+  "Value": 4783.057915057915,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 62,
+  "Value": 4779.93831919815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 63,
+  "Value": 4804.678899082569,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 64,
+  "Value": 4773.804430863254,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 65,
+  "Value": 4803.489623366641,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 66,
+  "Value": 4813.6557501904035,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 67,
+  "Value": 4782.727963525836,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 68,
+  "Value": 4774.757878554958,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 69,
+  "Value": 4805.634556574923,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 70,
+  "Value": 4848.973384030418,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 71,
+  "Value": 4818.556067588325,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 72,
+  "Value": 4825.263157894737,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 73,
+  "Value": 4816.712224753227,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 74,
+  "Value": 4833.980362537764,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 75,
+  "Value": 4890.625,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 76,
+  "Value": 4875.326170376055,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 77,
+  "Value": 4867.479119210327,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 78,
+  "Value": 4883.38893100834,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 79,
+  "Value": 4858.2768999247555,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 80,
+  "Value": 4852.178517397882,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 81,
+  "Value": 4830.211960635882,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 82,
+  "Value": 4807.737556561086,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 83,
+  "Value": 4844.611320754717,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 84,
+  "Value": 4864.504163512491,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 85,
+  "Value": 4879.842342342342,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 86,
+  "Value": 4890.3576751117735,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 87,
+  "Value": 4873.2784431137725,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 88,
+  "Value": 4876.367041198502,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 89,
+  "Value": 4863.162583518931,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 90,
+  "Value": 4861.225710014947,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 91,
+  "Value": 4915.876211782252,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 92,
+  "Value": 4881.461595824012,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 93,
+  "Value": 4859.94776119403,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 94,
+  "Value": 4842.957430918596,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 95,
+  "Value": 4824.263275991025,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 96,
+  "Value": 4836.4360119047615,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 97,
+  "Value": 4869.881656804734,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 98,
+  "Value": 4881.251851851852,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 99,
+  "Value": 4837.603244837758,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 100,
+  "Value": 4823.942520265291,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 101,
+  "Value": 4796.634544106746,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 102,
+  "Value": 4807.181952662722,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 103,
+  "Value": 4781.564575645756,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 104,
+  "Value": 4804.525925925926,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 105,
+  "Value": 4831.912527798369,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 106,
+  "Value": 4794.234769687964,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 107,
+  "Value": 4814.816176470588,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 108,
+  "Value": 4806.20486366986,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 109,
+  "Value": 4797.623616236162,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 110,
+  "Value": 4808.95664952241,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 111,
+  "Value": 4834.558173784978,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 112,
+  "Value": 4833.294203961849,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 113,
+  "Value": 4836.537618699781,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 114,
+  "Value": 4841.859956236324,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 115,
+  "Value": 4845.1497443389335,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 116,
+  "Value": 4866.298984034833,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 117,
+  "Value": 4807.850330154072,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 118,
+  "Value": 4786.075110456553,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 119,
+  "Value": 4822.005856515373,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 120,
+  "Value": 4754.862861378799,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 121,
+  "Value": 4765.763582966226,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 122,
+  "Value": 4778.905216752388,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 123,
+  "Value": 4773.355457227139,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 124,
+  "Value": 4822.553035844916,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 125,
+  "Value": 4796.56204379562,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 126,
+  "Value": 4798.649446494465,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 127,
+  "Value": 4781.737849779087,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 128,
+  "Value": 4785.6563421828905,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 129,
+  "Value": 4819.319180087848,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 130,
+  "Value": 4823.65907421014,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 131,
+  "Value": 4835.45720555962,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 132,
+  "Value": 4779.346549192364,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 133,
+  "Value": 4794.388278388278,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 134,
+  "Value": 4803.873807776962,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 135,
+  "Value": 4800.526700804682,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 136,
+  "Value": 4781.641025641025,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 137,
+  "Value": 4825.546647230321,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 138,
+  "Value": 4785.185459940652,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 139,
+  "Value": 4780.485651214128,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 140,
+  "Value": 4775.658284023669,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 141,
+  "Value": 4778.8938053097345,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 142,
+  "Value": 4807.619397501837,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 143,
+  "Value": 4773.715124816446,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 144,
+  "Value": 4779.985283296542,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 145,
+  "Value": 4753.90636430139,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 146,
+  "Value": 4835.400291120815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 147,
+  "Value": 4822.270072992701,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 148,
+  "Value": 4813.167520117045,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 149,
+  "Value": 4768.6549707602335,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 150,
+  "Value": 4763.7764791818845,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 151,
+  "Value": 4777.383040935672,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 152,
+  "Value": 4821.506550218341,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 153,
+  "Value": 4818.830409356725,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 154,
+  "Value": 4774.655425219941,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 155,
+  "Value": 4798.2735918068765,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 156,
+  "Value": 4786.303074670571,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 157,
+  "Value": 4778.616398243045,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 158,
+  "Value": 4811.884164222874,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 159,
+  "Value": 4779.941305942773,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 160,
+  "Value": 4770.462555066079,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 161,
+  "Value": 4806.964809384164,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 162,
+  "Value": 4817.799707602339,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 163,
+  "Value": 4823.564645726808,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 164,
+  "Value": 4804.628820960698,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 165,
+  "Value": 4823.178181818182,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 166,
+  "Value": 4772.621145374449,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 167,
+  "Value": 4802.789165446559,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 168,
+  "Value": 4824.195906432748,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 169,
+  "Value": 4856.516363636364,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 170,
+  "Value": 4826.8271334792125,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 171,
+  "Value": 4843.340659340659,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 172,
+  "Value": 4848.613933236575,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 173,
+  "Value": 4854.566010211524,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 174,
+  "Value": 4847.091836734694,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 175,
+  "Value": 4840.5852231163135,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 176,
+  "Value": 4859.1587417703,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 177,
+  "Value": 4873.189465983906,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 178,
+  "Value": 4845.747629467542,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 179,
+  "Value": 4851.220588235294,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 180,
+  "Value": 4817.3020527859235,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 181,
+  "Value": 4840.545058139535,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 182,
+  "Value": 4799.970930232558,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 183,
+  "Value": 4826.388278388278,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 184,
+  "Value": 4812.4304538799415,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 185,
+  "Value": 4863.674214755296,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 186,
+  "Value": 4845.451895043731,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 187,
+  "Value": 4859.819233550253,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 188,
+  "Value": 4870.66037735849,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 189,
+  "Value": 4883.205776173285,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 190,
+  "Value": 4887.953555878084,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 191,
+  "Value": 4852.8259286234525,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 192,
+  "Value": 4846.712626995646,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 193,
+  "Value": 4886.00145137881,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 194,
+  "Value": 4924.800580130529,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 195,
+  "Value": 4886.8428674873285,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 196,
+  "Value": 4866.030478955007,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 197,
+  "Value": 4865.291545189504,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 198,
+  "Value": 4858.0983847283405,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 0,
+  "Value": 692.4414715719064,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 1,
+  "Value": 607.2457627118644,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 2,
+  "Value": 880.4750593824228,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 3,
+  "Value": 916.6842105263158,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 4,
+  "Value": 1017.3669467787115,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 5,
+  "Value": 1025.993883792049,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 6,
+  "Value": 1129.4285714285713,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 7,
+  "Value": 1177.2185430463576,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 8,
+  "Value": 1207.3333333333333,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 9,
+  "Value": 1264.421052631579,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 10,
+  "Value": 1299.4719471947194,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 11,
+  "Value": 1463.920265780731,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 12,
+  "Value": 1565.5038759689924,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 13,
+  "Value": 1571.0791366906474,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 14,
+  "Value": 2092.7573529411766,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 15,
+  "Value": 2359.75,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 16,
+  "Value": 2484.740740740741,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 17,
+  "Value": 3153.2323232323233,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 18,
+  "Value": 3510.0626959247647,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 19,
+  "Value": 3605.7834757834758,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 20,
+  "Value": 3983.9882697947214,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 21,
+  "Value": 4282.591623036649,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 22,
+  "Value": 4382.017543859649,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 23,
+  "Value": 4452.915766738661,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 24,
+  "Value": 4402.475049900199,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 25,
+  "Value": 4528.055009823182,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 26,
+  "Value": 4667.867383512545,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 27,
+  "Value": 4634.315424610052,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 28,
+  "Value": 4649.137380191693,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 29,
+  "Value": 4655.318181818182,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 30,
+  "Value": 4651.923076923077,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 31,
+  "Value": 4617.890625,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 32,
+  "Value": 4661.620947630922,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 33,
+  "Value": 4622.8518971848225,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 34,
+  "Value": 4677.009345794392,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 35,
+  "Value": 4662.639821029083,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 36,
+  "Value": 4667.857911733046,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 37,
+  "Value": 4644.291666666667,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 38,
+  "Value": 4638.571428571428,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 39,
+  "Value": 4597.517730496454,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 40,
+  "Value": 4641.3880742913,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 41,
+  "Value": 4678.801843317972,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 42,
+  "Value": 4662.614145031334,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 43,
+  "Value": 4744.088541666667,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 44,
+  "Value": 4742.167832167832,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 45,
+  "Value": 4839.388275276126,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 46,
+  "Value": 4839.519392917369,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 47,
+  "Value": 4848.358458961474,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 48,
+  "Value": 4831.494632535095,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 49,
+  "Value": 4913.625204582651,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 50,
+  "Value": 4877.9983726607,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 51,
+  "Value": 4887.487765089722,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 52,
+  "Value": 4950.0,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 53,
+  "Value": 4905.02766798419,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 54,
+  "Value": 4909.464285714285,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 55,
+  "Value": 4922.25558121632,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 56,
+  "Value": 4988.626707132018,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 57,
+  "Value": 4983.411675511751,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 58,
+  "Value": 4996.209495101733,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 59,
+  "Value": 5018.702865761689,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 60,
+  "Value": 5058.577844311377,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 61,
+  "Value": 5063.015151515152,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 62,
+  "Value": 5075.978994748687,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 63,
+  "Value": 5082.091454272863,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 64,
+  "Value": 5092.955223880597,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 65,
+  "Value": 5026.207928197457,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 66,
+  "Value": 5060.545998504113,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 67,
+  "Value": 5068.511111111111,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 68,
+  "Value": 5079.212481426449,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 69,
+  "Value": 5084.835329341317,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 70,
+  "Value": 5039.020346646571,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 71,
+  "Value": 5048.4060150375935,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 72,
+  "Value": 5081.239731142644,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 73,
+  "Value": 5057.67616191904,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 74,
+  "Value": 4989.939668174962,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 75,
+  "Value": 5067.091454272863,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 76,
+  "Value": 5104.52023988006,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 77,
+  "Value": 5089.367559523809,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 78,
+  "Value": 5093.335820895522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 79,
+  "Value": 5079.81426448737,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 80,
+  "Value": 5068.444940476191,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 81,
+  "Value": 5106.96071163825,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 82,
+  "Value": 5121.351150705271,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 83,
+  "Value": 5076.7114093959735,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 84,
+  "Value": 5048.826151560178,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 85,
+  "Value": 5081.798084008843,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 86,
+  "Value": 5039.469026548672,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 87,
+  "Value": 5099.503703703704,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 88,
+  "Value": 5066.492647058823,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 89,
+  "Value": 5066.326681448632,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 90,
+  "Value": 5131.3485630066325,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 91,
+  "Value": 5104.110701107011,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 92,
+  "Value": 5103.851851851852,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 93,
+  "Value": 5120.296735905044,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 94,
+  "Value": 5141.24907063197,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 95,
+  "Value": 5167.74217585693,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 96,
+  "Value": 5188.508245877061,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 97,
+  "Value": 5166.771066368382,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 98,
+  "Value": 5148.3508245877065,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 99,
+  "Value": 5151.06334841629,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 100,
+  "Value": 5140.722347629797,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 101,
+  "Value": 5181.14134542706,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 102,
+  "Value": 5160.465465465465,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 103,
+  "Value": 5161.082706766917,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 104,
+  "Value": 5175.055845122859,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 105,
+  "Value": 5173.738805970149,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 106,
+  "Value": 5224.127691165553,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 107,
+  "Value": 5212.710487444609,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 108,
+  "Value": 5226.159582401193,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 109,
+  "Value": 5195.137138621201,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 110,
+  "Value": 5223.264248704663,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 111,
+  "Value": 5201.682656826568,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 112,
+  "Value": 5192.830609212481,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 113,
+  "Value": 5197.767857142857,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 114,
+  "Value": 5264.307920059216,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 115,
+  "Value": 5197.582089552238,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 116,
+  "Value": 5226.029629629629,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 117,
+  "Value": 5252.401779095627,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 118,
+  "Value": 5240.92867756315,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 119,
+  "Value": 5214.077380952381,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 120,
+  "Value": 5225.025754231052,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 121,
+  "Value": 5222.315711094564,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 122,
+  "Value": 5179.335820895522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 123,
+  "Value": 5209.103139013453,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 124,
+  "Value": 5218.767737117251,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 125,
+  "Value": 5258.543976348855,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 126,
+  "Value": 5284.973977695167,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 127,
+  "Value": 5277.749814951888,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 128,
+  "Value": 5229.947683109118,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 129,
+  "Value": 5232.470501474926,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 130,
+  "Value": 5230.243722304283,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 131,
+  "Value": 5228.690828402367,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 132,
+  "Value": 5266.504424778761,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 133,
+  "Value": 5237.752976190476,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 134,
+  "Value": 5242.104874446086,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 135,
+  "Value": 5238.9963099630995,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 136,
+  "Value": 5236.612426035503,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 137,
+  "Value": 5261.5003695491505,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 138,
+  "Value": 5262.861356932153,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 139,
+  "Value": 5223.920412675018,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 140,
+  "Value": 5222.153960029607,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 141,
+  "Value": 5183.90044576523,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 142,
+  "Value": 5275.040650406504,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 143,
+  "Value": 5245.973353071799,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 144,
+  "Value": 5230.442151805453,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 145,
+  "Value": 5234.041297935103,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 146,
+  "Value": 5250.555555555556,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 147,
+  "Value": 5234.17899408284,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 148,
+  "Value": 5220.54355919583,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 149,
+  "Value": 5204.116347569956,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 150,
+  "Value": 5195.208023774146,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 151,
+  "Value": 5218.377777777778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 152,
+  "Value": 5208.547197640118,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 153,
+  "Value": 5209.637037037037,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 154,
+  "Value": 5267.839233038348,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 155,
+  "Value": 5255.563743551953,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 156,
+  "Value": 5220.508849557522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 157,
+  "Value": 5226.071953010279,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 158,
+  "Value": 5252.0014771048745,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 159,
+  "Value": 5253.2035268185155,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 160,
+  "Value": 5271.6347569955815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 161,
+  "Value": 5263.384955752213,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 162,
+  "Value": 5225.696296296296,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 163,
+  "Value": 5232.8023598820055,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 164,
+  "Value": 5215.791420118343,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 165,
+  "Value": 5213.782192788815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 166,
+  "Value": 5255.27205882353,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 167,
+  "Value": 5226.609918578831,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 168,
+  "Value": 5217.5540641312455,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 169,
+  "Value": 5214.781319495923,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 170,
+  "Value": 5201.009579955785,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 171,
+  "Value": 5210.286975717439,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 172,
+  "Value": 5194.520648967552,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 173,
+  "Value": 5284.03261675315,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 174,
+  "Value": 5285.840643274853,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 175,
+  "Value": 5277.703595011005,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 176,
+  "Value": 5240.014662756598,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 177,
+  "Value": 5217.942689199118,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 178,
+  "Value": 5209.970588235294,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 179,
+  "Value": 5225.268185157972,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 180,
+  "Value": 5213.92673992674,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 181,
+  "Value": 5229.288334556126,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 182,
+  "Value": 5220.102489019034,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 183,
+  "Value": 5238.0952380952385,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 184,
+  "Value": 5262.731958762886,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 185,
+  "Value": 5300.75,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 186,
+  "Value": 5298.119030124908,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 187,
+  "Value": 5304.915378955114,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 188,
+  "Value": 5279.623616236162,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 189,
+  "Value": 5339.691176470588,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 190,
+  "Value": 5311.124908692476,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 191,
+  "Value": 5297.728937728938,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 192,
+  "Value": 5284.996320824135,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 193,
+  "Value": 5266.554252199414,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 194,
+  "Value": 5270.431602048281,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 195,
+  "Value": 5284.809104258444,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 196,
+  "Value": 5263.101406365655,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 197,
+  "Value": 5199.681481481482,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 198,
+  "Value": 5276.92082111437,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 0,
+  "Value": 657.5747508305648,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 1,
+  "Value": 632.3305084745763,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 2,
+  "Value": 847.2413793103449,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 3,
+  "Value": 1014.9214659685864,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 4,
+  "Value": 972.1613832853026,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 5,
+  "Value": 1187.3125,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 6,
+  "Value": 1131.27868852459,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 7,
+  "Value": 1150.4242424242425,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 8,
+  "Value": 1239.8019801980197,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 9,
+  "Value": 1233.2441471571906,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 10,
+  "Value": 1367.7441077441079,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 11,
+  "Value": 1408.0398671096345,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 12,
+  "Value": 1551.1920529801325,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 13,
+  "Value": 1534.7138047138046,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 14,
+  "Value": 1666.9896193771626,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 15,
+  "Value": 1935.6507936507937,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 16,
+  "Value": 2381.377245508982,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 17,
+  "Value": 2618.8743455497383,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 18,
+  "Value": 2940.052770448549,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 19,
+  "Value": 3254.270557029178,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 20,
+  "Value": 3593.7064676616915,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 21,
+  "Value": 3683.1592039800994,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 22,
+  "Value": 4094.4748858447488,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 23,
+  "Value": 4218.714596949891,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 24,
+  "Value": 4215.018181818182,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 25,
+  "Value": 4368.646209386282,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 26,
+  "Value": 4321.216429699842,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 27,
+  "Value": 4322.085106382979,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 28,
+  "Value": 4364.833555259654,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 29,
+  "Value": 4248.861209964412,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 30,
+  "Value": 4452.9036295369215,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 31,
+  "Value": 4351.651053864169,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 32,
+  "Value": 4372.477777777778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 33,
+  "Value": 4386.404255319149,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 34,
+  "Value": 4351.240799158781,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 35,
+  "Value": 4314.267912772586,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 36,
+  "Value": 4412.453987730061,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 37,
+  "Value": 4444.9147442326985,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 38,
+  "Value": 4486.327345309382,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 39,
+  "Value": 4438.651348651349,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 40,
+  "Value": 4432.472691161867,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 41,
+  "Value": 4419.872673849168,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 42,
+  "Value": 4509.105211406097,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 43,
+  "Value": 4540.961727183513,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 44,
+  "Value": 4514.936585365854,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 45,
+  "Value": 4537.647628267183,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 46,
+  "Value": 4578.322017458778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 47,
+  "Value": 4602.830739299611,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 48,
+  "Value": 4596.326530612245,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 49,
+  "Value": 4627.434656340755,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 50,
+  "Value": 4615.0728862973765,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 51,
+  "Value": 4524.281524926686,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 52,
+  "Value": 4562.712355212355,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 53,
+  "Value": 4617.325023969319,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 54,
+  "Value": 4590.086455331412,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 55,
+  "Value": 4599.600778967868,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 56,
+  "Value": 4616.538090646094,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 57,
+  "Value": 4652.238514173998,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 58,
+  "Value": 4669.168260038241,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 59,
+  "Value": 4735.41825095057,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 60,
+  "Value": 4786.853408029879,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 61,
+  "Value": 4843.195211786372,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 62,
+  "Value": 4903.456345634563,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 63,
+  "Value": 4871.434937611408,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 64,
+  "Value": 4871.1806797853305,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 65,
+  "Value": 4900.02661934339,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 66,
+  "Value": 4910.828193832599,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 67,
+  "Value": 4872.026315789473,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 68,
+  "Value": 4902.4868189806675,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 69,
+  "Value": 4901.81338028169,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 70,
+  "Value": 4926.773913043478,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 71,
+  "Value": 4900.5026455026455,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 72,
+  "Value": 4910.187165775401,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 73,
+  "Value": 4898.349687778769,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 74,
+  "Value": 4957.8717720391805,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 75,
+  "Value": 4915.792253521126,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 76,
+  "Value": 4961.954425942156,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 77,
+  "Value": 4942.42718446602,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 78,
+  "Value": 4888.5526315789475,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 79,
+  "Value": 4902.632493483927,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 80,
+  "Value": 4926.5944540727905,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 81,
+  "Value": 4890.7384882710685,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 82,
+  "Value": 4894.439617723719,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 83,
+  "Value": 4882.652173913043,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 84,
+  "Value": 4923.681898066784,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 85,
+  "Value": 4913.590869183494,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 86,
+  "Value": 4911.713043478261,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 87,
+  "Value": 4910.366492146597,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 88,
+  "Value": 4935.151253241141,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 89,
+  "Value": 4916.793760831889,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 90,
+  "Value": 4896.461937716263,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 91,
+  "Value": 4967.834339948231,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 92,
+  "Value": 4933.963730569948,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 93,
+  "Value": 4970.911435941531,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 94,
+  "Value": 4919.262152777777,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 95,
+  "Value": 4965.607394366197,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 96,
+  "Value": 4966.996527777777,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 97,
+  "Value": 4982.448096885813,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 98,
+  "Value": 4981.064013840831,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 99,
+  "Value": 4972.230835486649,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 100,
+  "Value": 4948.404533565824,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 101,
+  "Value": 4970.0952380952385,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 102,
+  "Value": 4938.634020618557,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 103,
+  "Value": 4966.173913043478,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 104,
+  "Value": 4927.149046793761,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 105,
+  "Value": 4973.08093994778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 106,
+  "Value": 4956.04347826087,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 107,
+  "Value": 4947.43766122098,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 108,
+  "Value": 5022.72491349481,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 109,
+  "Value": 4969.670138888889,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 110,
+  "Value": 4973.4578627280625,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 111,
+  "Value": 4957.002606429192,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 112,
+  "Value": 4976.919758412425,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 113,
+  "Value": 4923.138435081685,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 114,
+  "Value": 4958.235800344234,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 115,
+  "Value": 4977.088388214905,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 116,
+  "Value": 4997.349397590361,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 117,
+  "Value": 4958.101374570447,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 118,
+  "Value": 4947.235142118863,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 119,
+  "Value": 4944.435831180017,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 120,
+  "Value": 4976.528854435831,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 121,
+  "Value": 4955.876288659794,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 122,
+  "Value": 4998.922155688623,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 123,
+  "Value": 5002.720273738238,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 124,
+  "Value": 5003.848797250859,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 125,
+  "Value": 5017.367066895369,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 126,
+  "Value": 5048.041237113402,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 127,
+  "Value": 5047.747205503009,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 128,
+  "Value": 4995.192472198461,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 129,
+  "Value": 5007.48717948718,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 130,
+  "Value": 4991.713780918728,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 131,
+  "Value": 5012.956896551724,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 132,
+  "Value": 5019.658792650918,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 133,
+  "Value": 5010.30276816609,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 134,
+  "Value": 4960.5512489233415,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 135,
+  "Value": 5018.801724137931,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 136,
+  "Value": 4973.548109965635,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 137,
+  "Value": 4968.765008576329,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 138,
+  "Value": 5006.546700942587,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 139,
+  "Value": 5000.290846877673,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 140,
+  "Value": 5050.538922155689,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 141,
+  "Value": 5006.285714285715,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 142,
+  "Value": 5052.157534246576,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 143,
+  "Value": 5035.203111495246,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 144,
+  "Value": 5014.830875975716,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 145,
+  "Value": 5039.571428571428,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 146,
+  "Value": 5006.596675415573,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 147,
+  "Value": 4991.418563922942,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 148,
+  "Value": 5016.865148861646,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 149,
+  "Value": 5031.105354058722,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 150,
+  "Value": 5029.209383145091,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 151,
+  "Value": 5088.001715265867,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 152,
+  "Value": 5040.6988783434,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 153,
+  "Value": 5078.046272493573,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 154,
+  "Value": 5056.933677863911,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 155,
+  "Value": 5074.550949913644,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 156,
+  "Value": 5070.52495697074,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 157,
+  "Value": 5042.042735042735,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 158,
+  "Value": 5060.505136986301,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 159,
+  "Value": 5031.404109589041,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 160,
+  "Value": 5034.610778443114,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 161,
+  "Value": 5035.576592082616,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 162,
+  "Value": 5067.689594356261,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 163,
+  "Value": 5054.038128249566,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 164,
+  "Value": 5057.805724197745,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 165,
+  "Value": 5030.923209663503,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 166,
+  "Value": 5017.683664649957,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 167,
+  "Value": 5075.120068610635,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 168,
+  "Value": 5057.692967409948,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 169,
+  "Value": 5086.304533789564,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 170,
+  "Value": 5064.952951240376,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 171,
+  "Value": 5088.987993138937,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 172,
+  "Value": 5095.641025641025,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 173,
+  "Value": 5067.760683760684,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 174,
+  "Value": 5106.506849315068,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 175,
+  "Value": 5115.335598980459,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 176,
+  "Value": 5096.615384615385,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 177,
+  "Value": 5078.307952622674,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 178,
+  "Value": 5080.787468247248,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 179,
+  "Value": 5105.996607294317,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 180,
+  "Value": 5130.5191489361705,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 181,
+  "Value": 5089.659863945578,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 182,
+  "Value": 5104.513947590871,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 183,
+  "Value": 5075.945716709076,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 184,
+  "Value": 5113.670886075949,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 185,
+  "Value": 5109.376579612468,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 186,
+  "Value": 5128.478444632291,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 187,
+  "Value": 5136.0,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 188,
+  "Value": 5128.385726423109,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 189,
+  "Value": 5140.508905852417,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 190,
+  "Value": 5111.422413793103,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 191,
+  "Value": 5135.301614273577,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 192,
+  "Value": 5125.456081081081,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 193,
+  "Value": 5116.2997459779845,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 194,
+  "Value": 5127.110362257793,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 195,
+  "Value": 5132.973883740522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 196,
+  "Value": 5101.306191687871,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 197,
+  "Value": 5113.319220999153,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 198,
+  "Value": 5113.9529015979815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 0,
+  "Value": 683.563025210084,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 1,
+  "Value": 684.29203539823,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 2,
+  "Value": 920.5911330049261,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 3,
+  "Value": 1098.994708994709,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 4,
+  "Value": 1133.3333333333333,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 5,
+  "Value": 1163.9762611275964,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 6,
+  "Value": 1275.718309859155,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 7,
+  "Value": 1404.797507788162,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 8,
+  "Value": 1415.0657894736842,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 9,
+  "Value": 1658.5666666666666,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 10,
+  "Value": 1732.7692307692307,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 11,
+  "Value": 1870.3691275167785,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 12,
+  "Value": 2583.3807829181496,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 13,
+  "Value": 2604.9841269841268,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 14,
+  "Value": 2709.3081761006288,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 15,
+  "Value": 3052.5882352941176,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 16,
+  "Value": 3540.6060606060605,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 17,
+  "Value": 3808.1686046511627,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 18,
+  "Value": 4232.234957020058,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 19,
+  "Value": 4375.573770491803,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 20,
+  "Value": 4374.31914893617,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 21,
+  "Value": 4577.0,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 22,
+  "Value": 4707.06204379562,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 23,
+  "Value": 4818.858603066439,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 24,
+  "Value": 4882.8050713153725,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 25,
+  "Value": 4934.783258594918,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 26,
+  "Value": 4929.9276410998555,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 27,
+  "Value": 5019.190340909091,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 28,
+  "Value": 5143.772048846676,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 29,
+  "Value": 5121.006289308176,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 30,
+  "Value": 5176.562889165629,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 31,
+  "Value": 5195.569007263923,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 32,
+  "Value": 5318.047058823529,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 33,
+  "Value": 5330.711009174312,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 34,
+  "Value": 5334.884233737596,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 35,
+  "Value": 5417.72192513369,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 36,
+  "Value": 5397.732497387669,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 37,
+  "Value": 5369.7606659729445,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 38,
+  "Value": 5396.2037037037035,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 39,
+  "Value": 5468.135080645161,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 40,
+  "Value": 5473.069207622869,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 41,
+  "Value": 5491.006842619746,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 42,
+  "Value": 5525.359922178988,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 43,
+  "Value": 5563.424787133396,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 44,
+  "Value": 5544.436958614052,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 45,
+  "Value": 5582.312796208531,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 46,
+  "Value": 5584.184938036225,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 47,
+  "Value": 5597.052826691381,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 48,
+  "Value": 5681.303167420814,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 49,
+  "Value": 5655.524412296564,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 50,
+  "Value": 5707.0173833485815,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 51,
+  "Value": 5735.879170423806,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 52,
+  "Value": 5740.490196078431,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 53,
+  "Value": 5730.873015873016,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 54,
+  "Value": 5669.830053667263,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 55,
+  "Value": 5709.604672057502,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 56,
+  "Value": 5711.9407008086255,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 57,
+  "Value": 5728.216168717047,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 58,
+  "Value": 5718.897707231041,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 59,
+  "Value": 5756.795774647887,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 60,
+  "Value": 5754.486391571554,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 61,
+  "Value": 5775.700440528634,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 62,
+  "Value": 5773.075571177505,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 63,
+  "Value": 5799.123575810692,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 64,
+  "Value": 5846.237970253718,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 65,
+  "Value": 5724.603873239436,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 66,
+  "Value": 5746.4473684210525,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 67,
+  "Value": 5782.218340611354,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 68,
+  "Value": 5743.240660295395,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 69,
+  "Value": 5766.815008726004,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 70,
+  "Value": 5785.052447552447,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 71,
+  "Value": 5788.973020017406,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 72,
+  "Value": 5759.232111692844,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 73,
+  "Value": 5791.292875989446,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 74,
+  "Value": 5777.175239755885,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 75,
+  "Value": 5740.360281195079,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 76,
+  "Value": 5845.531358885018,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 77,
+  "Value": 5831.922077922078,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 78,
+  "Value": 5874.392605633803,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 79,
+  "Value": 5884.595782073814,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 80,
+  "Value": 5832.547332185886,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 81,
+  "Value": 5851.763180639585,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 82,
+  "Value": 5873.662940670679,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 83,
+  "Value": 5878.107173725151,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 84,
+  "Value": 5895.379310344828,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 85,
+  "Value": 5948.839826839827,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 86,
+  "Value": 5929.451219512195,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 87,
+  "Value": 5918.349261511729,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 88,
+  "Value": 5905.68339100346,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 89,
+  "Value": 5950.565217391304,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 90,
+  "Value": 5921.7789291882555,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 91,
+  "Value": 5911.840277777777,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 92,
+  "Value": 5860.716753022452,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 93,
+  "Value": 5853.321917808219,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 94,
+  "Value": 5883.030042918455,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 95,
+  "Value": 5894.377682403433,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 96,
+  "Value": 5896.732588134136,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 97,
+  "Value": 5837.393939393939,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 98,
+  "Value": 5861.089023336214,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 99,
+  "Value": 5860.553154710458,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 100,
+  "Value": 5845.3304721030045,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 101,
+  "Value": 5877.134199134199,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 102,
+  "Value": 5906.321642429427,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 103,
+  "Value": 5904.752818733738,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 104,
+  "Value": 5967.194055944056,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 105,
+  "Value": 5913.043859649123,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 106,
+  "Value": 5920.807726075504,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 107,
+  "Value": 5910.67067927773,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 108,
+  "Value": 5952.50430292599,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 109,
+  "Value": 5893.203463203463,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 110,
+  "Value": 5872.238547968885,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 111,
+  "Value": 5880.25129982669,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 112,
+  "Value": 5851.920757967269,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 113,
+  "Value": 5916.801051709027,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 114,
+  "Value": 5879.729965156795,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 115,
+  "Value": 5920.379310344828,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 116,
+  "Value": 5890.017021276596,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 117,
+  "Value": 5912.803819444444,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 118,
+  "Value": 5931.05445116681,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 119,
+  "Value": 5936.614718614718,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 120,
+  "Value": 5986.261925411969,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 121,
+  "Value": 6023.455945252353,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 122,
+  "Value": 5943.9122957867585,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 123,
+  "Value": 5973.086844368014,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 124,
+  "Value": 5921.316017316018,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 125,
+  "Value": 5986.529209621993,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 126,
+  "Value": 5967.623163353501,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 127,
+  "Value": 5947.764298093588,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 128,
+  "Value": 5906.88524590164,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 129,
+  "Value": 5863.553431798437,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 130,
+  "Value": 5895.175438596491,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 131,
+  "Value": 5904.298093587522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 132,
+  "Value": 5906.46856158484,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 133,
+  "Value": 5961.739130434783,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 134,
+  "Value": 5895.766550522648,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 135,
+  "Value": 5866.837088388215,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 136,
+  "Value": 5808.146853146854,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 137,
+  "Value": 5906.910356832028,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 138,
+  "Value": 5950.181818181818,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 139,
+  "Value": 5861.444734551784,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 140,
+  "Value": 5881.0,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 141,
+  "Value": 5821.395147313691,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 142,
+  "Value": 5853.132010353754,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 143,
+  "Value": 5857.685025817556,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 144,
+  "Value": 5881.016365202412,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 145,
+  "Value": 5887.050730868444,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 146,
+  "Value": 5901.71821305842,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 147,
+  "Value": 5902.72491349481,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 148,
+  "Value": 5898.347602739726,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 149,
+  "Value": 5935.008635578583,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 150,
+  "Value": 5913.276010318143,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 151,
+  "Value": 5875.264957264957,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 152,
+  "Value": 5940.967465753424,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 153,
+  "Value": 5887.463581833762,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 154,
+  "Value": 5864.7191011235955,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 155,
+  "Value": 5919.352890422778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 156,
+  "Value": 5901.073883161512,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 157,
+  "Value": 5850.405872193437,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 158,
+  "Value": 5863.946227233305,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 159,
+  "Value": 5837.291666666667,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 160,
+  "Value": 5786.318965517241,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 161,
+  "Value": 5785.9157351676695,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 162,
+  "Value": 5750.189818809318,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 163,
+  "Value": 5786.750871080139,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 164,
+  "Value": 5797.651646447141,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 165,
+  "Value": 5812.975567190227,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 166,
+  "Value": 5771.9051724137935,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 167,
+  "Value": 5850.226283724978,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 168,
+  "Value": 5829.801894918174,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 169,
+  "Value": 5834.596912521441,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 170,
+  "Value": 5837.773943054357,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 171,
+  "Value": 5820.700692041522,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 172,
+  "Value": 5774.083405734144,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 173,
+  "Value": 5804.170286707211,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 174,
+  "Value": 5798.903281519862,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 175,
+  "Value": 5758.5403996524765,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 176,
+  "Value": 5780.523605150214,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 177,
+  "Value": 5696.125429553264,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 178,
+  "Value": 5729.088586030664,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 179,
+  "Value": 5713.723313407344,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 180,
+  "Value": 5797.927146574154,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 181,
+  "Value": 5721.405312767781,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 182,
+  "Value": 5771.542416452442,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 183,
+  "Value": 5736.598290598291,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 184,
+  "Value": 5733.8317757009345,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 185,
+  "Value": 5733.227739726028,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 186,
+  "Value": 5750.1533219761495,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 187,
+  "Value": 5676.8349016253205,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 188,
+  "Value": 5648.552074513124,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 189,
+  "Value": 5613.35604770017,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 190,
+  "Value": 5603.558748943365,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 191,
+  "Value": 5593.9595619208085,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 192,
+  "Value": 5503.897736797988,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 193,
+  "Value": 5524.0466278101585,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 194,
+  "Value": 5480.766666666666,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 195,
+  "Value": 5464.724279835391,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 196,
+  "Value": 5503.618421052632,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 197,
+  "Value": 5493.352697095435,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 198,
+  "Value": 5519.678217821782,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 0,
+  "Value": 651.9016393442623,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 1,
+  "Value": 713.416149068323,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 2,
+  "Value": 897.4146341463414,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 3,
+  "Value": 1075.3403141361257,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 4,
+  "Value": 1366.4634146341464,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 5,
+  "Value": 1331.8885448916408,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 6,
+  "Value": 1352.536443148688,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 7,
+  "Value": 1671.7763157894738,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 8,
+  "Value": 1633.5416666666667,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 9,
+  "Value": 1983.7627118644068,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 10,
+  "Value": 2278.694362017804,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 11,
+  "Value": 2664.7368421052633,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 12,
+  "Value": 2763.7428571428572,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 13,
+  "Value": 2992.877094972067,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 14,
+  "Value": 3308.6740331491715,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 15,
+  "Value": 3684.5112781954886,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 16,
+  "Value": 3889.757281553398,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 17,
+  "Value": 4032.4269662921347,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 18,
+  "Value": 4218.0327868852455,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 19,
+  "Value": 4282.784090909091,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 20,
+  "Value": 4263.327137546468,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 21,
+  "Value": 4405.182608695653,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 22,
+  "Value": 4351.942336874052,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 23,
+  "Value": 4440.162002945508,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 24,
+  "Value": 4452.175141242938,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 25,
+  "Value": 4524.606879606879,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 26,
+  "Value": 4479.786516853933,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 27,
+  "Value": 4500.892494929006,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 28,
+  "Value": 4469.1469194312795,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 29,
+  "Value": 4578.163816381638,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 30,
+  "Value": 4647.727666955768,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 31,
+  "Value": 4633.31914893617,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 32,
+  "Value": 4716.466610312764,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 33,
+  "Value": 4671.073541842773,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 34,
+  "Value": 4680.831960461285,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 35,
+  "Value": 4785.559183673469,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 36,
+  "Value": 4783.425549227014,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 37,
+  "Value": 4830.764849471115,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 38,
+  "Value": 4727.657004830918,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 39,
+  "Value": 4797.475961538462,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 40,
+  "Value": 4786.306954436451,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 41,
+  "Value": 4793.009478672986,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 42,
+  "Value": 4783.696682464455,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 43,
+  "Value": 4741.616719242902,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 44,
+  "Value": 4755.11249030256,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 45,
+  "Value": 4759.347484276729,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 46,
+  "Value": 4760.902668759812,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 47,
+  "Value": 4768.504306969459,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 48,
+  "Value": 4840.342946219797,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 49,
+  "Value": 4816.4475743348985,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 50,
+  "Value": 4863.11093871218,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 51,
+  "Value": 4887.19968798752,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 52,
+  "Value": 4883.563664596273,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 53,
+  "Value": 4855.196911196911,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 54,
+  "Value": 4928.1221020092735,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 55,
+  "Value": 4911.719597211464,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 56,
+  "Value": 4910.3400309119015,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 57,
+  "Value": 4906.597382602002,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 58,
+  "Value": 5001.637337413925,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 59,
+  "Value": 5009.015384615384,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 60,
+  "Value": 5012.8,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 61,
+  "Value": 4999.884526558892,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 62,
+  "Value": 4984.900306748466,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 63,
+  "Value": 5010.115295926211,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 64,
+  "Value": 4959.011583011583,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 65,
+  "Value": 4997.425287356322,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 66,
+  "Value": 4981.105141980046,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 67,
+  "Value": 4955.045941807044,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 68,
+  "Value": 4949.335370511841,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 69,
+  "Value": 4945.855161787365,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 70,
+  "Value": 4930.270479134467,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 71,
+  "Value": 4951.30869899923,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 72,
+  "Value": 4917.806004618938,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 73,
+  "Value": 4969.946277820414,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 74,
+  "Value": 4990.950540958269,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 75,
+  "Value": 5025.011459129106,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 76,
+  "Value": 5009.739263803681,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 77,
+  "Value": 5019.11742133538,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 78,
+  "Value": 5007.498087222647,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 79,
+  "Value": 4983.023791250959,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 80,
+  "Value": 4961.2900763358775,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 81,
+  "Value": 4972.312977099236,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 82,
+  "Value": 4994.596464258263,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 83,
+  "Value": 4993.396946564885,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 84,
+  "Value": 4985.479662317728,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 85,
+  "Value": 5028.122605363985,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 86,
+  "Value": 5019.138062547673,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 87,
+  "Value": 4988.419847328244,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 88,
+  "Value": 5047.204301075269,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 89,
+  "Value": 5054.988540870894,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 90,
+  "Value": 5035.182370820668,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 91,
+  "Value": 5040.440729483283,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 92,
+  "Value": 5049.832953682612,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 93,
+  "Value": 5046.6311787072245,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 94,
+  "Value": 5010.121765601218,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 95,
+  "Value": 5007.796352583587,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 96,
+  "Value": 4997.631779984721,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 97,
+  "Value": 4980.993883792049,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 98,
+  "Value": 5008.7927107061505,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 99,
+  "Value": 5010.0381388253245,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 100,
+  "Value": 5039.832317073171,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 101,
+  "Value": 5022.545731707317,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 102,
+  "Value": 5016.585365853659,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 103,
+  "Value": 5065.376999238385,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 104,
+  "Value": 5021.0933940774485,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 105,
+  "Value": 5073.2373009855955,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 106,
+  "Value": 4983.532110091744,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 107,
+  "Value": 5008.893100833965,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 108,
+  "Value": 4999.741248097413,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 109,
+  "Value": 4996.341463414634,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 110,
+  "Value": 4981.517241379311,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 111,
+  "Value": 4986.959511077158,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 112,
+  "Value": 5026.516768292683,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 113,
+  "Value": 4994.349157733537,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 114,
+  "Value": 4978.969465648855,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 115,
+  "Value": 5018.038022813688,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 116,
+  "Value": 5072.1297709923665,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 117,
+  "Value": 5001.775057383321,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 118,
+  "Value": 5000.977845683728,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 119,
+  "Value": 5024.41131498471,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 120,
+  "Value": 5035.786646201074,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 121,
+  "Value": 5059.414893617021,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 122,
+  "Value": 5062.653992395437,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 123,
+  "Value": 5046.076335877862,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 124,
+  "Value": 5094.457099468489,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 125,
+  "Value": 5111.128787878788,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 126,
+  "Value": 5057.9299847793,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 127,
+  "Value": 5095.091185410334,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 128,
+  "Value": 5124.2726580350345,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 129,
+  "Value": 5120.450038138825,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 130,
+  "Value": 5080.890410958904,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 131,
+  "Value": 5122.6199543031225,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 132,
+  "Value": 5076.765375854214,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 133,
+  "Value": 5100.290297937357,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 134,
+  "Value": 5132.610015174507,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 135,
+  "Value": 5113.697478991597,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 136,
+  "Value": 5069.59059893859,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 137,
+  "Value": 5055.026615969582,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 138,
+  "Value": 5042.0804859529235,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 139,
+  "Value": 5072.614329268293,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 140,
+  "Value": 5067.513348588864,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 141,
+  "Value": 5107.236142748671,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 142,
+  "Value": 5102.406985573272,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 143,
+  "Value": 5117.589626239512,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 144,
+  "Value": 5070.6311787072245,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 145,
+  "Value": 5033.659281894576,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 146,
+  "Value": 5084.562071591775,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 147,
+  "Value": 5083.6342769701605,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 148,
+  "Value": 5145.441400304414,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 149,
+  "Value": 5096.8873668188735,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 150,
+  "Value": 5102.597105864433,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 151,
+  "Value": 5089.3821510297485,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 152,
+  "Value": 5089.673748103187,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 153,
+  "Value": 5100.763358778626,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 154,
+  "Value": 5116.396946564885,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 155,
+  "Value": 5130.875190258752,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 156,
+  "Value": 5101.270084162204,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 157,
+  "Value": 5125.06106870229,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 158,
+  "Value": 5128.782542113323,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 159,
+  "Value": 5127.060167555217,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 160,
+  "Value": 5134.878603945372,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 161,
+  "Value": 5116.541984732825,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 162,
+  "Value": 5164.578587699317,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 163,
+  "Value": 5159.66488956588,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 164,
+  "Value": 5114.018404907975,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 165,
+  "Value": 5109.664122137405,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 166,
+  "Value": 5094.881407804131,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 167,
+  "Value": 5149.6820590461775,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 168,
+  "Value": 5186.749811035525,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 169,
+  "Value": 5123.464746019712,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 170,
+  "Value": 5103.760424564064,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 171,
+  "Value": 5116.982562547384,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 172,
+  "Value": 5152.207890743551,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 173,
+  "Value": 5149.352627570449,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 174,
+  "Value": 5170.661596958175,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 175,
+  "Value": 5093.203661327231,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 176,
+  "Value": 5087.358778625954,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 177,
+  "Value": 5089.854628921194,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 178,
+  "Value": 5072.100075815011,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 179,
+  "Value": 5106.393318147305,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 180,
+  "Value": 5075.223654283548,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 181,
+  "Value": 5069.568508705526,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 182,
+  "Value": 5047.556732223903,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 183,
+  "Value": 5072.963525835867,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 184,
+  "Value": 5103.659090909091,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 185,
+  "Value": 5155.52950075643,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 186,
+  "Value": 5130.106302201974,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 187,
+  "Value": 5134.078847611827,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 188,
+  "Value": 5126.069802731411,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 189,
+  "Value": 5124.718844984803,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 190,
+  "Value": 5131.936699321778,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 191,
+  "Value": 5103.927217589083,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 192,
+  "Value": 5131.375661375661,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 193,
+  "Value": 5093.869499241275,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 194,
+  "Value": 5132.4177505738335,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 195,
+  "Value": 5167.401215805471,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 196,
+  "Value": 5162.7100681302045,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 197,
+  "Value": 5123.515565679575,
+  "Agent": "DQN (Adam + MSE in JAX)"
+ },
+ {
+  "Iteration": 198,
+  "Value": 5177.615793470008,
+  "Agent": "DQN (Adam + MSE in JAX)"
  }
 ]
