@@ -40,6 +40,7 @@ from __future__ import print_function
 import copy
 import functools
 
+from dopamine.jax import losses
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.replay_memory import prioritized_replay_buffer
@@ -63,7 +64,7 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
     # Fetch the logits for its selected action. We use vmap to perform this
     # indexing across the batch.
     chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
-    loss = jax.vmap(networks.softmax_cross_entropy_loss_with_logits)(
+    loss = jax.vmap(losses.softmax_cross_entropy_loss_with_logits)(
         target,
         chosen_action_logits)
     mean_loss = jnp.mean(loss_multipliers * loss)

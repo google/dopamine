@@ -103,10 +103,6 @@ class ClassicControlDQNNetwork(nn.Module):
 
 
 ### Rainbow Networks ###
-def softmax_cross_entropy_loss_with_logits(labels, logits):
-  return -jnp.sum(labels * nn.log_softmax(logits))
-
-
 @gin.configurable
 class RainbowNetwork(nn.Module):
   """Convolutional network used to compute the agent's return distributions."""

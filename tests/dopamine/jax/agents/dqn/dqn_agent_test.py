@@ -19,63 +19,19 @@ from __future__ import print_function
 
 import os
 import shutil
-from typing import Optional, Union
 
 from absl import flags
 from absl.testing import absltest
-from absl.testing import parameterized
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.utils import test_utils
-from flax import linen
+from flax import linen as nn
 import gin
 import jax.numpy as jnp
 import mock
 import numpy as onp
 
 FLAGS = flags.FLAGS
-
-
-class LossesTest(parameterized.TestCase):
-
-  @parameterized.named_parameters(
-      dict(testcase_name='BelowDelta1d',
-           target=1.0, prediction=0.0, delta=1.0,
-           expected=onp.array(0.5)),
-      dict(testcase_name='AboveDelta1d',
-           target=1.0, prediction=0.0, delta=0.5,
-           expected=onp.array(0.375)),
-      dict(testcase_name='MixedArraysDefaultDelta',
-           target=onp.ones(5), prediction=onp.array([0., 1., 2., 3., 4.]),
-           delta=None,
-           expected=onp.array([0.5, 0., 0.5, 1.5, 2.5])),
-      dict(testcase_name='MixedArraysSetDelta',
-           target=onp.ones(5), prediction=onp.array([0., 1., 2., 3., 4.]),
-           delta=2.0,
-           expected=onp.array([0.5, 0., 0.5, 2.0, 4.0])))
-  def testHuberLoss(self,
-                    target: Union[float, onp.array],
-                    prediction: Union[float, onp.array],
-                    delta: Optional[float],
-                    expected: Union[float, onp.array]):
-    if delta is None:
-      actual = dqn_agent.huber_loss(target, prediction)
-    else:
-      actual = dqn_agent.huber_loss(target, prediction, delta=delta)
-    onp.testing.assert_equal(actual, expected)
-
-  @parameterized.named_parameters(
-      dict(testcase_name='1DParameters',
-           target=2.0, prediction=0.0, expected=onp.array(4.0)),
-      dict(testcase_name='ArrayParameters',
-           target=onp.ones(5), prediction=onp.array([0., 1., 2., 3., 4.]),
-           expected=onp.array([1.0, 0.0, 1.0, 4.0, 9.0])))
-  def testMSELoss(self,
-                  target: Union[float, onp.array],
-                  prediction: Union[float, onp.array],
-                  expected: Union[float, onp.array]):
-    actual = dqn_agent.mse_loss(target, prediction)
-    onp.testing.assert_equal(actual, expected)
 
 
 class DQNAgentTest(absltest.TestCase):
@@ -102,11 +58,11 @@ class DQNAgentTest(absltest.TestCase):
 
     # This dummy network allows us to deterministically anticipate that
     # action 0 will be selected by an argmax.
-    class MockDQNNetwork(linen.Module):
+    class MockDQNNetwork(nn.Module):
       """The Jax network used in tests."""
       num_actions: int
 
-      @linen.compact
+      @nn.compact
       def __call__(self, x):
         # This weights_initializer gives action 0 a higher weight, ensuring
         # that it gets picked by the argmax.
@@ -117,9 +73,9 @@ class DQNAgentTest(absltest.TestCase):
           return to_pick_first_action
         x = x.astype(jnp.float32)
         x = x.reshape((-1))  # flatten
-        x = linen.Dense(features=self.num_actions,
-                        kernel_init=custom_init,
-                        bias_init=linen.initializers.ones)(x)
+        x = nn.Dense(features=self.num_actions,
+                     kernel_init=custom_init,
+                     bias_init=nn.initializers.ones)(x)
         return atari_lib.DQNNetworkType(x)
 
     agent = dqn_agent.JaxDQNAgent(

@@ -28,6 +28,7 @@ import time
 from absl import logging
 
 from dopamine.agents.dqn import dqn_agent
+from dopamine.jax import losses
 from dopamine.jax import networks
 from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
@@ -79,18 +80,6 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     raise ValueError('Unsupported optimizer {}'.format(name))
 
 
-# TODO(psc): Refactor into a separato losses module.
-def huber_loss(targets, predictions, delta=1.0):
-  x = jnp.abs(targets - predictions)
-  return jnp.where(x <= delta,
-                   0.5 * x**2,
-                   0.5 * delta**2 + delta * (x - delta))
-
-
-def mse_loss(targets, predictions):
-  return jnp.power((targets - predictions), 2)
-
-
 @functools.partial(jax.jit, static_argnums=(0, 8, 9))
 def train(network_def, target_params, optimizer, states, actions, next_states,
           rewards, terminals, cumulative_gamma, loss_type='huber'):
@@ -103,10 +92,9 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
     q_values = jax.vmap(q_online)(states).q_values
     q_values = jnp.squeeze(q_values)
     replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
-    loss = jnp.where(loss_type == 'huber',
-                     jnp.mean(jax.vmap(huber_loss)(target, replay_chosen_q)),
-                     jnp.mean(jax.vmap(mse_loss)(target, replay_chosen_q)))
-    return loss
+    if loss_type == 'huber':
+      return jnp.mean(jax.vmap(losses.huber_loss)(target, replay_chosen_q))
+    return jnp.mean(jax.vmap(losses.mse_loss)(target, replay_chosen_q))
 
   def q_target(state):
     return network_def.apply(target_params, state)
