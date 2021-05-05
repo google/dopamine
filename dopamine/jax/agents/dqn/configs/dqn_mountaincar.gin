@@ -30,7 +30,7 @@ create_runner.schedule = 'continuous_train'
 create_agent.agent_name = 'jax_dqn'
 create_agent.debug_mode = True
 TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
-Runner.num_iterations = 30
+Runner.num_iterations = 500
 Runner.training_steps = 1000
 Runner.max_steps_per_episode = 600  # Default max episode length.
 
