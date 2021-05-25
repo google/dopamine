@@ -53,7 +53,7 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
                      eps=1.5e-4, centered=False):
   """Create an optimizer for training.
 
-  Currently, only the Adam optimizer is supported.
+  Currently, only the Adam and RMSProp optimizers are supported.
 
   Args:
     name: str, name of the optimizer to create.
