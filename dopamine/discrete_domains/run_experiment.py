@@ -319,12 +319,12 @@ class Runner(object):
     while True:
       observation, reward, is_terminal = self._run_one_step(action)
 
-      total_reward += reward
-      step_number += 1
-
       if self._clip_rewards:
         # Perform reward clipping.
         reward = np.clip(reward, -1, 1)
+
+      total_reward += reward
+      step_number += 1
 
       if (self._environment.game_over or
           step_number == self._max_steps_per_episode):
