@@ -66,6 +66,7 @@ class JaxQuantileAgentTest(absltest.TestCase):
       """Custom Jax network used in tests."""
       num_actions: int
       num_atoms: int
+      inputs_preprocessed: bool = False
 
       @linen.compact
       def __call__(self, x):

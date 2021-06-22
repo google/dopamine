@@ -56,6 +56,7 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
       """Custom Jax model used in tests."""
       num_actions: int
       quantile_embedding_dim: int
+      inputs_preprocessed: bool = False
 
       @linen.compact
       def __call__(self, x, num_quantiles, rng):

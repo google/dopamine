@@ -61,6 +61,7 @@ class DQNAgentTest(absltest.TestCase):
     class MockDQNNetwork(nn.Module):
       """The Jax network used in tests."""
       num_actions: int
+      inputs_preprocessed: bool = False
 
       @nn.compact
       def __call__(self, x):

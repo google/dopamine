@@ -40,16 +40,26 @@ gin.constant('jax_networks.MOUNTAINCAR_MIN_VALS', (-1.2, -0.07))
 gin.constant('jax_networks.MOUNTAINCAR_MAX_VALS', (0.6, 0.07))
 
 
+def preprocess_atari_inputs(x):
+  """Input normalization for Atari 2600 input frames."""
+  return x.astype(jnp.float32) / 255.
+
+
+identity_preprocess_fn = lambda x: x
+
+
 ### DQN Networks ###
 @gin.configurable
 class NatureDQNNetwork(nn.Module):
   """The convolutional network used to compute the agent's Q-values."""
   num_actions: int
+  inputs_preprocessed: bool = False
 
   @nn.compact
   def __call__(self, x):
     initializer = nn.initializers.xavier_uniform()
-    x = x.astype(jnp.float32) / 255.
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
     x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)(x)
     x = nn.relu(x)
@@ -75,6 +85,7 @@ class ClassicControlDQNNetwork(nn.Module):
   hidden_units: int = 512
   min_vals: Union[None, Tuple[float, ...]] = None
   max_vals: Union[None, Tuple[float, ...]] = None
+  inputs_preprocessed: bool = False
 
   def setup(self):
     if self.min_vals is not None:
@@ -89,12 +100,13 @@ class ClassicControlDQNNetwork(nn.Module):
                                 kernel_init=initializer)
 
   def __call__(self, x):
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    if self.min_vals is not None:
-      x -= self._min_vals
-      x /= self._max_vals - self._min_vals
-      x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
+    if not self.inputs_preprocessed:
+      x = x.astype(jnp.float32)
+      x = x.reshape((-1))  # flatten
+      if self.min_vals is not None:
+        x -= self._min_vals
+        x /= self._max_vals - self._min_vals
+        x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
     for layer in self.layers:
       x = layer(x)
       x = nn.relu(x)
@@ -108,6 +120,7 @@ class RainbowNetwork(nn.Module):
   """Convolutional network used to compute the agent's return distributions."""
   num_actions: int
   num_atoms: int
+  inputs_preprocessed: bool = False
 
   @nn.compact
   def __call__(self, x, support):
@@ -115,7 +128,8 @@ class RainbowNetwork(nn.Module):
         scale=1.0 / jnp.sqrt(3.0),
         mode='fan_in',
         distribution='uniform')
-    x = x.astype(jnp.float32) / 255.
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
     x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)(x)
     x = nn.relu(x)
@@ -145,6 +159,7 @@ class ClassicControlRainbowNetwork(nn.Module):
   hidden_units: int = 512
   min_vals: Union[None, Tuple[float, ...]] = None
   max_vals: Union[None, Tuple[float, ...]] = None
+  inputs_preprocessed: bool = False
 
   def setup(self):
     if self.min_vals is not None:
@@ -158,12 +173,13 @@ class ClassicControlRainbowNetwork(nn.Module):
                                 kernel_init=initializer)
 
   def __call__(self, x, support):
-    x = x.astype(jnp.float32)
-    x = x.reshape((-1))  # flatten
-    if self.min_vals is not None:
-      x -= self._min_vals
-      x /= self._max_vals - self._min_vals
-      x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
+    if not self.inputs_preprocessed:
+      x = x.astype(jnp.float32)
+      x = x.reshape((-1))  # flatten
+      if self.min_vals is not None:
+        x -= self._min_vals
+        x /= self._max_vals - self._min_vals
+        x = 2.0 * x - 1.0  # Rescale in range [-1, 1].
     for layer in self.layers:
       x = layer(x)
       x = nn.relu(x)
@@ -179,6 +195,7 @@ class ImplicitQuantileNetwork(nn.Module):
   """The Implicit Quantile Network (Dabney et al., 2018).."""
   num_actions: int
   quantile_embedding_dim: int
+  inputs_preprocessed: bool = False
 
   @nn.compact
   def __call__(self, x, num_quantiles, rng):
@@ -186,7 +203,8 @@ class ImplicitQuantileNetwork(nn.Module):
         scale=1.0 / jnp.sqrt(3.0),
         mode='fan_in',
         distribution='uniform')
-    x = x.astype(jnp.float32) / 255.
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
     x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)(x)
     x = nn.relu(x)
@@ -224,6 +242,7 @@ class QuantileNetwork(nn.Module):
   """Convolutional network used to compute the agent's return quantiles."""
   num_actions: int
   num_atoms: int
+  inputs_preprocessed: bool = False
 
   @nn.compact
   def __call__(self, x):
@@ -231,7 +250,8 @@ class QuantileNetwork(nn.Module):
         scale=1.0 / jnp.sqrt(3.0),
         mode='fan_in',
         distribution='uniform')
-    x = x.astype(jnp.float32) / 255.
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
     x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
                 kernel_init=initializer)(x)
     x = nn.relu(x)

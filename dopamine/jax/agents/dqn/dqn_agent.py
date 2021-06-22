@@ -221,7 +221,8 @@ class JaxDQNAgent(object):
                summary_writing_frequency=500,
                allow_partial_reload=False,
                seed=None,
-               loss_type='huber'):
+               loss_type='huber',
+               preprocess_fn=None):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -261,6 +262,9 @@ class JaxDQNAgent(object):
       seed: int, a seed for DQN's internal RNG, used for initialization and
         sampling actions. If None, will use the current time in nanoseconds.
       loss_type: str, whether to use Huber or MSE loss during training.
+      preprocess_fn: function expecting the input state as parameter which
+        it preprocesses (such as normalizing the pixel values between 0 and 1)
+        before passing it to the Q-network. Defaults to None.
     """
     assert isinstance(observation_shape, tuple)
     seed = int(time.time() * 1e6) if seed is None else seed
@@ -279,12 +283,15 @@ class JaxDQNAgent(object):
                  max_tf_checkpoints_to_keep)
     logging.info('\t seed: %d', seed)
     logging.info('\t loss_type: %s', loss_type)
+    logging.info('\t preprocess_fn: %s', preprocess_fn)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
     self.observation_dtype = observation_dtype
     self.stack_size = stack_size
-    self.network_def = network(num_actions=num_actions)
+    self.network_def = network(
+        num_actions=num_actions,
+        inputs_preprocessed=(preprocess_fn is not None))
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -301,6 +308,10 @@ class JaxDQNAgent(object):
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
     self._loss_type = loss_type
+    if preprocess_fn is None:
+      self.preprocess_fn = networks.identity_preprocess_fn
+    else:
+      self.preprocess_fn = preprocess_fn
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
@@ -384,7 +395,7 @@ class JaxDQNAgent(object):
 
     self._rng, self.action = select_action(self.network_def,
                                            self.online_params,
-                                           self.state,
+                                           self.preprocess_fn(self.state),
                                            self._rng,
                                            self.num_actions,
                                            self.eval_mode,
@@ -419,7 +430,7 @@ class JaxDQNAgent(object):
 
     self._rng, self.action = select_action(self.network_def,
                                            self.online_params,
-                                           self.state,
+                                           self.preprocess_fn(self.state),
                                            self._rng,
                                            self.num_actions,
                                            self.eval_mode,
@@ -467,12 +478,14 @@ class JaxDQNAgent(object):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
+        states = self.preprocess_fn(self.replay_elements['state'])
+        next_states = self.preprocess_fn(self.replay_elements['next_state'])
         self.optimizer, loss = train(self.network_def,
                                      self.target_network_params,
                                      self.optimizer,
-                                     self.replay_elements['state'],
+                                     states,
                                      self.replay_elements['action'],
-                                     self.replay_elements['next_state'],
+                                     next_states,
                                      self.replay_elements['reward'],
                                      self.replay_elements['terminal'],
                                      self.cumulative_gamma,
