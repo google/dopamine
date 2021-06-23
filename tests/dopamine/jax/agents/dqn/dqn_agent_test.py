@@ -104,6 +104,36 @@ class DQNAgentTest(absltest.TestCase):
     agent.step(reward=1, observation=observation)
     agent.end_episode(reward=1)
 
+  def testPreprocessFnParam(self):
+
+    # Mock a regular network so we can inspect its constructor parameters.
+    class MockNetwork(object):
+
+      def __init__(self, num_actions=3, inputs_preprocessed=False):
+        self.num_actions = num_actions
+        self.inputs_preprocessed = inputs_preprocessed
+
+    # We create a subclass of JaxDQNAgent so we can override
+    # _build_networks_and_optimizer and avoid network creation.
+    class MockDQNAgent(dqn_agent.JaxDQNAgent):
+
+      def _build_networks_and_optimizer(self):
+        pass
+
+    # Test with the default setting for preprocess_fn (None).
+    agent = MockDQNAgent(num_actions=4, network=MockNetwork)
+    self.assertEqual(4, agent.network_def.num_actions)
+    self.assertFalse(agent.network_def.inputs_preprocessed)
+
+    # Test with a non-None preprocess_fn.
+    def preprocess_fn(x):
+      return x * 10.
+
+    agent = MockDQNAgent(num_actions=5, network=MockNetwork,
+                         preprocess_fn=preprocess_fn)
+    self.assertEqual(5, agent.network_def.num_actions)
+    self.assertTrue(agent.network_def.inputs_preprocessed)
+
   def testBeginEpisode(self):
     """Test the functionality of agent.begin_episode.
 

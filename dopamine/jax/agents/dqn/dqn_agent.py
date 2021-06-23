@@ -289,9 +289,13 @@ class JaxDQNAgent(object):
     self.observation_shape = tuple(observation_shape)
     self.observation_dtype = observation_dtype
     self.stack_size = stack_size
-    self.network_def = network(
-        num_actions=num_actions,
-        inputs_preprocessed=(preprocess_fn is not None))
+    if preprocess_fn is None:
+      self.network_def = network(num_actions=num_actions)
+      self.preprocess_fn = networks.identity_preprocess_fn
+    else:
+      self.network_def = network(num_actions=num_actions,
+                                 inputs_preprocessed=True)
+      self.preprocess_fn = preprocess_fn
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -308,10 +312,6 @@ class JaxDQNAgent(object):
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
     self._loss_type = loss_type
-    if preprocess_fn is None:
-      self.preprocess_fn = networks.identity_preprocess_fn
-    else:
-      self.preprocess_fn = preprocess_fn
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
