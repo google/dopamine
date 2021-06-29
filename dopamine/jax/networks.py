@@ -299,21 +299,21 @@ class NoisyNetwork(nn.Module):
 
     def mu_init(key, shape):
       # Initialization of mean noise parameters (Section 3.2)
-      low = -1 / jnp.power(x.shape[1], 0.5)
-      high = 1 / jnp.power(x.shape[1], 0.5)
+      low = -1 / jnp.power(x.shape[0], 0.5)
+      high = 1 / jnp.power(x.shape[0], 0.5)
       return jax.random.uniform(key, minval=low, maxval=high, shape=shape)
 
     def sigma_init(key, shape, dtype=jnp.float32):  # pylint: disable=unused-argument
       # Initialization of sigma noise parameters (Section 3.2)
-      return jnp.ones(shape, dtype) * (0.1 / onp.sqrt(x.shape[1]))
+      return jnp.ones(shape, dtype) * (0.1 / onp.sqrt(x.shape[0]))
 
     if self.eval_mode:
       # Turn off noise during evaluation
-      w_epsilon = onp.zeros(shape=(x.shape[1], features), dtype=onp.float32)
+      w_epsilon = onp.zeros(shape=(x.shape[0], features), dtype=onp.float32)
       b_epsilon = onp.zeros(shape=(features,), dtype=onp.float32)
     else:
       # Factored gaussian noise in (10) and (11) in Fortunato et al. (2018).
-      p = NoisyNetwork.sample_noise(self.rng_key, [x.shape[1], 1])
+      p = NoisyNetwork.sample_noise(self.rng_key, [x.shape[0], 1])
       q = NoisyNetwork.sample_noise(self.rng_key, [1, features])
       f_p = NoisyNetwork.f(p)
       f_q = NoisyNetwork.f(q)
@@ -321,8 +321,8 @@ class NoisyNetwork(nn.Module):
       b_epsilon = jnp.squeeze(f_q)
 
     # See (8) and (9) in Fortunato et al. (2018) for output computation.
-    w_mu = self.param('kernel_mu', mu_init, (x.shape[1], features))
-    w_sigma = self.param('kernel_sigma', sigma_init, (x.shape[1], features))
+    w_mu = self.param('kernel_mu', mu_init, (x.shape[0], features))
+    w_sigma = self.param('kernel_sigma', sigma_init, (x.shape[0], features))
     w = w_mu + jnp.multiply(w_sigma, w_epsilon)
     ret = jnp.matmul(x, w)
 
@@ -380,7 +380,7 @@ class FullRainbowNetwork(nn.Module):
           strides=(stride_size, stride_size),
           kernel_init=nn.initializers.xavier_uniform())(x)
       x = nn.relu(x)
-    x = x.reshape((x.shape[0], -1))  # flatten
+    x = x.reshape((-1))  # flatten
 
     net = feature_layer(key, self.noisy, eval_mode=eval_mode)
     x = net(x, features=512)  # Single hidden layer of size 512
@@ -389,16 +389,16 @@ class FullRainbowNetwork(nn.Module):
     if self.dueling:
       adv = net(x, features=self.num_actions * self.num_atoms)
       value = net(x, features=self.num_atoms)
-      adv = adv.reshape((adv.shape[0], self.num_actions, self.num_atoms))
-      value = value.reshape((value.shape[0], 1, self.num_atoms))
-      logits = value + (adv - (jnp.mean(adv, -2, keepdims=True)))
+      adv = adv.reshape((self.num_actions, self.num_atoms))
+      value = value.reshape((1, self.num_atoms))
+      logits = value + (adv - (jnp.mean(adv, axis=0, keepdims=True)))
     else:
       x = net(x, features=self.num_actions * self.num_atoms)
-      logits = x.reshape((x.shape[0], self.num_actions, self.num_atoms))
+      logits = x.reshape((self.num_actions, self.num_atoms))
 
     if self.distributional:
       probabilities = nn.softmax(logits)
-      q_values = jnp.sum(support * probabilities, axis=2)
+      q_values = jnp.sum(support * probabilities, axis=1)
       return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
-    q_values = jnp.sum(logits, axis=-1)  # Sum over all the num_atoms
+    q_values = jnp.sum(logits, axis=1)  # Sum over all the num_atoms
     return atari_lib.DQNNetworkType(q_values)
