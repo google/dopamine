@@ -45,7 +45,7 @@ games.
 This is not an official Google product.
 
 ## What's new
-* **16/102020:** Learning curves for the [QR-DQN JAX
+* **16/10/2020:** Learning curves for the [QR-DQN JAX
   agent](https://github.com/google/dopamine/blob/master/dopamine/jax/agents/quantile/quantile_agent.py)
   have been added to the [baseline
   plots](https://google.github.io/dopamine/baselines/plots.html)!
