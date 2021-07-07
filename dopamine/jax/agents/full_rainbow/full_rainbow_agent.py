@@ -213,6 +213,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     logging.info('\t noisy_networks: %s', noisy)
     logging.info('\t dueling_dqn: %s', dueling)
     logging.info('\t distributional: %s', distributional)
+    logging.info('\t num_atoms: %d', num_atoms)
     logging.info('\t replay_scheme: %s', replay_scheme)
     logging.info('\t num_updates_per_train_step: %d',
                  num_updates_per_train_step)

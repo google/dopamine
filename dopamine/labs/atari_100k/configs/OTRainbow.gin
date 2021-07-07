@@ -1,0 +1,46 @@
+# Overtrained Rainbow (OTRainbow) from Kielak et al.(2019)
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.agents.full_rainbow.full_rainbow_agent
+import dopamine.jax.networks
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.labs.atari_100k.atari_100k_rainbow_agent
+
+# Parameters specific to OTRainbow are higlighted by comments
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 3
+JaxDQNAgent.min_replay_history = 20000
+JaxDQNAgent.update_period = 1   # OTRainbow: Update every 1 step (rather than 4)
+JaxDQNAgent.target_update_period = 500  # OTRainbow (instead of 8000)
+JaxDQNAgent.epsilon_train = 0.01
+JaxDQNAgent.epsilon_eval = 0.001
+JaxDQNAgent.epsilon_decay_period = 50000  # OTRainbow (instead of 250000)
+JaxDQNAgent.optimizer = 'adam'
+
+# Don't use noisy networks, dueling DQN, and double DQN.
+JaxFullRainbowAgent.noisy = False
+JaxFullRainbowAgent.dueling = False
+JaxFullRainbowAgent.double_dqn = False
+JaxFullRainbowAgent.num_atoms = 51
+JaxFullRainbowAgent.num_updates_per_train_step = 8  # OTRainbow (instead of 1)
+JaxFullRainbowAgent.vmax = 10.
+JaxFullRainbowAgent.replay_scheme = 'prioritized'
+JaxFullRainbowAgent.epsilon_fn = @jax.agents.dqn.dqn_agent.linearly_decaying_epsilon
+Atari100kRainbowAgent.data_augmentation = False
+
+# Note these parameters are original Rainbow.
+create_optimizer.learning_rate = 0.0000625
+create_optimizer.eps = 0.00015
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Atari 100K benchmark doesn't use sticky actions.
+atari_lib.create_atari_environment.sticky_actions = False
+AtariPreprocessing.terminal_on_life_loss = True
+Runner.num_iterations = 1
+Runner.training_steps = 100000  # agent steps
+MaxEpisodeEvalRunner.num_eval_episodes = 100  # agent episodes
+Runner.max_steps_per_episode = 27000  # agent steps
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 1000000 # 1M as a proxy for unbounded memory
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32
