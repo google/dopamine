@@ -132,6 +132,7 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
                optimizer='adam',
                summary_writer=None,
                summary_writing_frequency=500,
+               seed=None,
                allow_partial_reload=False):
     """Initializes the agent and constructs the Graph.
 
@@ -168,6 +169,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         Summary writing disabled if set to None.
       summary_writing_frequency: int, frequency with which summaries will be
         written. Lower values will result in slower training.
+      seed: int, a seed for DQN's internal RNG, used for initialization and
+        sampling actions. If None, will use the current time in nanoseconds.
       allow_partial_reload: bool, whether we allow reloading a partial agent
         (for instance, only the network parameters).
     """
@@ -193,6 +196,7 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         optimizer=optimizer,
         summary_writer=summary_writer,
         summary_writing_frequency=summary_writing_frequency,
+        seed=seed,
         allow_partial_reload=allow_partial_reload)
 
   def _build_networks_and_optimizer(self):
