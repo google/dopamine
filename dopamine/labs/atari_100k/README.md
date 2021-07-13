@@ -10,7 +10,19 @@ steps (400k frames of interaction).
  * [DrQ][drq] (Data-regularized Q)
 
 All of these agents are based on the [full rainbow][full_rainbow] agent in Dopamine
-and can be instantiated using the gin configs provided in this directory. For evaluation, we report scores averaged over 100 episodes after training.
+and can be instantiated using the gin configs provided in this directory. For
+evaluation, we report scores averaged over 100 episodes after training.
+
+The entry point to the Atari 100k experiments is
+[`dopamine/labs/atari_100k/train.py`](https://github.com/google/dopamine/blob/master/dopamine/labs/atari_100k/train.py).
+To run the DER agent,
+
+```
+python -um dopamine.labs.atari_100k.train \
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/labs/atari_100k/configs/DER.gin
+```
+
 
 ##### References
 [Kaiser, Lukasz, et al. "Model-based reinforcement learning for atari." arXiv preprint arXiv:1903.00374 (2019).][simple]
