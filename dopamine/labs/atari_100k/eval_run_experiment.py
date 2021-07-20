@@ -6,18 +6,41 @@ import sys
 from absl import logging
 from dopamine.discrete_domains import run_experiment
 import gin
+import jax
 
 
 @gin.configurable
 class MaxEpisodeEvalRunner(run_experiment.Runner):
   """Runner for evaluating using a fixed number of episodes rather than steps."""
 
-  def __init__(self, base_dir, create_agent_fn, num_eval_episodes=100):
+  def __init__(self,
+               base_dir,
+               create_agent_fn,
+               num_eval_episodes=100,
+               max_noops=30):
     """Specify the number of evaluation episodes."""
     super().__init__(base_dir, create_agent_fn)
     self._num_eval_episodes = num_eval_episodes
     logging.info('Num evaluation episodes: %d', num_eval_episodes)
     self._evaluation_steps = None
+    self._max_noops = max_noops
+
+  def _initialize_episode(self):
+    """Initialization for a new episode with random number of no-ops.
+
+    Returns:
+     action: int, the initial action chosen by the agent.
+    """
+    initial_observation = self._environment.reset()
+    if self._max_noops > 0:
+      self._agent._rng, rng = jax.random.split(self._agent._rng)  # pylint: disable=protected-access
+      num_noops = jax.random.randint(
+          rng, shape=(), minval=0, maxval=self._max_noops)
+      for _ in range(num_noops):
+        initial_observation, _, terminal = self._run_one_step(0)
+        if terminal:
+          initial_observation = self._environment.reset()
+    return self._agent.begin_episode(initial_observation)
 
   def _run_one_phase_fix_episodes(self, max_episodes, statistics, run_mode_str):
     """Runs the agent/environment loop until a desired number of steps.
