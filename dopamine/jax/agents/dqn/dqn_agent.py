@@ -215,7 +215,6 @@ class JaxDQNAgent(object):
                epsilon_eval=0.001,
                epsilon_decay_period=250000,
                eval_mode=False,
-               max_tf_checkpoints_to_keep=4,
                optimizer='adam',
                summary_writer=None,
                summary_writing_frequency=500,
@@ -251,8 +250,6 @@ class JaxDQNAgent(object):
       epsilon_eval: float, epsilon used when evaluating the agent.
       epsilon_decay_period: int, length of the epsilon decay schedule.
       eval_mode: bool, True for evaluation and False for training.
-      max_tf_checkpoints_to_keep: int, the number of TensorFlow checkpoints to
-        keep.
       optimizer: str, name of optimizer to use.
       summary_writer: SummaryWriter object for outputting training statistics.
       summary_writing_frequency: int, frequency with which summaries will be
@@ -279,8 +276,6 @@ class JaxDQNAgent(object):
     logging.info('\t epsilon_eval: %f', epsilon_eval)
     logging.info('\t epsilon_decay_period: %d', epsilon_decay_period)
     logging.info('\t optimizer: %s', optimizer)
-    logging.info('\t max_tf_checkpoints_to_keep: %d',
-                 max_tf_checkpoints_to_keep)
     logging.info('\t seed: %d', seed)
     logging.info('\t loss_type: %s', loss_type)
     logging.info('\t preprocess_fn: %s', preprocess_fn)
