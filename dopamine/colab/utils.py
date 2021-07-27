@@ -45,6 +45,7 @@ ALL_GAMES = ['AirRaid', 'Alien', 'Amidar', 'Assault', 'Asterix', 'Asteroids',
              'SpaceInvaders', 'StarGunner', 'Tennis', 'TimePilot', 'Tutankham',
              'UpNDown', 'Venture', 'VideoPinball', 'WizardOfWor', 'YarsRevenge',
              'Zaxxon']
+MUJOCO_GAMES = ['Ant', 'HalfCheetah', 'Hopper', 'Humanoid', 'Walker2d']
 
 
 def load_baselines(base_dir, verbose=False):
