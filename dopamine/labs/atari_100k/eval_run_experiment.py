@@ -46,14 +46,22 @@ class MaxEpisodeEvalRunner(run_experiment.Runner):
     """
     initial_observation = self._environment.reset()
     if self._max_noops > 0:
-      self._agent._rng, rng = jax.random.split(self._agent._rng)  # pylint: disable=protected-access
-      num_noops = jax.random.randint(
-          rng, shape=(), minval=0, maxval=self._max_noops)
-      for _ in range(num_noops):
-        initial_observation, _, terminal = self._run_one_step(0)
-        if terminal:
-          initial_observation = self._environment.reset()
+      initial_observation = self._run_no_ops()
     return self._agent.begin_episode(initial_observation)
+
+  def _run_no_ops(self):
+    """Executes `num_noops` no-ops in the environment."""
+    self._agent._rng, rng = jax.random.split(self._agent._rng)  # pylint: disable=protected-access
+    num_noops = jax.random.randint(
+        rng, shape=(), minval=0, maxval=self._max_noops)
+    for _ in range(num_noops):
+      # Assumes raw action 0 is always no-op
+      self._environment.environment.ale.act(0)
+    if self._environment.environment.ale.game_over():
+      observation = self._environment.reset()
+    else:
+      observation = self._environment._pool_and_resize()  # pylint: disable=protected-access
+    return observation
 
   def _run_one_phase_fix_episodes(self, max_episodes, statistics, run_mode_str):
     """Runs the agent/environment loop until a desired number of steps.
