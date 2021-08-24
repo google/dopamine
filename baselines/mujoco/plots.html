@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Dopamine Benchmarks</title>
+
+<script src="https://www.gstatic.com/external_hosted/vega/vega.js"></script>
+<script src="https://www.gstatic.com/external_hosted/vega_lite/vega-lite.js"></script>
+<script src="https://www.gstatic.com/external_hosted/vega_embed/vega-embed.js"></script>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  .vega-actions a {
+    padding: 0.2em;
+  }
+</style>
+<script>
+  var selected_game = 'ant';
+  function showGame(elem) {
+    document.getElementById(selected_game).style.display = 'none';
+    document.getElementById(elem.value).style.display = 'block';
+    selected_game = elem.value;
+  }
+</script>
+
+<body onload="document.getElementById('ant').style.display = 'block'">
+
+<select id="game" name="game_select" onchange="showGame(this)">
+
+<option value="ant">Ant</option>
+
+<option value="halfcheetah">HalfCheetah</option>
+
+<option value="hopper">Hopper</option>
+
+<option value="humanoid">Humanoid</option>
+
+<option value="walker2d">Walker2d</option>
+
+</select>
+
+
+<div id="ant" style="display: none;">
+  <h1>Ant</h1>
+  <div id="ant_vg"></div>
+  <script>
+    const ant_spec = "data/ant.vg.json";
+    vegaEmbed('#ant_vg', ant_spec);
+  </script>
+</div>
+
+<div id="halfcheetah" style="display: none;">
+  <h1>HalfCheetah</h1>
+  <div id="halfcheetah_vg"></div>
+  <script>
+    const halfcheetah_spec = "data/halfcheetah.vg.json";
+    vegaEmbed('#halfcheetah_vg', halfcheetah_spec);
+  </script>
+</div>
+
+<div id="hopper" style="display: none;">
+  <h1>Hopper</h1>
+  <div id="hopper_vg"></div>
+  <script>
+    const hopper_spec = "data/hopper.vg.json";
+    vegaEmbed('#hopper_vg', hopper_spec);
+  </script>
+</div>
+
+<div id="humanoid" style="display: none;">
+  <h1>Humanoid</h1>
+  <div id="humanoid_vg"></div>
+  <script>
+    const humanoid_spec = "data/humanoid.vg.json";
+    vegaEmbed('#humanoid_vg', humanoid_spec);
+  </script>
+</div>
+
+<div id="walker2d" style="display: none;">
+  <h1>Walker2d</h1>
+  <div id="walker2d_vg"></div>
+  <script>
+    const walker2d_spec = "data/walker2d.vg.json";
+    vegaEmbed('#walker2d_vg', walker2d_spec);
+  </script>
+</div>
+
+
+</body>

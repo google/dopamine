@@ -1,0 +1,8002 @@
+[
+ {
+  "Iteration": 0,
+  "Value": 18.017591797752033,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 10,
+  "Value": 33.681396598487645,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 20,
+  "Value": 388.1565741496984,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 30,
+  "Value": 382.1583980066598,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 40,
+  "Value": 121.74812718017226,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 50,
+  "Value": 2357.0623346833127,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 60,
+  "Value": 3200.2357200722254,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 70,
+  "Value": 2930.503142489089,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 80,
+  "Value": 3165.7747938605335,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 90,
+  "Value": 3312.75965588553,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 100,
+  "Value": 1213.986183537939,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 110,
+  "Value": 1436.115131126444,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 120,
+  "Value": 1105.199107163829,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 130,
+  "Value": 3344.9515876719124,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 140,
+  "Value": 3333.5000775996555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 150,
+  "Value": 3342.899831199347,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 160,
+  "Value": 2099.351262361214,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 170,
+  "Value": 2415.5032351004957,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 180,
+  "Value": 3324.6724144838167,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 190,
+  "Value": 2309.0287723926676,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 200,
+  "Value": 3106.983417678311,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 210,
+  "Value": 3449.6306212352765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 220,
+  "Value": 3440.1231811166285,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 230,
+  "Value": 3473.982808540574,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 240,
+  "Value": 3473.66567994331,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 250,
+  "Value": 2630.7171237558277,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 260,
+  "Value": 2434.7349181818686,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 270,
+  "Value": 3525.6401420328316,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 280,
+  "Value": 3527.345131867481,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 290,
+  "Value": 3601.6074686117217,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 300,
+  "Value": 3631.155668116198,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 310,
+  "Value": 3596.423502116531,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 320,
+  "Value": 3582.967653422986,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 330,
+  "Value": 3576.545080127376,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 340,
+  "Value": 3520.0533287413336,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 350,
+  "Value": 3581.016628715225,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 360,
+  "Value": 2481.175040629438,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 370,
+  "Value": 3579.271206074987,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 380,
+  "Value": 3611.2549782385768,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 390,
+  "Value": 2559.655299592269,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 400,
+  "Value": 3576.420052537632,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 410,
+  "Value": 2498.746733559784,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 420,
+  "Value": 3664.693359202178,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 430,
+  "Value": 2751.2701542413865,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 440,
+  "Value": 3550.225039834187,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 450,
+  "Value": 3573.4969058132638,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 460,
+  "Value": 1326.6668231242643,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 470,
+  "Value": 3583.3938803718383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 480,
+  "Value": 1943.9711605800358,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 490,
+  "Value": 2487.770103739458,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 500,
+  "Value": 3553.5543381603275,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 510,
+  "Value": 3665.183378624015,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 520,
+  "Value": 3134.0359469599553,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 530,
+  "Value": 3069.2023164145003,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 540,
+  "Value": 3594.907792181847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 550,
+  "Value": 2700.5439123861634,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 560,
+  "Value": 3292.1782066587853,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 570,
+  "Value": 3573.274931125205,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 580,
+  "Value": 3589.508623733925,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 590,
+  "Value": 3571.7886900890144,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 600,
+  "Value": 3562.848538409197,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 610,
+  "Value": 3600.0012930447224,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 620,
+  "Value": 2977.889088935177,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 630,
+  "Value": 3576.9166693418524,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 640,
+  "Value": 3714.3813039917522,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 650,
+  "Value": 3042.7752562444502,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 660,
+  "Value": 2010.7540743145328,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 670,
+  "Value": 3606.9067074759205,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 680,
+  "Value": 2167.841126950977,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 690,
+  "Value": 2836.6944513460744,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 700,
+  "Value": 3627.155189306789,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 710,
+  "Value": 3630.156265277821,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 720,
+  "Value": 3624.5146667316453,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 730,
+  "Value": 3608.445441374802,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 740,
+  "Value": 3607.1846933277,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 750,
+  "Value": 3004.875374350963,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 760,
+  "Value": 3610.161379008289,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 770,
+  "Value": 3591.575542207449,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 780,
+  "Value": 3593.44830655709,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 790,
+  "Value": 3466.02720255864,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 800,
+  "Value": 3620.809800834682,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 810,
+  "Value": 3603.634879799255,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 820,
+  "Value": 1551.9790850434792,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 830,
+  "Value": 3699.452909211027,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 840,
+  "Value": 2998.3891601866612,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 850,
+  "Value": 3609.944625647341,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 860,
+  "Value": 3652.960370376264,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 870,
+  "Value": 2089.908161015932,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 880,
+  "Value": 2654.8784329222035,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 890,
+  "Value": 3388.332628516898,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 900,
+  "Value": 3646.173816158827,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 910,
+  "Value": 3678.0261159688075,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 920,
+  "Value": 3639.5196241860754,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 930,
+  "Value": 3170.160871776485,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 940,
+  "Value": 3020.512878355031,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 950,
+  "Value": 3685.039810043226,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 960,
+  "Value": 3678.1164849462352,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 970,
+  "Value": 3643.6823384981935,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 980,
+  "Value": 1633.1428544901412,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 990,
+  "Value": 2034.1357725665434,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1000.0,
+  "Value": 1798.1594891840996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1010.0,
+  "Value": 3747.602081663971,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1020.0,
+  "Value": 2551.5520771626016,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1030.0,
+  "Value": 3676.557202749795,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1040.0,
+  "Value": 1438.2092969038197,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1050.0,
+  "Value": 1882.0466980943786,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1060.0,
+  "Value": 3706.6731885323234,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1070.0,
+  "Value": 3693.4312420297947,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1080.0,
+  "Value": 3716.649951523016,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1090.0,
+  "Value": 3707.3338894383432,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1100.0,
+  "Value": 2771.4122380806493,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1110.0,
+  "Value": 3727.434554596734,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1120.0,
+  "Value": 3702.3173108994456,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1130.0,
+  "Value": 3712.4574257742997,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1140.0,
+  "Value": 2521.0221883141335,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1150.0,
+  "Value": 2172.3491937428307,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1160.0,
+  "Value": 2137.550425843975,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1170.0,
+  "Value": 3742.7903282995503,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1180.0,
+  "Value": 3870.689246396739,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1190.0,
+  "Value": 2806.0839215495507,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1200.0,
+  "Value": 3747.14795838769,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1210.0,
+  "Value": 3711.640244388549,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1220.0,
+  "Value": 3740.348152912056,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1230.0,
+  "Value": 2729.8983524218343,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1240.0,
+  "Value": 3747.5342163315668,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1250.0,
+  "Value": 3852.9517964847196,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1260.0,
+  "Value": 3732.0393929901243,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1270.0,
+  "Value": 3728.5160865071934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1280.0,
+  "Value": 3756.494244394309,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1290.0,
+  "Value": 3700.055105680332,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1300.0,
+  "Value": 3712.9347521136524,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1310.0,
+  "Value": 2879.9051684415695,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1320.0,
+  "Value": 3712.321994260789,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1330.0,
+  "Value": 2018.5299677184905,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1340.0,
+  "Value": 3692.303956460821,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1350.0,
+  "Value": 2550.8559954344373,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1360.0,
+  "Value": 1925.489228829696,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1370.0,
+  "Value": 2425.1504344020486,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1380.0,
+  "Value": 2251.843410762169,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1390.0,
+  "Value": 2035.456337354491,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1400.0,
+  "Value": 3731.770136769946,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1410.0,
+  "Value": 1441.8016678136353,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1420.0,
+  "Value": 3712.7175709743738,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1430.0,
+  "Value": 3029.105067813905,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1440.0,
+  "Value": 3735.14675562536,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1450.0,
+  "Value": 3735.546197357863,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1460.0,
+  "Value": 3798.935971835244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1470.0,
+  "Value": 3763.3122062920197,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1480.0,
+  "Value": 3730.0293607120366,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1490.0,
+  "Value": 2783.848947782759,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1500.0,
+  "Value": 2415.021481483814,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1510.0,
+  "Value": 2103.202808962238,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1520.0,
+  "Value": 2605.2705252908772,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1530.0,
+  "Value": 3734.330621852793,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1540.0,
+  "Value": 3763.1479625666593,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1550.0,
+  "Value": 3712.5038164898506,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1560.0,
+  "Value": 3731.2041156222463,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1570.0,
+  "Value": 3755.6995979023695,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1580.0,
+  "Value": 3259.4346881365555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1590.0,
+  "Value": 3746.0454889402276,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1600.0,
+  "Value": 3742.6658225629644,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1610.0,
+  "Value": 1877.2393767488977,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1620.0,
+  "Value": 3745.8090851422685,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1630.0,
+  "Value": 2927.5589888516533,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1640.0,
+  "Value": 3168.5792178651955,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1650.0,
+  "Value": 3773.8339706215816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1660.0,
+  "Value": 3705.2217607496004,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1670.0,
+  "Value": 3721.992528972648,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1680.0,
+  "Value": 3785.5819962985893,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1690.0,
+  "Value": 3758.10508772097,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1700.0,
+  "Value": 3712.9245060234553,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1710.0,
+  "Value": 2553.4713545969753,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1720.0,
+  "Value": 2141.0743992682383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1730.0,
+  "Value": 3627.4783164854907,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1740.0,
+  "Value": 2556.680866583581,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1750.0,
+  "Value": 3791.864557090546,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1760.0,
+  "Value": 1790.7659156534717,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1770.0,
+  "Value": 3776.975590668475,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1780.0,
+  "Value": 3741.3797782941556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1790.0,
+  "Value": 3814.9455802503458,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1800.0,
+  "Value": 2450.4324661179185,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1810.0,
+  "Value": 3687.4707658087696,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1820.0,
+  "Value": 2211.540945965545,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1830.0,
+  "Value": 2758.1255739774133,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1840.0,
+  "Value": 3759.4191345044233,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1850.0,
+  "Value": 3780.3010637675466,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1860.0,
+  "Value": 2380.6572399126353,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1870.0,
+  "Value": 3212.7749855378293,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1880.0,
+  "Value": 2812.7086995366503,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1890.0,
+  "Value": 2664.010333978672,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1900.0,
+  "Value": 3786.094213145151,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1910.0,
+  "Value": 1826.0180303208163,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1920.0,
+  "Value": 1751.2144379268675,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1930.0,
+  "Value": 3664.815837649642,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1940.0,
+  "Value": 3755.2705815581967,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1950.0,
+  "Value": 3768.474047500244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1960.0,
+  "Value": 3766.831424738091,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1970.0,
+  "Value": 3807.193295588499,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1980.0,
+  "Value": 3767.2168282474445,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1990.0,
+  "Value": 2614.217917157577,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2000.0,
+  "Value": 3762.458452644599,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2010.0,
+  "Value": 2941.7131744275075,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2020.0,
+  "Value": 3624.611828550912,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2030.0,
+  "Value": 2058.212707832884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2040.0,
+  "Value": 3733.7047148403235,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2050.0,
+  "Value": 3766.255044356818,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2060.0,
+  "Value": 3792.67445864625,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2070.0,
+  "Value": 3629.9519773323223,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2080.0,
+  "Value": 3798.535669919639,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2090.0,
+  "Value": 3803.0905211713325,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2100.0,
+  "Value": 946.2991472246023,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2110.0,
+  "Value": 3164.9854755901447,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2120.0,
+  "Value": 3860.343832614936,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2130.0,
+  "Value": 2215.7447134507834,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2140.0,
+  "Value": 3760.4906150821434,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2150.0,
+  "Value": 3349.805444383488,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2160.0,
+  "Value": 3154.139206593982,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2170.0,
+  "Value": 3798.8316929066737,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2180.0,
+  "Value": 3012.1947318908096,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2190.0,
+  "Value": 3769.455111276784,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2200.0,
+  "Value": 2800.363509972184,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2210.0,
+  "Value": 3813.380119199966,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2220.0,
+  "Value": 3789.6137029701267,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2230.0,
+  "Value": 3218.227514920654,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2240.0,
+  "Value": 3505.8027133779756,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2250.0,
+  "Value": 3052.3331218612293,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2260.0,
+  "Value": 3814.6406445519783,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2270.0,
+  "Value": 3766.99504420459,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2280.0,
+  "Value": 3792.668987929109,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2290.0,
+  "Value": 2087.0396506968573,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2300.0,
+  "Value": 3810.472126668583,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2310.0,
+  "Value": 3802.5639411691373,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2320.0,
+  "Value": 3795.1776883284056,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2330.0,
+  "Value": 3773.0642171683244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2340.0,
+  "Value": 2766.18654404364,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2350.0,
+  "Value": 3792.895568730249,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2360.0,
+  "Value": 2649.071616465265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2370.0,
+  "Value": 3772.6006132041152,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2380.0,
+  "Value": 3777.636112600401,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2390.0,
+  "Value": 2941.943721556715,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2400.0,
+  "Value": 3770.4237567622986,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2410.0,
+  "Value": 3821.6142646600747,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2420.0,
+  "Value": 2576.5286915112542,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2430.0,
+  "Value": 3831.8192292099716,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2440.0,
+  "Value": 2172.5029844557193,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2450.0,
+  "Value": 3822.329436650912,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2460.0,
+  "Value": 3832.8749430217417,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2470.0,
+  "Value": 3810.5196151085565,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2480.0,
+  "Value": 3794.2333988903642,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2490.0,
+  "Value": 3820.3865579963845,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2500.0,
+  "Value": 3797.037020877044,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2510.0,
+  "Value": 3827.397788080514,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2520.0,
+  "Value": 3791.241515668398,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2530.0,
+  "Value": 3781.5821507529754,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2540.0,
+  "Value": 1904.8468776362383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2550.0,
+  "Value": 3860.7967924453624,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2560.0,
+  "Value": 1925.6545622548908,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2570.0,
+  "Value": 3853.9072921512447,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2580.0,
+  "Value": 3792.3981558604473,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2590.0,
+  "Value": 2401.619451566894,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2600.0,
+  "Value": 2807.964062235251,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2610.0,
+  "Value": 3806.5415181877665,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2620.0,
+  "Value": 3806.5671376498103,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2630.0,
+  "Value": 3826.42084430296,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2640.0,
+  "Value": 3804.1155467731624,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2650.0,
+  "Value": 3124.332093118123,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2660.0,
+  "Value": 3856.2102430569803,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2670.0,
+  "Value": 2858.4823698369946,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2680.0,
+  "Value": 3006.65072176948,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2690.0,
+  "Value": 3752.5532939972218,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2700.0,
+  "Value": 2276.542342226262,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2710.0,
+  "Value": 3455.9913833723413,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2720.0,
+  "Value": 3275.3041473455296,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2730.0,
+  "Value": 3052.8732935205576,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2740.0,
+  "Value": 3809.6459389045117,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2750.0,
+  "Value": 2512.6856894224766,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2760.0,
+  "Value": 3088.133403096226,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2770.0,
+  "Value": 2653.982025277173,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2780.0,
+  "Value": 3427.3389055396683,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2790.0,
+  "Value": 3420.393903615757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2800.0,
+  "Value": 3702.986987291383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2810.0,
+  "Value": 2390.4752637363954,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2820.0,
+  "Value": 3806.7793706006037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2830.0,
+  "Value": 3068.7767901039983,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2840.0,
+  "Value": 3051.471236380089,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2850.0,
+  "Value": 3860.8211319624265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2860.0,
+  "Value": 3878.760393354138,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2870.0,
+  "Value": 2630.437354221449,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2880.0,
+  "Value": 2801.800173536352,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2890.0,
+  "Value": 3755.5036506260712,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2900.0,
+  "Value": 3851.14174779531,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2910.0,
+  "Value": 2490.1342577354726,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2920.0,
+  "Value": 3868.4470742611575,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2930.0,
+  "Value": 3891.099368264957,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2940.0,
+  "Value": 3883.7203999082208,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2950.0,
+  "Value": 3817.1205514958215,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2960.0,
+  "Value": 3844.453758724397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2970.0,
+  "Value": 3639.6454234314842,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2980.0,
+  "Value": 3553.8082182074213,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2990.0,
+  "Value": 3037.137707393479,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3000.0,
+  "Value": 2218.4868015277816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3010.0,
+  "Value": 3183.479480383788,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3020.0,
+  "Value": 2851.045160957756,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3030.0,
+  "Value": 2928.7783204166726,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3040.0,
+  "Value": 2614.746737803695,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3050.0,
+  "Value": 2505.3212042627624,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3060.0,
+  "Value": 3839.1161218549582,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3070.0,
+  "Value": 438.1260243285451,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3080.0,
+  "Value": 2614.5252684544953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3090.0,
+  "Value": 3762.554777381967,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3100.0,
+  "Value": 2000.8743516422649,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3110.0,
+  "Value": 2934.3935682630345,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3120.0,
+  "Value": 2136.173165965915,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3130.0,
+  "Value": 2618.621104143082,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3140.0,
+  "Value": 3914.6916605388155,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3150.0,
+  "Value": 2487.0140569265354,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3160.0,
+  "Value": 1780.138978998916,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3170.0,
+  "Value": 2763.096684335115,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3180.0,
+  "Value": 2995.8950863592777,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3190.0,
+  "Value": 2599.1261217800147,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 0.0,
+  "Value": 19.744582817273553,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 10.0,
+  "Value": 31.785250847404498,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 20.0,
+  "Value": 298.2772023813958,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 30.0,
+  "Value": 258.2046234490621,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 40.0,
+  "Value": 1090.8069057705559,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 50.0,
+  "Value": 711.0754361240157,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 60.0,
+  "Value": 620.8062044777253,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 70.0,
+  "Value": 971.1552349048918,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 80.0,
+  "Value": 1151.9125522937857,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 90.0,
+  "Value": 2988.2125709825145,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 100.0,
+  "Value": 3099.4882352565446,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 110.0,
+  "Value": 2561.8179213482363,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 120.0,
+  "Value": 2416.1815159027315,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 130.0,
+  "Value": 2855.3979916293943,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 140.0,
+  "Value": 996.7344153482836,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 150.0,
+  "Value": 2619.813100591127,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 160.0,
+  "Value": 2080.6257635137927,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 170.0,
+  "Value": 2621.9639456716927,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 180.0,
+  "Value": 1564.6477629654405,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 190.0,
+  "Value": 2734.219531506365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 200.0,
+  "Value": 3367.7727046272566,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 210.0,
+  "Value": 1990.1779938703494,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 220.0,
+  "Value": 3236.4414072332397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 230.0,
+  "Value": 3383.9944049947926,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 240.0,
+  "Value": 2005.6108973222597,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 250.0,
+  "Value": 1675.1468667564377,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 260.0,
+  "Value": 3287.367552625958,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 270.0,
+  "Value": 1996.1349479885366,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 280.0,
+  "Value": 2427.1740862423685,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 290.0,
+  "Value": 1714.8171093110316,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 300.0,
+  "Value": 2024.1952927163024,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 310.0,
+  "Value": 3315.95828399192,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 320.0,
+  "Value": 1741.9182547331122,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 330.0,
+  "Value": 1774.7349051054575,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 340.0,
+  "Value": 962.5563349819888,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 350.0,
+  "Value": 1995.0336349996705,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 360.0,
+  "Value": 1247.1789164711424,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 370.0,
+  "Value": 2207.029394710995,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 380.0,
+  "Value": 3331.236289371001,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 390.0,
+  "Value": 3472.1375572702873,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 400.0,
+  "Value": 3429.198477592251,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 410.0,
+  "Value": 3387.51009913575,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 420.0,
+  "Value": 2982.4595045381084,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 430.0,
+  "Value": 3418.5189165380566,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 440.0,
+  "Value": 3437.9329110790277,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 450.0,
+  "Value": 2338.7281861349884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 460.0,
+  "Value": 3524.652588005525,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 470.0,
+  "Value": 3499.5071178566573,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 480.0,
+  "Value": 3521.92354241489,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 490.0,
+  "Value": 3510.4299066289727,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 500.0,
+  "Value": 3487.427531252717,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 510.0,
+  "Value": 3569.0749720570443,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 520.0,
+  "Value": 3522.807202308139,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 530.0,
+  "Value": 2432.5578181269975,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 540.0,
+  "Value": 2981.370332590489,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 550.0,
+  "Value": 2759.779665380215,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 560.0,
+  "Value": 3554.905577578161,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 570.0,
+  "Value": 3590.0615638698014,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 580.0,
+  "Value": 3509.9812189620247,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 590.0,
+  "Value": 3505.116048220936,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 600.0,
+  "Value": 2417.8553201291847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 610.0,
+  "Value": 3659.9246099889797,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 620.0,
+  "Value": 1587.3694789397493,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 630.0,
+  "Value": 2446.2303810638064,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 640.0,
+  "Value": 2249.267766037714,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 650.0,
+  "Value": 2073.678924691402,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 660.0,
+  "Value": 2021.4306954483793,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 670.0,
+  "Value": 2468.055165948023,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 680.0,
+  "Value": 2204.3829392379716,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 690.0,
+  "Value": 1563.1712722941,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 700.0,
+  "Value": 2838.331327705233,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 710.0,
+  "Value": 1463.9355775817405,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 720.0,
+  "Value": 3680.313535774353,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 730.0,
+  "Value": 3604.709889876706,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 740.0,
+  "Value": 1239.2138800737614,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 750.0,
+  "Value": 3489.0498767131558,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 760.0,
+  "Value": 2227.949727102221,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 770.0,
+  "Value": 1985.4778382547029,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 780.0,
+  "Value": 3649.5180819604266,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 790.0,
+  "Value": 3685.107281002745,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 800.0,
+  "Value": 3043.3363454427554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 810.0,
+  "Value": 1832.9739159369874,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 820.0,
+  "Value": 2822.953049737764,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 830.0,
+  "Value": 1373.4778032414185,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 840.0,
+  "Value": 3647.376518413497,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 850.0,
+  "Value": 3697.488256319202,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 860.0,
+  "Value": 2631.938008759632,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 870.0,
+  "Value": 2923.7567977755843,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 880.0,
+  "Value": 2584.3741605468135,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 890.0,
+  "Value": 3664.4045248880675,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 900.0,
+  "Value": 2268.401323660361,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 910.0,
+  "Value": 221.33129998878812,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 920.0,
+  "Value": 3675.132325040103,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 930.0,
+  "Value": 3796.821431888841,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 940.0,
+  "Value": 2312.052256433286,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 950.0,
+  "Value": 3962.0136090929295,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 960.0,
+  "Value": 2258.6506189242937,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 970.0,
+  "Value": 3845.571699687081,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 980.0,
+  "Value": 2874.050788534276,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 990.0,
+  "Value": 3045.523566615905,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1000.0,
+  "Value": 2613.113285258905,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1010.0,
+  "Value": 3336.611302441468,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1020.0,
+  "Value": 1782.2234116082834,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1030.0,
+  "Value": 1697.5917801025473,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1040.0,
+  "Value": 2087.1533280784483,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1050.0,
+  "Value": 3840.89431245336,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1060.0,
+  "Value": 3825.9567370027953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1070.0,
+  "Value": 2790.718355930302,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1080.0,
+  "Value": 1611.0259558452415,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1090.0,
+  "Value": 2147.8752845149647,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1100.0,
+  "Value": 1074.183707937116,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1110.0,
+  "Value": 1688.712614465035,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1120.0,
+  "Value": 1595.9422388650437,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1130.0,
+  "Value": 2410.2975512941975,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1140.0,
+  "Value": 2738.099043301726,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1150.0,
+  "Value": 1978.8085648287224,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1160.0,
+  "Value": 2586.582400773491,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1170.0,
+  "Value": 1321.7224359355716,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1180.0,
+  "Value": 1372.6802913457057,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1190.0,
+  "Value": 3428.1755430480716,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1200.0,
+  "Value": 2396.189797550108,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1210.0,
+  "Value": 2512.369396652794,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1220.0,
+  "Value": 2907.384869326389,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1230.0,
+  "Value": 917.873367707135,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1240.0,
+  "Value": 1143.0117394456556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1250.0,
+  "Value": 2230.5370124098736,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1260.0,
+  "Value": 3755.232207106997,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1270.0,
+  "Value": 3796.624556746999,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1280.0,
+  "Value": 3237.271705353941,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1290.0,
+  "Value": 2669.103508854524,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1300.0,
+  "Value": 879.2182202497517,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1310.0,
+  "Value": 2987.239276873438,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1320.0,
+  "Value": 2901.637240300582,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1330.0,
+  "Value": 2790.680950207923,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1340.0,
+  "Value": 2908.736968739322,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1350.0,
+  "Value": 2269.1726369989137,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1360.0,
+  "Value": 2534.105767975896,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1370.0,
+  "Value": 2428.1991445876965,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1380.0,
+  "Value": 3724.7501974674556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1390.0,
+  "Value": 3895.559847600023,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1400.0,
+  "Value": 2550.634517033577,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1410.0,
+  "Value": 3884.7468641837054,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1420.0,
+  "Value": 3259.303440542787,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1430.0,
+  "Value": 3770.6805220855804,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1440.0,
+  "Value": 2889.3815335817944,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1450.0,
+  "Value": 3220.158798664212,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1460.0,
+  "Value": 3774.342992528273,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1470.0,
+  "Value": 2274.004764623134,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1480.0,
+  "Value": 3794.951164261984,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1490.0,
+  "Value": 1846.509705875206,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1500.0,
+  "Value": 1768.4444473257383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1510.0,
+  "Value": 3896.5634312986513,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1520.0,
+  "Value": 2511.274185110711,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1530.0,
+  "Value": 2715.241567587622,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1540.0,
+  "Value": 2779.8390829893615,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1550.0,
+  "Value": 2430.01726773303,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1560.0,
+  "Value": 2158.246874343254,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1570.0,
+  "Value": 3829.646752821389,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1580.0,
+  "Value": 2660.2428519901446,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1590.0,
+  "Value": 2686.4288360001715,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1600.0,
+  "Value": 3828.1071390522416,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1610.0,
+  "Value": 3760.1625778196817,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1620.0,
+  "Value": 3836.7408860981714,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1630.0,
+  "Value": 3911.903611437822,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1640.0,
+  "Value": 2896.940701352365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1650.0,
+  "Value": 2306.698506972087,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1660.0,
+  "Value": 3813.1574789852275,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1670.0,
+  "Value": 3372.4173229533994,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1680.0,
+  "Value": 2654.0141576044125,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1690.0,
+  "Value": 3983.0912772737333,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1700.0,
+  "Value": 2403.608344681032,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1710.0,
+  "Value": 3279.1465018998347,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1720.0,
+  "Value": 2691.5593236896757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1730.0,
+  "Value": 52.773362001970206,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1740.0,
+  "Value": 985.3327897812579,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1750.0,
+  "Value": 1000.0070329879701,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1760.0,
+  "Value": 1167.6324158137213,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1770.0,
+  "Value": 3632.468138611106,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1780.0,
+  "Value": 2930.7341442060024,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1790.0,
+  "Value": 3679.5274707768626,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1800.0,
+  "Value": 2262.6688074626613,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1810.0,
+  "Value": 3522.2788044813765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1820.0,
+  "Value": 3208.014632205135,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1830.0,
+  "Value": 2334.3290515834565,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1840.0,
+  "Value": 2815.0286602472597,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1850.0,
+  "Value": 2576.4538005187264,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1860.0,
+  "Value": 1785.3910984490728,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1870.0,
+  "Value": 3883.598772414244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1880.0,
+  "Value": 2975.513847327181,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1890.0,
+  "Value": 3967.316802841625,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1900.0,
+  "Value": 3808.0136681562744,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1910.0,
+  "Value": 3769.219704950633,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1920.0,
+  "Value": 3446.968169083471,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1930.0,
+  "Value": 3482.0171444036414,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1940.0,
+  "Value": 3598.173534547679,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1950.0,
+  "Value": 3147.5645731778545,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1960.0,
+  "Value": 3372.0192368632324,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1970.0,
+  "Value": 3951.7585778678126,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1980.0,
+  "Value": 1345.2281023225357,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1990.0,
+  "Value": 2569.729128498143,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2000.0,
+  "Value": 2357.359024201977,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2010.0,
+  "Value": 2199.6246815013337,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2020.0,
+  "Value": 3893.324615847188,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2030.0,
+  "Value": 2596.125164266929,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2040.0,
+  "Value": 1360.468355550062,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2050.0,
+  "Value": 2894.120614823934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2060.0,
+  "Value": 2735.5049295296353,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2070.0,
+  "Value": 2750.389124192576,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2080.0,
+  "Value": 3908.394172070936,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2090.0,
+  "Value": 2309.0778592544934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2100.0,
+  "Value": 1237.346921026102,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2110.0,
+  "Value": 4072.4196352772988,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2120.0,
+  "Value": 3162.02105315904,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2130.0,
+  "Value": 1165.9567922549265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2140.0,
+  "Value": 1714.6292118258953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2150.0,
+  "Value": 1527.0267048828791,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2160.0,
+  "Value": 3933.8451265033864,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2170.0,
+  "Value": 3994.408562033337,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2180.0,
+  "Value": 2566.6589780625936,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2190.0,
+  "Value": 1474.2258295192344,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2200.0,
+  "Value": 1677.864601363821,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2210.0,
+  "Value": 2297.8581772498846,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2220.0,
+  "Value": 1449.8014741274126,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2230.0,
+  "Value": 3985.3261138133735,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2240.0,
+  "Value": 4128.5131191288365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2250.0,
+  "Value": 3938.346215974112,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2260.0,
+  "Value": 1829.820594098365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2270.0,
+  "Value": 3313.551516240769,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2280.0,
+  "Value": 3638.8685860219557,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2290.0,
+  "Value": 2272.804448829351,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2300.0,
+  "Value": 1944.630664923077,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2310.0,
+  "Value": 1516.3482853744363,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2320.0,
+  "Value": 1723.3905743858993,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2330.0,
+  "Value": 2531.3541000954447,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2340.0,
+  "Value": 3937.2684241776024,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2350.0,
+  "Value": 4049.103211437957,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2360.0,
+  "Value": 2646.357067014461,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2370.0,
+  "Value": 4092.0687519646794,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2380.0,
+  "Value": 4039.335847212573,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2390.0,
+  "Value": 4038.673670566592,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2400.0,
+  "Value": 2389.960187783027,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2410.0,
+  "Value": 4069.7785728733197,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2420.0,
+  "Value": 2392.5560680105204,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2430.0,
+  "Value": 1921.5459741944596,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2440.0,
+  "Value": 4048.280424551432,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2450.0,
+  "Value": 4047.3652227362204,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2460.0,
+  "Value": 2296.3365906284953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2470.0,
+  "Value": 1020.7725381658948,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2480.0,
+  "Value": 334.911347937085,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2490.0,
+  "Value": 658.4523544630714,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2500.0,
+  "Value": 3530.8549147558583,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2510.0,
+  "Value": 3093.8603734138796,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2520.0,
+  "Value": 3100.687694916406,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2530.0,
+  "Value": 4016.1227163429053,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2540.0,
+  "Value": 3315.6957968754205,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2550.0,
+  "Value": 2130.623614393846,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2560.0,
+  "Value": 1888.315430555752,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2570.0,
+  "Value": 1039.8774651041308,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2580.0,
+  "Value": 4164.79526656624,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2590.0,
+  "Value": 3095.7165784582457,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2600.0,
+  "Value": 2069.7653381263967,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2610.0,
+  "Value": 2641.7714841546017,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2620.0,
+  "Value": 3982.6463898764982,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2630.0,
+  "Value": 1846.0857460550224,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2640.0,
+  "Value": 2592.688868510047,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2650.0,
+  "Value": 1687.0859813722045,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2660.0,
+  "Value": 2745.876839985109,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2670.0,
+  "Value": 1346.0919468571844,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2680.0,
+  "Value": 2475.2355164572764,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2690.0,
+  "Value": 1524.2552951578577,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2700.0,
+  "Value": 2685.216580354985,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2710.0,
+  "Value": 2797.7642831130097,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2720.0,
+  "Value": 4049.857163308556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2730.0,
+  "Value": 1860.7179981092868,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2740.0,
+  "Value": 2262.675124908355,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2750.0,
+  "Value": 3383.032868466642,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2760.0,
+  "Value": 4115.875775661923,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2770.0,
+  "Value": 2980.4128557209083,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2780.0,
+  "Value": 2841.4411869526343,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2790.0,
+  "Value": 3903.925673913035,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2800.0,
+  "Value": 3246.2813264437045,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2810.0,
+  "Value": 929.5176178264373,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2820.0,
+  "Value": 3446.5803753731916,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2830.0,
+  "Value": 4164.160760967591,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2840.0,
+  "Value": 4071.9501121174612,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2850.0,
+  "Value": 2686.7423737212935,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2860.0,
+  "Value": 3619.266452683757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2870.0,
+  "Value": 2595.9364256459153,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2880.0,
+  "Value": 3038.1549108241857,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2890.0,
+  "Value": 2483.160098586695,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2900.0,
+  "Value": 1921.4150097436866,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2910.0,
+  "Value": 2383.4958570648196,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2920.0,
+  "Value": 3772.0357657350723,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2930.0,
+  "Value": 493.577808432508,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2940.0,
+  "Value": 2184.3793082996635,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2950.0,
+  "Value": 2982.221039213013,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2960.0,
+  "Value": 2227.160502807139,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2970.0,
+  "Value": 2522.3751574821003,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2980.0,
+  "Value": 2193.969985623834,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2990.0,
+  "Value": 3148.3885308127556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3000.0,
+  "Value": 2198.7476708921604,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3010.0,
+  "Value": 2546.3593298845085,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3020.0,
+  "Value": 2658.5243878384317,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3030.0,
+  "Value": 3955.09383084106,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3040.0,
+  "Value": 3195.538767861161,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3050.0,
+  "Value": 4119.693525489871,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3060.0,
+  "Value": 3845.7193868846207,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3070.0,
+  "Value": 2665.9644287947194,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3080.0,
+  "Value": 3095.3129734571958,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3090.0,
+  "Value": 3792.435840195615,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3100.0,
+  "Value": 3212.9253521289547,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3110.0,
+  "Value": 2223.1976376997773,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3120.0,
+  "Value": 3453.9709982595773,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3130.0,
+  "Value": 2188.0039581792907,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3140.0,
+  "Value": 3086.172438857489,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3150.0,
+  "Value": 3105.4535999728473,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3160.0,
+  "Value": 2752.870410426071,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3170.0,
+  "Value": 2475.8499796990072,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3180.0,
+  "Value": 3057.3925156407904,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3190.0,
+  "Value": 4190.653346502632,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 0.0,
+  "Value": 18.55350327313362,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 10.0,
+  "Value": 34.02391501248968,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 20.0,
+  "Value": 455.8209277405798,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 30.0,
+  "Value": 1074.500070650293,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 40.0,
+  "Value": 438.9988073089876,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 50.0,
+  "Value": 971.5064413490619,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 60.0,
+  "Value": 456.01386321086375,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 70.0,
+  "Value": 1195.8438397170225,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 80.0,
+  "Value": 1076.1934721573182,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 90.0,
+  "Value": 819.2437030654248,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 100.0,
+  "Value": 1189.3886051588663,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 110.0,
+  "Value": 1168.296954467575,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 120.0,
+  "Value": 3225.0079394983454,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 130.0,
+  "Value": 3183.10653883932,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 140.0,
+  "Value": 3328.095114207713,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 150.0,
+  "Value": 3354.152411315415,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 160.0,
+  "Value": 2223.523454969488,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 170.0,
+  "Value": 3307.924378610877,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 180.0,
+  "Value": 3370.106306690565,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 190.0,
+  "Value": 3385.6260525626785,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 200.0,
+  "Value": 3296.289842367584,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 210.0,
+  "Value": 3371.328601516672,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 220.0,
+  "Value": 3355.624145517063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 230.0,
+  "Value": 2882.0900600314462,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 240.0,
+  "Value": 2058.6253617779125,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 250.0,
+  "Value": 3407.0742548204207,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 260.0,
+  "Value": 3132.3324115129108,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 270.0,
+  "Value": 3445.2775718011335,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 280.0,
+  "Value": 3443.8724720675814,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 290.0,
+  "Value": 3386.0876751755995,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 300.0,
+  "Value": 3458.72238850823,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 310.0,
+  "Value": 3421.414922143813,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 320.0,
+  "Value": 3422.405995738408,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 330.0,
+  "Value": 3604.9420191648906,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 340.0,
+  "Value": 3084.151574167666,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 350.0,
+  "Value": 3470.904358999002,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 360.0,
+  "Value": 3462.712974479455,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 370.0,
+  "Value": 2810.919368099763,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 380.0,
+  "Value": 3428.4664209155058,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 390.0,
+  "Value": 1850.7801940298073,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 400.0,
+  "Value": 3462.9834250214526,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 410.0,
+  "Value": 2135.2924795194735,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 420.0,
+  "Value": 2976.7757890704374,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 430.0,
+  "Value": 1610.4766346252154,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 440.0,
+  "Value": 3507.3303612453037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 450.0,
+  "Value": 2391.9798600868703,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 460.0,
+  "Value": 2060.655902033712,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 470.0,
+  "Value": 3565.737980955112,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 480.0,
+  "Value": 3663.798716788807,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 490.0,
+  "Value": 1606.2649670999133,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 500.0,
+  "Value": 3502.3440857471696,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 510.0,
+  "Value": 2745.184613571546,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 520.0,
+  "Value": 1917.1903953817618,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 530.0,
+  "Value": 1375.707431969222,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 540.0,
+  "Value": 2236.6525848648143,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 550.0,
+  "Value": 1558.4259472113454,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 560.0,
+  "Value": 2075.856534279617,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 570.0,
+  "Value": 1756.8839830504335,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 580.0,
+  "Value": 3540.697400259146,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 590.0,
+  "Value": 3526.6375372369844,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 600.0,
+  "Value": 2529.430974334945,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 610.0,
+  "Value": 2651.153723429037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 620.0,
+  "Value": 2549.093529927482,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 630.0,
+  "Value": 2078.994470088071,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 640.0,
+  "Value": 3529.0826821813475,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 650.0,
+  "Value": 2250.182559335127,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 660.0,
+  "Value": 2578.770211887585,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 670.0,
+  "Value": 2247.1607112821816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 680.0,
+  "Value": 2759.834638317397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 690.0,
+  "Value": 1654.371814248535,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 700.0,
+  "Value": 1703.2911499591235,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 710.0,
+  "Value": 3529.1309334036687,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 720.0,
+  "Value": 2722.1251654335065,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 730.0,
+  "Value": 3466.384149009462,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 740.0,
+  "Value": 1955.0500797696538,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 750.0,
+  "Value": 3572.5172150874687,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 760.0,
+  "Value": 2588.108426184973,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 770.0,
+  "Value": 3494.600723354756,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 780.0,
+  "Value": 3684.2420622721806,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 790.0,
+  "Value": 3622.7982802076094,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 800.0,
+  "Value": 3463.6240937417374,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 810.0,
+  "Value": 3517.528527286077,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 820.0,
+  "Value": 2633.4770574870727,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 830.0,
+  "Value": 3568.2617342212884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 840.0,
+  "Value": 3594.2029515913864,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 850.0,
+  "Value": 3635.0360929074614,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 860.0,
+  "Value": 3529.977957320568,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 870.0,
+  "Value": 2651.4542351884224,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 880.0,
+  "Value": 2231.888180598123,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 890.0,
+  "Value": 2486.0860980873063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 900.0,
+  "Value": 1596.0700767084697,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 910.0,
+  "Value": 3043.7618376942996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 920.0,
+  "Value": 3611.944861192975,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 930.0,
+  "Value": 2347.8805693081817,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 940.0,
+  "Value": 2393.0701628163824,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 950.0,
+  "Value": 3602.437616404626,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 960.0,
+  "Value": 3688.806574320179,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 970.0,
+  "Value": 2981.7298000046003,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 980.0,
+  "Value": 2437.454173644222,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 990.0,
+  "Value": 1902.3953735576379,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1000.0,
+  "Value": 2247.197138753323,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1010.0,
+  "Value": 3261.7734974603154,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1020.0,
+  "Value": 2350.0211167873204,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1030.0,
+  "Value": 2712.298928444314,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1040.0,
+  "Value": 1995.5806762570276,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1050.0,
+  "Value": 2856.653039030441,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1060.0,
+  "Value": 3170.773356216174,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1070.0,
+  "Value": 2655.052391490615,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1080.0,
+  "Value": 3751.4538251368135,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1090.0,
+  "Value": 3796.3060418823175,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1100.0,
+  "Value": 2324.4861893611137,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1110.0,
+  "Value": 2101.7463290817445,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1120.0,
+  "Value": 3053.296480222426,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1130.0,
+  "Value": 3783.8110835370094,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1140.0,
+  "Value": 1642.2889922052964,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1150.0,
+  "Value": 2134.3114619065614,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1160.0,
+  "Value": 2793.4447034470213,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1170.0,
+  "Value": 2017.0436728812501,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1180.0,
+  "Value": 3501.19520141265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1190.0,
+  "Value": 2871.858522603955,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1200.0,
+  "Value": 3653.683299272822,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1210.0,
+  "Value": 2556.5246530024106,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1220.0,
+  "Value": 2877.65681789257,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1230.0,
+  "Value": 2718.3818196970606,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1240.0,
+  "Value": 1972.765444195151,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1250.0,
+  "Value": 2370.2267923684853,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1260.0,
+  "Value": 3411.4581555914415,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1270.0,
+  "Value": 1920.7299011398463,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1280.0,
+  "Value": 3365.811079882767,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1290.0,
+  "Value": 3679.7933217950686,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1300.0,
+  "Value": 3714.0082046072207,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1310.0,
+  "Value": 3651.331869901075,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1320.0,
+  "Value": 3515.689327974122,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1330.0,
+  "Value": 2701.709606575448,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1340.0,
+  "Value": 3700.622828208398,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1350.0,
+  "Value": 3848.417613497768,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1360.0,
+  "Value": 3747.6228744649334,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1370.0,
+  "Value": 2463.00098562426,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1380.0,
+  "Value": 2953.9859061955067,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1390.0,
+  "Value": 3899.5820195941565,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1400.0,
+  "Value": 3727.7683654908333,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1410.0,
+  "Value": 3742.128862890674,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1420.0,
+  "Value": 3749.534942428401,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1430.0,
+  "Value": 3463.5808362991384,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1440.0,
+  "Value": 3755.3371140755153,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1450.0,
+  "Value": 2567.734039114233,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1460.0,
+  "Value": 2179.2598629981476,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1470.0,
+  "Value": 2451.3458363299987,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1480.0,
+  "Value": 2783.0674983526465,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1490.0,
+  "Value": 2235.8405745320724,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1500.0,
+  "Value": 3694.203107839835,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1510.0,
+  "Value": 2519.9811042007645,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1520.0,
+  "Value": 2466.775548659677,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1530.0,
+  "Value": 3962.536110547552,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1540.0,
+  "Value": 3786.5471034609436,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1550.0,
+  "Value": 3760.8612306673886,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1560.0,
+  "Value": 2184.890954982765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1570.0,
+  "Value": 1975.664975844521,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1580.0,
+  "Value": 2009.3434884818048,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1590.0,
+  "Value": 3202.8841766006626,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1600.0,
+  "Value": 2846.7638220338763,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1610.0,
+  "Value": 3744.4307048157384,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1620.0,
+  "Value": 3891.9231588760194,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1630.0,
+  "Value": 2576.653914648864,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1640.0,
+  "Value": 2854.121977138148,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1650.0,
+  "Value": 3866.6420591674346,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1660.0,
+  "Value": 3362.7102733042984,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1670.0,
+  "Value": 3850.722471947776,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1680.0,
+  "Value": 2235.8942053474766,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1690.0,
+  "Value": 2694.203891648439,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1700.0,
+  "Value": 3860.3374452620883,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1710.0,
+  "Value": 3183.5036136917265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1720.0,
+  "Value": 2776.9365525877847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1730.0,
+  "Value": 2765.089504318564,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1740.0,
+  "Value": 2376.344590519917,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1750.0,
+  "Value": 3040.377685677161,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1760.0,
+  "Value": 3804.361756780748,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1770.0,
+  "Value": 1698.0072502570617,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1780.0,
+  "Value": 2868.655742848195,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1790.0,
+  "Value": 3826.853802979457,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1800.0,
+  "Value": 2685.93504936652,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1810.0,
+  "Value": 2801.871025096937,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1820.0,
+  "Value": 2130.0563313324637,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1830.0,
+  "Value": 2443.4042634925704,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1840.0,
+  "Value": 2450.109764256911,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1850.0,
+  "Value": 3388.0777381498697,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1860.0,
+  "Value": 2058.810948856761,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1870.0,
+  "Value": 2736.1794747210274,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1880.0,
+  "Value": 1766.8473872085942,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1890.0,
+  "Value": 2691.5841026034745,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1900.0,
+  "Value": 3050.3240930857,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1910.0,
+  "Value": 3116.036955176987,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1920.0,
+  "Value": 3536.0243138259116,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1930.0,
+  "Value": 2090.3819078068263,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1940.0,
+  "Value": 2307.8469467541577,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1950.0,
+  "Value": 2360.4003504196953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1960.0,
+  "Value": 2230.1760217008896,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1970.0,
+  "Value": 1771.2789127191302,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1980.0,
+  "Value": 3717.3865819957273,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1990.0,
+  "Value": 3403.2608796437603,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2000.0,
+  "Value": 3405.517064701261,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2010.0,
+  "Value": 2086.2277382244547,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2020.0,
+  "Value": 3248.966860179625,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2030.0,
+  "Value": 2809.341369797821,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2040.0,
+  "Value": 2537.6627568877766,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2050.0,
+  "Value": 3762.515910478674,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2060.0,
+  "Value": 2595.7306918730483,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2070.0,
+  "Value": 3867.1439115508842,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2080.0,
+  "Value": 3920.5210671960344,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2090.0,
+  "Value": 3934.915609186794,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2100.0,
+  "Value": 2739.911275766339,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2110.0,
+  "Value": 3744.2152776048724,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2120.0,
+  "Value": 1263.395242296368,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2130.0,
+  "Value": 3881.316379299974,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2140.0,
+  "Value": 2910.979775470658,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2150.0,
+  "Value": 2210.5520854122087,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2160.0,
+  "Value": 3727.945562818233,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2170.0,
+  "Value": 2878.0319662949264,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2180.0,
+  "Value": 2129.3236882594715,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2190.0,
+  "Value": 2631.861328885125,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2200.0,
+  "Value": 3959.56178458162,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2210.0,
+  "Value": 3930.408747327252,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2220.0,
+  "Value": 2924.7001891241994,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2230.0,
+  "Value": 4050.405319951998,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2240.0,
+  "Value": 2744.799308781109,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2250.0,
+  "Value": 3959.3262683517887,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2260.0,
+  "Value": 2115.5186713584444,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2270.0,
+  "Value": 2153.2491979698643,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2280.0,
+  "Value": 2921.4790493431597,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2290.0,
+  "Value": 3290.9130067519836,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2300.0,
+  "Value": 4010.8936785188225,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2310.0,
+  "Value": 3997.8817303649057,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2320.0,
+  "Value": 3949.492939143158,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2330.0,
+  "Value": 3995.42155243339,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2340.0,
+  "Value": 2857.502489758208,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2350.0,
+  "Value": 4018.6148840938304,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2360.0,
+  "Value": 2147.0032923955587,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2370.0,
+  "Value": 3961.57275029286,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2380.0,
+  "Value": 3903.318168713005,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2390.0,
+  "Value": 3999.7327795771807,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2400.0,
+  "Value": 2518.865390223453,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2410.0,
+  "Value": 3367.519811651643,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2420.0,
+  "Value": 2823.6677554194157,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2430.0,
+  "Value": 3485.701733779664,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2440.0,
+  "Value": 3510.8777807446218,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2450.0,
+  "Value": 2456.343281557074,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2460.0,
+  "Value": 2588.706011354384,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2470.0,
+  "Value": 3853.488477960783,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2480.0,
+  "Value": 2217.934662939752,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2490.0,
+  "Value": 3018.7829754656386,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2500.0,
+  "Value": 3688.030172819683,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2510.0,
+  "Value": 2817.845600328471,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2520.0,
+  "Value": 2374.3784165572233,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2530.0,
+  "Value": 1996.0518744367428,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2540.0,
+  "Value": 3909.383274743389,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2550.0,
+  "Value": 2679.8259819478526,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2560.0,
+  "Value": 3960.120949272444,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2570.0,
+  "Value": 2369.58607000843,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2580.0,
+  "Value": 1469.8283860145527,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2590.0,
+  "Value": 2429.375998742397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2600.0,
+  "Value": 3366.459760135379,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2610.0,
+  "Value": 3803.337083027199,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2620.0,
+  "Value": 3962.926332531126,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2630.0,
+  "Value": 2476.6492708775104,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2640.0,
+  "Value": 2816.068329383572,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2650.0,
+  "Value": 3210.1414121212856,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2660.0,
+  "Value": 3966.4839127202117,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2670.0,
+  "Value": 2732.4521735484454,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2680.0,
+  "Value": 3980.783734634957,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2690.0,
+  "Value": 2466.354620708521,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2700.0,
+  "Value": 2149.1782197578555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2710.0,
+  "Value": 2371.2425683823158,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2720.0,
+  "Value": 2074.9205550610423,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2730.0,
+  "Value": 4070.933911932782,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2740.0,
+  "Value": 2508.2699186236323,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2750.0,
+  "Value": 3096.2067042553044,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2760.0,
+  "Value": 2473.8650206068132,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2770.0,
+  "Value": 3587.5221667026267,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2780.0,
+  "Value": 2601.513870268617,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2790.0,
+  "Value": 2179.438274195548,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2800.0,
+  "Value": 2588.721854430803,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2810.0,
+  "Value": 4079.4158744132756,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2820.0,
+  "Value": 3056.5793408367904,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2830.0,
+  "Value": 2422.0334738834995,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2840.0,
+  "Value": 2740.4419566215383,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2850.0,
+  "Value": 3970.511235755708,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2860.0,
+  "Value": 2108.9262271273496,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2870.0,
+  "Value": 4023.6977325827684,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2880.0,
+  "Value": 3470.0274285381884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2890.0,
+  "Value": 2205.5505606571387,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2900.0,
+  "Value": 3256.9935009485216,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2910.0,
+  "Value": 3998.5009848974432,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2920.0,
+  "Value": 3358.3655265938505,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2930.0,
+  "Value": 2762.1158704598993,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2940.0,
+  "Value": 4088.182811931797,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2950.0,
+  "Value": 1868.2757771053596,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2960.0,
+  "Value": 4002.845310063431,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2970.0,
+  "Value": 3101.3039007744424,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2980.0,
+  "Value": 1994.1701154340194,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2990.0,
+  "Value": 3536.4238459298836,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3000.0,
+  "Value": 3949.6658552338045,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3010.0,
+  "Value": 3098.9253835393292,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3020.0,
+  "Value": 4071.6659920539923,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3030.0,
+  "Value": 3263.7951194330317,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3040.0,
+  "Value": 2150.2058929120785,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3050.0,
+  "Value": 1407.0692732431496,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3060.0,
+  "Value": 3943.596865667008,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3070.0,
+  "Value": 3082.3085426418966,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3080.0,
+  "Value": 3981.5647068645526,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3090.0,
+  "Value": 4061.844206461978,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3100.0,
+  "Value": 2867.2792169382237,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3110.0,
+  "Value": 3732.6120073302936,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3120.0,
+  "Value": 3969.7841342202582,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3130.0,
+  "Value": 1800.8693166006663,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3140.0,
+  "Value": 3593.934523992048,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3150.0,
+  "Value": 2621.219936176155,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3160.0,
+  "Value": 2170.8529233116365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3170.0,
+  "Value": 2220.7573095542793,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3180.0,
+  "Value": 2537.090028106555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3190.0,
+  "Value": 2796.90833741815,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 0.0,
+  "Value": 21.10817831909783,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 10.0,
+  "Value": 39.1892724130717,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 20.0,
+  "Value": 321.97756855263475,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 30.0,
+  "Value": 313.13463065921803,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 40.0,
+  "Value": 1036.563887556004,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 50.0,
+  "Value": 663.1761579150365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 60.0,
+  "Value": 1244.4481154311281,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 70.0,
+  "Value": 899.5297957473415,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 80.0,
+  "Value": 2327.622944025626,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 90.0,
+  "Value": 3013.7666843127045,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 100.0,
+  "Value": 3164.6016320090744,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 110.0,
+  "Value": 1098.6669724173942,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 120.0,
+  "Value": 2873.4238927131723,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 130.0,
+  "Value": 3152.12733010531,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 140.0,
+  "Value": 1282.4281308870075,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 150.0,
+  "Value": 2272.221122166444,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 160.0,
+  "Value": 3191.7333606876928,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 170.0,
+  "Value": 3341.03775070118,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 180.0,
+  "Value": 3268.6149072487797,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 190.0,
+  "Value": 3285.7845589365807,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 200.0,
+  "Value": 3262.249408128561,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 210.0,
+  "Value": 3250.887090341263,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 220.0,
+  "Value": 3226.866839047455,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 230.0,
+  "Value": 3301.8937287477816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 240.0,
+  "Value": 1727.4356015569037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 250.0,
+  "Value": 3293.675223470847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 260.0,
+  "Value": 2402.3931081377746,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 270.0,
+  "Value": 2105.6841090766297,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 280.0,
+  "Value": 2353.628109711445,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 290.0,
+  "Value": 3282.0427658475155,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 300.0,
+  "Value": 3284.8604089921982,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 310.0,
+  "Value": 3303.5620944306743,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 320.0,
+  "Value": 3292.6879670231115,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 330.0,
+  "Value": 3348.6775646799338,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 340.0,
+  "Value": 2322.249914288955,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 350.0,
+  "Value": 1813.2751910458785,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 360.0,
+  "Value": 3278.142774526261,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 370.0,
+  "Value": 3300.98687898276,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 380.0,
+  "Value": 3332.6920042804454,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 390.0,
+  "Value": 3353.5789120769905,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 400.0,
+  "Value": 3344.6119700950144,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 410.0,
+  "Value": 3345.0134383536806,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 420.0,
+  "Value": 2797.0980751673133,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 430.0,
+  "Value": 3337.1068316966675,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 440.0,
+  "Value": 2140.9232196690173,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 450.0,
+  "Value": 3354.533785617178,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 460.0,
+  "Value": 3347.6413125739173,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 470.0,
+  "Value": 3376.2354755049914,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 480.0,
+  "Value": 3336.0740281318376,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 490.0,
+  "Value": 2916.3369957507275,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 500.0,
+  "Value": 3347.4742621792575,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 510.0,
+  "Value": 3363.617483017443,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 520.0,
+  "Value": 3336.5637756860597,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 530.0,
+  "Value": 3378.9161453786223,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 540.0,
+  "Value": 3359.9959423559208,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 550.0,
+  "Value": 3364.397590388338,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 560.0,
+  "Value": 3359.9010309503897,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 570.0,
+  "Value": 3356.6436590469348,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 580.0,
+  "Value": 3328.153779430947,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 590.0,
+  "Value": 3348.7773556672746,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 600.0,
+  "Value": 3345.5256853698666,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 610.0,
+  "Value": 2569.3598183498234,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 620.0,
+  "Value": 3351.7412562451364,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 630.0,
+  "Value": 3362.2649928940914,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 640.0,
+  "Value": 3342.90016566659,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 650.0,
+  "Value": 3402.9957110477017,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 660.0,
+  "Value": 3363.8140054274722,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 670.0,
+  "Value": 2088.889917797903,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 680.0,
+  "Value": 3373.4276168040356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 690.0,
+  "Value": 3374.494772358025,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 700.0,
+  "Value": 3384.138572890684,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 710.0,
+  "Value": 3398.672266811892,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 720.0,
+  "Value": 3332.093520512269,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 730.0,
+  "Value": 3389.338409361513,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 740.0,
+  "Value": 3401.4433635068403,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 750.0,
+  "Value": 3489.356164858044,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 760.0,
+  "Value": 3070.092353641232,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 770.0,
+  "Value": 3358.642335351061,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 780.0,
+  "Value": 3359.9498914567935,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 790.0,
+  "Value": 3374.4744614777837,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 800.0,
+  "Value": 2940.055633259554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 810.0,
+  "Value": 3481.3422697864103,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 820.0,
+  "Value": 3381.2061456744627,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 830.0,
+  "Value": 3402.1153890114538,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 840.0,
+  "Value": 3419.0296138078015,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 850.0,
+  "Value": 3378.143064638622,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 860.0,
+  "Value": 3245.2742788801997,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 870.0,
+  "Value": 3388.34713502584,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 880.0,
+  "Value": 2132.425128260107,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 890.0,
+  "Value": 1702.1606970382966,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 900.0,
+  "Value": 3369.531659188397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 910.0,
+  "Value": 3181.67144982827,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 920.0,
+  "Value": 3394.403108677504,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 930.0,
+  "Value": 3389.7966444047747,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 940.0,
+  "Value": 3411.3431438493394,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 950.0,
+  "Value": 3386.9805571618163,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 960.0,
+  "Value": 2053.777167055344,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 970.0,
+  "Value": 3393.0933862243623,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 980.0,
+  "Value": 2359.3810060533897,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 990.0,
+  "Value": 2944.9849461903127,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1000.0,
+  "Value": 3405.8822887534816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1010.0,
+  "Value": 3381.3788893154006,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1020.0,
+  "Value": 3402.036353121788,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1030.0,
+  "Value": 3406.1404264688895,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1040.0,
+  "Value": 3425.9050330114387,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1050.0,
+  "Value": 3402.833313964225,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1060.0,
+  "Value": 3525.8003040126805,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1070.0,
+  "Value": 3507.941425329657,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1080.0,
+  "Value": 3401.019131019126,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1090.0,
+  "Value": 3464.87654727259,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1100.0,
+  "Value": 3433.7628544558634,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1110.0,
+  "Value": 3324.0556504075216,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1120.0,
+  "Value": 1436.8208232655172,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1130.0,
+  "Value": 3512.265631966069,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1140.0,
+  "Value": 2399.0459570037356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1150.0,
+  "Value": 2475.6478625272416,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1160.0,
+  "Value": 2959.3929974910625,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1170.0,
+  "Value": 2508.556011995123,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1180.0,
+  "Value": 2519.0355416277685,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1190.0,
+  "Value": 2690.084321999547,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1200.0,
+  "Value": 2161.746117987654,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1210.0,
+  "Value": 1897.0760121935327,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1220.0,
+  "Value": 2285.426148927556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1230.0,
+  "Value": 2209.7902494510304,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1240.0,
+  "Value": 3385.970870678269,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1250.0,
+  "Value": 2429.5580830204167,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1260.0,
+  "Value": 2865.22807795045,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1270.0,
+  "Value": 1941.519958003841,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1280.0,
+  "Value": 2298.8574690291193,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1290.0,
+  "Value": 3487.8313228794395,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1300.0,
+  "Value": 2628.0010662161912,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1310.0,
+  "Value": 3627.616923230992,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1320.0,
+  "Value": 2002.5548414922578,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1330.0,
+  "Value": 1758.411460209757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1340.0,
+  "Value": 2499.2043071365615,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1350.0,
+  "Value": 1602.0788654203668,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1360.0,
+  "Value": 3707.6409955972595,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1370.0,
+  "Value": 2533.6110631312317,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1380.0,
+  "Value": 1897.6720637480153,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1390.0,
+  "Value": 3013.3792532291063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1400.0,
+  "Value": 2482.208416442539,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1410.0,
+  "Value": 2577.4642512643286,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1420.0,
+  "Value": 2269.986743426278,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1430.0,
+  "Value": 1843.032387168633,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1440.0,
+  "Value": 3713.3129960625274,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1450.0,
+  "Value": 3581.0430663393245,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1460.0,
+  "Value": 1612.009384657474,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1470.0,
+  "Value": 2447.628627596491,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1480.0,
+  "Value": 2388.009694130106,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1490.0,
+  "Value": 3696.4932651255463,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1500.0,
+  "Value": 3584.2971231793567,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1510.0,
+  "Value": 1717.9694335853676,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1520.0,
+  "Value": 2033.4176430910957,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1530.0,
+  "Value": 2744.708608303891,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1540.0,
+  "Value": 2659.184631750688,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1550.0,
+  "Value": 2395.9963885600164,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1560.0,
+  "Value": 2673.979473879913,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1570.0,
+  "Value": 3844.9944117141063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1580.0,
+  "Value": 2489.3502881371987,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1590.0,
+  "Value": 3494.11700175668,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1600.0,
+  "Value": 3690.5343088493314,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1610.0,
+  "Value": 3149.946973436696,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1620.0,
+  "Value": 2151.9810074588677,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1630.0,
+  "Value": 2556.205000689886,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1640.0,
+  "Value": 1649.576576242019,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1650.0,
+  "Value": 1380.6542252569486,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1660.0,
+  "Value": 2208.909357868926,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1670.0,
+  "Value": 2917.573763878995,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1680.0,
+  "Value": 1379.08581874906,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1690.0,
+  "Value": 3039.666620502074,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1700.0,
+  "Value": 1809.892835341034,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1710.0,
+  "Value": 3461.185869938691,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1720.0,
+  "Value": 2508.848143940717,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1730.0,
+  "Value": 1614.4190577539996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1740.0,
+  "Value": 2270.7110359148523,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1750.0,
+  "Value": 3747.4210090215356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1760.0,
+  "Value": 3868.562498281389,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1770.0,
+  "Value": 1697.1219644364967,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1780.0,
+  "Value": 2149.9982397370386,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1790.0,
+  "Value": 3717.8530310490546,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1800.0,
+  "Value": 2347.362582310843,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1810.0,
+  "Value": 3778.3913902567024,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1820.0,
+  "Value": 1824.453963163702,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1830.0,
+  "Value": 3696.061471752536,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1840.0,
+  "Value": 3461.023936874052,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1850.0,
+  "Value": 3036.426638281664,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1860.0,
+  "Value": 1476.3907016448532,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1870.0,
+  "Value": 3065.8723063220696,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1880.0,
+  "Value": 2638.874718193588,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1890.0,
+  "Value": 3077.1542027725523,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1900.0,
+  "Value": 3247.5705025055063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1910.0,
+  "Value": 1708.2155385133794,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1920.0,
+  "Value": 2711.7978610838436,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1930.0,
+  "Value": 2141.6459500188607,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1940.0,
+  "Value": 2609.468797738524,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1950.0,
+  "Value": 2542.3732717085286,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1960.0,
+  "Value": 3781.4644215137128,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1970.0,
+  "Value": 2037.3656942798434,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1980.0,
+  "Value": 1783.6528685329765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1990.0,
+  "Value": 2098.531623307964,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2000.0,
+  "Value": 2860.3248473747462,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2010.0,
+  "Value": 2349.819660677993,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2020.0,
+  "Value": 1613.9201681873667,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2030.0,
+  "Value": 2075.2799868604116,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2040.0,
+  "Value": 2472.716631493123,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2050.0,
+  "Value": 1888.5012719777276,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2060.0,
+  "Value": 2370.5056485350633,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2070.0,
+  "Value": 2786.8110085444337,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2080.0,
+  "Value": 1964.7889422100097,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2090.0,
+  "Value": 3816.677978561181,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2100.0,
+  "Value": 1741.4099729483007,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2110.0,
+  "Value": 1635.6421564911618,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2120.0,
+  "Value": 2000.1279711707355,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2130.0,
+  "Value": 2052.788661141834,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2140.0,
+  "Value": 2106.862417553555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2150.0,
+  "Value": 1838.1795919231797,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2160.0,
+  "Value": 2138.178050044641,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2170.0,
+  "Value": 2962.711183928739,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2180.0,
+  "Value": 2928.533306473149,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2190.0,
+  "Value": 2945.9516159710174,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2200.0,
+  "Value": 3528.274074713602,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2210.0,
+  "Value": 2100.812109817802,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2220.0,
+  "Value": 2250.3785883542623,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2230.0,
+  "Value": 1783.8270274645856,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2240.0,
+  "Value": 2394.0728857228987,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2250.0,
+  "Value": 3268.6049996026986,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2260.0,
+  "Value": 2166.0919328796667,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2270.0,
+  "Value": 2103.0427497559226,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2280.0,
+  "Value": 2769.910905075414,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2290.0,
+  "Value": 2617.6931703058895,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2300.0,
+  "Value": 3900.8148496987733,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2310.0,
+  "Value": 1757.4521344420352,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2320.0,
+  "Value": 3565.4200562467604,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2330.0,
+  "Value": 3266.506757177701,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2340.0,
+  "Value": 3859.924717207356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2350.0,
+  "Value": 3286.1068510545465,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2360.0,
+  "Value": 3978.2291994814555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2370.0,
+  "Value": 3839.2798400355114,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2380.0,
+  "Value": 3913.3982615463765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2390.0,
+  "Value": 2422.2039724662063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2400.0,
+  "Value": 2181.8377476673195,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2410.0,
+  "Value": 2154.204319435529,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2420.0,
+  "Value": 2874.671014596427,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2430.0,
+  "Value": 2566.2156400952344,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2440.0,
+  "Value": 2505.590752077389,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2450.0,
+  "Value": 1942.0885471494457,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2460.0,
+  "Value": 3366.6225265702087,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2470.0,
+  "Value": 3410.533799102277,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2480.0,
+  "Value": 2060.4444575467783,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2490.0,
+  "Value": 2960.9510868332773,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2500.0,
+  "Value": 3279.6930572545602,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2510.0,
+  "Value": 2829.428980438688,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2520.0,
+  "Value": 1854.7510579319658,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2530.0,
+  "Value": 2435.0301791660786,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2540.0,
+  "Value": 1957.9895493999604,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2550.0,
+  "Value": 3448.396583515996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2560.0,
+  "Value": 2069.9067645366413,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2570.0,
+  "Value": 2354.3500754281995,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2580.0,
+  "Value": 3031.526402548339,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2590.0,
+  "Value": 2766.4218635928,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2600.0,
+  "Value": 2108.702663924201,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2610.0,
+  "Value": 2227.936718288125,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2620.0,
+  "Value": 3342.6554502355402,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2630.0,
+  "Value": 3021.94299161901,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2640.0,
+  "Value": 2709.3393090024456,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2650.0,
+  "Value": 3398.902324093807,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2660.0,
+  "Value": 2820.4716170530182,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2670.0,
+  "Value": 2275.993381183612,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2680.0,
+  "Value": 2230.8283468816894,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2690.0,
+  "Value": 2966.542009022556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2700.0,
+  "Value": 2777.80045434143,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2710.0,
+  "Value": 3138.5604945261107,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2720.0,
+  "Value": 3138.4766941753596,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2730.0,
+  "Value": 2775.6074254796968,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2740.0,
+  "Value": 3392.9896290165707,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2750.0,
+  "Value": 2921.4212715529416,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2760.0,
+  "Value": 2355.885196269884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2770.0,
+  "Value": 2487.807175368631,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2780.0,
+  "Value": 3116.489472872645,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2790.0,
+  "Value": 3937.545708287267,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2800.0,
+  "Value": 2576.2538178677555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2810.0,
+  "Value": 3439.305084095652,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2820.0,
+  "Value": 3129.3632882910642,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2830.0,
+  "Value": 4004.3979902661786,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2840.0,
+  "Value": 2762.203872971232,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2850.0,
+  "Value": 3998.6917868820847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2860.0,
+  "Value": 3954.018671449615,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2870.0,
+  "Value": 2760.4240675546607,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2880.0,
+  "Value": 2165.964909405651,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2890.0,
+  "Value": 3784.8579453985712,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2900.0,
+  "Value": 3325.4004078100784,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2910.0,
+  "Value": 2162.9309653832765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2920.0,
+  "Value": 2981.761953882245,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2930.0,
+  "Value": 3334.717205025765,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2940.0,
+  "Value": 4064.3982050707705,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2950.0,
+  "Value": 3965.3546395784265,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2960.0,
+  "Value": 3995.4418754637372,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2970.0,
+  "Value": 3446.332979137492,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2980.0,
+  "Value": 2915.835830084816,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2990.0,
+  "Value": 2321.287337448541,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3000.0,
+  "Value": 4073.5984163221724,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3010.0,
+  "Value": 2618.8439099154266,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3020.0,
+  "Value": 4045.4945651956227,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3030.0,
+  "Value": 3432.645370709522,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3040.0,
+  "Value": 3408.1336830051514,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3050.0,
+  "Value": 3968.9083771379164,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3060.0,
+  "Value": 3441.709884435795,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3070.0,
+  "Value": 3885.9244944907928,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3080.0,
+  "Value": 2481.1215286965244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3090.0,
+  "Value": 3933.1011299140428,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3100.0,
+  "Value": 3948.2372696992375,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3110.0,
+  "Value": 3961.870268338568,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3120.0,
+  "Value": 3983.862381194142,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3130.0,
+  "Value": 3988.7251483951945,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3140.0,
+  "Value": 4029.89213981732,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3150.0,
+  "Value": 4070.758223391657,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3160.0,
+  "Value": 2072.777868519,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3170.0,
+  "Value": 3025.552886583526,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3180.0,
+  "Value": 3962.0089079774234,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3190.0,
+  "Value": 3984.152197754189,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 0.0,
+  "Value": 23.59433603912431,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 10.0,
+  "Value": 45.29186486451051,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 20.0,
+  "Value": 362.6050171915879,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 30.0,
+  "Value": 242.7028047372937,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 40.0,
+  "Value": 1020.3258988535838,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 50.0,
+  "Value": 1047.853733469046,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 60.0,
+  "Value": 533.3999308716368,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 70.0,
+  "Value": 1797.052495204437,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 80.0,
+  "Value": 1684.546944906945,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 90.0,
+  "Value": 2767.278706714157,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 100.0,
+  "Value": 3018.7060417484454,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 110.0,
+  "Value": 3080.4884680226587,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 120.0,
+  "Value": 3126.7915489931543,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 130.0,
+  "Value": 2220.634743534738,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 140.0,
+  "Value": 1591.4201640323154,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 150.0,
+  "Value": 3329.8970197442823,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 160.0,
+  "Value": 1700.828812681788,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 170.0,
+  "Value": 3256.606413929401,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 180.0,
+  "Value": 3226.772848625307,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 190.0,
+  "Value": 2197.7108549290715,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 200.0,
+  "Value": 2142.6517150396066,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 210.0,
+  "Value": 3219.6598070253735,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 220.0,
+  "Value": 3272.8989431116365,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 230.0,
+  "Value": 2006.4216769123996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 240.0,
+  "Value": 2342.494826789991,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 250.0,
+  "Value": 3218.638419788675,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 260.0,
+  "Value": 3205.024209116853,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 270.0,
+  "Value": 3127.04346966747,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 280.0,
+  "Value": 3187.2592297066954,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 290.0,
+  "Value": 2144.094933312008,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 300.0,
+  "Value": 1416.7059600137934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 310.0,
+  "Value": 1626.8011056805017,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 320.0,
+  "Value": 2014.9415635643159,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 330.0,
+  "Value": 2834.0694605205017,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 340.0,
+  "Value": 2599.4266278394102,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 350.0,
+  "Value": 3072.6620071966167,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 360.0,
+  "Value": 2743.7214990364737,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 370.0,
+  "Value": 2693.1580723907286,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 380.0,
+  "Value": 2288.835327893624,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 390.0,
+  "Value": 3331.0472663034784,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 400.0,
+  "Value": 3356.304617317392,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 410.0,
+  "Value": 2083.7625404561854,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 420.0,
+  "Value": 3403.440698923697,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 430.0,
+  "Value": 1717.789314518307,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 440.0,
+  "Value": 3399.919677284332,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 450.0,
+  "Value": 3356.6804783820053,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 460.0,
+  "Value": 3432.820572184955,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 470.0,
+  "Value": 3419.120967784222,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 480.0,
+  "Value": 3367.5569679057203,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 490.0,
+  "Value": 3361.2480421240884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 500.0,
+  "Value": 2097.578928905108,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 510.0,
+  "Value": 3524.567119642215,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 520.0,
+  "Value": 3511.407705747163,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 530.0,
+  "Value": 3504.578182352176,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 540.0,
+  "Value": 2607.2777207286817,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 550.0,
+  "Value": 2508.4111993606307,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 560.0,
+  "Value": 1251.621027226679,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 570.0,
+  "Value": 2313.5037991617037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 580.0,
+  "Value": 3074.939883846541,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 590.0,
+  "Value": 3457.5476168506707,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 600.0,
+  "Value": 3551.2291912777064,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 610.0,
+  "Value": 3498.196930061876,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 620.0,
+  "Value": 3518.8549682581124,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 630.0,
+  "Value": 1743.654145433788,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 640.0,
+  "Value": 3515.382563499285,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 650.0,
+  "Value": 3531.6188747854308,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 660.0,
+  "Value": 2319.5372666999174,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 670.0,
+  "Value": 2432.5257671387117,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 680.0,
+  "Value": 3495.3940611723965,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 690.0,
+  "Value": 1153.004783572811,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 700.0,
+  "Value": 3162.477247746998,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 710.0,
+  "Value": 3556.126089019841,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 720.0,
+  "Value": 3547.5510534303567,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 730.0,
+  "Value": 2457.2574808060244,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 740.0,
+  "Value": 1594.032493441502,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 750.0,
+  "Value": 2338.403770270802,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 760.0,
+  "Value": 1211.2051610286303,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 770.0,
+  "Value": 1306.1750023019902,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 780.0,
+  "Value": 3546.6421307322953,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 790.0,
+  "Value": 2304.850000111432,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 800.0,
+  "Value": 3575.229331987328,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 810.0,
+  "Value": 3615.3342814341263,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 820.0,
+  "Value": 3477.209018278568,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 830.0,
+  "Value": 3488.010402346063,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 840.0,
+  "Value": 3533.1253839385718,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 850.0,
+  "Value": 1920.2682189201173,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 860.0,
+  "Value": 3552.6795047066485,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 870.0,
+  "Value": 3577.511589598397,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 880.0,
+  "Value": 3551.2800813479485,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 890.0,
+  "Value": 2754.531166439531,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 900.0,
+  "Value": 1930.0495313383199,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 910.0,
+  "Value": 3567.2424841926554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 920.0,
+  "Value": 3545.877240128743,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 930.0,
+  "Value": 3593.289016039472,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 940.0,
+  "Value": 3676.0934156567178,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 950.0,
+  "Value": 3078.799558628697,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 960.0,
+  "Value": 3590.551398550571,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 970.0,
+  "Value": 3220.3428336585866,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 980.0,
+  "Value": 3583.8042520690606,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 990.0,
+  "Value": 3704.8374074055964,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1000.0,
+  "Value": 3627.811072444165,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1010.0,
+  "Value": 3214.7131866974605,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1020.0,
+  "Value": 3662.1377314453644,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1030.0,
+  "Value": 3641.3779596255354,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1040.0,
+  "Value": 3654.7814631424562,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1050.0,
+  "Value": 3602.826618569856,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1060.0,
+  "Value": 1992.8794420750662,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1070.0,
+  "Value": 3085.7011831436803,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1080.0,
+  "Value": 3146.2713114691965,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1090.0,
+  "Value": 2772.418333564455,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1100.0,
+  "Value": 3628.941317070064,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1110.0,
+  "Value": 3683.0105127866996,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1120.0,
+  "Value": 3610.2204417737935,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1130.0,
+  "Value": 3625.9789851572236,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1140.0,
+  "Value": 3570.945266732478,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1150.0,
+  "Value": 3696.2757992242186,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1160.0,
+  "Value": 3623.5455424632114,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1170.0,
+  "Value": 3582.1681659420747,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1180.0,
+  "Value": 3769.7329908445836,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1190.0,
+  "Value": 3713.860414398542,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1200.0,
+  "Value": 3750.886655000742,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1210.0,
+  "Value": 2817.0394491489137,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1220.0,
+  "Value": 3688.284161184175,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1230.0,
+  "Value": 3519.802057080614,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1240.0,
+  "Value": 666.2477092143826,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1250.0,
+  "Value": 3833.6421193568876,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1260.0,
+  "Value": 3678.4208868938103,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1270.0,
+  "Value": 3728.309533307245,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1280.0,
+  "Value": 2140.2472568948897,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1290.0,
+  "Value": 3745.0438688148934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1300.0,
+  "Value": 2777.814753036752,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1310.0,
+  "Value": 2628.5007478815596,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1320.0,
+  "Value": 1688.2950886070757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1330.0,
+  "Value": 3788.2432117886133,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1340.0,
+  "Value": 3750.0824525885255,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1350.0,
+  "Value": 2125.2824180582634,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1360.0,
+  "Value": 1645.6628824888023,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1370.0,
+  "Value": 3154.333883529757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1380.0,
+  "Value": 2738.545273840865,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1390.0,
+  "Value": 3715.529355185899,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1400.0,
+  "Value": 3022.0998014388715,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1410.0,
+  "Value": 2191.9736814683965,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1420.0,
+  "Value": 1889.5618888896215,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1430.0,
+  "Value": 2185.7991642412558,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1440.0,
+  "Value": 2019.5288013895556,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1450.0,
+  "Value": 3237.3940192355994,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1460.0,
+  "Value": 2797.8005753393363,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1470.0,
+  "Value": 3812.899605932361,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1480.0,
+  "Value": 2764.720106430429,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1490.0,
+  "Value": 2486.208751583645,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1500.0,
+  "Value": 2043.4134685874865,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1510.0,
+  "Value": 3912.142454162277,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1520.0,
+  "Value": 2117.9652739851044,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1530.0,
+  "Value": 3087.125627635499,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1540.0,
+  "Value": 1993.8187172584776,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1550.0,
+  "Value": 3184.7700179428493,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1560.0,
+  "Value": 2825.4523059537555,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1570.0,
+  "Value": 2848.3249108875525,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1580.0,
+  "Value": 1615.714659747027,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1590.0,
+  "Value": 266.31978119127774,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1600.0,
+  "Value": 2608.4065918525403,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1610.0,
+  "Value": 3613.0986466941754,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1620.0,
+  "Value": 2163.8105355577395,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1630.0,
+  "Value": 1340.403506785756,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1640.0,
+  "Value": 2446.086990145824,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1650.0,
+  "Value": 2041.3464762839094,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1660.0,
+  "Value": 2752.471876109355,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1670.0,
+  "Value": 2662.962522560445,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1680.0,
+  "Value": 2612.782237332003,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1690.0,
+  "Value": 2986.8299713484794,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1700.0,
+  "Value": 1936.8270964779333,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1710.0,
+  "Value": 2928.7447909708944,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1720.0,
+  "Value": 2865.6540383811925,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1730.0,
+  "Value": 3838.522816179124,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1740.0,
+  "Value": 2148.675578975062,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1750.0,
+  "Value": 2996.334405318654,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1760.0,
+  "Value": 3923.4265583007113,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1770.0,
+  "Value": 2794.2443936970312,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1780.0,
+  "Value": 3825.9462895450934,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1790.0,
+  "Value": 3649.2572313947176,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1800.0,
+  "Value": 3813.64840061583,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1810.0,
+  "Value": 2014.0562220856636,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1820.0,
+  "Value": 3771.9097092334932,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1830.0,
+  "Value": 2250.005180487684,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1840.0,
+  "Value": 3805.0435493179866,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1850.0,
+  "Value": 3088.6242533827544,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1860.0,
+  "Value": 3535.5903938284273,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1870.0,
+  "Value": 2437.7341012425477,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1880.0,
+  "Value": 3808.400356780862,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1890.0,
+  "Value": 2035.508718068289,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1900.0,
+  "Value": 2440.531046361837,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1910.0,
+  "Value": 3087.4237007378356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1920.0,
+  "Value": 3850.1833976377034,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1930.0,
+  "Value": 2715.5193331016735,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1940.0,
+  "Value": 2115.9172224392255,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1950.0,
+  "Value": 3067.5864177335025,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1960.0,
+  "Value": 2927.7713679145922,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1970.0,
+  "Value": 3705.0236075086373,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1980.0,
+  "Value": 2010.0443002735665,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 1990.0,
+  "Value": 3786.6745293750837,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2000.0,
+  "Value": 3880.169834785847,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2010.0,
+  "Value": 2948.204633776324,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2020.0,
+  "Value": 2922.2696651878036,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2030.0,
+  "Value": 3851.5180243671102,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2040.0,
+  "Value": 1998.539730846567,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2050.0,
+  "Value": 3890.705516123356,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2060.0,
+  "Value": 2504.644093761554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2070.0,
+  "Value": 3904.620453894181,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2080.0,
+  "Value": 2702.045897393637,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2090.0,
+  "Value": 2421.876382889274,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2100.0,
+  "Value": 2489.5473640324826,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2110.0,
+  "Value": 2732.782202691762,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2120.0,
+  "Value": 1518.3321528292352,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2130.0,
+  "Value": 1413.6164658838923,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2140.0,
+  "Value": 1493.567338221379,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2150.0,
+  "Value": 2046.6542334754693,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2160.0,
+  "Value": 3805.7262093617396,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2170.0,
+  "Value": 3210.6461782039632,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2180.0,
+  "Value": 3731.436382061552,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2190.0,
+  "Value": 3325.8365791077913,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2200.0,
+  "Value": 3146.6929229231655,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2210.0,
+  "Value": 3808.6245635498112,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2220.0,
+  "Value": 3818.6057801556876,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2230.0,
+  "Value": 2933.424521231189,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2240.0,
+  "Value": 1028.3594284199269,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2250.0,
+  "Value": 2159.3393333282297,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2260.0,
+  "Value": 3419.7837131329525,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2270.0,
+  "Value": 3846.376577825795,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2280.0,
+  "Value": 2526.378771233966,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2290.0,
+  "Value": 3698.712716193475,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2300.0,
+  "Value": 3913.4450563272762,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2310.0,
+  "Value": 3024.662466941657,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2320.0,
+  "Value": 1693.0859148447496,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2330.0,
+  "Value": 3856.2649340546623,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2340.0,
+  "Value": 2590.3262360940735,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2350.0,
+  "Value": 2106.264017217375,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2360.0,
+  "Value": 3860.163118965404,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2370.0,
+  "Value": 2365.370607566301,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2380.0,
+  "Value": 3552.382716746677,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2390.0,
+  "Value": 3289.1229865657547,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2400.0,
+  "Value": 2975.110584248235,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2410.0,
+  "Value": 2604.6452778458333,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2420.0,
+  "Value": 3879.291804263962,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2430.0,
+  "Value": 4016.1340330486123,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2440.0,
+  "Value": 2067.378778751824,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2450.0,
+  "Value": 2440.0602978702186,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2460.0,
+  "Value": 3774.019941913206,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2470.0,
+  "Value": 3120.6913604499723,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2480.0,
+  "Value": 2590.2391357278057,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2490.0,
+  "Value": 2139.411111431662,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2500.0,
+  "Value": 3559.6341699601116,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2510.0,
+  "Value": 2706.9420385842577,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2520.0,
+  "Value": 3081.124842647796,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2530.0,
+  "Value": 2196.321044913479,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2540.0,
+  "Value": 2863.661894279237,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2550.0,
+  "Value": 3219.03115689944,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2560.0,
+  "Value": 2866.4859582907566,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2570.0,
+  "Value": 2702.650878261062,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2580.0,
+  "Value": 3954.06966831902,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2590.0,
+  "Value": 3151.396004107949,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2600.0,
+  "Value": 3196.927605074664,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2610.0,
+  "Value": 2001.9454576894134,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2620.0,
+  "Value": 2773.982152170567,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2630.0,
+  "Value": 3309.4715937634182,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2640.0,
+  "Value": 1905.81737572629,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2650.0,
+  "Value": 2122.366694007293,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2660.0,
+  "Value": 4098.878892552422,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2670.0,
+  "Value": 3302.295698579175,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2680.0,
+  "Value": 2237.9209089658193,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2690.0,
+  "Value": 1859.1451696391748,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2700.0,
+  "Value": 2260.835349309391,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2710.0,
+  "Value": 4001.37624990191,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2720.0,
+  "Value": 2157.2470926823357,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2730.0,
+  "Value": 1333.6443686175976,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2740.0,
+  "Value": 2158.5179362211093,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2750.0,
+  "Value": 2819.517554469963,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2760.0,
+  "Value": 2342.5412825341427,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2770.0,
+  "Value": 2225.9159636000554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2780.0,
+  "Value": 2112.6590955712554,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2790.0,
+  "Value": 1662.2466588330378,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2800.0,
+  "Value": 2372.8746382630884,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2810.0,
+  "Value": 3778.27061838557,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2820.0,
+  "Value": 2936.189248824757,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2830.0,
+  "Value": 3840.3767303236564,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2840.0,
+  "Value": 3826.3220997159024,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2850.0,
+  "Value": 3976.427006696684,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2860.0,
+  "Value": 2143.2438811492407,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2870.0,
+  "Value": 1773.398590948107,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2880.0,
+  "Value": 1252.1579181125617,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2890.0,
+  "Value": 2322.121549364541,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2900.0,
+  "Value": 1422.436239306394,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2910.0,
+  "Value": 3174.156070859185,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2920.0,
+  "Value": 2772.6575019038037,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2930.0,
+  "Value": 2441.6775701769047,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2940.0,
+  "Value": 2715.555375504193,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2950.0,
+  "Value": 3582.5365749302314,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2960.0,
+  "Value": 2880.2881847947665,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2970.0,
+  "Value": 2213.3609190832944,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2980.0,
+  "Value": 3072.456417986531,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 2990.0,
+  "Value": 3246.6559247520927,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3000.0,
+  "Value": 3947.4173805555793,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3010.0,
+  "Value": 2536.594286362709,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3020.0,
+  "Value": 2359.611568298182,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3030.0,
+  "Value": 2274.1224769373853,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3040.0,
+  "Value": 3935.0508962258077,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3050.0,
+  "Value": 3896.228711033915,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3060.0,
+  "Value": 2616.3498692907606,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3070.0,
+  "Value": 2310.9568450383504,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3080.0,
+  "Value": 3033.1165047543545,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3090.0,
+  "Value": 3406.155257190243,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3100.0,
+  "Value": 3673.5742414190227,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3110.0,
+  "Value": 3957.9879238587246,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3120.0,
+  "Value": 3331.465960931594,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3130.0,
+  "Value": 1975.794832222564,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3140.0,
+  "Value": 4040.126126024737,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3150.0,
+  "Value": 3208.165116114958,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3160.0,
+  "Value": 3924.3245379244167,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3170.0,
+  "Value": 3631.481892645028,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3180.0,
+  "Value": 3871.9640601044684,
+  "Agent": "SAC"
+ },
+ {
+  "Iteration": 3190.0,
+  "Value": 2830.7915111748243,
+  "Agent": "SAC"
+ }
+]
