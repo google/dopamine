@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-r"""The entry point for running a Dopamine agent on continuous control envs.
+r"""The entry point for running a Dopamine agent on continuous control envs."""
 
 
 flags.DEFINE_string('base_dir', None,
