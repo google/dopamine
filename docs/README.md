@@ -10,8 +10,10 @@ You can find the documentation for each module in our codebase in our
 
 Dopamine is organized as follows:
 
+*   [`jax`](https://github.com/google/dopamine/tree/master/dopamine/jax)
+    contains jax agent implementations and networks.
 *   [`agents`](https://github.com/google/dopamine/tree/master/dopamine/agents)
-    contains agent implementations.
+    contains tenforflow agent implementations.
 *   [`atari`](https://github.com/google/dopamine/tree/master/dopamine/atari)
     contains Atari-specific code, including code to run experiments and
     preprocessing code.
@@ -23,8 +25,64 @@ Dopamine is organized as follows:
 *   [`colab`](https://github.com/google/dopamine/tree/master/dopamine/colab)
     contains code used to inspect the results of experiments, as well as example
     colab notebooks.
-*   [`tests`](https://github.com/google/dopamine/tree/master/tests)
-    contains all our test files.
+*   [`tests`](https://github.com/google/dopamine/tree/master/tests) contains all
+    our test files.
+
+## Training agents
+
+### Atari games
+
+The entry point to the standard Atari 2600 experiment is
+[`dopamine/discrete_domains/train.py`](https://github.com/google/dopamine/blob/master/dopamine/discrete_domains/train.py).
+To run the basic DQN agent,
+
+```
+python -um dopamine.discrete_domains.train \
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/dqn/configs/dqn.gin
+```
+
+By default, this will kick off an experiment lasting 200 million frames. The
+command-line interface will output statistics about the latest training episode:
+
+```
+[...]
+I0824 17:13:33.078342 140196395337472 tf_logging.py:115] gamma: 0.990000
+I0824 17:13:33.795608 140196395337472 tf_logging.py:115] Beginning training...
+Steps executed: 5903 Episode length: 1203 Return: -19.
+```
+
+To get finer-grained information about the process, you can adjust the
+experiment parameters in
+[`dopamine/agents/dqn/configs/dqn.gin`](https://github.com/google/dopamine/blob/master/dopamine/agents/dqn/configs/dqn.gin),
+in particular by reducing `Runner.training_steps` and `Runner.evaluation_steps`,
+which together determine the total number of steps needed to complete an
+iteration. This is useful if you want to inspect log files or checkpoints, which
+are generated at the end of each iteration.
+
+More generally, the whole of Dopamine is easily configured using the
+[gin configuration framework](https://github.com/google/gin-config).
+
+### Non-Atari discrete environments
+
+We provide sample configuration files for training an agent on Cartpole and
+Acrobot. For example, to train C51 on Cartpole with default settings, run the
+following command:
+
+```
+python -um dopamine.discrete_domains.train \
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/rainbow/configs/c51_cartpole.gin
+```
+
+You can train Rainbow on Acrobot with the following command:
+
+```
+python -um dopamine.discrete_domains.train \
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/agents/rainbow/configs/rainbow_acrobot.gin
+```
+
 
 ## Configuring agents
 

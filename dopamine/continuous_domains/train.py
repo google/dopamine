@@ -14,6 +14,13 @@
 # limitations under the License.
 r"""The entry point for running a Dopamine agent on continuous control envs.
 
+"""
+
+from absl import app
+from absl import flags
+from absl import logging
+
+from dopamine.continuous_domains import run_experiment
 
 flags.DEFINE_string('base_dir', None,
                     'Base directory to host all required sub-directories.')
