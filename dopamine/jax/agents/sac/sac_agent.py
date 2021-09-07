@@ -20,7 +20,6 @@ Based on agent described in
   https://arxiv.org/abs/1812.05905
 """
 
-import copy
 import functools
 import math
 import operator
@@ -38,6 +37,7 @@ import gin
 import jax
 import jax.numpy as jnp
 import numpy as onp
+import optax
 import tensorflow as tf
 
 
@@ -46,12 +46,22 @@ gin.constant('sac_agent.IMAGE_DTYPE', onp.uint8)
 gin.constant('sac_agent.STATE_DTYPE', onp.float32)
 
 
-@functools.partial(jax.jit, static_argnums=0)
-def train(network_def: nn.Module, optim: flax.optim.Optimizer,
+@functools.partial(jax.jit, static_argnums=(0, 1, 2))
+def train(network_def: nn.Module,
+          optim: optax.GradientTransformation,
+          alpha_optim: optax.GradientTransformation,
+          optimizer_state: jnp.ndarray,
+          alpha_optimizer_state: jnp.ndarray,
+          network_params: flax.core.FrozenDict,
           target_params: flax.core.FrozenDict,
-          alpha_optim: flax.optim.Optimizer, key: jnp.ndarray,
-          states: jnp.ndarray, actions: jnp.ndarray, next_states: jnp.ndarray,
-          rewards: jnp.ndarray, terminals: jnp.ndarray, cumulative_gamma: float,
+          log_alpha: jnp.ndarray,
+          key: jnp.ndarray,
+          states: jnp.ndarray,
+          actions: jnp.ndarray,
+          next_states: jnp.ndarray,
+          rewards: jnp.ndarray,
+          terminals: jnp.ndarray,
+          cumulative_gamma: float,
           target_entropy: float,
           reward_scale_factor: float) -> Mapping[str, Any]:
   """Run the training step.
@@ -61,8 +71,12 @@ def train(network_def: nn.Module, optim: flax.optim.Optimizer,
   Args:
     network_def: The SAC network definition.
     optim: The SAC optimizer (which also wraps the SAC parameters).
-    target_params: The parameters for SAC's target network.
     alpha_optim: The optimizer for alpha.
+    optimizer_state: The SAC optimizer state.
+    alpha_optimizer_state: The alpha optimizer state.
+    network_params: Parameters for SAC's online network.
+    target_params: The parameters for SAC's target network.
+    log_alpha: Parameters for alpha network.
     key: An rng key to use for random action selection.
     states: A batch of states.
     actions: A batch of actions.
@@ -78,9 +92,7 @@ def train(network_def: nn.Module, optim: flax.optim.Optimizer,
       training statistics.
   """
   # Get the models from all the optimizers.
-  params = optim.target
-  frozen_params = params  # For use within loss_fn without apply gradients
-  log_alpha = alpha_optim.target
+  frozen_params = network_params  # For use in loss_fn without apply gradients
 
   batch_size = states.shape[0]
   actions = jnp.reshape(actions, (batch_size, -1))  # Flatten
@@ -163,7 +175,7 @@ def train(network_def: nn.Module, optim: flax.optim.Optimizer,
       in_axes=(None, None, 0, 0, 0, 0, 0, 0))
 
   rng = jnp.stack(jax.random.split(key, num=batch_size))
-  (_, aux_vars), gradients = grad_fn(params, log_alpha, states, actions,
+  (_, aux_vars), gradients = grad_fn(network_params, log_alpha, states, actions,
                                      rewards, next_states, terminals, rng)
 
   # This calculates the mean gradient/aux_vars using the individual
@@ -173,13 +185,18 @@ def train(network_def: nn.Module, optim: flax.optim.Optimizer,
   network_gradient, alpha_gradient = gradients
 
   # Apply gradients to all the optimizers.
-  optim = optim.apply_gradient(network_gradient)
-  alpha_optim = alpha_optim.apply_gradient(alpha_gradient)
+  updates, optimizer_state = optim.update(network_gradient, optimizer_state)
+  network_params = optax.apply_updates(network_params, updates)
+  alpha_updates, alpha_optimizer_state = alpha_optim.update(
+      alpha_gradient, alpha_optimizer_state)
+  log_alpha = optax.apply_updates(log_alpha, alpha_updates)
 
   # Compile everything in a dict.
   returns = {
-      'network_optim': optim,
-      'alpha_optim': alpha_optim,
+      'network_params': network_params,
+      'log_alpha': log_alpha,
+      'optimizer_state': optimizer_state,
+      'alpha_optimizer_state': alpha_optimizer_state,
       'Losses/Critic': aux_vars['critic_loss'],
       'Losses/Actor': aux_vars['policy_loss'],
       'Losses/Alpha': aux_vars['alpha_loss'],
@@ -361,27 +378,20 @@ class SACAgent(dqn_agent.JaxDQNAgent):
 
   def _build_networks_and_optimizer(self):
     self._rng, init_key = jax.random.split(self._rng)
-    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
 
     # We can reuse init_key safely for the action selection key
     # since it is only used for shape inference during initialization.
-    network_params = self.network_def.init(init_key, self.state, init_key)
-    self.network_optimizer = optimizer_def.create(network_params)
+    self.network_params = self.network_def.init(init_key, self.state, init_key)
+    self.network_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer_state = self.network_optimizer.init(self.network_params)
 
     # TODO(joshgreaves): Find a way to just copy the critic params
-    self.target_params = copy.deepcopy(network_params)
+    self.target_params = self.network_params
 
     # \alpha network
-    log_alpha = jnp.zeros(1)
-    self.alpha_optimizer = optimizer_def.create(log_alpha)
-
-  @property
-  def network_params(self):
-    return self.network_optimizer.target
-
-  @property
-  def log_alpha(self):
-    return self.alpha_optimizer.target
+    self.log_alpha = jnp.zeros(1)
+    self.alpha_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+    self.alpha_optimizer_state = self.alpha_optimizer.init(self.log_alpha)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -482,15 +492,19 @@ class SACAgent(dqn_agent.JaxDQNAgent):
         self._rng, key = jax.random.split(self._rng)
 
         train_returns = train(
-            self.network_def, self.network_optimizer, self.target_params,
-            self.alpha_optimizer, key, self.replay_elements['state'],
+            self.network_def, self.network_optimizer, self.alpha_optimizer,
+            self.optimizer_state, self.alpha_optimizer_state,
+            self.network_params, self.target_params, self.log_alpha,
+            key, self.replay_elements['state'],
             self.replay_elements['action'], self.replay_elements['next_state'],
             self.replay_elements['reward'], self.replay_elements['terminal'],
             self.cumulative_gamma, self.target_entropy,
             self.reward_scale_factor)
 
-        self.network_optimizer = train_returns['network_optim']
-        self.alpha_optimizer = train_returns['alpha_optim']
+        self.network_params = train_returns['network_params']
+        self.optimizer_state = train_returns['optimizer_state']
+        self.log_alpha = train_returns['log_alpha']
+        self.alpha_optimizer_state = train_returns['alpha_optimizer_state']
 
         if (self.summary_writer is not None and
             self.training_steps > 0 and
@@ -528,8 +542,10 @@ class SACAgent(dqn_agent.JaxDQNAgent):
         'state': self.state,
         'training_steps': self.training_steps,
         'network_params': self.network_params,
+        'optimizer_state': self.optimizer_state,
         'target_params': self.target_params,
-        'log_alpha': self.alpha_optimizer.target,
+        'log_alpha': self.log_alpha,
+        'alpha_optimizer_state': self.alpha_optimizer_state,
     }
     return bundle_dictionary
 
@@ -564,12 +580,13 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       self.state = bundle_dictionary['state']
       self.training_steps = bundle_dictionary['training_steps']
 
-      optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
-      self.network_optimizer = optimizer_def.create(
-          bundle_dictionary['network_params'])
+      self.network_params = bundle_dictionary['network_params']
+      self.network_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+      self.optimizer_state = bundle_dictionary['optimizer_state']
       self.target_params = bundle_dictionary['target_params']
-      self.alpha_optimizer = optimizer_def.create(
-          bundle_dictionary['log_alpha'])
+      self.log_alpha = bundle_dictionary['log_alpha']
+      self.alpha_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+      self.alpha_optimizer_state = bundle_dictionary['alpha_optimizer_state']
     elif not self.allow_partial_reload:
       return False
     else:

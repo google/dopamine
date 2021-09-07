@@ -31,6 +31,7 @@ import gin
 import jax
 import jax.numpy as jnp
 import numpy as onp
+import optax
 import tensorflow as tf
 
 
@@ -100,13 +101,12 @@ def target_quantile_values(network_def, online_params, target_params,
   return rng, jax.lax.stop_gradient(target_quantile_vals[:, None])
 
 
-@functools.partial(jax.jit, static_argnums=(0, 8, 9, 10, 11, 12, 13))
-def train(network_def, target_params, optimizer, states, actions,
-          next_states, rewards, terminals, num_tau_samples,
+@functools.partial(jax.jit, static_argnums=(0, 3, 10, 11, 12, 13, 14, 15))
+def train(network_def, online_params, target_params, optimizer, optimizer_state,
+          states, actions, next_states, rewards, terminals, num_tau_samples,
           num_tau_prime_samples, num_quantile_samples, cumulative_gamma,
           double_dqn, kappa, rng):
   """Run a training step."""
-  online_params = optimizer.target
   def loss_fn(params, rng_input, target_quantile_vals):
     def online(state):
       return network_def.apply(params, state, num_quantiles=num_tau_samples,
@@ -162,8 +162,9 @@ def train(network_def, target_params, optimizer, states, actions,
   grad_fn = jax.value_and_grad(loss_fn)
   rng, rng_input = jax.random.split(rng)
   loss, grad = grad_fn(online_params, rng_input, target_quantile_vals)
-  optimizer = optimizer.apply_gradient(grad)
-  return rng, optimizer, loss
+  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  online_params = optax.apply_updates(online_params, updates)
+  return rng, optimizer_state, online_params, loss
 
 
 @functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 9, 11, 12))
@@ -325,12 +326,12 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
-    online_network_params = self.network_def.init(
+    self.online_params = self.network_def.init(
         rng, x=self.state, num_quantiles=self.num_tau_samples,
         rng=self._rng)
-    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
-    self.optimizer = optimizer_def.create(online_network_params)
-    self.target_network_params = copy.deepcopy(online_network_params)
+    self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer_state = self.optimizer.init(self.online_params)
+    self.target_network_params = copy.deepcopy(self.online_params)
 
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.
@@ -412,10 +413,12 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         self._sample_from_replay_buffer()
-        self._rng, self.optimizer, loss = train(
+        self._rng, self.optimizer_state, self.online_params, loss = train(
             self.network_def,
+            self.online_params,
             self.target_network_params,
             self.optimizer,
+            self.optimizer_state,
             self.replay_elements['state'],
             self.replay_elements['action'],
             self.replay_elements['next_state'],

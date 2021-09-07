@@ -33,12 +33,12 @@ from dopamine.jax import networks
 from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
 from flax import core
-from flax import optim
 from flax.training import checkpoints
 import gin
 import jax
 import jax.numpy as jnp
 import numpy as onp
+import optax
 import tensorflow as tf
 
 
@@ -69,22 +69,21 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
   if name == 'adam':
     logging.info('Creating Adam optimizer with settings lr=%f, beta1=%f, '
                  'beta2=%f, eps=%f', learning_rate, beta1, beta2, eps)
-    return optim.Adam(
-        learning_rate=learning_rate, beta1=beta1, beta2=beta2, eps=eps)
+    return optax.adam(learning_rate, b1=beta1, b2=beta2, eps=eps)
   elif name == 'rmsprop':
     logging.info('Creating RMSProp optimizer with settings lr=%f, beta2=%f, '
                  'eps=%f', learning_rate, beta2, eps)
-    return optim.RMSProp(learning_rate=learning_rate, beta2=beta2, eps=eps,
+    return optax.rmsprop(learning_rate, decay=beta2, eps=eps,
                          centered=centered)
   else:
     raise ValueError('Unsupported optimizer {}'.format(name))
 
 
-@functools.partial(jax.jit, static_argnums=(0, 8, 9))
-def train(network_def, target_params, optimizer, states, actions, next_states,
-          rewards, terminals, cumulative_gamma, loss_type='huber'):
+@functools.partial(jax.jit, static_argnums=(0, 3, 10, 11))
+def train(network_def, online_params, target_params, optimizer, optimizer_state,
+          states, actions, next_states, rewards, terminals, cumulative_gamma,
+          loss_type='huber'):
   """Run the training step."""
-  online_params = optimizer.target
   def loss_fn(params, target):
     def q_online(state):
       return network_def.apply(params, state)
@@ -106,8 +105,9 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
                     cumulative_gamma)
   grad_fn = jax.value_and_grad(loss_fn)
   loss, grad = grad_fn(online_params, target)
-  optimizer = optimizer.apply_gradient(grad)
-  return optimizer, loss
+  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  online_params = optax.apply_updates(online_params, updates)
+  return optimizer_state, online_params, loss
 
 
 def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
@@ -322,16 +322,10 @@ class JaxDQNAgent(object):
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
-    online_network_params = self.network_def.init(rng, x=self.state)
-    optimizer_def = create_optimizer(self._optimizer_name)
-    self.optimizer = optimizer_def.create(online_network_params)
-    self.target_network_params = copy.deepcopy(online_network_params)
-
-  @property
-  def online_params(self):
-    # We set up this symlink to use the params that are being updated by the
-    # optimizer.
-    return self.optimizer.target
+    self.online_params = self.network_def.init(rng, x=self.state)
+    self.optimizer = create_optimizer(self._optimizer_name)
+    self.optimizer_state = self.optimizer.init(self.online_params)
+    self.target_network_params = copy.deepcopy(self.online_params)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -475,16 +469,19 @@ class JaxDQNAgent(object):
         self._sample_from_replay_buffer()
         states = self.preprocess_fn(self.replay_elements['state'])
         next_states = self.preprocess_fn(self.replay_elements['next_state'])
-        self.optimizer, loss = train(self.network_def,
-                                     self.target_network_params,
-                                     self.optimizer,
-                                     states,
-                                     self.replay_elements['action'],
-                                     next_states,
-                                     self.replay_elements['reward'],
-                                     self.replay_elements['terminal'],
-                                     self.cumulative_gamma,
-                                     self._loss_type)
+        self.optimizer_state, self.online_params, loss = train(
+            self.network_def,
+            self.online_params,
+            self.target_network_params,
+            self.optimizer,
+            self.optimizer_state,
+            states,
+            self.replay_elements['action'],
+            next_states,
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            self.cumulative_gamma,
+            self._loss_type)
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
@@ -568,6 +565,7 @@ class JaxDQNAgent(object):
         'state': self.state,
         'training_steps': self.training_steps,
         'online_params': self.online_params,
+        'optimizer_state': self.optimizer_state,
         'target_params': self.target_network_params
     }
     return bundle_dictionary
@@ -603,10 +601,10 @@ class JaxDQNAgent(object):
       self.state = bundle_dictionary['state']
       self.training_steps = bundle_dictionary['training_steps']
       if isinstance(bundle_dictionary['online_params'], core.FrozenDict):
-        online_network_params = bundle_dictionary['online_params']
+        self.online_params = bundle_dictionary['online_params']
         self.target_network_params = bundle_dictionary['target_params']
       else:  # Load pre-linen checkpoint.
-        online_network_params = core.FrozenDict({
+        self.online_params = core.FrozenDict({
             'params': checkpoints.convert_pre_linen(
                 bundle_dictionary['online_params']).unfreeze()
         })
@@ -615,8 +613,11 @@ class JaxDQNAgent(object):
                 bundle_dictionary['target_params']).unfreeze()
         })
       # We recreate the optimizer with the new online weights.
-      optimizer_def = create_optimizer(self._optimizer_name)
-      self.optimizer = optimizer_def.create(online_network_params)
+      self.optimizer = create_optimizer(self._optimizer_name)
+      if 'optimizer_state' in bundle_dictionary:
+        self.optimizer_state = bundle_dictionary['optimizer_state']
+      else:
+        self.optimizer_state = self.optimizer.init(self.online_params)
     elif not self.allow_partial_reload:
       return False
     else:

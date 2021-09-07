@@ -32,7 +32,7 @@ atari_lib.create_atari_environment.game_name = 'Pong'
 # Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
 atari_lib.create_atari_environment.sticky_actions = True
 create_runner.schedule = 'continuous_train'
-create_agent.agent_name = 'jax_rainbow'
+create_agent.agent_name = 'full_rainbow'
 create_agent.debug_mode = True
 Runner.num_iterations = 200
 Runner.training_steps = 250000  # agent steps

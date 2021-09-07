@@ -48,14 +48,15 @@ import gin
 import jax
 import jax.numpy as jnp
 import numpy as onp
+import optax
 import tensorflow as tf
 
 
-@functools.partial(jax.jit, static_argnums=(0, 10))
-def train(network_def, target_params, optimizer, states, actions, next_states,
-          rewards, terminals, loss_weights, support, cumulative_gamma):
+@functools.partial(jax.jit, static_argnums=(0, 3, 12))
+def train(network_def, online_params, target_params, optimizer, optimizer_state,
+          states, actions, next_states, rewards, terminals, loss_weights,
+          support, cumulative_gamma):
   """Run a training step."""
-  online_params = optimizer.target
   def loss_fn(params, target, loss_multipliers):
     def q_online(state):
       return network_def.apply(params, state, support)
@@ -83,8 +84,9 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
 
   # Get the unweighted loss without taking its mean for updating priorities.
   (mean_loss, loss), grad = grad_fn(online_params, target, loss_weights)
-  optimizer = optimizer.apply_gradient(grad)
-  return optimizer, loss, mean_loss
+  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  online_params = optax.apply_updates(online_params, updates)
+  return optimizer_state, online_params, loss, mean_loss
 
 
 @functools.partial(jax.vmap, in_axes=(None, 0, 0, 0, None, None))
@@ -270,11 +272,11 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
-    online_network_params = self.network_def.init(rng, x=self.state,
-                                                  support=self._support)
-    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
-    self.optimizer = optimizer_def.create(online_network_params)
-    self.target_network_params = copy.deepcopy(online_network_params)
+    self.online_params = self.network_def.init(rng, x=self.state,
+                                               support=self._support)
+    self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer_state = self.optimizer.init(self.online_params)
+    self.target_network_params = copy.deepcopy(self.online_params)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -386,10 +388,12 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         else:
           loss_weights = jnp.ones(self.replay_elements['state'].shape[0])
 
-        self.optimizer, loss, mean_loss = train(
+        self.optimizer_state, self.online_params, loss, mean_loss = train(
             self.network_def,
+            self.online_params,
             self.target_network_params,
             self.optimizer,
+            self.optimizer_state,
             self.replay_elements['state'],
             self.replay_elements['action'],
             self.replay_elements['next_state'],

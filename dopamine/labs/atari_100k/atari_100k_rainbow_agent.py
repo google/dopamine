@@ -114,12 +114,14 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
       # Uniform weights if not using prioritized replay.
       loss_weights = jnp.ones(states.shape[0])
 
-    self.optimizer, loss, mean_loss, self._rng = full_rainbow_agent.train(
-        self.network_def, self.target_network_params, self.optimizer, states,
-        self.replay_elements['action'], next_states,
-        self.replay_elements['reward'], self.replay_elements['terminal'],
-        loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-        self._distributional, self._rng)
+    (self.optimizer_state, self.online_params,
+     loss, mean_loss, self._rng) = full_rainbow_agent.train(
+         self.network_def, self.online_params, self.target_network_params,
+         self.optimizer, self.optimizer_state, states,
+         self.replay_elements['action'], next_states,
+         self.replay_elements['reward'], self.replay_elements['terminal'],
+         loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
+         self._distributional, self._rng)
 
     if self._replay_scheme == 'prioritized':
       self._replay.set_priority(self.replay_elements['indices'],
