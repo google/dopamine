@@ -1,0 +1,46 @@
+# Data Regularlized-Q (DrQ) form Kostrikov et al. (2020)
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.agents.full_rainbow.full_rainbow_agent
+import dopamine.jax.networks
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.labs.atari_100k.atari_100k_rainbow_agent
+
+# Parameters specific to DrQ are higlighted by comments
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 10  # DrQ (instead of 3)
+JaxDQNAgent.min_replay_history = 1600  # DrQ (instead of 20000)
+JaxDQNAgent.update_period = 1  # DrQ (rather than 4)
+JaxDQNAgent.target_update_period = 1  # DrQ (rather than 8000)
+# See "https://arxiv.org/abs/2108.13264" for more details.
+JaxDQNAgent.epsilon_train = 0.01  # DrQ(ε)
+JaxDQNAgent.epsilon_eval = 0.001  # DrQ(ε)
+JaxDQNAgent.epsilon_decay_period = 5000  # DrQ
+JaxDQNAgent.optimizer = 'adam'
+
+JaxFullRainbowAgent.noisy = False  # DrQ (Efficient DQN)
+JaxFullRainbowAgent.dueling = True
+JaxFullRainbowAgent.double_dqn = True
+JaxFullRainbowAgent.distributional = False  # DrQ (Efficient DQN)
+JaxFullRainbowAgent.num_atoms = 1  # Since DrQ uses DQN, rather than C51
+JaxFullRainbowAgent.num_updates_per_train_step = 1
+JaxFullRainbowAgent.replay_scheme = 'uniform'
+JaxFullRainbowAgent.epsilon_fn = @jax.agents.dqn.dqn_agent.linearly_decaying_epsilon
+Atari100kRainbowAgent.data_augmentation = True
+
+# Note these parameters are from DER (van Hasselt et al, 2019)
+create_optimizer.learning_rate = 0.0001
+create_optimizer.eps = 0.00015
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Atari 100K benchmark doesn't use sticky actions.
+atari_lib.create_atari_environment.sticky_actions = False
+AtariPreprocessing.terminal_on_life_loss = True
+Runner.num_iterations = 1
+Runner.training_steps = 100000  # agent steps
+MaxEpisodeEvalRunner.num_eval_episodes = 100  # agent episodes
+Runner.max_steps_per_episode = 27000  # agent steps
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 1000000 # 1M as a proxy for unbounded memory
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32

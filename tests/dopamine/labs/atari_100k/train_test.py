@@ -71,7 +71,7 @@ class RunnerIntegrationTest(parameterized.TestCase):
     # Check log files
     self.assertTrue(os.path.exists(os.path.join(self._logging_dir, 'log_0')))
 
-  @parameterized.parameters('OTRainbow', 'DER', 'DrQ')
+  @parameterized.parameters('OTRainbow', 'DER', 'DrQ', 'DrQ_eps')
   def testIntegration(self, agent_name):
     """Test the DER agent."""
     logging.info('####### Training the %s agent #####', agent_name)

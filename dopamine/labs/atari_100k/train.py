@@ -32,7 +32,7 @@ import tensorflow as tf
 
 
 FLAGS = flags.FLAGS
-AGENTS = ['DER', 'DrQ', 'OTRainbow']
+AGENTS = ['DER', 'DrQ', 'OTRainbow', 'DrQ_eps']
 
 # flags are defined when importing run_xm_preprocessing
 flags.DEFINE_enum('agent', 'DER', AGENTS, 'Name of the agent.')
