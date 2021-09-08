@@ -83,6 +83,39 @@ python -um dopamine.discrete_domains.train \
   --gin_files dopamine/agents/rainbow/configs/rainbow_acrobot.gin
 ```
 
+### Continuous control environments
+
+The entry point for continuous control agents is
+[`dopamine/continuous_domains/train.py`](https://github.com/google/dopamine/blob/master/dopamine/continuous_domains/train.py).
+You will need a Mujoco key to run the following example. To run SAC on the
+HalfCheetah environment of Mujoco, run:
+
+```
+python -um dopamine.continuous_domains.train \
+  --base_dir /tmp/dopamine_runs \
+  --gin_files dopamine/jax/agents/sac/configs/sac.gin
+```
+
+By default, this will kick off an experiment lasting 3200 episodes, with 1000
+environment steps per episode. The command-line interface will output statistics
+about the latest training episode:
+
+```
+[...]
+I0908 17:19:39.618797 1803949 run_experiment.py:446] Starting iteration 0
+I0908 17:19:40.592262 1803949 run_experiment.py:405] Average undiscounted return per training episode: -168.19
+I0908 17:19:40.592391 1803949 run_experiment.py:407] Average training steps per second: 1027.80
+I0908 17:19:45.699378 1803949 run_experiment.py:427] Average undiscounted return per evaluation episode: -279.07
+```
+
+To run with different environments/hyperparemeters, adjust the gin config file
+found here:
+[`dopamine/jax/agents/sac/configs/sac.gin`](https://github.com/google/dopamine/blob/master/dopamine/jax/agents/sac/configs/sac.gin).
+For your experiments, you may choose to supply a new gin config file, or
+override the existing config file with command line `gin_bindings` args.
+
+For more information on using gin, see the
+[gin github repo](https://github.com/google/gin-config).
 
 ## Configuring agents
 

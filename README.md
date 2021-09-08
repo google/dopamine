@@ -2,7 +2,7 @@
 [Getting Started](#getting-started) |
 [Docs][docs] |
 [Baseline Results][baselines] |
-[Changelist](https://google.github.io/dopamine/docs/changelist.md)
+[Changelist](https://google.github.io/dopamine/docs/changelist)
 
 <div align="center">
   <img src="https://google.github.io/dopamine/images/dopamine_logo.png"><br><br>
@@ -136,8 +136,8 @@ If you use Dopamine in your work, we ask that you cite our
 
 
 
-[docs]: https://github.com/google/dopamine/tree/master/docs
-[baselines]: https://google.github.io/dopamine/baselines/plots.html
+[docs]: https://google.github.io/dopamine/docs/
+[baselines]: https://google.github.io/dopamine/baselines
 [machado]: https://jair.org/index.php/jair/article/view/11182
 [ale]: https://jair.org/index.php/jair/article/view/10819
 [dqn]: https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
