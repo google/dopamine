@@ -58,6 +58,9 @@ gin.constant('gym_lib.MOUNTAINCAR_OBSERVATION_DTYPE', tf.float64)
 gin.constant('gym_lib.MOUNTAINCAR_STACK_SIZE', 1)
 
 
+MUJOCO_GAMES = ('Ant', 'HalfCheetah', 'Hopper', 'Humanoid', 'Walker2d')
+
+
 @gin.configurable
 def create_gym_environment(environment_name=None, version='v0'):
   """Wraps a Gym environment with some basic preprocessing.
@@ -70,6 +73,8 @@ def create_gym_environment(environment_name=None, version='v0'):
     A Gym environment with some standard preprocessing.
   """
   assert environment_name is not None
+
+
   full_game_name = '{}-{}'.format(environment_name, version)
   env = gym.make(full_game_name)
   # Strip out the TimeLimit wrapper from Gym, which caps us at 200 steps.

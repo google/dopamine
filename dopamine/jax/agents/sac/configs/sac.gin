@@ -28,12 +28,10 @@ create_optimizer.beta1 = 0.9
 create_optimizer.beta2 = 0.999
 create_optimizer.eps = 1.0e-8
 
-create_gym_environment.environment_name = 'DM-HalfCheetah'
+create_gym_environment.environment_name = 'HalfCheetah'
 create_gym_environment.version = 'v2'
 create_continuous_runner.schedule = 'continuous_train_and_eval'
 create_continuous_agent.agent_name = 'sac'
-deepmind_control_lib.create_deepmind_control_environment.use_image_observations = False
-DeepmindControlPreprocessing.action_repeat = 1
 ContinuousTrainRunner.create_environment_fn = @gym_lib.create_gym_environment
 ContinuousRunner.num_iterations = 3200
 ContinuousRunner.training_steps = 1000
@@ -43,3 +41,4 @@ ContinuousRunner.clip_rewards = False
 
 circular_replay_buffer.OutOfGraphReplayBuffer.replay_capacity = 1000000
 circular_replay_buffer.OutOfGraphReplayBuffer.batch_size = 256
+

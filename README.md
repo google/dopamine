@@ -44,6 +44,13 @@ This is not an official Google product.
 There are several options for getting started with Dopamine, depending on your
 use case.
 
+### Prerequisites
+
+* Atari: To run Atari environments with Dopamine, install the atari roms
+following the instructions from [atari-py](https://github.com/openai/atari-py#roms).
+* Mujoco: To use Dopamine for continuous control, install Mujoco and get a
+license. See instructions [here](https://github.com/openai/mujoco-py#install-mujoco).
+
 ### Installing from Source
 
 
@@ -85,7 +92,7 @@ export PYTHONPATH=$PYTHONPATH:$PWD
 python -m tests.dopamine.atari_init_test
 ```
 
-### Next Steps
+## Next Steps
 
 View the [docs][docs] for more information on training agents.
 
@@ -94,7 +101,7 @@ We supply [baselines][baselines] for each Dopamine agent.
 We also provide a set of [Colaboratory notebooks](https://github.com/google/dopamine/tree/master/dopamine/colab)
 which demonstrate how to use Dopamine.
 
-### References
+## References
 
 [Bellemare et al., *The Arcade Learning Environment: An evaluation platform for
 general agents*. Journal of Artificial Intelligence Research, 2013.][ale]
@@ -115,7 +122,7 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 [Haarnoja et al., *Soft Actor-Critic Algorithms and Applications*,
 arXiv preprint arXiv:1812.05905, 2018.][sac]
 
-### Giving credit
+## Giving credit
 
 If you use Dopamine in your work, we ask that you cite our
 [white paper][dopamine_paper]. Here is an example BibTeX entry:

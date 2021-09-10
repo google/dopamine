@@ -24,6 +24,7 @@ kiwisolver>=1.2.0
 Markdown>=3.2.2
 matplotlib>=3.3.0
 msgpack>=1.0.0
+mujoco-py<2.1,>=2.0
 numpy>=1.18.5
 oauthlib>=3.1.0
 opencv-python>=4.3.0.36
@@ -48,6 +49,7 @@ tensorboard
 tensorboard-plugin-wit
 tensorflow
 tensorflow-estimator
+tensorflow-probability>=0.13.0
 termcolor>=1.1.0
 tf-slim>=1.1.0
 urllib3>=1.25.10

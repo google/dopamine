@@ -41,6 +41,9 @@ def main(unused_argv):
     unused_argv: Arguments (unused).
   """
   logging.set_verbosity(logging.INFO)
+  base_dir = FLAGS.base_dir
+  gin_files = FLAGS.gin_files
+  gin_bindings = FLAGS.gin_bindings
 
   run_experiment.load_gin_configs(gin_files, gin_bindings)
   runner = run_experiment.create_continuous_runner(base_dir)
