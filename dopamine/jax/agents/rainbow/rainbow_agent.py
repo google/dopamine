@@ -199,6 +199,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
                epsilon_decay_period=250000,
                replay_scheme='prioritized',
                optimizer='adam',
+               seed=None,
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False):
@@ -234,6 +235,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
       replay_scheme: str, 'prioritized' or 'uniform', the sampling scheme of the
         replay memory.
       optimizer: str, name of optimizer to use.
+      seed: int, a seed for Rainbow's internal RNG, used for initialization and
+        sampling actions. If None, will use the current time in nanoseconds.
       summary_writer: SummaryWriter object for outputting training statistics.
         Summary writing disabled if set to None.
       summary_writing_frequency: int, frequency with which summaries will be
@@ -266,6 +269,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         epsilon_eval=epsilon_eval,
         epsilon_decay_period=epsilon_decay_period,
         optimizer=optimizer,
+        seed=seed,
         summary_writer=summary_writer,
         summary_writing_frequency=summary_writing_frequency,
         allow_partial_reload=allow_partial_reload)
