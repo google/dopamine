@@ -46,10 +46,20 @@ use case.
 
 ### Prerequisites
 
-* Atari: To run Atari environments with Dopamine, install the atari roms
-following the instructions from [atari-py](https://github.com/openai/atari-py#roms).
-* Mujoco: To use Dopamine for continuous control, install Mujoco and get a
-license. See instructions [here](https://github.com/openai/mujoco-py#install-mujoco).
+Dopamine supports Atari environments and Mujoco environments. Install the
+environments you intend to use before you install Dopamine:
+
+**Atari**
+
+1. Install the atari roms following the instructions from
+[atari-py](https://github.com/openai/atari-py#roms).
+
+**Mujoco**
+
+1. Install Mujoco and get a license
+[here](https://github.com/openai/mujoco-py#install-mujoco).
+2. Run `pip install mujoco-py` (we recommend using a
+[virtual environment](virtualenv)).
 
 ### Installing from Source
 
@@ -71,9 +81,11 @@ Dopamine supports tensorflow (legacy) and jax (actively maintained) agents.
 View the [Tensorflow documentation](https://www.tensorflow.org/install) for
 more information on installing tensorflow.
 
-Note: We recommend using a [virtual environment](https://docs.python.org/3/library/venv.html#creating-virtual-environments) when working with Dopamine.
+Note: We recommend using a [virtual environment](virtualenv) when working with Dopamine.
 
 ### Installing with Pip
+
+Note: We strongly recommend installing from source for most users.
 
 Installing with pip is simple, but Dopamine is designed to be modified
 directly. We recommend installing from source for writing your own experiments.
@@ -155,3 +167,4 @@ If you use Dopamine in your work, we ask that you cite our
 [iqn]: https://arxiv.org/abs/1806.06923
 [sac]: https://arxiv.org/abs/1812.05905
 [dopamine_paper]: https://arxiv.org/abs/1812.06110
+[vitualenv]: https://docs.python.org/3/library/venv.html#creating-virtual-environments
