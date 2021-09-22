@@ -6,8 +6,12 @@ Note: This changelist attempts to summarize major changes to the Dopamine
 library. For a more fine-grained changelist, consider looking through the
 [commit history](https://github.com/google/dopamine/commits/master).
 
-*   **07/09/2021:** Migrated JAX agents to use [Optax](https://github.com/deepmind/optax)
-    to create optimizers, as `flax.optim` is
+*   **21/09/2021:** Added Dockerfiles and instructions for using Dopamine with
+    docker.
+
+*   **07/09/2021:** Migrated JAX agents to use
+    [Optax](https://github.com/deepmind/optax) to create optimizers, as
+    `flax.optim` is
     [being deprecated](https://flax.readthedocs.io/en/latest/flax.optim.html)
 
 *   **25/08/2021:** Added SAC and continuous control training library. Added

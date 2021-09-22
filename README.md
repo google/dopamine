@@ -41,8 +41,11 @@ This is not an official Google product.
 ## Getting Started
 
 
-There are several options for getting started with Dopamine, depending on your
-use case.
+We provide docker containers for using Dopamine.
+Instructions can be found [here](https://google.github.io/dopamine/docker/).
+
+Alternatively, Dopamine can be installed from source (preferred) or installed
+with pip. For either of these methods, continue reading at prerequisites.
 
 ### Prerequisites
 
