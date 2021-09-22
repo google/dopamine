@@ -388,7 +388,7 @@ class SPRNetwork(nn.Module):
   noisy: bool
   dueling: bool
   distributional: bool
-  renormalize: bool
+  renormalize: bool = True
   padding: Any = "SAME"
 
   def setup(self):
