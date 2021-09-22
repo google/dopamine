@@ -41,6 +41,12 @@ import optax
 import tensorflow as tf
 
 
+logging.warning(
+    ('Setting tf to CPU only, to avoid OOM. '
+     'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
+     'for more information.'))
+tf.config.set_visible_devices([], 'GPU')
+
 
 gin.constant('sac_agent.IMAGE_DTYPE', onp.uint8)
 gin.constant('sac_agent.STATE_DTYPE', onp.float32)

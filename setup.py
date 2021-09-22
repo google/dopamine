@@ -41,6 +41,7 @@ install_requires = [
     'pygame >= 1.9.2',
     'pandas >= 0.24.2',
     'tf_slim >= 1.0',
+    'tensorflow-probability >= 0.13.0',
 ]
 
 dopamine_description = (

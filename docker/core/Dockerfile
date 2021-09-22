@@ -1,7 +1,9 @@
 # If you want to use a different version of CUDA, view the available
 # images here: https://hub.docker.com/r/nvidia/cuda
-# Note: Jax currently supports cuda versions up to 11.3.
-ARG cuda_docker_tag="11.1.1-cudnn8-devel-ubuntu20.04"
+# Note:
+#   - Jax currently supports CUDA versions up to 11.3.
+#   - Tensorflow required CUDA versions after 11.2.
+ARG cuda_docker_tag="11.2.2-cudnn8-devel-ubuntu20.04"
 FROM nvidia/cuda:${cuda_docker_tag}
 
 COPY . /root/dopamine/
