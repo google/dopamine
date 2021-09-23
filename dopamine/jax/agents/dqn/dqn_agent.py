@@ -19,7 +19,6 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
-import copy
 import functools
 import inspect
 import math
@@ -105,7 +104,8 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
                     cumulative_gamma)
   grad_fn = jax.value_and_grad(loss_fn)
   loss, grad = grad_fn(online_params, target)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  updates, optimizer_state = optimizer.update(grad, optimizer_state,
+                                              params=online_params)
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss
 
@@ -325,7 +325,7 @@ class JaxDQNAgent(object):
     self.online_params = self.network_def.init(rng, x=self.state)
     self.optimizer = create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
-    self.target_network_params = copy.deepcopy(self.online_params)
+    self.target_network_params = self.online_params
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""

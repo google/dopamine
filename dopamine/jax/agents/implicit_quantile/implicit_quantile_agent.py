@@ -22,7 +22,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import copy
 import functools
 
 from dopamine.jax import networks
@@ -162,7 +161,8 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   grad_fn = jax.value_and_grad(loss_fn)
   rng, rng_input = jax.random.split(rng)
   loss, grad = grad_fn(online_params, rng_input, target_quantile_vals)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  updates, optimizer_state = optimizer.update(grad, optimizer_state,
+                                              params=online_params)
   online_params = optax.apply_updates(online_params, updates)
   return rng, optimizer_state, online_params, loss
 
@@ -331,7 +331,7 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
         rng=self._rng)
     self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
-    self.target_network_params = copy.deepcopy(self.online_params)
+    self.target_network_params = self.online_params
 
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.

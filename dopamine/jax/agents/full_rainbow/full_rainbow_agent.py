@@ -27,7 +27,6 @@ Details in "Rainbow: Combining Improvements in Deep Reinforcement Learning" by
 Hessel et al. (2018).
 """
 
-import copy
 import functools
 
 from absl import logging
@@ -119,7 +118,8 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
 
   # Get the unweighted loss without taking its mean for updating priorities.
   (mean_loss, loss), grad = grad_fn(online_params, target, loss_weights)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  updates, optimizer_state = optimizer.update(grad, optimizer_state,
+                                              params=online_params)
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss, mean_loss, rng2
 
@@ -248,7 +248,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
                                                support=self._support)
     self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
-    self.target_network_params = copy.deepcopy(self.online_params)
+    self.target_network_params = self.online_params
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""

@@ -191,10 +191,11 @@ def train(network_def: nn.Module,
   network_gradient, alpha_gradient = gradients
 
   # Apply gradients to all the optimizers.
-  updates, optimizer_state = optim.update(network_gradient, optimizer_state)
+  updates, optimizer_state = optim.update(network_gradient, optimizer_state,
+                                          params=network_params)
   network_params = optax.apply_updates(network_params, updates)
   alpha_updates, alpha_optimizer_state = alpha_optim.update(
-      alpha_gradient, alpha_optimizer_state)
+      alpha_gradient, alpha_optimizer_state, params=log_alpha)
   log_alpha = optax.apply_updates(log_alpha, alpha_updates)
 
   # Compile everything in a dict.
