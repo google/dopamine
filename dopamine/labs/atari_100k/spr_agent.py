@@ -49,6 +49,7 @@ import jax
 import jax.numpy as jnp
 import numpy as onp
 import tensorflow as tf
+import optax
 from dopamine.labs.atari_100k import spr_networks as networks
 from dopamine.labs.atari_100k.replay_memory import time_batch_replay_buffer as tdrbs
 
@@ -94,14 +95,14 @@ def get_spr_targets(model, states, key):
   return results
 
 
-@functools.partial(jax.jit, static_argnums=(0, 11, 12, 13, 15))
-def train(network_def, target_params, optimizer, states, actions, next_states,
+@functools.partial(jax.jit, static_argnums=(0, 3, 13, 14, 15, 17))
+def train(network_def, online_params, target_params, optimizer, optimizer_state, states, actions, next_states,
           rewards, terminals, same_traj_mask, loss_weights, support,
           cumulative_gamma, double_dqn, distributional, rng, spr_weight):
   """Run a training step."""
 
   current_state = states[:, 0]
-  online_params = optimizer.target
+  online_params = online_params
   # Split the current rng into 2 for updating the rng after this call
   rng, rng1, rng2 = jax.random.split(rng, num=3)
   use_spr = spr_weight > 0
@@ -198,10 +199,11 @@ def train(network_def, target_params, optimizer, states, actions, next_states,
 
   # Get the unweighted loss without taking its mean for updating priorities.
   (mean_loss, (loss, dqn_loss,
-               spr_loss)), grad = grad_fn(optimizer.target, target, spr_targets,
+               spr_loss)), grad = grad_fn(online_params, target, spr_targets,
                                           loss_weights)
-  optimizer = optimizer.apply_gradient(grad)
-  return optimizer, loss, mean_loss, dqn_loss, spr_loss, rng2
+  updates, optimizer_state = optimizer.update(grad, optimizer_state)
+  online_params = optax.apply_updates(online_params, updates)
+  return optimizer_state, online_params, loss, mean_loss, dqn_loss, spr_loss, rng2
 
 
 @functools.partial(
@@ -333,15 +335,15 @@ class SPRAgent(dqn_agent.JaxDQNAgent):
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
-    online_network_params = self.network_def.init(
+    self.online_params = self.network_def.init(
         rng,
         x=self.state,
         actions=jnp.zeros((5,)),
         do_rollout=self.spr_weight > 0,
         support=self._support)
-    optimizer_def = dqn_agent.create_optimizer(self._optimizer_name)
-    self.optimizer = optimizer_def.create(online_network_params)
-    self.target_network_params = copy.deepcopy(online_network_params)
+    self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
+    self.optimizer_state = self.optimizer.init(self.online_params)
+    self.target_network_params = copy.deepcopy(self.online_params)
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
@@ -404,15 +406,20 @@ class SPRAgent(dqn_agent.JaxDQNAgent):
       # Uniform weights if not using prioritized replay.
       loss_weights = jnp.ones(states.shape[0])
 
-    self.optimizer, loss, mean_loss, dqn_loss, spr_loss, self._rng = train(
-        self.network_def, self.target_network_params, self.optimizer, states,
-        self.replay_elements['action'], next_states,
-        self.replay_elements['reward'][:,
-                                       0], self.replay_elements['terminal'][:,
-                                                                            0],
+    self.optimizer_state, self.online_params, loss, mean_loss,\
+    dqn_loss, spr_loss,\
+    self._rng = train(
+        self.network_def, self.online_params, self.target_network_params,
+        self.optimizer, self.optimizer_state,
+        states,
+        self.replay_elements['action'],
+        next_states,
+        self.replay_elements['reward'][:, 0],
+        self.replay_elements['terminal'][:, 0],
         self.replay_elements['same_trajectory'][:, 1:], loss_weights,
         self._support, self.cumulative_gamma, self._double_dqn,
-        self._distributional, self._rng, self.spr_weight)
+        self._distributional, self._rng, self.spr_weight
+    )
 
     if self._replay_scheme == 'prioritized':
       # Rainbow and prioritized replay are parametrized by an exponent
