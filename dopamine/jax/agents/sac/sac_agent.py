@@ -41,11 +41,16 @@ import optax
 import tensorflow as tf
 
 
-logging.warning(
-    ('Setting tf to CPU only, to avoid OOM. '
-     'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
-     'for more information.'))
-tf.config.set_visible_devices([], 'GPU')
+try:
+  logging.warning(
+      ('Setting tf to CPU only, to avoid OOM. '
+       'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
+       'for more information.'))
+  tf.config.set_visible_devices([], 'GPU')
+except tf.errors.NotFoundError:
+  logging.info(
+      ('Unable to modify visible devices. '
+       'If you don\'t have a GPU, this is expected.'))
 
 
 gin.constant('sac_agent.IMAGE_DTYPE', onp.uint8)
