@@ -22,6 +22,9 @@ from dopamine.discrete_domains import iteration_statistics
 from dopamine.discrete_domains import run_experiment as base_run_experiment
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.jax.agents.sac import sac_agent
+# pylint: disable=unused-import
+from dopamine.labs.sac_from_pixels import deepmind_control_lib
+# pylint: enable=unused-import
 from flax.metrics import tensorboard
 import gin
 from gym import spaces

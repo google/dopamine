@@ -30,6 +30,12 @@ from absl import logging
 from dopamine.jax import continuous_networks
 from dopamine.jax import losses
 from dopamine.jax.agents.dqn import dqn_agent
+# pylint: disable=unused-import
+# This enables (experimental) networks for SAC from pixels.
+# Note, that the full name import is required to avoid a naming
+# collision with the short name import (continuous_networks) above.
+import dopamine.labs.sac_from_pixels.continuous_networks
+# pylint: enable=unused-import
 from dopamine.replay_memory import circular_replay_buffer
 import flax
 from flax import linen as nn
