@@ -211,6 +211,9 @@ class OutOfGraphPrioritizedReplayBuffer(
     """
     assert indices.dtype == np.int32, ('Indices must be integers, '
                                        'given: {}'.format(indices.dtype))
+    # Convert JAX arrays to NumPy arrays first, since it is faster to iterate
+    # over the entirety of a NumPy array than a JAX array.
+    priorities = np.asarray(priorities)
     for index, priority in zip(indices, priorities):
       self.sum_tree.set(index, priority)
 
