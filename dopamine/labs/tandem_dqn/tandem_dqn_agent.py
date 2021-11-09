@@ -158,7 +158,7 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
 
     action = self._select_action(params)
     if agent_type == 'active':
-      self.action = onp.asarray(self.action)
+      self.action = onp.asarray(action)
     return action
 
   def _train_step(self):
