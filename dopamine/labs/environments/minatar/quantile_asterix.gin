@@ -1,0 +1,38 @@
+# Hyperparameters follow Dabney et al. (2017) but we modify as necessary to
+# match those used in Rainbow (Hessel et al., 2018), to ensure apples-to-apples
+# comparison.
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.jax.agents.quantile.quantile_agent
+import dopamine.labs.environments.minatar.minatar_env
+import dopamine.replay_memory.prioritized_replay_buffer
+
+JaxQuantileAgent.observation_shape = %minatar_env.ASTERIX_SHAPE
+JaxQuantileAgent.observation_dtype = %minatar_env.DTYPE
+JaxQuantileAgent.stack_size = 1
+JaxQuantileAgent.network = @minatar_env.MinatarQuantileNetwork
+JaxQuantileAgent.kappa = 1.0
+JaxQuantileAgent.num_atoms = 200
+JaxQuantileAgent.gamma = 0.99
+JaxQuantileAgent.update_horizon = 3
+JaxQuantileAgent.min_replay_history = 1000 # agent steps
+JaxQuantileAgent.update_period = 4
+JaxQuantileAgent.target_update_period = 1000 # agent steps
+JaxQuantileAgent.epsilon_train = 0.01
+JaxQuantileAgent.epsilon_eval = 0.001
+JaxQuantileAgent.replay_scheme = 'prioritized'
+JaxQuantileAgent.optimizer = 'adam'
+create_optimizer.learning_rate = 0.00025
+create_optimizer.eps = 3.125e-4
+
+create_minatar_env.game_name  = 'asterix'
+TrainRunner.create_environment_fn =  @minatar_env.create_minatar_env
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_quantile'
+create_agent.debug_mode = True
+Runner.num_iterations = 10
+Runner.training_steps = 1000000
+Runner.max_steps_per_episode = 100000000
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 100000
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32

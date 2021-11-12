@@ -1,0 +1,35 @@
+# Hyperparameters for a simple Rainbow-style Cartpole agent. The
+# hyperparameters chosen achieve reasonable performance.
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.jax.agents.rainbow.rainbow_agent
+import dopamine.jax.networks
+import dopamine.labs.environments.minatar.minatar_env
+import dopamine.replay_memory.prioritized_replay_buffer
+
+JaxRainbowAgent.observation_shape = %minatar_env.FREEWAY_SHAPE
+JaxRainbowAgent.observation_dtype = %minatar_env.DTYPE
+JaxRainbowAgent.stack_size = 1
+JaxRainbowAgent.network = @minatar_env.MinatarRainbowNetwork
+JaxRainbowAgent.num_atoms = 51
+JaxRainbowAgent.vmax = 100.
+JaxRainbowAgent.gamma = 0.99
+JaxRainbowAgent.update_horizon = 3
+JaxRainbowAgent.min_replay_history = 1000
+JaxRainbowAgent.update_period = 4
+JaxRainbowAgent.target_update_period = 1000
+JaxRainbowAgent.replay_scheme = 'prioritized'
+create_optimizer.learning_rate = 0.00025
+create_optimizer.eps = 3.125e-4
+
+create_minatar_env.game_name  = 'freeway'
+TrainRunner.create_environment_fn =  @minatar_env.create_minatar_env
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_rainbow'
+create_agent.debug_mode = True
+Runner.num_iterations = 10
+Runner.training_steps = 1000000
+Runner.max_steps_per_episode = 100000000
+
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 100000
+OutOfGraphPrioritizedReplayBuffer.batch_size = 32

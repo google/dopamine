@@ -32,6 +32,8 @@ class AtariPlotter(plotter.Plotter):
   _defaults = {
       'x': 0,
       'y': 0,
+      'input_width': 160,
+      'input_height': 210,
       'width': 160,
       'height': 210,
   }
@@ -46,8 +48,8 @@ class AtariPlotter(plotter.Plotter):
     """
     super(AtariPlotter, self).__init__(parameter_dict)
     assert 'environment' in self.parameters
-    self.game_surface = pygame.Surface((self.parameters['width'],
-                                        self.parameters['height']))
+    self.game_surface = pygame.Surface((self.parameters['input_width'],
+                                        self.parameters['input_height']))
 
   def draw(self):
     """Render the Atari 2600 frame.

@@ -30,6 +30,12 @@ from absl import logging
 from dopamine.jax import continuous_networks
 from dopamine.jax import losses
 from dopamine.jax.agents.dqn import dqn_agent
+# pylint: disable=unused-import
+# This enables (experimental) networks for SAC from pixels.
+# Note, that the full name import is required to avoid a naming
+# collision with the short name import (continuous_networks) above.
+import dopamine.labs.sac_from_pixels.continuous_networks
+# pylint: enable=unused-import
 from dopamine.replay_memory import circular_replay_buffer
 import flax
 from flax import linen as nn
@@ -41,11 +47,16 @@ import optax
 import tensorflow as tf
 
 
-logging.warning(
-    ('Setting tf to CPU only, to avoid OOM. '
-     'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
-     'for more information.'))
-tf.config.set_visible_devices([], 'GPU')
+try:
+  logging.warning(
+      ('Setting tf to CPU only, to avoid OOM. '
+       'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
+       'for more information.'))
+  tf.config.set_visible_devices([], 'GPU')
+except tf.errors.NotFoundError:
+  logging.info(
+      ('Unable to modify visible devices. '
+       'If you don\'t have a GPU, this is expected.'))
 
 
 gin.constant('sac_agent.IMAGE_DTYPE', onp.uint8)

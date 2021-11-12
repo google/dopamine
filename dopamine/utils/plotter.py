@@ -66,6 +66,11 @@ class Plotter(object):
     if 'title' in self.parameters:
       self.plot.set_title(self.parameters['title'],
                           fontsize=self.parameters['fontsize'] + 2)
+    if 'xticks' in self.parameters:
+      self.plot.set_xticks(self.parameters['xticks'])
+    if 'xticklabels' in self.parameters:
+      self.plot.set_xticklabels(self.parameters['xticklabels'])
+
     self.plot.tick_params(labelsize=self.parameters['fontsize'])
 
   @abc.abstractmethod
