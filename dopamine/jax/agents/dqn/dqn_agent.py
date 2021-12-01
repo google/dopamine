@@ -63,7 +63,7 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     centered: bool, centered parameter for RMSProp.
 
   Returns:
-    A flax optimizer.
+    An optax optimizer.
   """
   if name == 'adam':
     logging.info('Creating Adam optimizer with settings lr=%f, beta1=%f, '
