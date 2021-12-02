@@ -670,7 +670,7 @@ class OutOfGraphReplayBuffer(object):
     for attr in checkpointable_elements:
       filename = self._generate_filename(checkpoint_dir, attr, iteration_number)
       with tf.io.gfile.GFile(filename, 'wb') as f:
-        with gzip.GzipFile(fileobj=f) as outfile:
+        with gzip.GzipFile(fileobj=f, mode='wb') as outfile:
           # Checkpoint the np arrays in self._store with np.save instead of
           # pickling the dictionary is critical for file size and performance.
           # STORE_FILENAME_PREFIX indicates that the variable is contained in
