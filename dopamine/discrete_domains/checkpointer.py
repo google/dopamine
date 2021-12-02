@@ -92,6 +92,7 @@ def get_latest_checkpoint_number(base_directory,
     return -1
 
 
+@gin.configurable
 class Checkpointer(object):
   """Class for managing checkpoints for Dopamine agents.
   """
