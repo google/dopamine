@@ -603,7 +603,6 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       self.optimizer_state = bundle_dictionary['optimizer_state']
       self.target_params = bundle_dictionary['target_params']
       self.log_alpha = bundle_dictionary['log_alpha']
-      self.alpha_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
       self.alpha_optimizer_state = bundle_dictionary['alpha_optimizer_state']
     elif not self.allow_partial_reload:
       return False

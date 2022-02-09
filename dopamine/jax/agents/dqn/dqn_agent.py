@@ -612,8 +612,7 @@ class JaxDQNAgent(object):
             'params': checkpoints.convert_pre_linen(
                 bundle_dictionary['target_params']).unfreeze()
         })
-      # We recreate the optimizer with the new online weights.
-      self.optimizer = create_optimizer(self._optimizer_name)
+      # We load the optimizer state or recreate it with the new online weights.
       if 'optimizer_state' in bundle_dictionary:
         self.optimizer_state = bundle_dictionary['optimizer_state']
       else:
