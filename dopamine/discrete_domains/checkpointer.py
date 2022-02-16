@@ -55,8 +55,6 @@ from absl import logging
 import gin
 import tensorflow as tf
 
-CHECKPOINT_DURATION = 4
-
 
 @gin.configurable
 def get_latest_checkpoint_number(base_directory,
@@ -98,7 +96,9 @@ class Checkpointer(object):
   """
 
   def __init__(self, base_directory, checkpoint_file_prefix='ckpt',
-               sentinel_file_identifier='checkpoint', checkpoint_frequency=1):
+               sentinel_file_identifier='checkpoint', checkpoint_frequency=1,
+               checkpoint_duration=4,
+               keep_every=None):
     """Initializes Checkpointer.
 
     Args:
@@ -106,6 +106,9 @@ class Checkpointer(object):
       checkpoint_file_prefix: str, prefix to use for naming checkpoint files.
       sentinel_file_identifier: str, prefix to use for naming sentinel files.
       checkpoint_frequency: int, the frequency at which to checkpoint.
+      checkpoint_duration: int, how many checkpoints to keep
+      keep_every: Optional (int or None), keep all checkpoints == 0 % this
+        number. Set to None to disable.
 
     Raises:
       ValueError: if base_directory is empty, or not creatable.
@@ -116,13 +119,15 @@ class Checkpointer(object):
     self._sentinel_file_prefix = 'sentinel_{}_complete'.format(
         sentinel_file_identifier)
     self._checkpoint_frequency = checkpoint_frequency
+    self._checkpoint_duration = checkpoint_duration
+    self._keep_every = keep_every
     self._base_directory = base_directory
     try:
       tf.io.gfile.makedirs(base_directory)
-    except tf.errors.PermissionDeniedError:
+    except tf.errors.PermissionDeniedError as permission_error:
       # We catch the PermissionDeniedError and issue a more useful exception.
       raise ValueError('Unable to create checkpoint path: {}.'.format(
-          base_directory))
+          base_directory)) from permission_error
 
   def _generate_filename(self, file_prefix, iteration_number):
     """Returns a checkpoint filename from prefix and iteration number."""
@@ -158,9 +163,16 @@ class Checkpointer(object):
   def _clean_up_old_checkpoints(self, iteration_number):
     """Removes sufficiently old checkpoints."""
     # After writing a the checkpoint and sentinel file, we garbage collect files
-    # that are CHECKPOINT_DURATION * self._checkpoint_frequency versions old.
+    # that are self._checkpoint_duration * self._checkpoint_frequency
+    # versions old.
     stale_iteration_number = iteration_number - (self._checkpoint_frequency *
-                                                 CHECKPOINT_DURATION)
+                                                 self._checkpoint_duration)
+
+    # If keep_every has been set, we spare every keep_every'th checkpoint
+    if (self._keep_every is not None
+        and (stale_iteration_number %
+             (self._keep_every*self._checkpoint_frequency) == 0)):
+      return
 
     if stale_iteration_number >= 0:
       stale_file = self._generate_filename(self._checkpoint_file_prefix,

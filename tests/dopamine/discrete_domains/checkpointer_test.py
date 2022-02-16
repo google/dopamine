@@ -19,7 +19,6 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import shutil
 
 
 
@@ -32,32 +31,28 @@ FLAGS = flags.FLAGS
 
 class CheckpointerTest(tf.test.TestCase):
 
-  def setUp(self):
-    super(CheckpointerTest, self).setUp()
-    self._test_subdir = os.path.join('/tmp/dopamine_tests', 'checkpointing')
-    shutil.rmtree(self._test_subdir, ignore_errors=True)
-    os.makedirs(self._test_subdir)
-
   def testCheckpointingInitialization(self):
     # Fails with empty directory.
-    with self.assertRaisesRegexp(ValueError,
-                                 'No path provided to Checkpointer.'):
+    with self.assertRaisesRegex(ValueError,
+                                'No path provided to Checkpointer.'):
       checkpointer.Checkpointer('')
     # Fails with invalid directory.
     invalid_dir = '/does/not/exist'
-    with self.assertRaisesRegexp(
+    with self.assertRaisesRegex(
         ValueError, 'Unable to create checkpoint path: {}.'.
         format(invalid_dir)):
       checkpointer.Checkpointer(invalid_dir)
     # Succeeds with valid directory.
-    checkpointer.Checkpointer('/tmp/dopamine_tests')
+    tmpdir = self.create_tempdir()
+    checkpointer.Checkpointer(tmpdir)
     # This verifies initialization still works after the directory has already
     # been created.
-    self.assertTrue(tf.io.gfile.exists('/tmp/dopamine_tests'))
-    checkpointer.Checkpointer('/tmp/dopamine_tests')
+    self.assertTrue(tf.io.gfile.exists(tmpdir))
+    checkpointer.Checkpointer(tmpdir)
 
   def testLogToFileWithValidDirectoryDefaultPrefix(self):
-    exp_checkpointer = checkpointer.Checkpointer(self._test_subdir)
+    tmpdir = self.create_tempdir()
+    exp_checkpointer = checkpointer.Checkpointer(tmpdir)
     data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
     iteration_number = 1729
     exp_checkpointer.save_checkpoint(iteration_number, data)
@@ -67,8 +62,10 @@ class CheckpointerTest(tf.test.TestCase):
 
   def testLogToFileWithValidDirectoryCustomPrefix(self):
     prefix = 'custom_prefix'
-    exp_checkpointer = checkpointer.Checkpointer(self._test_subdir,
-                                                 checkpoint_file_prefix=prefix)
+    tmpdir = self.create_tempdir()
+    exp_checkpointer = checkpointer.Checkpointer(
+        tmpdir,
+        checkpoint_file_prefix=prefix)
     data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
     iteration_number = 1729
     exp_checkpointer.save_checkpoint(iteration_number, data)
@@ -81,8 +78,8 @@ class CheckpointerTest(tf.test.TestCase):
         -1, checkpointer.get_latest_checkpoint_number('/does/not/exist'))
 
   def testLoadLatestCheckpointWithEmptyDir(self):
-    self.assertEqual(
-        -1, checkpointer.get_latest_checkpoint_number(self._test_subdir))
+    tmpdir = self.create_tempdir()
+    self.assertEqual(-1, checkpointer.get_latest_checkpoint_number(tmpdir))
 
   def testLoadLatestCheckpointWithOverride(self):
     override_number = 1729
@@ -92,29 +89,32 @@ class CheckpointerTest(tf.test.TestCase):
             '/ignored', override_number=override_number))
 
   def testLoadLatestCheckpoint(self):
-    exp_checkpointer = checkpointer.Checkpointer(self._test_subdir)
+    tmpdir = self.create_tempdir()
+    exp_checkpointer = checkpointer.Checkpointer(tmpdir)
     first_iter = 1729
     exp_checkpointer.save_checkpoint(first_iter, first_iter)
     second_iter = first_iter + 1
     exp_checkpointer.save_checkpoint(second_iter, second_iter)
     self.assertEqual(
         second_iter,
-        checkpointer.get_latest_checkpoint_number(self._test_subdir))
+        checkpointer.get_latest_checkpoint_number(tmpdir))
 
   def testGarbageCollection(self):
     custom_prefix = 'custom_prefix'
+    tmpdir = self.create_tempdir()
     exp_checkpointer = checkpointer.Checkpointer(
-        self._test_subdir, checkpoint_file_prefix=custom_prefix)
+        tmpdir,
+        checkpoint_file_prefix=custom_prefix)
     data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
     deleted_log_files = 7
-    total_log_files = checkpointer.CHECKPOINT_DURATION + deleted_log_files
+    total_log_files = exp_checkpointer._checkpoint_duration + deleted_log_files
     for iteration_number in range(total_log_files):
       exp_checkpointer.save_checkpoint(iteration_number, data)
     for iteration_number in range(total_log_files):
       prefixes = [custom_prefix, 'sentinel_checkpoint_complete']
       for prefix in prefixes:
-        checkpoint_file = os.path.join(self._test_subdir, '{}.{}'.format(
-            prefix, iteration_number))
+        checkpoint_file = os.path.join(tmpdir,
+                                       f'{prefix}.{iteration_number}')
         if iteration_number < deleted_log_files:
           self.assertFalse(tf.io.gfile.exists(checkpoint_file))
         else:
@@ -123,12 +123,14 @@ class CheckpointerTest(tf.test.TestCase):
   def testGarbageCollectionWithCheckpointFrequency(self):
     custom_prefix = 'custom_prefix'
     checkpoint_frequency = 3
+    tmpdir = self.create_tempdir()
     exp_checkpointer = checkpointer.Checkpointer(
-        self._test_subdir, checkpoint_file_prefix=custom_prefix,
+        tmpdir,
+        checkpoint_file_prefix=custom_prefix,
         checkpoint_frequency=checkpoint_frequency)
     data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
     deleted_log_files = 6
-    total_log_files = (checkpointer.CHECKPOINT_DURATION *
+    total_log_files = (exp_checkpointer._checkpoint_duration *
                        checkpoint_frequency) + deleted_log_files + 1
 
     # The checkpoints will happen in iteration numbers 0,3,6,9,12,15,18.
@@ -139,15 +141,83 @@ class CheckpointerTest(tf.test.TestCase):
     for iteration_number in range(total_log_files):
       prefixes = [custom_prefix, 'sentinel_checkpoint_complete']
       for prefix in prefixes:
-        checkpoint_file = os.path.join(self._test_subdir, '{}.{}'.format(
-            prefix, iteration_number))
+        checkpoint_file = os.path.join(tmpdir,
+                                       f'{prefix}.{iteration_number}')
         if iteration_number <= deleted_log_files:
           self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+        elif iteration_number % checkpoint_frequency == 0:
+          self.assertTrue(tf.io.gfile.exists(checkpoint_file))
         else:
-          if iteration_number % checkpoint_frequency == 0:
-            self.assertTrue(tf.io.gfile.exists(checkpoint_file))
-          else:
-            self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+          self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+
+  def testGarbageCollectionWithCheckpointDuration(self):
+    custom_prefix = 'custom_prefix'
+    checkpoint_frequency = 3
+    checkpoint_duration = 6
+    tmpdir = self.create_tempdir()
+    exp_checkpointer = checkpointer.Checkpointer(
+        tmpdir,
+        checkpoint_file_prefix=custom_prefix,
+        checkpoint_frequency=checkpoint_frequency,
+        checkpoint_duration=checkpoint_duration)
+    data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
+    total_log_files = 40
+    deleted_log_files = 21
+
+    # The checkpoints will happen in iteration numbers
+    # 0,3,6,9,12,15,18,21,24,27,30,33,36,39
+    # We are checking if checkpoints 0,3,6,9,12,15,18,21 are deleted.
+    for iteration_number in range(total_log_files):
+      exp_checkpointer.save_checkpoint(iteration_number,
+                                       data)
+    for iteration_number in range(total_log_files):
+      prefixes = [custom_prefix, 'sentinel_checkpoint_complete']
+      for prefix in prefixes:
+        checkpoint_file = os.path.join(tmpdir,
+                                       f'{prefix}.{iteration_number}')
+        if iteration_number <= deleted_log_files:
+          self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+        elif iteration_number % checkpoint_frequency == 0:
+          self.assertTrue(tf.io.gfile.exists(checkpoint_file))
+        else:
+          self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+
+  def testGarbageCollectionWithKeepEvery(self):
+    custom_prefix = 'custom_prefix'
+    checkpoint_frequency = 3
+    checkpoint_duration = 6
+    keep_every = 3
+    tmpdir = self.create_tempdir()
+    exp_checkpointer = checkpointer.Checkpointer(
+        tmpdir,
+        checkpoint_file_prefix=custom_prefix,
+        checkpoint_frequency=checkpoint_frequency,
+        checkpoint_duration=checkpoint_duration,
+        keep_every=keep_every)
+    data = {'data1': 1, 'data2': 'two', 'data3': (3, 'three')}
+    deleted_log_files = 21
+    total_log_files = 40
+
+    # The checkpoints will happen in iteration numbers
+    # 0,3,6,9,12,15,18,21,24,27,30,33,36,39
+    # We are checking if checkpoints 3,6,12,15 are deleted.
+    # Checkpoints 0, 9 and 18 would have normally been deleted but should
+    # have been spared by keep_every.
+    for iteration_number in range(total_log_files):
+      exp_checkpointer.save_checkpoint(iteration_number,
+                                       data)
+    for iteration_number in range(total_log_files):
+      prefixes = [custom_prefix, 'sentinel_checkpoint_complete']
+      for prefix in prefixes:
+        checkpoint_file = os.path.join(tmpdir,
+                                       f'{prefix}.{iteration_number}')
+        if (iteration_number <= deleted_log_files
+            and iteration_number % (checkpoint_frequency*keep_every) != 0):
+          self.assertFalse(tf.io.gfile.exists(checkpoint_file))
+        elif iteration_number % checkpoint_frequency == 0:
+          self.assertTrue(tf.io.gfile.exists(checkpoint_file))
+        else:
+          self.assertFalse(tf.io.gfile.exists(checkpoint_file))
 
 if __name__ == '__main__':
   tf.compat.v1.disable_v2_behavior()
