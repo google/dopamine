@@ -313,8 +313,9 @@ class NoisyNetwork(nn.Module):
       b_epsilon = onp.zeros(shape=(features,), dtype=onp.float32)
     else:
       # Factored gaussian noise in (10) and (11) in Fortunato et al. (2018).
-      p = NoisyNetwork.sample_noise(self.rng_key, [x.shape[0], 1])
-      q = NoisyNetwork.sample_noise(self.rng_key, [1, features])
+      rng_p, rng_q = jax.random.split(self.rng_key, num=2)
+      p = NoisyNetwork.sample_noise(rng_p, [x.shape[0], 1])
+      q = NoisyNetwork.sample_noise(rng_q, [1, features])
       f_p = NoisyNetwork.f(p)
       f_q = NoisyNetwork.f(q)
       w_epsilon = f_p * f_q
