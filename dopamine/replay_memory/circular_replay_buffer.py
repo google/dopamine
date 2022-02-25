@@ -47,9 +47,6 @@ ReplayElement = (
 # A prefix that can not collide with variable names for checkpoint files.
 STORE_FILENAME_PREFIX = '$store$_'
 
-# This constant determines how many iterations a checkpoint is kept for.
-CHECKPOINT_DURATION = 4
-
 
 def modulo_range(start, length, modulo):
   for i in range(length):
@@ -116,7 +113,9 @@ class OutOfGraphReplayBuffer(object):
                action_shape=(),
                action_dtype=np.int32,
                reward_shape=(),
-               reward_dtype=np.float32):
+               reward_dtype=np.float32,
+               checkpoint_duration=4,
+               keep_every=None):
     """Initializes OutOfGraphReplayBuffer.
 
     Args:
@@ -140,6 +139,9 @@ class OutOfGraphReplayBuffer(object):
       reward_shape: tuple of ints, the shape of the reward vector. Empty tuple
         means the reward is a scalar.
       reward_dtype: np.dtype, type of elements in the reward.
+      checkpoint_duration: int, how many iterations a checkpoint is kept for.
+      keep_every: Optional (int or None), keep all checkpoints == 0 % this
+        number. Set to None to disable.
 
     Raises:
       ValueError: If replay_capacity is too small to hold at least one
@@ -161,6 +163,8 @@ class OutOfGraphReplayBuffer(object):
     logging.info('\t batch_size: %d', batch_size)
     logging.info('\t update_horizon: %d', update_horizon)
     logging.info('\t gamma: %f', gamma)
+    logging.info('\t checkpoint_duration: %d', checkpoint_duration)
+    logging.info('\t keep_every: %s', str(keep_every))
 
     self._action_shape = action_shape
     self._action_dtype = action_dtype
@@ -190,6 +194,8 @@ class OutOfGraphReplayBuffer(object):
         dtype=np.float32)
     self._next_experience_is_episode_start = True
     self._episode_end_indices = set()
+    self._checkpoint_duration = checkpoint_duration
+    self._keep_every = keep_every
 
   def _create_storage(self):
     """Creates the numpy arrays used to store transitions.
@@ -686,7 +692,13 @@ class OutOfGraphReplayBuffer(object):
 
       # After writing a checkpoint file, we garbage collect the checkpoint file
       # that is four versions old.
-      stale_iteration_number = iteration_number - CHECKPOINT_DURATION
+      stale_iteration_number = iteration_number - self._checkpoint_duration
+
+      # If keep_every has been set, we spare every keep_every'th checkpoint.
+      if (self._keep_every is not None and
+          (stale_iteration_number % self._keep_every == 0)):
+        return
+
       if stale_iteration_number >= 0:
         stale_filename = self._generate_filename(checkpoint_dir, attr,
                                                  stale_iteration_number)

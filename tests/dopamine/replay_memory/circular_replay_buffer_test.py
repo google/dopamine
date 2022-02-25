@@ -115,7 +115,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     zeros = np.zeros(OBSERVATION_SHAPE)
     memory.add(zeros, 0, 0, 0, 0, [0, 0])
 
-    with self.assertRaisesRegexp(ValueError, 'Add expects'):
+    with self.assertRaisesRegex(ValueError, 'Add expects'):
       memory.add(zeros, 0, 0, 0)
     # Check if the cursor moved STACK_SIZE -1 zeros adds + 1, (the one above).
     self.assertEqual(memory.cursor(), STACK_SIZE)
@@ -134,11 +134,11 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
     memory._check_add_types(zeros, 0, 0, 0, 0, [0, 0])
 
-    with self.assertRaisesRegexp(ValueError, 'Add expects'):
+    with self.assertRaisesRegex(ValueError, 'Add expects'):
       memory._check_add_types(zeros, 0, 0, 0)
 
   def testLowCapacity(self):
-    with self.assertRaisesRegexp(ValueError, 'There is not enough capacity'):
+    with self.assertRaisesRegex(ValueError, 'There is not enough capacity'):
       circular_replay_buffer.OutOfGraphReplayBuffer(
           observation_shape=OBSERVATION_SHAPE,
           stack_size=10,
@@ -147,7 +147,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
           update_horizon=1,
           gamma=1.0)
 
-    with self.assertRaisesRegexp(ValueError, 'There is not enough capacity'):
+    with self.assertRaisesRegex(ValueError, 'There is not enough capacity'):
       circular_replay_buffer.OutOfGraphReplayBuffer(
           observation_shape=OBSERVATION_SHAPE,
           stack_size=5,
@@ -175,8 +175,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE,
         update_horizon=5,
         gamma=1.0)
-    with self.assertRaisesRegexp(AssertionError,
-                                 'end_index must be larger than start_index'):
+    with self.assertRaisesRegex(AssertionError,
+                                'end_index must be larger than start_index'):
       memory.get_range([], 2, 1)
     with self.assertRaises(AssertionError):
       # Negative end_index.
@@ -184,8 +184,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     with self.assertRaises(AssertionError):
       # Start index beyond replay capacity.
       memory.get_range([], replay_capacity, replay_capacity + 1)
-    with self.assertRaisesRegexp(AssertionError,
-                                 'Index 1 has not been added.'):
+    with self.assertRaisesRegex(AssertionError, 'Index 1 has not been added.'):
       memory.get_range([], 1, 2)
 
   def testGetRangeNoWraparound(self):
@@ -507,8 +506,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     memory.reward = self._test_reward
     memory.terminal = self._test_terminal
     current_iteration = 5
-    stale_iteration = (
-        current_iteration - circular_replay_buffer.CHECKPOINT_DURATION)
+    stale_iteration = current_iteration - memory._checkpoint_duration
     memory.save(self._test_subdir, stale_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):
@@ -527,6 +525,36 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
       # The stale version file should have been deleted.
       self.assertFalse(tf.io.gfile.exists(stale_filename))
 
+  def testSaveWithKeepEvery(self):
+    checkpoint_duration, keep_every = 1, 2
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE,
+        keep_every=keep_every,
+        checkpoint_duration=checkpoint_duration)
+    memory.observation = self._test_observation
+    memory.action = self._test_action
+    memory.reward = self._test_reward
+    memory.terminal = self._test_terminal
+    total_iterations = 6
+    for iteration in range(1, total_iterations+1):
+      memory.save(self._test_subdir, iteration)
+    stale_iteration = total_iterations - memory._checkpoint_duration
+
+    for iteration in range(1, total_iterations+1):
+      for attr in memory.__dict__:
+        if attr.startswith('_'):
+          continue
+        filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
+            attr, iteration))
+        # Stale file should have been deleted if not a multiple of `keep_every`.
+        if (iteration <= stale_iteration) and (iteration % keep_every) != 0:
+          self.assertFalse(tf.io.gfile.exists(filename))
+        else:
+          self.assertTrue(tf.io.gfile.exists(filename))
+
   def testSaveNonNDArrayAttributes(self):
     """Tests checkpointing an attribute which is not a numpy array."""
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
@@ -541,8 +569,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     memory.dummy_attribute_3 = CheckpointableClass()
 
     current_iteration = 5
-    stale_iteration = (
-        current_iteration - circular_replay_buffer.CHECKPOINT_DURATION)
+    stale_iteration = current_iteration - memory._checkpoint_duration
     memory.save(self._test_subdir, stale_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):
@@ -664,7 +691,7 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     self._test_invalid_range = np.ones(num_dims)
 
   def testConstructorCapacityNotLargeEnough(self):
-    with self.assertRaisesRegexp(
+    with self.assertRaisesRegex(
         ValueError,
         r'Update horizon \(5\) should be significantly '
         r'smaller than replay capacity \(5\)\.'):
@@ -675,8 +702,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
           update_horizon=5)
 
   def testConstructorWithZeroUpdateHorizon(self):
-    with self.assertRaisesRegexp(ValueError,
-                                 r'Update horizon must be positive\.'):
+    with self.assertRaisesRegex(ValueError,
+                                r'Update horizon must be positive\.'):
       circular_replay_buffer.WrappedReplayBuffer(
           observation_shape=OBSERVATION_SHAPE,
           stack_size=STACK_SIZE,
@@ -684,10 +711,10 @@ class WrappedReplayBufferTest(tf.test.TestCase):
 
   def testConstructorWithOutOfBoundsDiscountFactor(self):
     exception_string = r'Discount factor \(gamma\) must be in \[0, 1\]\.'
-    with self.assertRaisesRegexp(ValueError, exception_string):
+    with self.assertRaisesRegex(ValueError, exception_string):
       circular_replay_buffer.WrappedReplayBuffer(
           observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=-1)
-    with self.assertRaisesRegexp(ValueError, exception_string):
+    with self.assertRaisesRegex(ValueError, exception_string):
       circular_replay_buffer.WrappedReplayBuffer(
           observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=1.1)
 
