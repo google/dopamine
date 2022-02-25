@@ -15,7 +15,9 @@
 """Atari 100k rainbow agent with support for data augmentation."""
 
 import functools
+
 from absl import logging
+from dopamine.jax import networks
 from dopamine.jax.agents.full_rainbow import full_rainbow_agent
 import gin
 import jax
@@ -84,6 +86,7 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
                num_actions,
                data_augmentation=False,
                summary_writer=None,
+               network=networks.FullRainbowNetwork,
                seed=None):
     """Creates the Rainbow-based agent for the Atari 100k benchmark.
 
@@ -93,12 +96,16 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
       num_actions: int, number of actions the agent can take at any state.
       data_augmentation: bool, whether to use data augmentation.
       summary_writer: SummaryWriter object, for outputting training statistics.
+      network: flax.linen Module, neural network used by the agent initialized
+        by shape in _create_network below. See
+        dopamine.jax.networks.RainbowNetwork as an example.
       seed: int, a seed for Jax RNG and initialization.
     """
     super().__init__(
         num_actions=num_actions,
         preprocess_fn=preprocess_inputs_with_augmentation,
         summary_writer=summary_writer,
+        network=network,
         seed=seed)
     logging.info('\t data_augmentation: %s', data_augmentation)
     self._data_augmentation = data_augmentation
