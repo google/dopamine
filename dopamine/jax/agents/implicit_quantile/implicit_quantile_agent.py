@@ -244,7 +244,8 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
                replay_scheme='prioritized',
                optimizer='adam',
                summary_writer=None,
-               summary_writing_frequency=500):
+               summary_writing_frequency=500,
+               seed=None):
     """Initializes the agent and constructs the necessary components.
 
     Most of this constructor's parameters are IQN-specific hyperparameters whose
@@ -291,6 +292,8 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
         Summary writing disabled if set to None.
       summary_writing_frequency: int, frequency with which summaries will be
         written. Lower values will result in slower training.
+      seed: int, a seed for internal RNG, used for initialization and
+        sampling actions. If None, will use the current time in nanoseconds.
     """
     self.kappa = kappa
     # num_tau_samples = N below equation (3) in the paper.
@@ -322,7 +325,8 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
         epsilon_decay_period=epsilon_decay_period,
         optimizer=optimizer,
         summary_writer=summary_writer,
-        summary_writing_frequency=summary_writing_frequency)
+        summary_writing_frequency=summary_writing_frequency,
+        seed=seed)
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
