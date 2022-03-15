@@ -49,7 +49,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='4.0.2',
+    version='4.0.3',
     description=dopamine_description,
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -84,6 +84,7 @@ setup(
     packages=find_packages(exclude=['docs']),
     package_data={'testdata': ['testdata/*.gin']},
     install_requires=install_requires,
+    python_requires='>=3.5,<4',
     project_urls={  # Optional
         'Documentation': 'https://github.com/google/dopamine',
         'Bug Reports': 'https://github.com/google/dopamine/issues',
