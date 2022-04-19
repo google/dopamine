@@ -29,6 +29,7 @@ from absl import logging
 from dopamine.agents.dqn import dqn_agent
 from dopamine.jax import losses
 from dopamine.jax import networks
+from dopamine.metrics import statistics_instance
 from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
 from flax import core
@@ -74,6 +75,10 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
                  'eps=%f', learning_rate, beta2, eps)
     return optax.rmsprop(learning_rate, decay=beta2, eps=eps,
                          centered=centered)
+  elif name == 'sgd':
+    logging.info('Creating SGD optimizer with settings '
+                 'lr=%f', learning_rate)
+    return optax.sgd(learning_rate)
   else:
     raise ValueError('Unsupported optimizer {}'.format(name))
 
@@ -221,7 +226,8 @@ class JaxDQNAgent(object):
                allow_partial_reload=False,
                seed=None,
                loss_type='huber',
-               preprocess_fn=None):
+               preprocess_fn=None,
+               collector_allowlist=('tensorboard')):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -252,6 +258,8 @@ class JaxDQNAgent(object):
       eval_mode: bool, True for evaluation and False for training.
       optimizer: str, name of optimizer to use.
       summary_writer: SummaryWriter object for outputting training statistics.
+        May also be a str specifying the base directory, in which case the
+        SummaryWriter will be created by the agent.
       summary_writing_frequency: int, frequency with which summaries will be
         written. Lower values will result in slower training.
       allow_partial_reload: bool, whether we allow reloading a partial agent
@@ -262,6 +270,8 @@ class JaxDQNAgent(object):
       preprocess_fn: function expecting the input state as parameter which
         it preprocesses (such as normalizing the pixel values between 0 and 1)
         before passing it to the Q-network. Defaults to None.
+      collector_allowlist: list of str, if using CollectorDispatcher, this can
+        be used to specify which Collectors to log to.
     """
     assert isinstance(observation_shape, tuple)
     seed = int(time.time() * 1e6) if seed is None else seed
@@ -303,10 +313,18 @@ class JaxDQNAgent(object):
     self.update_period = update_period
     self.eval_mode = eval_mode
     self.training_steps = 0
-    self.summary_writer = summary_writer
+    if isinstance(summary_writer, str):
+      try:
+        tf.compat.v1.enable_v2_behavior()
+      except ValueError:
+        pass
+      self.summary_writer = tf.summary.create_file_writer(summary_writer)
+    else:
+      self.summary_writer = summary_writer
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
     self._loss_type = loss_type
+    self._collector_allowlist = collector_allowlist
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
@@ -485,10 +503,15 @@ class JaxDQNAgent(object):
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
-          summary = tf.compat.v1.Summary(value=[
-              tf.compat.v1.Summary.Value(tag='HuberLoss', simple_value=loss)])
-          self.summary_writer.add_summary(summary, self.training_steps)
+          with self.summary_writer.as_default():
+            tf.summary.scalar('HuberLoss', loss, step=self.training_steps)
           self.summary_writer.flush()
+          if hasattr(self, 'collector_dispatcher'):
+            self.collector_dispatcher.write(
+                [statistics_instance.StatisticsInstance(
+                    'Loss', loss.to_py(), step=self.training_steps),
+                 ],
+                collector_allowlist=self._collector_allowlist)
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 
@@ -622,3 +645,9 @@ class JaxDQNAgent(object):
     else:
       logging.warning("Unable to reload the agent's parameters!")
     return True
+
+  def set_collector_dispatcher(self, collector_dispatcher):
+    self.collector_dispatcher = collector_dispatcher
+    # Ensure we have a collector allowlist defined.
+    if not hasattr(self, '_collector_allowlist'):
+      self._collector_allowlist = ('tensorboard')

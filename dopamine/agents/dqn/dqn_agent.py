@@ -26,10 +26,9 @@ from absl import logging
 
 from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
+import gin.tf
 import numpy as np
 import tensorflow as tf
-
-import gin.tf
 
 
 # These are aliases which are used by other classes.
@@ -141,6 +140,8 @@ class DQNAgent(object):
         function.
       summary_writer: SummaryWriter object for outputting training statistics.
         Summary writing disabled if set to None.
+        May also be a str specifying the base directory, in which case the
+        SummaryWriter will be created by the agent.
       summary_writing_frequency: int, frequency with which summaries will be
         written. Lower values will result in slower training.
       allow_partial_reload: bool, whether we allow reloading a partial agent
@@ -181,9 +182,22 @@ class DQNAgent(object):
     self.eval_mode = eval_mode
     self.training_steps = 0
     self.optimizer = optimizer
-    self.summary_writer = summary_writer
+    tf.compat.v1.disable_v2_behavior()
+    if isinstance(summary_writer, str):  # If we're passing in directory name.
+      self.summary_writer = tf.compat.v1.summary.FileWriter(summary_writer)
+    else:
+      self.summary_writer = summary_writer
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
+
+    if sess is None:
+      config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
+      # Allocate only subset of the GPU memory as needed which allows for
+      # running multiple agents/workers on the same GPU.
+      config.gpu_options.allow_growth = True
+      self._sess = tf.compat.v1.Session('', config=config)
+    else:
+      self._sess = sess
 
     with tf.device(tf_device):
       # Create a placeholder for the state input to the DQN network.
@@ -202,7 +216,6 @@ class DQNAgent(object):
     if self.summary_writer is not None:
       # All tf.summaries should have been defined prior to running this.
       self._merged_summaries = tf.compat.v1.summary.merge_all()
-    self._sess = sess
 
     var_map = atari_lib.maybe_transform_variable_names(
         tf.compat.v1.global_variables())
@@ -213,6 +226,10 @@ class DQNAgent(object):
     # environment.
     self._observation = None
     self._last_observation = None
+
+    if self.summary_writer is not None:
+      self.summary_writer.add_graph(graph=tf.compat.v1.get_default_graph())
+    self._sess.run(tf.compat.v1.global_variables_initializer())
 
   def _create_network(self, name):
     """Builds the convolutional network used to compute the agent's Q-values.

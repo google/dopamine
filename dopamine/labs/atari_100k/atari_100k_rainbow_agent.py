@@ -148,9 +148,8 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
                                 jnp.sqrt(loss + 1e-10))
 
     if self.summary_writer is not None:
-      summary = tf.compat.v1.Summary(value=[
-          tf.compat.v1.Summary.Value(
-              tag='CrossEntropyLoss', simple_value=mean_loss)
-      ])
-      self.summary_writer.add_summary(summary, self.training_steps)
+      with self.summary_writer.as_default():
+        tf.summary.scalar('CrossEntropyLoss', mean_loss,
+                          step=self.training_steps)
+      self.summary_writer.flush()
 

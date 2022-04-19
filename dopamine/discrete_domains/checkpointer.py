@@ -18,8 +18,8 @@ This Checkpointer expects a base directory where checkpoints for different
 iterations are stored. Specifically, Checkpointer.save_checkpoint() takes in
 as input a dictionary 'data' to be pickled to disk. At each iteration, we
 write a file called 'cpkt.#', where # is the iteration number. The
-Checkpointer also cleans up old files, maintaining up to the CHECKPOINT_DURATION
-most recent iterations.
+Checkpointer also cleans up old files, maintaining up to the
+`checkpoint_duration` most recent iterations.
 
 The Checkpointer writes a sentinel file to indicate that checkpointing was
 globally successful. This means that all other checkpointing activities

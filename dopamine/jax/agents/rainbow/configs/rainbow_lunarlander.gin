@@ -1,14 +1,15 @@
-# Hyperparameters for a simple Rainbow-style Acrobot agent. The hyperparameters
+# Hyperparameters for a simple Rainbow-style LunarLander agent. The hyperparameters
 # chosen achieve reasonable performance.
-import dopamine.jax.agents.rainbow.rainbow_agent
-import dopamine.jax.networks
 import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
-import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.jax.agents.rainbow.rainbow_agent
+import dopamine.jax.networks
+import dopamine.replay_memory.circular_replay_buffer
+import flax
 
-JaxRainbowAgent.observation_shape = %gym_lib.ACROBOT_OBSERVATION_SHAPE
-JaxRainbowAgent.observation_dtype = %jax_networks.ACROBOT_OBSERVATION_DTYPE
-JaxRainbowAgent.stack_size = %gym_lib.ACROBOT_STACK_SIZE
+JaxRainbowAgent.observation_shape = %gym_lib.LUNAR_OBSERVATION_SHAPE
+JaxRainbowAgent.observation_dtype = %jax_networks.LUNAR_OBSERVATION_DTYPE
+JaxRainbowAgent.stack_size = %gym_lib.LUNAR_STACK_SIZE
 JaxRainbowAgent.network = @networks.ClassicControlRainbowNetwork
 JaxRainbowAgent.num_atoms = 201
 JaxRainbowAgent.vmax = 10.
@@ -22,19 +23,18 @@ JaxRainbowAgent.replay_scheme = 'prioritized'
 create_optimizer.learning_rate = 0.09
 create_optimizer.eps = 0.0003125
 
-ClassicControlRainbowNetwork.min_vals = %jax_networks.ACROBOT_MIN_VALS
-ClassicControlRainbowNetwork.max_vals = %jax_networks.ACROBOT_MAX_VALS
-
-create_gym_environment.environment_name = 'Acrobot'
-create_gym_environment.version = 'v1'
+create_gym_environment.environment_name = 'LunarLander'
+create_gym_environment.version = 'v2'
 create_runner.schedule = 'continuous_train'
 create_agent.agent_name = 'jax_rainbow'
 create_agent.debug_mode = True
 TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
-Runner.num_iterations = 500
-Runner.training_steps = 1000
+Runner.num_iterations = 125
+Runner.training_steps = 4000
 Runner.evaluation_steps = 1000
-Runner.max_steps_per_episode = 500
+Runner.max_steps_per_episode = 1000
 
 OutOfGraphPrioritizedReplayBuffer.replay_capacity = 50000
 OutOfGraphPrioritizedReplayBuffer.batch_size = 128
+OutOfGraphReplayBuffer.replay_capacity = 50000
+OutOfGraphReplayBuffer.batch_size = 128

@@ -26,6 +26,7 @@ import functools
 
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
+from dopamine.metrics import statistics_instance
 import gin
 import jax
 import jax.numpy as jnp
@@ -36,8 +37,8 @@ import tensorflow as tf
 
 @functools.partial(
     jax.vmap,
-    in_axes=(None, None, None, 0, 0, 0, None, None, None, None, None),
-    out_axes=(None, 0))
+    in_axes=(None, None, None, 0, 0, 0, None, None, None, None, 0),
+    out_axes=(0, 0))
 def target_quantile_values(network_def, online_params, target_params,
                            next_states, rewards, terminals,
                            num_tau_prime_samples, num_quantile_samples,
@@ -106,12 +107,14 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
           num_tau_prime_samples, num_quantile_samples, cumulative_gamma,
           double_dqn, kappa, rng):
   """Run a training step."""
+  batch_size = states.shape[0]
   def loss_fn(params, rng_input, target_quantile_vals):
-    def online(state):
+    def online(state, key):
       return network_def.apply(params, state, num_quantiles=num_tau_samples,
-                               rng=rng_input)
+                               rng=key)
 
-    model_output = jax.vmap(online)(states)
+    batched_rng = jnp.stack(jax.random.split(rng_input, num=batch_size))
+    model_output = jax.vmap(online)(states, batched_rng)
     quantile_values = model_output.quantile_values
     quantiles = model_output.quantiles
     chosen_action_quantile_values = jax.vmap(lambda x, y: x[:, y][:, None])(
@@ -146,7 +149,9 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     loss = jnp.mean(loss, axis=1)
     return jnp.mean(loss)
 
-  rng, target_quantile_vals = target_quantile_values(
+  rng, target_rng = jax.random.split(rng, num=2)
+  batched_target_rng = jnp.stack(jax.random.split(target_rng, num=batch_size))
+  _, target_quantile_vals = target_quantile_values(
       network_def,
       online_params,
       target_params,
@@ -157,7 +162,7 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
       num_quantile_samples,
       cumulative_gamma,
       double_dqn,
-      rng)
+      batched_target_rng)
   grad_fn = jax.value_and_grad(loss_fn)
   rng, rng_input = jax.random.split(rng)
   loss, grad = grad_fn(online_params, rng_input, target_quantile_vals)
@@ -438,10 +443,15 @@ class JaxImplicitQuantileAgent(dqn_agent.JaxDQNAgent):
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
-          summary = tf.compat.v1.Summary(value=[
-              tf.compat.v1.Summary.Value(tag='QuantileLoss',
-                                         simple_value=loss)])
-          self.summary_writer.add_summary(summary, self.training_steps)
+          with self.summary_writer.as_default():
+            tf.summary.scalar('QuantileLoss', loss, step=self.training_steps)
+          self.summary_writer.flush()
+          if hasattr(self, 'collector_dispatcher'):
+            self.collector_dispatcher.write(
+                [statistics_instance.StatisticsInstance(
+                    'Loss', loss.to_py(), step=self.training_steps),
+                 ],
+                collector_allowlist=self._collector_allowlist)
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 

@@ -207,12 +207,11 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
         if (self.summary_writer is not None and
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
-          values = [tf.compat.v1.Summary.Value(tag='Losses/Active',
-                                               simple_value=active_loss),
-                    tf.compat.v1.Summary.Value(tag='Losses/Passive',
-                                               simple_value=passive_loss)]
-          summary = tf.compat.v1.Summary(value=values)
-          self.summary_writer.add_summary(summary, self.training_steps)
+          with self.summary_writer.as_default():
+            tf.summary.scalar('Losses/Active', active_loss,
+                              step=self.training_steps)
+            tf.summary.scalar('Losses/Passive', passive_loss,
+                              step=self.training_steps)
           self.summary_writer.flush()
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()

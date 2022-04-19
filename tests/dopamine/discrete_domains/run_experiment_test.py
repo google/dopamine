@@ -30,10 +30,12 @@ from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import checkpointer
 from dopamine.discrete_domains import logger
 from dopamine.discrete_domains import run_experiment
+from dopamine.metrics import collector_dispatcher
+from dopamine.metrics import statistics_instance
+import gin.tf
 import mock
 import tensorflow as tf
 
-import gin.tf
 
 FLAGS = flags.FLAGS
 
@@ -155,7 +157,7 @@ class RunExperimentTest(tf.test.TestCase):
 
   def testCreateRunnerUnknown(self):
     base_dir = '/tmp'
-    with self.assertRaisesRegexp(ValueError, 'Unknown schedule'):
+    with self.assertRaisesRegex(ValueError, 'Unknown schedule'):
       run_experiment.create_runner(base_dir,
                                    'Unknown schedule')
 
@@ -195,7 +197,16 @@ class RunnerTest(tf.test.TestCase):
     self._agent = mock.Mock()
     self._agent.begin_episode.side_effect = lambda x: 0
     self._agent.step.side_effect = self._agent_step
-    self._create_agent_fn = lambda x, y, summary_writer: self._agent
+    def create_agent_fn(unused_x, unused_y, summary_writer):
+      assert isinstance(summary_writer, str)
+      self._agent.summary_writer = tf.compat.v1.summary.FileWriter(
+          summary_writer)
+      config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
+      config.gpu_options.allow_growth = True
+      self._agent._sess = tf.compat.v1.Session('', config=config)
+      return self._agent
+
+    self._create_agent_fn = create_agent_fn
     self._test_subdir = '/tmp/dopamine_tests'
     shutil.rmtree(self._test_subdir, ignore_errors=True)
     os.makedirs(self._test_subdir)
@@ -204,8 +215,8 @@ class RunnerTest(tf.test.TestCase):
   def testInitializeCheckpointingWithNoCheckpointFile(self, mock_get_latest):
     mock_get_latest.return_value = -1
     base_dir = '/does/not/exist'
-    with self.assertRaisesRegexp(tf.errors.PermissionDeniedError,
-                                 '.*/does.*'):
+    with self.assertRaisesRegex(tf.errors.PermissionDeniedError,
+                                '.*/does.*'):
       run_experiment.Runner(base_dir, self._create_agent_fn, mock.Mock)
 
   @mock.patch.object(checkpointer, 'get_latest_checkpoint_number')
@@ -308,7 +319,9 @@ class RunnerTest(tf.test.TestCase):
     for i in range(len(statistics)):
       self.assertDictEqual(expected_statistics[i], statistics[i])
 
-  def testRunOneIteration(self):
+  @mock.patch.object(collector_dispatcher, 'CollectorDispatcher')
+  def testRunOneIteration(self, mock_collector_dispatcher):
+    mock_collector_dispatcher.return_value = mock.Mock()
     environment_steps = 2
     environment = MockEnvironment(max_steps=environment_steps)
     training_steps = 20
@@ -332,8 +345,22 @@ class RunnerTest(tf.test.TestCase):
       self.assertEqual(expected_dictionary[k], dictionary[k])
     # Also verify that average number of steps per second is present and
     # positive.
-    self.assertEqual(len(dictionary['train_average_steps_per_second']), 1)
+    self.assertLen(dictionary['train_average_steps_per_second'], 1)
     self.assertGreater(dictionary['train_average_steps_per_second'][0], 0)
+    self.assertEqual(1, runner._collector_dispatcher.write.call_count)
+    keys = ['Train/NumEpisodes', 'Train/AverageReturns',
+            'Train/AverageStepsPerSecond', 'Eval/NumEpisodes',
+            'Eval/AverageReturns']
+    vals = [train_calls, -1.0, None, eval_calls, -1.0]
+    arg_pos = 0
+    for key, val in zip(keys, vals):
+      if val is None:
+        arg_pos += 1
+        continue  # Ignore steps per second
+      self.assertEqual(
+          statistics_instance.StatisticsInstance(key, val, 1),
+          runner._collector_dispatcher.write.call_args_list[0][0][0][arg_pos])
+      arg_pos += 1
 
   @mock.patch.object(logger, 'Logger')
   def testLogExperiment(self, mock_logger_constructor):
@@ -352,6 +379,26 @@ class RunnerTest(tf.test.TestCase):
     self.assertEqual(num_iterations, experiment_logger._calls_to_set)
     self.assertEqual((num_iterations / log_every_n),
                      experiment_logger._calls_to_log)
+
+  @mock.patch.object(logger, 'Logger')
+  def testLogExperimentWithoutLegacyLogging(self, mock_logger_constructor):
+    log_every_n = 2
+    logging_file_prefix = 'prefix'
+    statistics = 'statistics'
+    experiment_logger = MockLogger(test_cls=self)
+    mock_logger_constructor.return_value = experiment_logger
+    runner = run_experiment.Runner(
+        self._test_subdir, self._create_agent_fn, mock.Mock,
+        logging_file_prefix=logging_file_prefix,
+        log_every_n=log_every_n,
+        use_legacy_logger=False)
+    num_iterations = 10
+    for i in range(num_iterations):
+      # This should not do anything.
+      runner._log_experiment(i, statistics)
+    # With legacy logging turned off, it should never call the Logger.
+    self.assertEqual(0, experiment_logger._calls_to_set)
+    self.assertEqual(0, experiment_logger._calls_to_log)
 
   @mock.patch.object(checkpointer, 'Checkpointer')
   @mock.patch.object(logger, 'Logger')
@@ -437,7 +484,19 @@ class RunnerTest(tf.test.TestCase):
     self.assertEqual(num_iterations, experiment_logger._calls_to_set)
     self.assertEqual(num_iterations, experiment_logger._calls_to_log)
     glob_string = '{}/events.out.tfevents.*'.format(self._test_subdir)
-    self.assertGreater(len(tf.io.gfile.glob(glob_string)), 0)
+    self.assertNotEmpty(tf.io.gfile.glob(glob_string))
+
+  @mock.patch.object(collector_dispatcher, 'CollectorDispatcher')
+  def testCollectorDispatcherSetup(self, mock_collector_dispatcher):
+    environment = MockEnvironment()
+    mock_collector_dispatcher.return_value = 'CD'
+    self._agent.set_collector_dispatcher = mock.Mock()
+    _ = run_experiment.Runner(
+        self._test_subdir, self._create_agent_fn, lambda: environment)
+    self.assertEqual(1, mock_collector_dispatcher.call_count)
+    self.assertEqual(1, self._agent.set_collector_dispatcher.call_count)
+    self.assertEqual(
+        'CD', self._agent.set_collector_dispatcher.call_args_list[0][0][0])
 
 
 if __name__ == '__main__':

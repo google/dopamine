@@ -42,14 +42,14 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
 
   def quickDqnFlags(self):
     """Assign flags for a quick run of DQN agent."""
-    FLAGS.gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
+    FLAGS.gin_files = ['dopamine/jax/agents/dqn/configs/dqn.gin']
     FLAGS.gin_bindings = [
         "create_runner.schedule='continuous_train'",
         'Runner.training_steps=100',
         'Runner.evaluation_steps=10',
         'Runner.num_iterations=1',
         'Runner.max_steps_per_episode=100',
-        'dqn_agent.DQNAgent.min_replay_history=500',
+        'dqn_agent.JaxDQNAgent.min_replay_history=500',
         'WrappedReplayBuffer.replay_capacity=100'
     ]
     FLAGS.alsologtostderr = True
@@ -59,8 +59,6 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     # Check checkpoint files
     self.assertTrue(
         os.path.exists(os.path.join(self._checkpoint_dir, 'ckpt.0')))
-    self.assertTrue(
-        os.path.exists(os.path.join(self._checkpoint_dir, 'checkpoint')))
     self.assertTrue(
         os.path.exists(
             os.path.join(self._checkpoint_dir,

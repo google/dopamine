@@ -31,10 +31,10 @@ import os
 import pickle
 
 from absl import logging
+import gin.tf
 import numpy as np
 import tensorflow as tf
 
-import gin.tf
 
 # Defines a type describing part of the tuple returned by the replay
 # memory. Each element of the tuple is a tensor of shape [batch, ...] where
@@ -97,6 +97,8 @@ class OutOfGraphReplayBuffer(object):
       the blank ones at the beginning of an episode).
     invalid_range: np.array, an array with the indices of cursor-related invalid
       transitions
+    episode_end_indices: set[int], a set of indices corresponding to the
+      end of an episode.
   """
 
   def __init__(self,
@@ -193,9 +195,16 @@ class OutOfGraphReplayBuffer(object):
         [math.pow(self._gamma, n) for n in range(update_horizon)],
         dtype=np.float32)
     self._next_experience_is_episode_start = True
-    self._episode_end_indices = set()
+    self.episode_end_indices = set()
     self._checkpoint_duration = checkpoint_duration
     self._keep_every = keep_every
+
+  @property
+  def _episode_end_indices(self):
+    logging.warning('The name `_episode_end_indices` will be deprecated '
+                    'in a future version of Dopamine. Please use '
+                    '`episode_end_indices` instead.')
+    return self.episode_end_indices
 
   def _create_storage(self):
     """Creates the numpy arrays used to store transitions.
@@ -244,7 +253,7 @@ class OutOfGraphReplayBuffer(object):
     for element_type in self.get_add_args_signature():
       zero_transition.append(
           np.zeros(element_type.shape, dtype=element_type.type))
-    self._episode_end_indices.discard(self.cursor())  # If present
+    self.episode_end_indices.discard(self.cursor())  # If present
     self._add(*zero_transition)
 
   def add(self,
@@ -294,10 +303,10 @@ class OutOfGraphReplayBuffer(object):
       self._next_experience_is_episode_start = False
 
     if episode_end or terminal:
-      self._episode_end_indices.add(self.cursor())
+      self.episode_end_indices.add(self.cursor())
       self._next_experience_is_episode_start = True
     else:
-      self._episode_end_indices.discard(self.cursor())  # If present
+      self.episode_end_indices.discard(self.cursor())  # If present
 
     self._add(observation, action, reward, terminal, *args)
 
@@ -456,7 +465,7 @@ class OutOfGraphReplayBuffer(object):
     # If the episode ends before the update horizon, without a terminal signal,
     # it is invalid.
     for i in modulo_range(index, self._update_horizon, self._replay_capacity):
-      if i in self._episode_end_indices and not self._store['terminal'][i]:
+      if i in self.episode_end_indices and not self._store['terminal'][i]:
         return False
 
     return True
@@ -719,16 +728,27 @@ class OutOfGraphReplayBuffer(object):
       NotFoundError: If not all expected files are found in directory.
     """
     save_elements = self._return_checkpointable_elements()
+    skip_episode_end_indices = False
     # We will first make sure we have all the necessary files available to avoid
     # loading a partially-specified (i.e. corrupted) replay buffer.
     for attr in save_elements:
       filename = self._generate_filename(checkpoint_dir, attr, suffix)
+
       if not tf.io.gfile.exists(filename):
+        if attr == 'episode_end_indices':
+          logging.warning('Unable to find episode_end_indices. This is '
+                          'expected for old checkpoints.')
+          skip_episode_end_indices = True
+          continue
+
         raise tf.errors.NotFoundError(None, None,
                                       'Missing file: {}'.format(filename))
     # If we've reached this point then we have verified that all expected files
     # are available.
     for attr in save_elements:
+      if attr == 'episode_end_indices' and skip_episode_end_indices:
+        continue
+
       filename = self._generate_filename(checkpoint_dir, attr, suffix)
       with tf.io.gfile.GFile(filename, 'rb') as f:
         with gzip.GzipFile(fileobj=f) as infile:

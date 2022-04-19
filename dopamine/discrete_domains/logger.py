@@ -23,24 +23,25 @@ import pickle
 
 from absl import logging
 
+import gin.tf
 import tensorflow as tf
 
 
-CHECKPOINT_DURATION = 4
-
-
+@gin.configurable
 class Logger(object):
   """Class for maintaining a dictionary of data to log."""
 
-  def __init__(self, logging_dir):
+  def __init__(self, logging_dir, logs_duration=4):
     """Initializes Logger.
 
     Args:
       logging_dir: str, Directory to which logs are written.
+      logs_duration: int, how many logs to keep
     """
     # Dict used by logger to store data.
     self.data = {}
     self._logging_enabled = True
+    self._logs_duration = logs_duration
 
     if not logging_dir:
       logging.info('Logging directory not specified, will not log.')
@@ -92,8 +93,8 @@ class Logger(object):
     with tf.io.gfile.GFile(log_file, 'w') as fout:
       pickle.dump(self.data, fout, protocol=pickle.HIGHEST_PROTOCOL)
     # After writing a checkpoint file, we garbage collect the log file
-    # that is CHECKPOINT_DURATION versions old.
-    stale_iteration_number = iteration_number - CHECKPOINT_DURATION
+    # that is logs_duration versions old.
+    stale_iteration_number = iteration_number - self._logs_duration
     if stale_iteration_number >= 0:
       stale_file = self._generate_filename(filename_prefix,
                                            stale_iteration_number)

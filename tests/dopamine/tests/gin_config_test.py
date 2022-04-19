@@ -23,9 +23,9 @@ from absl import logging
 
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import run_experiment
+import gin.tf
 import tensorflow as tf
 
-import gin.tf
 
 FLAGS = flags.FLAGS
 
@@ -165,7 +165,7 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(
         ['dopamine/agents/dqn/configs/dqn.gin'], [])
     agent = run_experiment.create_agent(
-        self.test_session(),
+        None,
         atari_lib.create_atari_environment(game_name='Pong'))
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 1)
@@ -183,13 +183,13 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(
         ['dopamine/agents/rainbow/configs/c51.gin'], [])
     agent = run_experiment.create_agent(
-        self.test_session(),
+        None,
         atari_lib.create_atari_environment(game_name='Pong'))
     self.assertEqual(agent._num_atoms, 51)
     support = self.evaluate(agent._support)
     self.assertEqual(min(support), -10.)
     self.assertEqual(max(support), 10.)
-    self.assertEqual(len(support), 51)
+    self.assertLen(support, 51)
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 1)
     self.assertEqual(agent.min_replay_history, 20000)
@@ -206,13 +206,13 @@ class GinConfigTest(tf.test.TestCase):
     run_experiment.load_gin_configs(
         ['dopamine/agents/rainbow/configs/rainbow.gin'], [])
     agent = run_experiment.create_agent(
-        self.test_session(),
+        None,
         atari_lib.create_atari_environment(game_name='Pong'))
     self.assertEqual(agent._num_atoms, 51)
     support = self.evaluate(agent._support)
     self.assertEqual(min(support), -10.)
     self.assertEqual(max(support), 10.)
-    self.assertEqual(len(support), 51)
+    self.assertLen(support, 51)
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 3)
     self.assertEqual(agent.min_replay_history, 20000)
@@ -231,7 +231,7 @@ class GinConfigTest(tf.test.TestCase):
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/'
+    gin_files = ['dopamine/agents/' +
                  'implicit_quantile/configs/implicit_quantile_icml.gin']
     gin_bindings = [
         'Runner.num_iterations=0',
@@ -249,7 +249,7 @@ class GinConfigTest(tf.test.TestCase):
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/implicit_quantile/configs/'
+    gin_files = ['dopamine/agents/implicit_quantile/configs/' +
                  'implicit_quantile_icml.gin']
     gin_bindings = [
         'Runner.num_iterations=0',
@@ -268,7 +268,7 @@ class GinConfigTest(tf.test.TestCase):
         '/tmp/dopamine_tests',
         datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/implicit_quantile/configs/'
+    gin_files = ['dopamine/agents/implicit_quantile/configs/' +
                  'implicit_quantile.gin']
     gin_bindings = [
         'Runner.num_iterations=0',

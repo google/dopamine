@@ -114,7 +114,8 @@ class ContinuousRunner(base_run_experiment.Runner):
                training_steps=250000,
                evaluation_steps=125000,
                max_steps_per_episode=1000,
-               clip_rewards=False):
+               clip_rewards=False,
+               use_legacy_logger=True):
     """Initialize the Runner object in charge of running a full experiment.
 
     Args:
@@ -133,6 +134,8 @@ class ContinuousRunner(base_run_experiment.Runner):
       max_steps_per_episode: int, maximum number of steps after which an episode
         terminates.
       clip_rewards: bool, whether to clip rewards in [-1, 1].
+      use_legacy_logger: bool, whether to use the legacy Logger. This will be
+        deprecated soon, replaced with the new CollectorDispatcher setup.
 
     This constructor will take the following actions:
     - Initialize an environment.
@@ -142,6 +145,7 @@ class ContinuousRunner(base_run_experiment.Runner):
       Checkpointer object.
     """
     assert base_dir is not None
+    self._legacy_logger_enabled = use_legacy_logger
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations

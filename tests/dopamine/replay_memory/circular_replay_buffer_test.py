@@ -525,6 +525,55 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
       # The stale version file should have been deleted.
       self.assertFalse(tf.io.gfile.exists(stale_filename))
 
+  def testEpisodeEndIndicesAreCorrectlySaved(self):
+    testdir = self.create_tempdir()
+
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE)
+    memory.add(np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
+               0,
+               0.0,
+               False,
+               episode_end=True)
+    current_iteration = 5
+
+    memory.save(testdir.full_path, current_iteration)
+
+    filename = os.path.join(testdir.full_path,
+                            f'episode_end_indices_ckpt.{current_iteration}.gz')
+    self.assertTrue(tf.io.gfile.exists(filename))
+
+  def testEpisodeEndIndicesAreCorrectlyLoaded(self):
+    testdir = self.create_tempdir()
+
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE)
+    memory.add(np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
+               0,
+               0.0,
+               False,
+               episode_end=True)
+    new_memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE)
+    current_iteration = 5
+
+    memory.save(testdir.full_path, current_iteration)
+    new_memory.load(testdir.full_path, str(current_iteration))
+
+    self.assertLen(new_memory.episode_end_indices, 1)
+    self.assertEqual(
+        memory.episode_end_indices,
+        new_memory.episode_end_indices)
+
   def testSaveWithKeepEvery(self):
     checkpoint_duration, keep_every = 1, 2
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(

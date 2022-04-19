@@ -36,11 +36,11 @@ from dopamine.jax.agents.full_rainbow import full_rainbow_agent
 from dopamine.jax.agents.implicit_quantile import implicit_quantile_agent as jax_implicit_quantile_agent
 from dopamine.jax.agents.quantile import quantile_agent as jax_quantile_agent
 from dopamine.jax.agents.rainbow import rainbow_agent as jax_rainbow_agent
-
+from dopamine.metrics import collector_dispatcher
+from dopamine.metrics import statistics_instance
+import gin.tf
 import numpy as np
 import tensorflow as tf
-
-import gin.tf
 
 
 def load_gin_configs(gin_files, gin_bindings):
@@ -171,7 +171,9 @@ class Runner(object):
                training_steps=250000,
                evaluation_steps=125000,
                max_steps_per_episode=27000,
-               clip_rewards=True):
+               clip_rewards=True,
+               use_legacy_logger=True,
+               fine_grained_print_to_console=True):
     """Initialize the Runner object in charge of running a full experiment.
 
     Args:
@@ -190,6 +192,10 @@ class Runner(object):
       max_steps_per_episode: int, maximum number of steps after which an episode
         terminates.
       clip_rewards: bool, whether to clip rewards in [-1, 1].
+      use_legacy_logger: bool, whether to use the legacy Logger. This will be
+        deprecated soon, replaced with the new CollectorDispatcher setup.
+      fine_grained_print_to_console: bool, whether to print fine-grained
+        progress to console (useful for debugging).
 
     This constructor will take the following actions:
     - Initialize an environment.
@@ -200,8 +206,9 @@ class Runner(object):
       Checkpointer object.
     """
     assert base_dir is not None
-    tf.compat.v1.disable_v2_behavior()
 
+    self._legacy_logger_enabled = use_legacy_logger
+    self._fine_grained_print_to_console_enabled = fine_grained_print_to_console
     self._logging_file_prefix = logging_file_prefix
     self._log_every_n = log_every_n
     self._num_iterations = num_iterations
@@ -211,26 +218,50 @@ class Runner(object):
     self._base_dir = base_dir
     self._clip_rewards = clip_rewards
     self._create_directories()
-    self._summary_writer = tf.compat.v1.summary.FileWriter(self._base_dir)
 
     self._environment = create_environment_fn()
-    config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
-    # Allocate only subset of the GPU memory as needed which allows for running
-    # multiple agents/workers on the same GPU.
-    config.gpu_options.allow_growth = True
-    # Set up a session and initialize variables.
-    self._sess = tf.compat.v1.Session('', config=config)
+    # The agent is now in charge of setting up the session.
+    self._sess = None
+    # We're using a bit of a hack in that we pass in _base_dir instead of an
+    # actually SummaryWriter. This is because the agent is now in charge of the
+    # session, but needs to create the SummaryWriter before creating the ops,
+    # and in order to do so, it requires the base directory.
     self._agent = create_agent_fn(self._sess, self._environment,
-                                  summary_writer=self._summary_writer)
-    self._summary_writer.add_graph(graph=tf.compat.v1.get_default_graph())
-    self._sess.run(tf.compat.v1.global_variables_initializer())
+                                  summary_writer=self._base_dir)
+    if hasattr(self._agent, '_sess'):
+      self._sess = self._agent._sess
+    self._summary_writer = self._agent.summary_writer
 
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)
+
+    # Create a collector dispatcher for metrics reporting.
+    self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
+        self._base_dir)
+    set_collector_dispatcher_fn = getattr(
+        self._agent, 'set_collector_dispatcher', None)
+    if callable(set_collector_dispatcher_fn):
+      set_collector_dispatcher_fn(self._collector_dispatcher)
+
+  @property
+  def _use_legacy_logger(self):
+    if not hasattr(self, '_legacy_logger_enabled'):
+      return True
+    return self._legacy_logger_enabled
+
+  @property
+  def _fine_grained_print_to_console(self):
+    if not hasattr(self, '_fine_grained_print_to_console_enabled'):
+      return True
+    return self._fine_grained_print_to_console_enabled
 
   def _create_directories(self):
     """Create necessary sub-directories."""
     self._checkpoint_dir = os.path.join(self._base_dir, 'checkpoints')
-    self._logger = logger.Logger(os.path.join(self._base_dir, 'logs'))
+    if self._use_legacy_logger:
+      logging.warning(
+          'DEPRECATION WARNING: Logger is being deprecated. '
+          'Please switch to CollectorDispatcher!')
+      self._logger = logger.Logger(os.path.join(self._base_dir, 'logs'))
 
   def _initialize_checkpointer_and_maybe_resume(self, checkpoint_file_prefix):
     """Reloads the latest checkpoint if it exists.
@@ -268,7 +299,8 @@ class Runner(object):
         if experiment_data is not None:
           assert 'logs' in experiment_data
           assert 'current_iteration' in experiment_data
-          self._logger.data = experiment_data['logs']
+          if self._use_legacy_logger:
+            self._logger.data = experiment_data['logs']
           self._start_iteration = experiment_data['current_iteration'] + 1
         logging.info('Reloaded checkpoint and will start from iteration %d',
                      self._start_iteration)
@@ -376,12 +408,13 @@ class Runner(object):
       step_count += episode_length
       sum_returns += episode_return
       num_episodes += 1
-      # We use sys.stdout.write instead of logging so as to flush frequently
-      # without generating a line break.
-      sys.stdout.write('Steps executed: {} '.format(step_count) +
-                       'Episode length: {} '.format(episode_length) +
-                       'Return: {}\r'.format(episode_return))
-      sys.stdout.flush()
+      if self._fine_grained_print_to_console:
+        # We use sys.stdout.write instead of logging so as to flush frequently
+        # without generating a line break.
+        sys.stdout.write('Steps executed: {} '.format(step_count) +
+                         'Episode length: {} '.format(episode_length) +
+                         'Return: {}\r'.format(episode_return))
+        sys.stdout.flush()
     return step_count, sum_returns, num_episodes
 
   def _run_train_phase(self, statistics):
@@ -455,10 +488,28 @@ class Runner(object):
     num_episodes_eval, average_reward_eval = self._run_eval_phase(
         statistics)
 
-    self._save_tensorboard_summaries(iteration, num_episodes_train,
-                                     average_reward_train, num_episodes_eval,
-                                     average_reward_eval,
-                                     average_steps_per_second)
+    self._collector_dispatcher.write([
+        statistics_instance.StatisticsInstance('Train/NumEpisodes',
+                                               num_episodes_train,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Train/AverageReturns',
+                                               average_reward_train,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
+                                               average_steps_per_second,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Eval/NumEpisodes',
+                                               num_episodes_eval,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Eval/AverageReturns',
+                                               average_reward_eval,
+                                               iteration),
+    ])
+    if self._summary_writer is not None:
+      self._save_tensorboard_summaries(iteration, num_episodes_train,
+                                       average_reward_train, num_episodes_eval,
+                                       average_reward_eval,
+                                       average_steps_per_second)
     return statistics.data_lists
 
   def _save_tensorboard_summaries(self, iteration,
@@ -477,20 +528,36 @@ class Runner(object):
       average_reward_eval: float, The average evaluation reward.
       average_steps_per_second: float, The average number of steps per second.
     """
-    summary = tf.compat.v1.Summary(value=[
-        tf.compat.v1.Summary.Value(
-            tag='Train/NumEpisodes', simple_value=num_episodes_train),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageReturns', simple_value=average_reward_train),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageStepsPerSecond',
-            simple_value=average_steps_per_second),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/NumEpisodes', simple_value=num_episodes_eval),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/AverageReturns', simple_value=average_reward_eval)
-    ])
-    self._summary_writer.add_summary(summary, iteration)
+    if self._summary_writer is None:
+      return
+
+    if self._sess is None:
+      with self._summary_writer.as_default():
+        tf.summary.scalar('Train/NumEpisodes', num_episodes_train,
+                          step=iteration)
+        tf.summary.scalar('Train/AverageReturns', average_reward_train,
+                          step=iteration)
+        tf.summary.scalar('Train/AverageStepsPerSecond',
+                          average_steps_per_second, step=iteration)
+        tf.summary.scalar('Eval/NumEpisodes', num_episodes_eval, step=iteration)
+        tf.summary.scalar('Eval/AverageReturns', average_reward_eval,
+                          step=iteration)
+      self._summary_writer.flush()
+    else:
+      summary = tf.compat.v1.Summary(value=[
+          tf.compat.v1.Summary.Value(
+              tag='Train/NumEpisodes', simple_value=num_episodes_train),
+          tf.compat.v1.Summary.Value(
+              tag='Train/AverageReturns', simple_value=average_reward_train),
+          tf.compat.v1.Summary.Value(
+              tag='Train/AverageStepsPerSecond',
+              simple_value=average_steps_per_second),
+          tf.compat.v1.Summary.Value(
+              tag='Eval/NumEpisodes', simple_value=num_episodes_eval),
+          tf.compat.v1.Summary.Value(
+              tag='Eval/AverageReturns', simple_value=average_reward_eval)
+      ])
+      self._summary_writer.add_summary(summary, iteration)
 
   def _log_experiment(self, iteration, statistics):
     """Records the results of the current iteration.
@@ -499,6 +566,9 @@ class Runner(object):
       iteration: int, iteration number.
       statistics: `IterationStatistics` object containing statistics to log.
     """
+    if not hasattr(self, '_logger'):
+      return
+
     self._logger['iteration_{:d}'.format(iteration)] = statistics
     if iteration % self._log_every_n == 0:
       self._logger.log_to_file(self._logging_file_prefix, iteration)
@@ -513,7 +583,8 @@ class Runner(object):
                                                         iteration)
     if experiment_data:
       experiment_data['current_iteration'] = iteration
-      experiment_data['logs'] = self._logger.data
+      if self._use_legacy_logger:
+        experiment_data['logs'] = self._logger.data
       self._checkpointer.save_checkpoint(iteration, experiment_data)
 
   def run_experiment(self):
@@ -526,9 +597,13 @@ class Runner(object):
 
     for iteration in range(self._start_iteration, self._num_iterations):
       statistics = self._run_one_iteration(iteration)
-      self._log_experiment(iteration, statistics)
+      if self._use_legacy_logger:
+        self._log_experiment(iteration, statistics)
       self._checkpoint_experiment(iteration)
-    self._summary_writer.flush()
+      self._collector_dispatcher.flush()
+    if self._summary_writer is not None:
+      self._summary_writer.flush()
+    self._collector_dispatcher.close()
 
 
 @gin.configurable
@@ -574,21 +649,45 @@ class TrainRunner(Runner):
     num_episodes_train, average_reward_train, average_steps_per_second = (
         self._run_train_phase(statistics))
 
-    self._save_tensorboard_summaries(iteration, num_episodes_train,
-                                     average_reward_train,
-                                     average_steps_per_second)
+    self._collector_dispatcher.write([
+        statistics_instance.StatisticsInstance('Train/NumEpisodes',
+                                               num_episodes_train,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Train/AverageReturns',
+                                               average_reward_train,
+                                               iteration),
+        statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
+                                               average_steps_per_second,
+                                               iteration),
+    ])
+    if self._summary_writer is not None:
+      self._save_tensorboard_summaries(iteration, num_episodes_train,
+                                       average_reward_train,
+                                       average_steps_per_second)
     return statistics.data_lists
 
   def _save_tensorboard_summaries(self, iteration, num_episodes,
                                   average_reward, average_steps_per_second):
     """Save statistics as tensorboard summaries."""
-    summary = tf.compat.v1.Summary(value=[
-        tf.compat.v1.Summary.Value(
-            tag='Train/NumEpisodes', simple_value=num_episodes),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageReturns', simple_value=average_reward),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageStepsPerSecond',
-            simple_value=average_steps_per_second),
-    ])
-    self._summary_writer.add_summary(summary, iteration)
+    if self._summary_writer is None:
+      return
+
+    if self._sess is None:
+      with self._summary_writer.as_default():
+        tf.summary.scalar('Train/NumEpisodes', num_episodes, step=iteration)
+        tf.summary.scalar('Train/AverageReturns', average_reward,
+                          step=iteration)
+        tf.summary.scalar('Train/AverageStepsPerSecond',
+                          average_steps_per_second, step=iteration)
+      self._summary_writer.flush()
+    else:
+      summary = tf.compat.v1.Summary(value=[
+          tf.compat.v1.Summary.Value(
+              tag='Train/NumEpisodes', simple_value=num_episodes),
+          tf.compat.v1.Summary.Value(
+              tag='Train/AverageReturns', simple_value=average_reward),
+          tf.compat.v1.Summary.Value(
+              tag='Train/AverageStepsPerSecond',
+              simple_value=average_steps_per_second),
+      ])
+      self._summary_writer.add_summary(summary, iteration)

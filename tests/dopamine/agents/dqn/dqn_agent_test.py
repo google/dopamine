@@ -26,10 +26,10 @@ from absl import flags
 from dopamine.agents.dqn import dqn_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.utils import test_utils
+import gin.tf
 import mock
 import numpy as np
 import tensorflow as tf
-import gin.tf
 
 FLAGS = flags.FLAGS
 
@@ -235,7 +235,7 @@ class DQNAgentTest(tf.test.TestCase):
       with tf.compat.v1.Session() as sess:
         _ = self._create_test_agent(sess)
 
-  def _testCustomShapes(self, shape, dtype, stack_size):
+  def _test_custom_shapes(self, shape, dtype, stack_size):
     self.observation_shape = shape
     self.observation_dtype = dtype
     self.stack_size = stack_size
@@ -289,17 +289,17 @@ class DQNAgentTest(tf.test.TestCase):
   def testStepTrainCustomObservationShapes(self):
     custom_shapes = [(1,), (4, 4), (6, 1), (1, 6), (1, 1, 6), (6, 6, 6, 6)]
     for shape in custom_shapes:
-      self._testCustomShapes(shape, tf.uint8, 1)
+      self._test_custom_shapes(shape, tf.uint8, 1)
 
   def testStepTrainCustomTypes(self):
     custom_types = [tf.float32, tf.uint8, tf.int64]
     for dtype in custom_types:
-      self._testCustomShapes((4, 4), dtype, 1)
+      self._test_custom_shapes((4, 4), dtype, 1)
 
   def testStepTrainCustomStackSizes(self):
     custom_stack_sizes = [1, 4, 8]
     for stack_size in custom_stack_sizes:
-      self._testCustomShapes((4, 4), tf.uint8, stack_size)
+      self._test_custom_shapes((4, 4), tf.uint8, stack_size)
 
   def testLinearlyDecayingEpsilon(self):
     """Test the functionality of the linearly_decaying_epsilon function."""

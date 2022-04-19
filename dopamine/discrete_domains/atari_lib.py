@@ -468,12 +468,13 @@ class AtariPreprocessing(object):
       else:
         is_terminal = game_over
 
-      if is_terminal:
-        break
       # We max-pool over the last two frames, in grayscale.
-      elif time_step >= self.frame_skip - 2:
+      if time_step >= self.frame_skip - 2:
         t = time_step - (self.frame_skip - 2)
         self._fetch_grayscale_observation(self.screen_buffer[t])
+
+      if is_terminal:
+        break
 
     # Pool the last two observations.
     observation = self._pool_and_resize()

@@ -42,9 +42,8 @@ from __future__ import print_function
 from dopamine.agents.dqn import dqn_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import prioritized_replay_buffer
-import tensorflow as tf
-
 import gin.tf
+import tensorflow as tf
 
 
 @gin.configurable

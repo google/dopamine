@@ -22,15 +22,16 @@ import os
 import pickle
 import shutil
 
-
 from absl import flags
+from absl.testing import absltest
+from absl.testing import parameterized
 from dopamine.discrete_domains import logger
 import tensorflow as tf
 
 FLAGS = flags.FLAGS
 
 
-class LoggerTest(tf.test.TestCase):
+class LoggerTest(parameterized.TestCase):
 
   def setUp(self):
     super(LoggerTest, self).setUp()
@@ -52,7 +53,7 @@ class LoggerTest(tf.test.TestCase):
 
   def testSetEntry(self):
     exp_logger = logger.Logger('/tmp/dopamine_tests')
-    self.assertEqual(len(exp_logger.data.keys()), 0)
+    self.assertEmpty(exp_logger.data.keys())
     key = 'key'
     val = [1, 2, 3, 4]
     exp_logger[key] = val
@@ -89,8 +90,9 @@ class LoggerTest(tf.test.TestCase):
     self.assertEqual(contents, pickle.dumps(expected_dictionary,
                                             protocol=pickle.HIGHEST_PROTOCOL))
 
-  def testGarbageCollection(self):
-    exp_logger = logger.Logger(self._test_subdir)
+  @parameterized.parameters((2), (4))
+  def testGarbageCollectionWithDefaults(self, logs_duration):
+    exp_logger = logger.Logger(self._test_subdir, logs_duration=logs_duration)
     self.assertTrue(exp_logger.is_logging_enabled())
     key = 'key'
     val = [1, 2, 3, 4]
@@ -99,7 +101,7 @@ class LoggerTest(tf.test.TestCase):
     expected_dictionary[key] = val
     self.assertEqual(expected_dictionary, exp_logger.data)
     deleted_log_files = 7
-    total_log_files = logger.CHECKPOINT_DURATION + deleted_log_files
+    total_log_files = logs_duration + deleted_log_files
     for iteration_number in range(total_log_files):
       exp_logger.log_to_file('log', iteration_number)
     for iteration_number in range(total_log_files):
@@ -113,4 +115,4 @@ class LoggerTest(tf.test.TestCase):
 
 if __name__ == '__main__':
   tf.compat.v1.disable_v2_behavior()
-  tf.test.main()
+  absltest.main()

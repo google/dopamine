@@ -26,6 +26,7 @@ import functools
 
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
+from dopamine.metrics import statistics_instance
 from dopamine.replay_memory import prioritized_replay_buffer
 import gin
 import jax
@@ -271,10 +272,16 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
           loss = loss_weights * loss
           mean_loss = jnp.mean(loss)
         if self.summary_writer is not None:
-          summary = tf.compat.v1.Summary(value=[
-              tf.compat.v1.Summary.Value(tag='QuantileLoss',
-                                         simple_value=mean_loss)])
-          self.summary_writer.add_summary(summary, self.training_steps)
+          with self.summary_writer.as_default():
+            tf.summary.scalar('QuantileLoss', mean_loss,
+                              step=self.training_steps)
+          self.summary_writer.flush()
+          if hasattr(self, 'collector_dispatcher'):
+            self.collector_dispatcher.write(
+                [statistics_instance.StatisticsInstance(
+                    'Loss', mean_loss.to_py(), step=self.training_steps),
+                 ],
+                collector_allowlist=self._collector_allowlist)
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 
