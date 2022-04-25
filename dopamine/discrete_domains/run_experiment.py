@@ -249,6 +249,12 @@ class Runner(object):
     return self._legacy_logger_enabled
 
   @property
+  def _has_collector_dispatcher(self):
+    if not hasattr(self, '_collector_dispatcher'):
+      return False
+    return True
+
+  @property
   def _fine_grained_print_to_console(self):
     if not hasattr(self, '_fine_grained_print_to_console_enabled'):
       return True
@@ -488,23 +494,24 @@ class Runner(object):
     num_episodes_eval, average_reward_eval = self._run_eval_phase(
         statistics)
 
-    self._collector_dispatcher.write([
-        statistics_instance.StatisticsInstance('Train/NumEpisodes',
-                                               num_episodes_train,
-                                               iteration),
-        statistics_instance.StatisticsInstance('Train/AverageReturns',
-                                               average_reward_train,
-                                               iteration),
-        statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
-                                               average_steps_per_second,
-                                               iteration),
-        statistics_instance.StatisticsInstance('Eval/NumEpisodes',
-                                               num_episodes_eval,
-                                               iteration),
-        statistics_instance.StatisticsInstance('Eval/AverageReturns',
-                                               average_reward_eval,
-                                               iteration),
-    ])
+    if self._has_collector_dispatcher:
+      self._collector_dispatcher.write([
+          statistics_instance.StatisticsInstance('Train/NumEpisodes',
+                                                 num_episodes_train,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Train/AverageReturns',
+                                                 average_reward_train,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
+                                                 average_steps_per_second,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Eval/NumEpisodes',
+                                                 num_episodes_eval,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Eval/AverageReturns',
+                                                 average_reward_eval,
+                                                 iteration),
+      ])
     if self._summary_writer is not None:
       self._save_tensorboard_summaries(iteration, num_episodes_train,
                                        average_reward_train, num_episodes_eval,
@@ -600,10 +607,12 @@ class Runner(object):
       if self._use_legacy_logger:
         self._log_experiment(iteration, statistics)
       self._checkpoint_experiment(iteration)
-      self._collector_dispatcher.flush()
+      if self._has_collector_dispatcher:
+        self._collector_dispatcher.flush()
     if self._summary_writer is not None:
       self._summary_writer.flush()
-    self._collector_dispatcher.close()
+    if self._has_collector_dispatcher:
+      self._collector_dispatcher.close()
 
 
 @gin.configurable
