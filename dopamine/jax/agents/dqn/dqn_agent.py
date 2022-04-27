@@ -86,7 +86,7 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
 @functools.partial(jax.jit, static_argnums=(0, 3, 10, 11))
 def train(network_def, online_params, target_params, optimizer, optimizer_state,
           states, actions, next_states, rewards, terminals, cumulative_gamma,
-          loss_type='huber'):
+          loss_type='mse'):
   """Run the training step."""
   def loss_fn(params, target):
     def q_online(state):
@@ -225,7 +225,7 @@ class JaxDQNAgent(object):
                summary_writing_frequency=500,
                allow_partial_reload=False,
                seed=None,
-               loss_type='huber',
+               loss_type='mse',
                preprocess_fn=None,
                collector_allowlist=('tensorboard')):
     """Initializes the agent and constructs the necessary components.
