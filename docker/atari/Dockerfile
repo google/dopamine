@@ -11,7 +11,7 @@ RUN mkdir /root/roms
 COPY ./Roms.rar /root/roms/
 
 RUN apt-get install unrar -y
-RUN rar x -o+ /root/roms/Roms.rar /root/roms/
+RUN unrar x -o+ /root/roms/Roms.rar /root/roms/
 
 # Install ROMs with ale-py.
 RUN pip install atari_py ale-py
