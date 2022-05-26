@@ -200,24 +200,25 @@ class RainbowNetwork(tf.keras.Model):
     self.num_actions = num_actions
     self.num_atoms = num_atoms
     self.support = support
-    self.kernel_initializer = tf.keras.initializers.VarianceScaling(
-        scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
+    def kernel_initializer():
+      tf.keras.initializers.VarianceScaling(
+          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
         32, [8, 8], strides=4, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.conv2 = tf.keras.layers.Conv2D(
         64, [4, 4], strides=2, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.conv3 = tf.keras.layers.Conv2D(
         64, [3, 3], strides=1, padding='same', activation=activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
         512, activation=activation_fn,
-        kernel_initializer=self.kernel_initializer, name='fully_connected')
+        kernel_initializer=kernel_initializer(), name='fully_connected')
     self.dense2 = tf.keras.layers.Dense(
-        num_actions * num_atoms, kernel_initializer=self.kernel_initializer,
+        num_actions * num_atoms, kernel_initializer=kernel_initializer(),
         name='fully_connected')
 
   def call(self, state):
@@ -262,24 +263,25 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     self.quantile_embedding_dim = quantile_embedding_dim
     # We need the activation function during `call`, therefore set the field.
     self.activation_fn = tf.keras.activations.relu
-    self.kernel_initializer = tf.keras.initializers.VarianceScaling(
-        scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
+    def kernel_initializer():
+      self.kernel_initializer = tf.keras.initializers.VarianceScaling(
+          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
         32, [8, 8], strides=4, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.conv2 = tf.keras.layers.Conv2D(
         64, [4, 4], strides=2, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.conv3 = tf.keras.layers.Conv2D(
         64, [3, 3], strides=1, padding='same', activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer, name='Conv')
+        kernel_initializer=kernel_initializer(), name='Conv')
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
         512, activation=self.activation_fn,
-        kernel_initializer=self.kernel_initializer, name='fully_connected')
+        kernel_initializer=kernel_initializer(), name='fully_connected')
     self.dense2 = tf.keras.layers.Dense(
-        num_actions, kernel_initializer=self.kernel_initializer,
+        num_actions, kernel_initializer=kernel_initializer(),
         name='fully_connected')
 
   def call(self, state, num_quantiles):
