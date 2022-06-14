@@ -77,6 +77,7 @@ class CollectorDispatcher(object):
         logging.warning('Collector %s not recognized, ignoring.', c)
         continue
       self._collectors.append(AVAILABLE_COLLECTORS[c](base_dir))
+      logging.info('Added collector %s.', c)
 
   def write(
       self,
