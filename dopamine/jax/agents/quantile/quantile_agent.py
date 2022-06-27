@@ -271,7 +271,9 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
           # Weight the loss by the inverse priorities.
           loss = loss_weights * loss
           mean_loss = jnp.mean(loss)
-        if self.summary_writer is not None:
+        if (self.summary_writer is not None and
+            self.training_steps > 0 and
+            self.training_steps % self.summary_writing_frequency == 0):
           with self.summary_writer.as_default():
             tf.summary.scalar('QuantileLoss', mean_loss,
                               step=self.training_steps)
