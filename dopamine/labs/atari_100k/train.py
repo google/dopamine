@@ -67,7 +67,8 @@ def main(unused_argv):
     unused_argv: Arguments (unused).
   """
   logging.set_verbosity(logging.INFO)
-  tf.compat.v1.disable_v2_behavior()
+  tf.compat.v1.enable_v2_behavior()
+
   base_dir = FLAGS.base_dir
   gin_files, gin_bindings = FLAGS.gin_files, FLAGS.gin_bindings
   run_experiment.load_gin_configs(gin_files, gin_bindings)
