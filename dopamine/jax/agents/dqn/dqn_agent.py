@@ -289,6 +289,8 @@ class JaxDQNAgent(object):
     logging.info('\t seed: %d', seed)
     logging.info('\t loss_type: %s', loss_type)
     logging.info('\t preprocess_fn: %s', preprocess_fn)
+    logging.info('\t summary_writing_frequency: %d', summary_writing_frequency)
+    logging.info('\t allow_partial_reload: %s', allow_partial_reload)
 
     self.num_actions = num_actions
     self.observation_shape = tuple(observation_shape)
