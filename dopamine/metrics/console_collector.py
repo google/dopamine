@@ -46,10 +46,14 @@ class ConsoleCollector(collector.Collector):
       statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
     step_string = ''
     for s in statistics:
+      if not self.check_type(s.type):
+        continue
       step_string += f'[Iteration {s.step}]: {s.name} = {s.value}\n'
-    logging.info(step_string)
-    if self._log_file is not None:
-      self._log_file_writer.write(step_string)
+    # Only write out if step_string is non-empty
+    if step_string:
+      logging.info(step_string)
+      if self._log_file is not None:
+        self._log_file_writer.write(step_string)
 
   def close(self) -> None:
     if self._log_file is not None:

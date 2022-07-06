@@ -52,6 +52,16 @@ class PickleCollectorTest(absltest.TestCase):
     self.assertEqual(pickle.dump.call_count, 0)
     self.assertEqual(expected_stats, collector._statistics)
 
+  def test_no_write_with_unsupported_type(self):
+    collector = pickle_collector.PickleCollector(self._tmpdir)
+    pickle.dump = mock.MagicMock()
+    for i in range(10):
+      stat = statistics_instance.StatisticsInstance(
+          'val', i, i, type='unsupported')
+      collector.write([stat])
+    self.assertEqual(pickle.dump.call_count, 0)
+    self.assertEmpty(collector._statistics)
+
   def test_flush(self):
     collector = pickle_collector.PickleCollector(self._tmpdir)
     pickle.dump = mock.MagicMock()

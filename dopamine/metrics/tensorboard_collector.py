@@ -38,6 +38,8 @@ class TensorboardCollector(collector.Collector):
       statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
     with self.summary_writer.as_default():
       for s in statistics:
+        if not self.check_type(s.type):
+          continue
         tf.summary.scalar(s.name, s.value, step=s.step)
 
   def flush(self):

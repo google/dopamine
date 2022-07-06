@@ -69,6 +69,18 @@ class ConsoleCollectorTest(absltest.TestCase):
     self.assertEqual(logging.info.call_count, 100)
     self.assertEqual(collector._log_file_writer.write.call_count, 100)
 
+  def test_no_write_with_unsupported_type(self):
+    collector = console_collector.ConsoleCollector(
+        self._tmpdir, save_to_file=True)
+    num_steps = 100
+    logging.info = mock.MagicMock()
+    collector._log_file_writer.write = mock.MagicMock()
+    for i in range(num_steps):
+      collector.write([statistics_instance.StatisticsInstance(
+          'val', i, i, type='unsupported')])
+      logging.info.assert_not_called()
+      collector._log_file_writer.write.assert_not_called()
+
   def test_full_run(self):
     collector = console_collector.ConsoleCollector(
         self._tmpdir, save_to_file=True)

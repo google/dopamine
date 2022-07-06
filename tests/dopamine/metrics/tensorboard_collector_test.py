@@ -59,6 +59,18 @@ class TensorboardCollectorTest(absltest.TestCase):
     self.assertEqual(tf.summary.scalar.call_count, num_steps)
     self.assertEqual(collector.summary_writer.flush.call_count, 0)
 
+  def test_no_write_with_unsupported_type(self):
+    tf.summary.create_file_writer = mock.MagicMock()
+    collector = tensorboard_collector.TensorboardCollector(
+        self.create_tempdir().full_path)
+    self.assertEqual(1, tf.summary.create_file_writer.call_count)
+    tf.summary.scalar = mock.MagicMock()
+    for i in range(10):
+      stat = statistics_instance.StatisticsInstance(
+          'val', i, i, type='unsupported')
+      collector.write([stat])
+      tf.summary.scalar.assert_not_called()
+
   def test_full_run(self):
     tf.summary.create_file_writer = mock.MagicMock()
     collector = tensorboard_collector.TensorboardCollector(

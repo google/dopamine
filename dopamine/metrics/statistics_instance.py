@@ -24,3 +24,4 @@ class StatisticsInstance:
   name: str
   value: Any
   step: int
+  type: str = 'scalar'

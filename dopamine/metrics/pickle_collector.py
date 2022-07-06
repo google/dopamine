@@ -46,6 +46,8 @@ class PickleCollector(collector.Collector):
     # is currently written by the Dopamine Logger, so as to be as compatible
     # with user's plotting setups.
     for s in statistics:
+      if not self.check_type(s.type):
+        continue
       self._statistics[f'iteration_{s.step}'][s.name].append(s.value)
 
   def flush(self):
