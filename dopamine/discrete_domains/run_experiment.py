@@ -81,7 +81,7 @@ def create_agent(sess, environment, agent_name=None, summary_writer=None,
   assert agent_name is not None
   if not debug_mode:
     summary_writer = None
-  if agent_name == 'dqn':
+  if agent_name.startswith('dqn'):
     return dqn_agent.DQNAgent(sess, num_actions=environment.action_space.n,
                               summary_writer=summary_writer)
   elif agent_name == 'rainbow':

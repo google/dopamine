@@ -1,0 +1,36 @@
+# Hyperparameters for a simple DQN-style LunarLander agent. The hyperparameters
+# chosen achieve reasonable performance.
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.networks
+import dopamine.replay_memory.circular_replay_buffer
+import flax
+
+JaxDQNAgent.observation_shape = %gym_lib.LUNAR_OBSERVATION_SHAPE
+JaxDQNAgent.observation_dtype = %jax_networks.LUNAR_OBSERVATION_DTYPE
+JaxDQNAgent.stack_size = %gym_lib.LUNAR_STACK_SIZE
+JaxDQNAgent.network = @networks.JaxFourierDQNNetwork
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 1
+JaxDQNAgent.min_replay_history = 500
+JaxDQNAgent.update_period = 4
+JaxDQNAgent.target_update_period = 100
+JaxDQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
+JaxDQNAgent.optimizer = 'adam'
+create_optimizer.learning_rate = 0.001
+create_optimizer.eps = 3.125e-4
+
+create_gym_environment.environment_name = 'LunarLander'
+create_gym_environment.version = 'v2'
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_dqn'
+create_agent.debug_mode = True
+TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
+Runner.num_iterations = 125
+Runner.training_steps = 4000
+Runner.evaluation_steps = 1000
+Runner.max_steps_per_episode = 1000
+
+OutOfGraphReplayBuffer.replay_capacity = 50000
+OutOfGraphReplayBuffer.batch_size = 128

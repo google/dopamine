@@ -14,8 +14,9 @@
 # limitations under the License.
 """Various networks for Jax Dopamine agents."""
 
+import itertools
 import time
-from typing import Tuple, Union
+from typing import Optional, Sequence, Tuple, Union
 
 from dopamine.discrete_domains import atari_lib
 from flax import linen as nn
@@ -112,6 +113,71 @@ class ClassicControlDQNNetwork(nn.Module):
       x = layer(x)
       x = nn.relu(x)
     q_values = self.final_layer(x)
+    return atari_lib.DQNNetworkType(q_values)
+
+
+class FourierBasis(object):
+  """Fourier Basis linear function approximation.
+
+  Requires the ranges for each dimension, and is thus able to use only sine or
+  cosine (and uses cosine). So, this has half the coefficients that a full
+  Fourier approximation would use.
+
+  Adapted from Will Dabney's (wdabney@) TF implementation for JAX.
+
+  From the paper:
+  G.D. Konidaris, S. Osentoski and P.S. Thomas. (2011)
+  Value Function Approximation in Reinforcement Learning using the Fourier Basis
+  """
+
+  def __init__(self,
+               nvars: int,
+               min_vals: Union[float, Sequence[float]] = 0.0,
+               max_vals: Optional[Union[float, Sequence[float]]] = None,
+               order: int = 3):
+    self.order = order
+    self.min_vals = jnp.array(min_vals)
+    self.max_vals = max_vals
+    terms = itertools.product(range(order + 1), repeat=nvars)
+    if max_vals is not None:
+      assert len(self.min_vals) == len(self.max_vals)
+      self.max_vals = jnp.array(self.max_vals)
+      self.denominator = [
+          max_vals[i] - min_vals[i] for i in range(len(min_vals))]
+
+    # Removing first iterate because it corresponds to the constant bias
+    self.multipliers = jnp.array([list(map(int, x)) for x in terms][1:])
+
+  def scale(self, values):
+    shifted = values - self.min_vals
+    if self.max_vals is None:
+      return shifted
+
+    return [shifted[i] / self.denominator[i] for i in range(len(shifted))]
+
+  def compute_features(self, features):
+    # Important to rescale features to be between [0,1]
+    scaled = jnp.array(self.scale(features))
+    return jnp.cos(jnp.pi * jnp.matmul(scaled, jnp.transpose(self.multipliers)))
+
+
+@gin.configurable
+class JaxFourierDQNNetwork(nn.Module):
+  """Fourier-basis for DQN-like agents."""
+  num_actions: int
+  min_vals: Optional[Sequence[float]] = None
+  max_vals: Optional[Sequence[float]] = None
+  fourier_basis_order: int = 3
+
+  @nn.compact
+  def __call__(self, x):
+    initializer = nn.initializers.xavier_uniform()
+    x = x.astype(jnp.float32)
+    x = x.reshape((-1))  # flatten
+    x = FourierBasis(x.shape[-1], self.min_vals, self.max_vals,
+                     order=self.fourier_basis_order).compute_features(x)
+    q_values = nn.Dense(features=self.num_actions,
+                        kernel_init=initializer, use_bias=False)(x)
     return atari_lib.DQNNetworkType(q_values)
 
 

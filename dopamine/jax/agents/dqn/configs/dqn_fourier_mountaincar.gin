@@ -1,0 +1,38 @@
+# Hyperparameters for a simple DQN-style MountainCar agent. The hyperparameters
+# chosen achieve reasonable performance.
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.networks
+import dopamine.replay_memory.circular_replay_buffer
+import flax
+
+JaxDQNAgent.observation_shape = %gym_lib.MOUNTAINCAR_OBSERVATION_SHAPE
+JaxDQNAgent.observation_dtype = %jax_networks.MOUNTAINCAR_OBSERVATION_DTYPE
+JaxDQNAgent.stack_size = %gym_lib.MOUNTAINCAR_STACK_SIZE
+JaxDQNAgent.network = @networks.JaxFourierDQNNetwork
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 1
+JaxDQNAgent.min_replay_history = 500
+JaxDQNAgent.update_period = 4
+JaxDQNAgent.target_update_period = 100
+JaxDQNAgent.epsilon_fn = @dqn_agent.identity_epsilon
+JaxDQNAgent.optimizer = 'adam'
+create_optimizer.learning_rate = 0.001
+create_optimizer.eps = 3.125e-4
+
+JaxFourierDQNNetwork.min_vals = %jax_networks.MOUNTAINCAR_MIN_VALS
+JaxFourierDQNNetwork.max_vals = %jax_networks.MOUNTAINCAR_MAX_VALS
+
+create_gym_environment.environment_name = 'MountainCar'
+create_gym_environment.version = 'v0'
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'jax_dqn'
+create_agent.debug_mode = True
+TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
+Runner.num_iterations = 500
+Runner.training_steps = 1000
+Runner.max_steps_per_episode = 600  # Default max episode length.
+
+OutOfGraphReplayBuffer.replay_capacity = 50000
+OutOfGraphReplayBuffer.batch_size = 128
