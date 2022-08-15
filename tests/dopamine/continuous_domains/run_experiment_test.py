@@ -72,7 +72,7 @@ class RunExperimentTest(parameterized.TestCase):
     gin.bind_parameter('create_continuous_agent.agent_name', 'sac')
 
     runner = run_experiment.create_continuous_runner(
-        self.create_tempdir(), schedule)
+        self.create_tempdir().full_path, schedule)
 
     self.assertIsInstance(runner, expected)
 

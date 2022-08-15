@@ -36,6 +36,7 @@ from dopamine.jax.agents.dqn import dqn_agent
 # collision with the short name import (continuous_networks) above.
 import dopamine.labs.sac_from_pixels.continuous_networks
 # pylint: enable=unused-import
+from dopamine.metrics import statistics_instance
 from dopamine.replay_memory import circular_replay_buffer
 import flax
 from flax import linen as nn
@@ -281,7 +282,8 @@ class SACAgent(dqn_agent.JaxDQNAgent):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False,
-               seed=None):
+               seed=None,
+               collector_allowlist=('tensorboard')):
     r"""Initializes the agent and constructs the necessary components.
 
     Args:
@@ -321,6 +323,8 @@ class SACAgent(dqn_agent.JaxDQNAgent):
         (for instance, only the network parameters).
       seed: int, a seed for SAC's internal RNG, used for initialization and
         sampling actions.
+      collector_allowlist: list of str, if using CollectorDispatcher, this can
+        be used to specify which Collectors to log to.
     """
     assert isinstance(observation_shape, tuple)
     # If we're performing hard updates, we force the smoothing coefficient to 1.
@@ -381,6 +385,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     self.summary_writer = summary_writer
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
+    self._collector_allowlist = collector_allowlist
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
@@ -528,10 +533,19 @@ class SACAgent(dqn_agent.JaxDQNAgent):
             self.training_steps > 0 and
             self.training_steps % self.summary_writing_frequency == 0):
 
+          statistics = []
           for k in train_returns:
             if k.startswith('Losses') or k.startswith('Values'):
               self.summary_writer.scalar(k, train_returns[k],
                                          self.training_steps)
+              if hasattr(self, 'collector_dispatcher'):
+                statistics.append(
+                    statistics_instance.StatisticsInstance(
+                        k, train_returns[k].to_py(),
+                        step=self.training_steps))
+          if hasattr(self, 'collector_dispatcher'):
+            self.collector_dispatcher.write(
+                statistics, collector_allowlist=self._collector_allowlist)
           self.summary_writer.flush()
         self._maybe_sync_weights()
     self.training_steps += 1

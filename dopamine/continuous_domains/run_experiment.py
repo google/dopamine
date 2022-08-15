@@ -25,6 +25,8 @@ from dopamine.jax.agents.sac import sac_agent
 # pylint: disable=unused-import
 from dopamine.labs.sac_from_pixels import deepmind_control_lib
 # pylint: enable=unused-import
+from dopamine.metrics import collector_dispatcher
+from dopamine.metrics import statistics_instance
 from flax.metrics import tensorboard
 import gin
 from gym import spaces
@@ -161,6 +163,32 @@ class ContinuousRunner(base_run_experiment.Runner):
                                   summary_writer=self._summary_writer)
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)
 
+    # Create a collector dispatcher for metrics reporting.
+    self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
+        self._base_dir)
+    set_collector_dispatcher_fn = getattr(
+        self._agent, 'set_collector_dispatcher', None)
+    if callable(set_collector_dispatcher_fn):
+      set_collector_dispatcher_fn(self._collector_dispatcher)
+
+  @property
+  def _use_legacy_logger(self):
+    if not hasattr(self, '_legacy_logger_enabled'):
+      return True
+    return self._legacy_logger_enabled
+
+  @property
+  def _has_collector_dispatcher(self):
+    if not hasattr(self, '_collector_dispatcher'):
+      return False
+    return True
+
+  @property
+  def _fine_grained_print_to_console(self):
+    if not hasattr(self, '_fine_grained_print_to_console_enabled'):
+      return True
+    return self._fine_grained_print_to_console_enabled
+
   def _save_tensorboard_summaries(self, iteration,
                                   num_episodes_train,
                                   average_reward_train,
@@ -228,6 +256,18 @@ class ContinuousTrainRunner(ContinuousRunner):
     num_episodes_train, average_reward_train, average_steps_per_second = (
         self._run_train_phase(statistics))
 
+    if self._has_collector_dispatcher:
+      self._collector_dispatcher.write([
+          statistics_instance.StatisticsInstance('Train/NumEpisodes',
+                                                 num_episodes_train,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Train/AverageReturns',
+                                                 average_reward_train,
+                                                 iteration),
+          statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
+                                                 average_steps_per_second,
+                                                 iteration),
+      ])
     self._save_tensorboard_summaries(iteration, num_episodes_train,
                                      average_reward_train,
                                      average_steps_per_second)
