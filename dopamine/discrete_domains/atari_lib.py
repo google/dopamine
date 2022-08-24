@@ -201,7 +201,7 @@ class RainbowNetwork(tf.keras.Model):
     self.num_atoms = num_atoms
     self.support = support
     def kernel_initializer():
-      tf.keras.initializers.VarianceScaling(
+      return tf.keras.initializers.VarianceScaling(
           scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
@@ -264,8 +264,9 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     # We need the activation function during `call`, therefore set the field.
     self.activation_fn = tf.keras.activations.relu
     def kernel_initializer():
-      self.kernel_initializer = tf.keras.initializers.VarianceScaling(
+      return tf.keras.initializers.VarianceScaling(
           scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
+    self.kernel_initializer = kernel_initializer
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
         32, [8, 8], strides=4, padding='same', activation=self.activation_fn,
@@ -320,7 +321,7 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     if not hasattr(self, 'dense_quantile'):
       self.dense_quantile = tf.keras.layers.Dense(
           state_vector_length, activation=self.activation_fn,
-          kernel_initializer=self.kernel_initializer)
+          kernel_initializer=self.kernel_initializer())
     quantile_net = self.dense_quantile(quantile_net)
     x = tf.multiply(state_net_tiled, quantile_net)
     x = self.dense1(x)
