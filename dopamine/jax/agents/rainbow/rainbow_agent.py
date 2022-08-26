@@ -429,7 +429,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
                 [statistics_instance.StatisticsInstance(
-                    'Loss', mean_loss.to_py(), step=self.training_steps),
+                    'Loss', onp.asarray(mean_loss), step=self.training_steps),
                  ],
                 collector_allowlist=self._collector_allowlist)
       if self.training_steps % self.target_update_period == 0:

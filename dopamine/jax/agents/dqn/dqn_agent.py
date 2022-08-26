@@ -511,7 +511,7 @@ class JaxDQNAgent(object):
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
                 [statistics_instance.StatisticsInstance(
-                    'Loss', loss.to_py(), step=self.training_steps),
+                    'Loss', onp.asarray(loss), step=self.training_steps),
                  ],
                 collector_allowlist=self._collector_allowlist)
       if self.training_steps % self.target_update_period == 0:

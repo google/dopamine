@@ -541,7 +541,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
               if hasattr(self, 'collector_dispatcher'):
                 statistics.append(
                     statistics_instance.StatisticsInstance(
-                        k, train_returns[k].to_py(),
+                        k, onp.asarray(train_returns[k]),
                         step=self.training_steps))
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
