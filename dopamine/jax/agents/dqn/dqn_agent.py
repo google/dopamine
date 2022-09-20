@@ -227,7 +227,7 @@ class JaxDQNAgent(object):
                seed=None,
                loss_type='mse',
                preprocess_fn=None,
-               collector_allowlist=('tensorboard')):
+               collector_allowlist=('tensorboard',)):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -652,4 +652,4 @@ class JaxDQNAgent(object):
     self.collector_dispatcher = collector_dispatcher
     # Ensure we have a collector allowlist defined.
     if not hasattr(self, '_collector_allowlist'):
-      self._collector_allowlist = ('tensorboard')
+      self._collector_allowlist = ('tensorboard',)
