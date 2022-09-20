@@ -32,7 +32,7 @@ install_requires = [
     'gin-config >= 0.3.0',
     'absl-py >= 0.9.0',
     'opencv-python >= 3.4.8.29',
-    'gym[atari] >= 0.13.1',
+    'gym <= 0.25.2',
     'flax >= 0.2.0',
     'jax >= 0.1.72',
     'jaxlib >= 0.1.51',
@@ -49,7 +49,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='4.0.5',
+    version='4.0.6',
     description=dopamine_description,
     long_description=long_description,
     long_description_content_type='text/markdown',
