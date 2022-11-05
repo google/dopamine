@@ -302,7 +302,9 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       self._replay.set_priority(self.replay_elements['indices'],
                                 jnp.sqrt(loss + 1e-10))
 
-    if self.summary_writer is not None:
+    if (self.summary_writer is not None and
+        self.training_steps > 0 and
+        self.training_steps % self.summary_writing_frequency == 0):
       with self.summary_writer.as_default():
         tf.summary.scalar('CrossEntropyLoss', mean_loss,
                           step=self.training_steps)
