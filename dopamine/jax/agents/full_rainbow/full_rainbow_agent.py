@@ -44,6 +44,12 @@ import optax
 import tensorflow as tf
 
 
+@gin.configurable
+def zero_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
+                 unused_epsilon):
+  return 0.0
+
+
 @functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 10, 11))
 def select_action(network_def, params, state, rng, num_actions, eval_mode,
                   epsilon_eval, epsilon_train, epsilon_decay_period,
@@ -238,7 +244,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
             noisy=self._noisy,
             dueling=self._dueling,
             distributional=self._distributional),
-        epsilon_fn=dqn_agent.identity_epsilon if self._noisy else epsilon_fn,
+        epsilon_fn=zero_epsilon if self._noisy else epsilon_fn,
         summary_writer=summary_writer,
         seed=seed,
         preprocess_fn=preprocess_fn)
