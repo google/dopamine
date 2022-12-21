@@ -126,7 +126,7 @@ class OutOfGraphReplayBuffer(object):
       replay_capacity: int, number of transitions to keep in memory.
       batch_size: int.
       update_horizon: int, length of update ('n' in n-step update).
-      gamma: int, the discount factor.
+      gamma: float, the discount factor.
       max_sample_attempts: int, the maximum number of attempts allowed to
         get a sample.
       extra_storage_types: list of ReplayElements defining the type of the extra
