@@ -85,6 +85,7 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
   def __init__(self,
                num_actions,
                data_augmentation=False,
+               mse_loss=False,
                summary_writer=None,
                network=networks.FullRainbowNetwork,
                seed=None):
@@ -95,6 +96,7 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     Args:
       num_actions: int, number of actions the agent can take at any state.
       data_augmentation: bool, whether to use data augmentation.
+      mse_loss: bool, mse loss function.
       summary_writer: SummaryWriter object, for outputting training statistics.
       network: flax.linen Module, neural network used by the agent initialized
         by shape in _create_network below. See
@@ -109,6 +111,7 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
         seed=seed)
     logging.info('\t data_augmentation: %s', data_augmentation)
     self._data_augmentation = data_augmentation
+    self._mse_loss = mse_loss
     logging.info('\t data_augmentation: %s', data_augmentation)
     # Preprocessing during training and evaluation can be possibly different,
     # for example, when using data augmentation during training.
@@ -141,7 +144,7 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
          self.replay_elements['action'], next_states,
          self.replay_elements['reward'], self.replay_elements['terminal'],
          loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._rng)
+         self._distributional, self._mse_loss, self._rng)
 
     if self._replay_scheme == 'prioritized':
       self._replay.set_priority(self.replay_elements['indices'],

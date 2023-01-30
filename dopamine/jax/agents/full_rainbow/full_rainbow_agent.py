@@ -80,10 +80,12 @@ def get_q_values(model, states, rng):
   return model(states, key=rng).q_values
 
 
-@functools.partial(jax.jit, static_argnums=(0, 3, 12, 13, 14))
+@functools.partial(jax.jit, static_argnames=('network_def', 'optimizer',
+                                             'cumulative_gamma', 'double_dqn',
+                                             'distributional', 'mse_loss'))
 def train(network_def, online_params, target_params, optimizer, optimizer_state,
           states, actions, next_states, rewards, terminals, loss_weights,
-          support, cumulative_gamma, double_dqn, distributional, rng):
+          support, cumulative_gamma, double_dqn, distributional, mse_loss, rng):
   """Run a training step."""
 
   # Split the current rng into 2 for updating the rng after this call
@@ -112,7 +114,9 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
       q_values = get_q_values(q_online, states, rng)
       q_values = jnp.squeeze(q_values)
       replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
-      loss = jax.vmap(losses.huber_loss)(target, replay_chosen_q)
+
+      loss = losses.mse_loss if mse_loss else losses.huber_loss
+      loss = jax.vmap(loss)(target, replay_chosen_q)
 
     mean_loss = jnp.mean(loss_multipliers * loss)
     return mean_loss, loss
@@ -177,6 +181,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
                dueling=True,
                double_dqn=True,
                distributional=True,
+               mse_loss=False,
                num_updates_per_train_step=1,
                network=networks.FullRainbowNetwork,
                num_atoms=51,
@@ -195,6 +200,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       dueling: bool, Whether to use dueling network architecture or not.
       double_dqn: bool, Whether to use Double DQN or not.
       distributional: bool, whether to use distributional RL or not.
+      mse_loss: bool, mse loss function.
       num_updates_per_train_step: int, Number of gradient updates every training
         step. Defaults to 1.
       network: flax.linen Module, neural network used by the agent initialized
@@ -221,6 +227,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     logging.info('\t noisy_networks: %s', noisy)
     logging.info('\t dueling_dqn: %s', dueling)
     logging.info('\t distributional: %s', distributional)
+    logging.info('\t mse_loss: %d', mse_loss)
     logging.info('\t num_atoms: %d', num_atoms)
     logging.info('\t replay_scheme: %s', replay_scheme)
     logging.info('\t num_updates_per_train_step: %d',
@@ -235,6 +242,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     self._noisy = noisy
     self._dueling = dueling
     self._distributional = distributional
+    self._mse_loss = mse_loss
     self._num_updates_per_train_step = num_updates_per_train_step
 
     super().__init__(
@@ -295,7 +303,7 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
          self.replay_elements['action'], next_states,
          self.replay_elements['reward'], self.replay_elements['terminal'],
          loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._rng)
+         self._distributional, self._mse_loss, self._rng)
 
     if self._replay_scheme == 'prioritized':
       # Rainbow and prioritized replay are parametrized by an exponent
