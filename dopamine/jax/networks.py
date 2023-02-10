@@ -348,7 +348,7 @@ class NoisyNetwork(nn.Module):
     rng_key: jax.interpreters.xla.DeviceArray, key for JAX RNG.
     eval_mode: bool, whether to turn off noise during evaluation.
   """
-  rng_key: jax.interpreters.xla.DeviceArray
+  rng_key: jax.Array
   eval_mode: bool = False
 
   @staticmethod
