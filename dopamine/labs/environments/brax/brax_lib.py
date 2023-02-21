@@ -40,7 +40,7 @@ class BraxEnv(object):
 
   @property
   def observation_space(self) -> onp.ndarray:
-    return self._state.obs.shape
+    return self._state.obs.shape  # pytype: disable=bad-return-type  # jax-ndarray
 
   @property
   def action_space(self) -> int:
@@ -58,7 +58,7 @@ class BraxEnv(object):
     self.game_over = False
     self._rng, rng = jax.random.split(self._rng)
     self._state = self.env.reset(rng=rng)
-    return self._state.obs
+    return self._state.obs  # pytype: disable=bad-return-type  # jax-ndarray
 
   def step(self, action) -> Tuple[onp.ndarray, onp.ndarray, bool,
                                   Mapping[Any, Any]]:
