@@ -1,0 +1,17 @@
+include 'dopamine/labs/atari_100k/configs/DrQ_eps.gin'
+
+import dopamine.labs.redo.recycled_atari100k_rainbow_agent
+
+create_agent_recycled.agent_name = 'atari100k'
+create_runner_recycled.max_episode_eval = True
+get_mask_updater.mode = 'dense'
+# Empty list allows all.
+JaxDQNAgent.collector_allowlist = []
+JaxDQNAgent.summary_writing_frequency = 50_000
+CollectorDispatcher.collectors = ['console']
+RecycledAtari100kRainbowAgent.network = 'nature'
+
+# changing it to have 10 points of evaluation
+Runner.num_iterations = 10
+Runner.training_steps = 10000  # agent steps
+BaseRecycler.reset_end_step = 400_000

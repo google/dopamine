@@ -1,0 +1,13 @@
+include 'dopamine/jax/agents/rainbow/configs/rainbow.gin'
+
+import dopamine.labs.redo.recycled_rainbow_agent
+
+Runner.num_iterations = 40
+create_agent_recycled.agent_name = 'rainbow'
+# Empty list allows all.
+JaxDQNAgent.collector_allowlist = []
+JaxRainbowAgent.summary_writing_frequency = 50_000
+CollectorDispatcher.collectors = ['console']
+RecycledRainbowAgent.network = 'nature'
+
+RecycledRainbowAgent.num_updates_per_train_step = 1

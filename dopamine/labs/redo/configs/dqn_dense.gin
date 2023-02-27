@@ -1,0 +1,18 @@
+include 'dopamine/jax/agents/dqn/configs/dqn.gin'
+
+import dopamine.labs.redo.recycled_dqn_agents
+import dopamine.labs.redo.weight_recyclers
+
+Runner.num_iterations = 40
+create_agent_recycled.agent_name = 'dqn'
+# Empty list allows all.
+JaxDQNAgent.collector_allowlist = []
+JaxDQNAgent.summary_writing_frequency = 50_000
+CollectorDispatcher.collectors = ['console']
+RecycledDQNAgent.network = 'nature'
+RecycledDQNAgent.num_updates_per_train_step = 1
+
+NeuronRecyclerScheduled.score_type = 'redo'
+NeuronRecyclerScheduled.recycle_rate = 0.3
+
+BaseRecycler.reset_end_step = 2_500_000

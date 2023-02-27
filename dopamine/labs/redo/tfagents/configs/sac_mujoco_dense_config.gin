@@ -1,0 +1,17 @@
+# Config to run SAC training for dense on mujoco environments.
+
+train_eval.env_name = 'Humanoid-v2'
+train_eval.initial_collect_steps = 10000
+train_eval.num_iterations = 500_000  # 500K
+train_eval.width = 1.0
+train_eval.weight_decay = 0.
+train_eval.weights_update_per_interaction = 1
+# If provided used in training
+train_eval.learning_rate_overwrite = None
+
+SparseSacAgent.reset_mode = None
+SparseSacAgent.reset_freq = 1000
+SparseSacAgent.reset_frac = 0.0
+
+train_eval.heavy_priming = False
+train_eval.heavy_priming_num_iterations = 100000
