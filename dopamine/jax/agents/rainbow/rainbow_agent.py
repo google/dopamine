@@ -316,7 +316,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
 
     self._rng, self.action = select_action(self.network_def,
                                            self.online_params,
-                                           self.state,
+                                           self.preprocess_fn(self.state),
                                            self._rng,
                                            self.num_actions,
                                            self.eval_mode,
