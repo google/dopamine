@@ -1,0 +1,43 @@
+# Hyperparameters follow Hessel et al. (2018), except for sticky_actions,
+# which was False (not using sticky actions) in the original paper.
+import dopamine.jax.agents.full_rainbow.full_rainbow_agent
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.labs.offline_rl.fixed_replay
+import dopamine.labs.offline_rl.jax.networks
+import dopamine.labs.offline_rl.jax.offline_rainbow_agent
+
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 3
+JaxDQNAgent.min_replay_history = 1000  # agent steps
+# update_period=1 is a sane default for offline RL.
+JaxDQNAgent.update_period = 1
+JaxDQNAgent.epsilon_eval = 0.001
+JaxDQNAgent.optimizer = 'adam'
+JaxDQNAgent.summary_writing_frequency = 2500
+
+JaxFullRainbowAgent.dueling = True
+JaxFullRainbowAgent.double_dqn = True
+JaxFullRainbowAgent.num_atoms = 51
+JaxFullRainbowAgent.replay_scheme = 'uniform'
+JaxFullRainbowAgent.vmax = 10.
+
+# Note these parameters are different from C51's.
+create_optimizer.learning_rate = 0.0000625
+create_optimizer.eps = 0.000015
+
+JaxFullRainbowAgent.network = @networks.ParameterizedRainbowNetwork
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Sticky actions with probability 0.25, as suggested by (Machado et al., 2017).
+atari_lib.create_atari_environment.sticky_actions = True
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'return_conditioned_bc'
+Runner.num_iterations = 200
+Runner.training_steps = 62_500  # agent steps
+Runner.evaluation_steps = 125000  # agent steps
+Runner.max_steps_per_episode = 27000  # agent steps
+
+JaxFixedReplayBuffer.replay_capacity = 50000
+JaxFixedReplayBuffer.batch_size = 32
