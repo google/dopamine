@@ -60,7 +60,7 @@ def get_mock_batch(action_shape: Tuple[int, ...],
           np.stack([mock_sampling_prob for _ in range(batch_size)], axis=0))
 
 
-def create_agent(action_shape: Union[Tuple[int, ...], int] = 4,
+def create_agent(action_shape: Union[Tuple[int, ...], int] = 4,  # pytype: disable=annotation-type-mismatch  # numpy-scalars
                  eval_mode: bool = False,
                  min_replay_history: int = 10_000,
                  update_period: int = 4,
@@ -228,7 +228,7 @@ class SacAgentTest(parameterized.TestCase):
   def testAgentTrainsWithImageObservations(self):
     action_shape = (4,)
     stack_size = 4
-    agent = create_agent(
+    agent = create_agent(  # pytype: disable=wrong-arg-types  # numpy-scalars
         action_shape=action_shape,
         observation_shape=IMG_OBSERVATION_SHAPE,
         observation_dtype=np.uint8,

@@ -149,7 +149,7 @@ def train(network_def: nn.Module,
     target_q_value = jnp.squeeze(
         jnp.minimum(target_q_value_1, target_q_value_2))
 
-    alpha_value = jnp.exp(log_alpha)
+    alpha_value = jnp.exp(log_alpha)  # pytype: disable=wrong-arg-types  # numpy-scalars
     log_prob = target_outputs.actor.log_probability
     target = reward_scale_factor * reward + cumulative_gamma * (
         target_q_value - alpha_value * log_prob) * (1. - terminal)
@@ -168,7 +168,7 @@ def train(network_def: nn.Module,
         frozen_params, state, sampled_action, method=network_def.critic)
     no_grad_q_value = jnp.squeeze(
         jnp.minimum(q_value_no_grad_1, q_value_no_grad_2))
-    alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))
+    alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))  # pytype: disable=wrong-arg-types  # numpy-scalars
     policy_loss = jnp.mean(alpha_value * action_log_prob - no_grad_q_value)
 
     # J(\alpha) from equation (18) in paper.
