@@ -1,0 +1,51 @@
+# Data Regularlized-Q (DrQ) form Kostrikov et al. (2020)
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.networks
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.labs.atari_100k.spr_networks
+import dopamine.labs.atari_100k.spr_agent
+
+# Parameters specific to DrQ are higlighted by comments
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 10    # DrQ (instead of 3)
+JaxDQNAgent.min_replay_history = 2000    # DrQ (instead of 20000)
+JaxDQNAgent.update_period = 1    # DrQ (rather than 4)
+JaxDQNAgent.target_update_period = 1    # DrQ (rather than 8000)
+JaxDQNAgent.epsilon_train = 0.00
+JaxDQNAgent.epsilon_eval = 0.001
+JaxDQNAgent.epsilon_decay_period = 2001    # DrQ
+JaxDQNAgent.optimizer = 'adam'
+
+SPRAgent.noisy = True
+SPRAgent.dueling = True
+SPRAgent.double_dqn = True
+SPRAgent.distributional = True
+SPRAgent.num_atoms = 51
+SPRAgent.log_every = 100
+SPRAgent.num_updates_per_train_step = 2
+SPRAgent.spr_weight = 5
+SPRAgent.jumps = 5
+SPRAgent.data_augmentation = True
+SPRAgent.replay_scheme = 'prioritized'
+SPRAgent.network    = @spr_networks.SPRNetwork
+SPRAgent.epsilon_fn = @jax.agents.dqn.dqn_agent.linearly_decaying_epsilon
+
+# Note these parameters are from DER (van Hasselt et al, 2019)
+create_optimizer.learning_rate = 0.0001
+create_optimizer.eps = 0.00015
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Atari 100K benchmark doesn't use sticky actions.
+atari_lib.create_atari_environment.sticky_actions = False
+AtariPreprocessing.terminal_on_life_loss = True
+Runner.num_iterations = 1
+Runner.training_steps = 100000  # agent steps
+MaxEpisodeEvalRunner.num_eval_episodes = 100  # agent episodes
+Runner.max_steps_per_episode = 27000  # agent steps
+
+DeterministicOutOfGraphPrioritizedTemporalReplayBuffer.replay_capacity = 200000
+DeterministicOutOfGraphPrioritizedTemporalReplayBuffer.batch_size = 32
+DeterministicOutOfGraphTemporalReplayBuffer.replay_capacity = 200000
+DeterministicOutOfGraphTemporalReplayBuffer.batch_size = 32
