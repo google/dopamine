@@ -631,11 +631,11 @@ class JaxDQNAgent(object):
       else:  # Load pre-linen checkpoint.
         self.online_params = core.FrozenDict({
             'params': checkpoints.convert_pre_linen(
-                bundle_dictionary['online_params']).unfreeze()
+                core.unfreeze(bundle_dictionary['online_params']))
         })
         self.target_network_params = core.FrozenDict({
             'params': checkpoints.convert_pre_linen(
-                bundle_dictionary['target_params']).unfreeze()
+                core.unfreeze(bundle_dictionary['target_params']))
         })
       # We load the optimizer state or recreate it with the new online weights.
       if 'optimizer_state' in bundle_dictionary:
