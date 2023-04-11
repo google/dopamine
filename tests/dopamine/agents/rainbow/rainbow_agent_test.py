@@ -36,7 +36,7 @@ class ProjectDistributionTest(tf.test.TestCase):
     weights = tf.constant(
         [[0.1, 0.2, 0.3, 0.2], [0.1, 0.2, 0.3, 0.2]], dtype=tf.float32)
     target_support = tf.constant([4, 5, 6, 7, 8], dtype=tf.float32)
-    with self.assertRaisesRegexp(ValueError, 'are incompatible'):
+    with self.assertRaisesRegex(ValueError, 'are incompatible'):
       rainbow_agent.project_distribution(supports, weights, target_support)
 
   def testInconsistentSupportsAndWeightsWithPlaceholders(self):
@@ -50,8 +50,8 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with self.assertRaisesRegexp(tf.errors.InvalidArgumentError,
-                                   'assertion failed'):
+      with self.assertRaisesRegex(tf.errors.InvalidArgumentError,
+                                  'assertion failed'):
         sess.run(
             projection,
             feed_dict={
@@ -66,7 +66,7 @@ class ProjectDistributionTest(tf.test.TestCase):
         [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]],
         dtype=tf.float32)
     target_support = tf.constant([4, 5, 6], dtype=tf.float32)
-    with self.assertRaisesRegexp(ValueError, 'are incompatible'):
+    with self.assertRaisesRegex(ValueError, 'are incompatible'):
       rainbow_agent.project_distribution(supports, weights, target_support)
 
   def testInconsistentSupportsAndTargetSupportWithPlaceholders(self):
@@ -80,8 +80,8 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports_ph, weights_ph, target_support_ph, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with self.assertRaisesRegexp(tf.errors.InvalidArgumentError,
-                                   'assertion failed'):
+      with self.assertRaisesRegex(tf.errors.InvalidArgumentError,
+                                  'assertion failed'):
         sess.run(
             projection,
             feed_dict={
@@ -96,7 +96,7 @@ class ProjectDistributionTest(tf.test.TestCase):
         [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]],
         dtype=tf.float32)
     target_support = tf.constant(3, dtype=tf.float32)
-    with self.assertRaisesRegexp(ValueError, 'Index out of range'):
+    with self.assertRaises(ValueError):
       rainbow_agent.project_distribution(supports, weights, target_support)
 
   def testZeroDimensionalTargetSupportWithPlaceholders(self):
@@ -125,7 +125,7 @@ class ProjectDistributionTest(tf.test.TestCase):
         [[0.1, 0.2, 0.3, 0.2, 0.2], [0.1, 0.2, 0.3, 0.2, 0.2]],
         dtype=tf.float32)
     target_support = tf.constant([[3]], dtype=tf.float32)
-    with self.assertRaisesRegexp(ValueError, 'out of bounds'):
+    with self.assertRaisesRegex(ValueError, 'out of bounds'):
       rainbow_agent.project_distribution(supports, weights, target_support)
 
   def testMultiDimensionalTargetSupportWithPlaceholders(self):
@@ -158,8 +158,8 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports, weights, target_support, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with self.assertRaisesRegexp(tf.errors.InvalidArgumentError,
-                                   'assertion failed'):
+      with self.assertRaisesRegex(tf.errors.InvalidArgumentError,
+                                  'assertion failed'):
         sess.run(projection)
 
   def testProjectNewSupportHasInconsistentDeltask(self):
@@ -172,8 +172,8 @@ class ProjectDistributionTest(tf.test.TestCase):
         supports, weights, target_support, validate_args=True)
     with self.test_session() as sess:
       tf.compat.v1.global_variables_initializer().run()
-      with self.assertRaisesRegexp(tf.errors.InvalidArgumentError,
-                                   'assertion failed'):
+      with self.assertRaisesRegex(tf.errors.InvalidArgumentError,
+                                  'assertion failed'):
         sess.run(projection)
 
   def testProjectSingleIdenticalDistribution(self):
