@@ -26,26 +26,53 @@ from absl import logging
 from dopamine.discrete_domains import run_experiment
 from dopamine.discrete_domains import train as base_train
 from dopamine.labs.atari_100k import atari_100k_rainbow_agent
+from dopamine.labs.atari_100k import atari_100k_runner
 from dopamine.labs.atari_100k import eval_run_experiment
+from dopamine.labs.atari_100k import spr_agent
 import numpy as np
 import tensorflow as tf
 
+.learning.deepmind.xmanager2.client.google as xm  # pylint: disable=unused-import
+
+
 
 FLAGS = flags.FLAGS
-AGENTS = ['DER', 'DrQ', 'OTRainbow', 'DrQ_eps']
+AGENTS = ['DER', 'DrQ', 'OTRainbow', 'DrQ_eps', 'SPR']
 
 # flags are defined when importing run_xm_preprocessing
 flags.DEFINE_enum('agent', 'DER', AGENTS, 'Name of the agent.')
 flags.DEFINE_integer('run_number', 1, 'Run number.')
 flags.DEFINE_boolean('max_episode_eval', True,
                      'Whether to use `MaxEpisodeEvalRunner` or not.')
+flags.DEFINE_boolean(
+    'legacy_runner',
+    False,
+    (
+        'Whether to use the legacy MaxEpisodeEvalRunner.'
+        ' This runner does not run parallel evaluation environments and may be'
+        ' easier to understand, but will be noticeably slower. It also does not'
+        ' guarantee that a precise number of training steps will be collected,'
+        ' which clashes with the technical definition of Atari 100k.'
+    ),
+)
 
 
-def create_agent(sess,  # pylint: disable=unused-argument
-                 environment,
-                 seed,
-                 summary_writer=None):
+def create_agent(
+    sess,  # pylint: disable=unused-argument
+    environment,
+    seed,
+    agent_name: str,
+    summary_writer=None,
+):
   """Helper function for creating full rainbow-based Atari 100k agent."""
+
+  if agent_name == 'SPR':
+    return spr_agent.SPRAgent(
+        num_actions=environment.action_space.n,
+        seed=seed,
+        summary_writer=summary_writer,
+    )
+
   return atari_100k_rainbow_agent.Atari100kRainbowAgent(
       num_actions=environment.action_space.n,
       seed=seed,
@@ -73,13 +100,17 @@ def main(unused_argv):
   gin_files, gin_bindings = FLAGS.gin_files, FLAGS.gin_bindings
   run_experiment.load_gin_configs(gin_files, gin_bindings)
   # Set the Jax agent seed using the run number
-  create_agent_fn = functools.partial(create_agent, seed=FLAGS.run_number)
-  if FLAGS.max_episode_eval:
+  create_agent_fn = functools.partial(
+      create_agent, seed=FLAGS.run_number, agent_name=FLAGS.agent
+  )
+  if FLAGS.legacy_runner:
     runner_fn = eval_run_experiment.MaxEpisodeEvalRunner
     logging.info('Using MaxEpisodeEvalRunner for evaluation.')
     runner = runner_fn(base_dir, create_agent_fn)
   else:
-    runner = run_experiment.Runner(base_dir, create_agent_fn)
+    runner = atari_100k_runner.DataEfficientAtariRunner(
+        base_dir, create_agent_fn
+    )
   runner.run_experiment()
 
 

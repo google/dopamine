@@ -1,0 +1,64 @@
+
+# Self-Predictive Representations (Schwarzer et al, 2021)
+# Major changes from standard Rainbow other than the SPR loss itself include:
+#  * No separate target network (update period 1),
+#  * 10-step returns (instead of 3)
+#  * Data augmentation (as in DrQ, Kostrikov et al 2020)
+#  * Replay every step, and two train updates per step
+#    * total replay ratio increased by factor of 8
+# These are roughly a hybrid of DrQ and Rainbow's hyperparameters.
+
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.networks
+import dopamine.discrete_domains.checkpointer
+import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer
+import dopamine.labs.atari_100k.spr_networks
+import dopamine.labs.atari_100k.spr_agent
+import dopamine.labs.atari_100k.atari_100k_rainbow_agent
+
+# Parameters specific to DrQ are higlighted by comments
+JaxDQNAgent.gamma = 0.99
+JaxDQNAgent.update_horizon = 10    # DrQ (instead of 3)
+JaxDQNAgent.min_replay_history = 2000    # DrQ (instead of 20000)
+JaxDQNAgent.update_period = 1    # DrQ (rather than 4)
+JaxDQNAgent.target_update_period = 1    # DrQ (rather than 8000)
+JaxDQNAgent.epsilon_train = 0.00
+JaxDQNAgent.epsilon_eval = 0.001
+JaxDQNAgent.epsilon_decay_period = 2001    # DrQ
+JaxDQNAgent.optimizer = 'adam'
+
+JaxFullRainbowAgent.noisy = True
+JaxFullRainbowAgent.dueling = True
+JaxFullRainbowAgent.double_dqn = True
+JaxFullRainbowAgent.distributional = True
+JaxFullRainbowAgent.num_atoms = 51
+JaxFullRainbowAgent.num_updates_per_train_step = 2
+JaxFullRainbowAgent.replay_scheme = 'prioritized'
+JaxFullRainbowAgent.network = @dopamine.labs.atari_100k.spr_networks.SPRNetwork
+Atari100kRainbowAgent.data_augmentation = True
+dopamine.labs.atari_100k.spr_agent.SPRAgent.epsilon_fn = @jax.agents.dqn.dqn_agent.linearly_decaying_epsilon
+dopamine.labs.atari_100k.spr_agent.SPRAgent.spr_weight = 5
+dopamine.labs.atari_100k.spr_agent.SPRAgent.jumps = 5
+
+# Note these parameters are from DER (van Hasselt et al, 2019)
+create_optimizer.learning_rate = 0.0001
+create_optimizer.eps = 0.00015
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+# Atari 100K benchmark doesn't use sticky actions.
+atari_lib.create_atari_environment.sticky_actions = False
+AtariPreprocessing.terminal_on_life_loss = True
+Runner.num_iterations = 10
+Runner.training_steps = 10000  # agent steps
+MaxEpisodeEvalRunner.num_eval_episodes = 100  # agent episodes
+Runner.max_steps_per_episode = 27000  # agent steps
+
+dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer.PrioritizedJaxSubsequenceParallelEnvReplayBuffer.replay_capacity = 1000000
+dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer.PrioritizedJaxSubsequenceParallelEnvReplayBuffer.batch_size = 32
+dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer.JaxSubsequenceParallelEnvReplayBuffer.replay_capacity = 1000000
+dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer.JaxSubsequenceParallelEnvReplayBuffer.batch_size = 32
+
+Checkpointer.keep_every = 1

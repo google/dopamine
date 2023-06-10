@@ -50,6 +50,85 @@ def preprocess_atari_inputs(x):
 identity_preprocess_fn = lambda x: x
 
 
+@gin.configurable
+class Stack(nn.Module):
+  """Stack of pooling and convolutional blocks with residual connections."""
+  num_ch: int
+  num_blocks: int
+  use_max_pooling: bool = True
+
+  @nn.compact
+  def __call__(self, x):
+    initializer = nn.initializers.xavier_uniform()
+    conv_out = nn.Conv(
+        features=self.num_ch,
+        kernel_size=(3, 3),
+        strides=1,
+        kernel_init=initializer,
+        padding='SAME')(
+            x)
+    if self.use_max_pooling:
+      conv_out = nn.max_pool(
+          conv_out, window_shape=(3, 3), padding='SAME', strides=(2, 2))
+
+    for _ in range(self.num_blocks):
+      block_input = conv_out
+      conv_out = nn.relu(conv_out)
+      conv_out = nn.Conv(features=self.num_ch, kernel_size=(3, 3),
+                         strides=1, padding='SAME')(conv_out)
+      conv_out = nn.relu(conv_out)
+      conv_out = nn.Conv(features=self.num_ch, kernel_size=(3, 3),
+                         strides=1, padding='SAME')(conv_out)
+      conv_out += block_input
+
+    return conv_out
+
+
+@gin.configurable
+class ImpalaEncoder(nn.Module):
+  """Impala Network which also outputs penultimate representation layers."""
+  nn_scale: int = 1
+  stack_sizes: Tuple[int, ...] = (16, 32, 32)
+  num_blocks: int = 2
+
+  def setup(self):
+    self._stacks = [
+        Stack(num_ch=stack_size * self.nn_scale,
+              num_blocks=self.num_blocks) for stack_size in self.stack_sizes
+    ]
+
+  @nn.compact
+  def __call__(self, x):
+    for stack in self._stacks:
+      x = stack(x)
+    return nn.relu(x)
+
+
+### DQN Network with ImpalaEncoder ###
+@gin.configurable
+class ImpalaDQNNetwork(nn.Module):
+  """The convolutional network used to compute the agent's Q-values."""
+  num_actions: int
+  inputs_preprocessed: bool = False
+  nn_scale: int = 1
+
+  def setup(self):
+    self.encoder = ImpalaEncoder(nn_scale=self.nn_scale)
+
+  @nn.compact
+  def __call__(self, x):
+    initializer = nn.initializers.xavier_uniform()
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
+    x = self.encoder(x)
+    x = x.reshape((-1))  # flatten
+    x = nn.Dense(features=512, kernel_init=initializer)(x)
+    x = nn.relu(x)
+    q_values = nn.Dense(features=self.num_actions,
+                        kernel_init=initializer)(x)
+    return atari_lib.DQNNetworkType(q_values)
+
+
 ### DQN Networks ###
 @gin.configurable
 class NatureDQNNetwork(nn.Module):
