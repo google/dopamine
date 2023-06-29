@@ -342,7 +342,8 @@ class JaxDQNAgent(object):
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
-    self.online_params = self.network_def.init(rng, x=self.state)
+    state = self.preprocess_fn(self.state)
+    self.online_params = self.network_def.init(rng, x=state)
     self.optimizer = create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
     self.target_network_params = self.online_params
