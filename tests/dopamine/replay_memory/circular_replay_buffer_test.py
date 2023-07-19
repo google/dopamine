@@ -647,12 +647,18 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     # will be raised.
     with self.assertRaises(tf.errors.NotFoundError):
       memory.load('/does/not/exist', '3')
-    self.assertNotEqual(memory._store['observation'], self._test_observation)
-    self.assertNotEqual(memory._store['action'], self._test_action)
-    self.assertNotEqual(memory._store['reward'], self._test_reward)
-    self.assertNotEqual(memory._store['terminal'], self._test_terminal)
-    self.assertNotEqual(memory.add_count, self._test_add_count)
-    self.assertNotEqual(memory.invalid_range, self._test_invalid_range)
+    self.assertFalse(
+        np.array_equal(memory._store['observation'], self._test_observation)
+    )
+    self.assertFalse(np.array_equal(memory._store['action'], self._test_action))
+    self.assertFalse(np.array_equal(memory._store['reward'], self._test_reward))
+    self.assertFalse(
+        np.array_equal(memory._store['terminal'], self._test_terminal)
+    )
+    self.assertFalse(np.array_equal(memory.add_count, self._test_add_count))
+    self.assertFalse(
+        np.array_equal(memory.invalid_range, self._test_invalid_range)
+    )
 
   def testPartialLoadFails(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
@@ -660,11 +666,15 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         replay_capacity=5,
         batch_size=BATCH_SIZE)
-    self.assertNotEqual(memory._store['observation'], self._test_observation)
-    self.assertNotEqual(memory._store['action'], self._test_action)
-    self.assertNotEqual(memory._store['reward'], self._test_reward)
-    self.assertNotEqual(memory._store['terminal'], self._test_terminal)
-    self.assertNotEqual(memory.add_count, self._test_add_count)
+    self.assertFalse(
+        np.array_equal(memory._store['observation'], self._test_observation)
+    )
+    self.assertFalse(np.array_equal(memory._store['action'], self._test_action))
+    self.assertFalse(np.array_equal(memory._store['reward'], self._test_reward))
+    self.assertFalse(
+        np.array_equal(memory._store['terminal'], self._test_terminal)
+    )
+    self.assertFalse(np.array_equal(memory.add_count, self._test_add_count))
     numpy_arrays = {
         'observation': self._test_observation,
         'action': self._test_action,
@@ -682,12 +692,18 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
       memory.load(self._test_subdir, '3')
     # Since we are missing the reward file, it should not have loaded any of
     # the other files.
-    self.assertNotEqual(memory._store['observation'], self._test_observation)
-    self.assertNotEqual(memory._store['action'], self._test_action)
-    self.assertNotEqual(memory._store['reward'], self._test_reward)
-    self.assertNotEqual(memory._store['terminal'], self._test_terminal)
-    self.assertNotEqual(memory.add_count, self._test_add_count)
-    self.assertNotEqual(memory.invalid_range, self._test_invalid_range)
+    self.assertFalse(
+        np.array_equal(memory._store['observation'], self._test_observation)
+    )
+    self.assertFalse(np.array_equal(memory._store['action'], self._test_action))
+    self.assertFalse(np.array_equal(memory._store['reward'], self._test_reward))
+    self.assertFalse(
+        np.array_equal(memory._store['terminal'], self._test_terminal)
+    )
+    self.assertFalse(np.array_equal(memory.add_count, self._test_add_count))
+    self.assertFalse(
+        np.array_equal(memory.invalid_range, self._test_invalid_range)
+    )
 
   def testLoad(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
@@ -695,12 +711,18 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         replay_capacity=5,
         batch_size=BATCH_SIZE)
-    self.assertNotEqual(memory._store['observation'], self._test_observation)
-    self.assertNotEqual(memory._store['action'], self._test_action)
-    self.assertNotEqual(memory._store['reward'], self._test_reward)
-    self.assertNotEqual(memory._store['terminal'], self._test_terminal)
-    self.assertNotEqual(memory.add_count, self._test_add_count)
-    self.assertNotEqual(memory.invalid_range, self._test_invalid_range)
+    self.assertFalse(
+        np.array_equal(memory._store['observation'], self._test_observation)
+    )
+    self.assertFalse(np.array_equal(memory._store['action'], self._test_action))
+    self.assertFalse(np.array_equal(memory._store['reward'], self._test_reward))
+    self.assertFalse(
+        np.array_equal(memory._store['terminal'], self._test_terminal)
+    )
+    self.assertFalse(np.array_equal(memory.add_count, self._test_add_count))
+    self.assertFalse(
+        np.array_equal(memory.invalid_range, self._test_invalid_range)
+    )
     store_prefix = '$store$_'
     numpy_arrays = {
         store_prefix + 'observation': self._test_observation,
@@ -851,13 +873,26 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         replay_capacity=5,
         batch_size=BATCH_SIZE)
-    self.assertNotEqual(replay.memory._store['observation'],
-                        self._test_observation)
-    self.assertNotEqual(replay.memory._store['action'], self._test_action)
-    self.assertNotEqual(replay.memory._store['reward'], self._test_reward)
-    self.assertNotEqual(replay.memory._store['terminal'], self._test_terminal)
-    self.assertNotEqual(replay.memory.add_count, self._test_add_count)
-    self.assertNotEqual(replay.memory.invalid_range, self._test_invalid_range)
+    self.assertFalse(
+        np.array_equal(
+            replay.memory._store['observation'], self._test_observation
+        )
+    )
+    self.assertFalse(
+        np.array_equal(replay.memory._store['action'], self._test_action)
+    )
+    self.assertFalse(
+        np.array_equal(replay.memory._store['reward'], self._test_reward)
+    )
+    self.assertFalse(
+        np.array_equal(replay.memory._store['terminal'], self._test_terminal)
+    )
+    self.assertFalse(
+        np.array_equal(replay.memory.add_count, self._test_add_count)
+    )
+    self.assertFalse(
+        np.array_equal(replay.memory.invalid_range, self._test_invalid_range)
+    )
     store_prefix = '$store$_'
     numpy_arrays = {
         store_prefix + 'observation': self._test_observation,
