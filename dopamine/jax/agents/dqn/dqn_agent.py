@@ -14,10 +14,6 @@
 # limitations under the License.
 """Compact implementation of a DQN agent in JAx."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import collections
 import functools
 import inspect
@@ -32,8 +28,6 @@ from dopamine.jax import networks
 from dopamine.metrics import statistics_instance
 from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
-from flax import core
-from flax.training import checkpoints
 import gin
 import jax
 import jax.numpy as jnp
@@ -626,18 +620,8 @@ class JaxDQNAgent(object):
     if bundle_dictionary is not None:
       self.state = bundle_dictionary['state']
       self.training_steps = bundle_dictionary['training_steps']
-      if isinstance(bundle_dictionary['online_params'], core.FrozenDict):
-        self.online_params = bundle_dictionary['online_params']
-        self.target_network_params = bundle_dictionary['target_params']
-      else:  # Load pre-linen checkpoint.
-        self.online_params = core.FrozenDict({
-            'params': checkpoints.convert_pre_linen(
-                core.unfreeze(bundle_dictionary['online_params']))
-        })
-        self.target_network_params = core.FrozenDict({
-            'params': checkpoints.convert_pre_linen(
-                core.unfreeze(bundle_dictionary['target_params']))
-        })
+      self.online_params = bundle_dictionary['online_params']
+      self.target_network_params = bundle_dictionary['target_params']
       # We load the optimizer state or recreate it with the new online weights.
       if 'optimizer_state' in bundle_dictionary:
         self.optimizer_state = bundle_dictionary['optimizer_state']
