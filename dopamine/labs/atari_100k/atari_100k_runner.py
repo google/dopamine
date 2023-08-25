@@ -24,6 +24,9 @@ from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import iteration_statistics
 from dopamine.discrete_domains import run_experiment
 from dopamine.labs.atari_100k import normalization_utils
+from dopamine.metrics import collector_dispatcher
+from dopamine.metrics import statistics_instance
+
 import gin
 import jax
 import numpy as np
@@ -101,6 +104,13 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     self._agent.cache_train_state()
 
     self.log_normalized_scores = log_normalized_scores
+    # Create a collector dispatcher for metrics reporting.
+    self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
+        self._base_dir)
+    set_collector_dispatcher_fn = getattr(
+        self._agent, 'set_collector_dispatcher', None)
+    if callable(set_collector_dispatcher_fn):
+      set_collector_dispatcher_fn(self._collector_dispatcher)
 
   def _run_one_phase(self,
                      envs,
@@ -455,6 +465,23 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     num_episodes_eval, average_reward_eval, norm_score_eval = (
         self._run_eval_phase(statistics)
     )
+    self._collector_dispatcher.write([
+        statistics_instance.StatisticsInstance(
+            'Train/NumEpisodes', num_episodes_train, iteration
+        ),
+        statistics_instance.StatisticsInstance(
+            'Train/AverageReturns', average_reward_train, iteration
+        ),
+        statistics_instance.StatisticsInstance(
+            'Train/AverageStepsPerSecond', average_steps_per_second, iteration
+        ),
+        statistics_instance.StatisticsInstance(
+            'Eval/NumEpisodes', num_episodes_eval, iteration
+        ),
+        statistics_instance.StatisticsInstance(
+            'Eval/AverageReturns', average_reward_eval, iteration
+        ),
+    ])
     self._save_tensorboard_summaries(
         iteration,
         num_episodes_train,
