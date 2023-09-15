@@ -17,7 +17,7 @@
 import itertools
 import time
 from typing import Optional, Sequence, Tuple, Union
-
+from absl import logging
 from dopamine.discrete_domains import atari_lib
 from flax import linen as nn
 import gin
@@ -92,6 +92,11 @@ class ImpalaEncoder(nn.Module):
   num_blocks: int = 2
 
   def setup(self):
+    logging.info('\t Creating %s ...', self.__class__.__name__)
+    logging.info('\t Creating ImpalaDQNNetwork ...')
+    logging.info('\t num_blocks: %s', self.num_blocks)
+    logging.info('\t nn_scale: %s', self.nn_scale)
+    logging.info('\t stack_sizes: %s', self.stack_sizes)
     self._stacks = [
         Stack(num_ch=stack_size * self.nn_scale,
               num_blocks=self.num_blocks) for stack_size in self.stack_sizes
