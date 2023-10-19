@@ -31,7 +31,7 @@ from dopamine.labs.offline_rl.jax import offline_dr3_with_validation_agent
 from dopamine.labs.offline_rl.jax import offline_rainbow_agent
 from dopamine.labs.offline_rl.jax import return_conditioned_bc_agent
 from dopamine.labs.offline_rl.jax import run_experiment
-from jax.config import config as jax_config
+from jax import config as jax_config
 
 AGENTS = [
     'jax_dqn', 'jax_dr3', 'jax_rainbow', 'jax_return_conditioned_bc',
