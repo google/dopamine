@@ -91,7 +91,10 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   """Run the training step."""
   def loss_fn(params, target):
     def q_online(state):
-      return network_def.apply(params, state)
+      try:
+        return network_def.apply(params, state)
+      except errors.ApplyScopeInvalidVariablesStructureError as e:
+        return network_def.apply(params["params"], state)
 
     q_values = jax.vmap(q_online)(states).q_values
     q_values = jnp.squeeze(q_values)
