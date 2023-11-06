@@ -33,6 +33,7 @@ from dopamine.metrics import statistics_instance
 from dopamine.replay_memory import circular_replay_buffer
 from dopamine.replay_memory import prioritized_replay_buffer
 from flax import core
+from flax import errors
 from flax.training import checkpoints
 import gin
 import jax
@@ -90,7 +91,10 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   """Run the training step."""
   def loss_fn(params, target):
     def q_online(state):
-      return network_def.apply(params, state)
+      try:
+        return network_def.apply(params, state)
+      except errors.ApplyScopeInvalidVariablesStructureError as e:
+        return network_def.apply(params["params"], state)
 
     q_values = jax.vmap(q_online)(states).q_values
     q_values = jnp.squeeze(q_values)
@@ -100,7 +104,10 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     return jnp.mean(jax.vmap(losses.mse_loss)(target, replay_chosen_q))
 
   def q_target(state):
-    return network_def.apply(target_params, state)
+    try:
+      return network_def.apply(target_params, state)
+    except errors.ApplyScopeInvalidVariablesStructureError as e:
+      return network_def.apply(target_params["params"], state)
 
   target = target_q(q_target,
                     next_states,
