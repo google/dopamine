@@ -43,7 +43,7 @@ flags.DEFINE_multi_string(
     'gin_bindings', [],
     'Gin bindings to override the values set in the config files '
     '(e.g. "DQNAgent.epsilon_train=0.1",'
-    '      "create_environment.game_name="Pong"").')
+    '      "atari_lib.create_atari_environment.game_name="Pong"").')
 
 
 FLAGS = flags.FLAGS
