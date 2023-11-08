@@ -134,8 +134,17 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   # Modified
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
-    self.dense2.reset_states()
-    self.last_layer.reset_states()
+    session = K.get_session()
+    layer = self.last_layer
+    for v in layer.__dict__:
+      v_arg = getattr(layer,v)
+      if hasattr(v_arg,'initializer'):
+         initializer_method = getattr(v_arg, 'initializer')
+         initializer_method.run(session=session)
+         print('reinitializing layer {}.{}'.format(layer.name, v))
+
+
+  
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
     x = tf.cast(state, tf.float32)
