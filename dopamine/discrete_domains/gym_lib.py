@@ -128,22 +128,14 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
       self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms,
                                               name='fully_connected')
 
+   # Modified: saving the initial weights to load them after
+    model.save_weights('model.h5')
+
   # Modified
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
-
-    self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=self.activation_fn,
-                                        name='fully_connected')
-    
-    self.dense2 = tf.keras.layers.Dense(512, activation=self.activation_fn,
-                                        name='fully_connected')
-    if self.num_atoms is None:
-      self.last_layer = tf.keras.layers.Dense(self.num_actions,
-                                              name='fully_connected')
-    else:
-      self.last_layer = tf.keras.layers.Dense(self.num_actions * self.num_atoms,
-                                              name='fully_connected')
+    self.dense2.reset_states()
+    self.last_layer.reset_states()
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
     x = tf.cast(state, tf.float32)
