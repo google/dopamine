@@ -135,16 +135,16 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
     initializers = [tf.keras.initializers.glorot_uniform(), tf.keras.initializers.Zeros()]
-    dense1.set_weights([np.array(initializers[0]((4, 512)), dtype=np.float32),
+    self.dense1.set_weights([np.array(initializers[0]((4, 512)), dtype=np.float32),
                    np.array(initializers[1]((512,)), dtype=np.float32)])
-    dense2.set_weights([np.array(initializers[0]((512, 512)), dtype=np.float32),
+    self.dense2.set_weights([np.array(initializers[0]((512, 512)), dtype=np.float32),
                        np.array(initializers[1]((512,)), dtype=np.float32)])
     
     if num_atoms is None:
-        last_layer.set_weights([np.array(initializers[0]((self.num_actions, 512)), dtype=np.float32),
+        self.last_layer.set_weights([np.array(initializers[0]((self.num_actions, 512)), dtype=np.float32),
                                 np.array(initializers[1]((self.num_actions,)), dtype=np.float32)])
     else:
-        last_layer.set_weights([np.array(initializers[0]((self.num_actions * num_atoms, 512)), dtype=np.float32),
+        self.last_layer.set_weights([np.array(initializers[0]((self.num_actions * num_atoms, 512)), dtype=np.float32),
                                 np.array(initializers[1]((self.num_actions * num_atoms,)), dtype=np.float32)])
 
   
