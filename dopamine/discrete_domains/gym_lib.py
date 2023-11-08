@@ -130,7 +130,11 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   # Modified
   def reset_last_layer(self):
     """Reset the last layer of the network."""
-    self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms,
+    if self.num_atoms is None:
+      self.last_layer = tf.keras.layers.Dense(self.num_actions,
+                                              name='fully_connected')
+    else:
+      self.last_layer = tf.keras.layers.Dense(self.num_actions * self.num_atoms,
                                               name='fully_connected')
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
