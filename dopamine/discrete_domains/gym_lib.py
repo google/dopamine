@@ -114,6 +114,7 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     self.num_atoms = num_atoms
     self.min_vals = min_vals
     self.max_vals = max_vals
+    self.activation_fn = activation_fn
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
@@ -129,7 +130,10 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
 
   # Modified
   def reset_last_layer(self):
-    """Reset the last layer of the network."""
+    """Reset the last layer(s) of the network."""
+    
+    self.dense2 = tf.keras.layers.Dense(512, activation=self.activation_fn,
+                                        name='fully_connected')
     if self.num_atoms is None:
       self.last_layer = tf.keras.layers.Dense(self.num_actions,
                                               name='fully_connected')
