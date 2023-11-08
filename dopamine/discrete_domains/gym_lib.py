@@ -145,7 +145,7 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
                                 np.array(initializers[1]((self.num_actions,)), dtype=np.float32)])
     else:
         last_layer.set_weights([np.array(initializers[0]((self.num_actions * num_atoms, 512)), dtype=np.float32),
-                                np.array(initializers[1]((self.num_actions * num_atoms,), dtype=np.float32)])
+                                np.array(initializers[1]((self.num_actions * num_atoms,)), dtype=np.float32)])
 
   
   def call(self, state):
