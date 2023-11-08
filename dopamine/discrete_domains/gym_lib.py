@@ -139,9 +139,9 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   # Modified
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
-    self.reset_layers(self.dense1)
-    self.reset_layers(self.dense2)
-    self.reset_layers(self.last_layer)
+    self.reset_layer(self.dense1)
+    self.reset_layer(self.dense2)
+    self.reset_layer(self.last_layer)
 
   
   def call(self, state):
