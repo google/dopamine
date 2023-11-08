@@ -606,6 +606,7 @@ class Runner(object):
       # Modified
       if iteration % 25 == 0:
         self._agent.ResetLastLayers()
+        sys.stdout.write("PATRIK")
       statistics = self._run_one_iteration(iteration)
       if self._use_legacy_logger:
         self._log_experiment(iteration, statistics)
