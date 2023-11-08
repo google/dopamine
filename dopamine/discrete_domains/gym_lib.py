@@ -134,13 +134,14 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   # Modified
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
-    layer = self.last_layer
-    for v in layer.__dict__:
-      v_arg = getattr(layer,v)
-      if hasattr(v_arg,'initializer'):
-         initializer_method = getattr(v_arg, 'initializer')
-         initializer_method.run()
-         print('reinitializing layer {}.{}'.format(layer.name, v))
+    self.dense1.set_weights([tf.keras.initializers.glorot_uniform()(self.dense1.get_weights()[0]),
+                         tf.keras.initializers.zeros()(self.dense1.get_weights()[1])])
+    
+    self.dense2.set_weights([tf.keras.initializers.glorot_uniform()(self.dense2.get_weights()[0]),
+                         tf.keras.initializers.zeros()(self.dense2.get_weights()[1])])
+    
+    self.last_layer.set_weights([tf.keras.initializers.glorot_uniform()(self.last_layer.get_weights()[0]),
+                         tf.keras.initializers.zeros()(self.last_layer.get_weights()[1])])
 
   
   def call(self, state):
