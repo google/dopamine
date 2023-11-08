@@ -133,7 +133,7 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     """Reset the last layer(s) of the network."""
 
     self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
+    self.dense1 = tf.keras.layers.Dense(512, activation=self.activation_fn,
                                         name='fully_connected')
     
     self.dense2 = tf.keras.layers.Dense(512, activation=self.activation_fn,
