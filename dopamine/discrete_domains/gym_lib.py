@@ -132,20 +132,16 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     # model.save_weights('model.h5')
 
   # Modified
+  def reset_layer(self, layer):
+    a,b = layer.get_weights()[0].shape
+    layer.set_weights([np.random.randn(a,b), np.ones(layer.get_weights()[1].shape)])
+    
+  # Modified
   def reset_last_layer(self):
     """Reset the last layer(s) of the network."""
-    initializers = [tf.keras.initializers.glorot_uniform(), tf.keras.initializers.Zeros()]
-    self.dense1.set_weights([np.array(initializers[0]((4, 512)), dtype=np.float32),
-                   np.array(initializers[1]((512,)), dtype=np.float32)])
-    self.dense2.set_weights([np.array(initializers[0]((512, 512)), dtype=np.float32),
-                       np.array(initializers[1]((512,)), dtype=np.float32)])
-    
-    if num_atoms is None:
-        self.last_layer.set_weights([np.array(initializers[0]((self.num_actions, 512)), dtype=np.float32),
-                                np.array(initializers[1]((self.num_actions,)), dtype=np.float32)])
-    else:
-        self.last_layer.set_weights([np.array(initializers[0]((self.num_actions * num_atoms, 512)), dtype=np.float32),
-                                np.array(initializers[1]((self.num_actions * num_atoms,)), dtype=np.float32)])
+    self.reset_layers(self.dense1)
+    self.reset_layers(self.dense2)
+    self.reset_layers(self.last_layer)
 
   
   def call(self, state):
