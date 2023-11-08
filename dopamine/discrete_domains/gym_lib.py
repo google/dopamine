@@ -129,7 +129,7 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
                                               name='fully_connected')
 
    # Modified: saving the initial weights to load them after
-    model.save_weights('model.h5')
+    # model.save_weights('model.h5')
 
   # Modified
   def reset_last_layer(self):
