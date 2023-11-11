@@ -102,7 +102,7 @@ class DQNAgent(object):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False,
-               reset_period=100):
+               reset_period=500):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -184,8 +184,7 @@ class DQNAgent(object):
     self.training_steps = 0
     self.optimizer = optimizer
     #Modified
-    self.optimizer_state = [self.optimizer.iterations, self.optimizer.lr,self.optimizer.beta_1,
-                   self.optimizer.beta_2, self.optimizer.decay]
+    self.optimizer_state = self.optimizer.variables()
 
     self.reset_period = reset_period
     tf.compat.v1.disable_v2_behavior()
