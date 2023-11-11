@@ -101,7 +101,8 @@ class DQNAgent(object):
                    centered=True),
                summary_writer=None,
                summary_writing_frequency=500,
-               allow_partial_reload=False):
+               allow_partial_reload=False,
+               reset_period=10000):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -182,6 +183,11 @@ class DQNAgent(object):
     self.eval_mode = eval_mode
     self.training_steps = 0
     self.optimizer = optimizer
+    #Modified
+    self.optimizer_state = [self.optimizer.iterations, self.optimizer.lr,self.optimizer.beta_1,
+                   self.optimizer.beta_2, self.optimizer.decay]
+
+    self.reset_period = reset_period
     tf.compat.v1.disable_v2_behavior()
     if isinstance(summary_writer, str):  # If we're passing in directory name.
       self.summary_writer = tf.compat.v1.summary.FileWriter(summary_writer)
@@ -209,6 +215,8 @@ class DQNAgent(object):
       self._replay = self._build_replay_buffer(use_staging)
 
       self._build_networks()
+
+      self.online_convnet_state = self.online_convnet.get_weights()
 
       self._train_op = self._build_train_op()
       self._sync_qt_ops = self._build_sync_op()
@@ -460,7 +468,21 @@ class DQNAgent(object):
       if self.training_steps % self.target_update_period == 0:
         self._sess.run(self._sync_qt_ops)
 
+      if self.training_steps % self.reset_period == 0:
+        print("Resetting last layers...")
+        self.ResetWeights()
+
     self.training_steps += 1
+
+  def ResetWeights(self):
+    #Reset the weights of the last layer
+    self.online_convnet.set_weights(self.online_convnet_state)
+    self.target_convnet.set_weights(self.online_convnet_state)
+    self._sess.run(tf.compat.v1.global_variables_initializer())
+    #Reset the optimizer state
+    optimizer_reset = tf.compat.v1.variables_initializer(self.optimizer_state)
+    self._sess.run(optimizer_reset)
+
 
   def _record_observation(self, observation):
     """Records an observation and update state.
