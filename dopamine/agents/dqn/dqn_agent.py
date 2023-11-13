@@ -479,7 +479,10 @@ class DQNAgent(object):
     # self.target_convnet.set_weights(self.online_convnet_state)
     for layer in self.online_convnet.layers:
       print(layer.name)
+      for l in layer:
+        print(l.name)
       if layer.name == "last_layer":
+        print("Resetting last layer!")
         layer.kernel.initializer.run(session=self._sess)
         layer.bias.initializer.run(session=self._sess)
 
