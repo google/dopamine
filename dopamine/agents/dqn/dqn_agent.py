@@ -487,7 +487,7 @@ class DQNAgent(object):
     #self.online_convnet.last_layer.kernel.initializer.run(session=self._sess)
     #self.online_convnet.last_layer.bias.initializer.run(session=self._sess)
 
-    self._sess.run(tf.compat.v1.global_variables_initializer())
+    # self._sess.run(tf.compat.v1.global_variables_initializer())
     # Reset the optimizer state
     optimizer_reset = tf.compat.v1.variables_initializer(self.optimizer_state)
     self._sess.run(optimizer_reset)
