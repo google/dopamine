@@ -183,7 +183,7 @@ class DQNAgent(object):
     self.eval_mode = eval_mode
     self.training_steps = 0
     self.optimizer = optimizer
-    #Modified
+    # Modified
     self.optimizer_state = self.optimizer.variables()
 
     self.reset_period = reset_period
@@ -474,14 +474,13 @@ class DQNAgent(object):
     self.training_steps += 1
 
   def ResetWeights(self):
-    #Reset the weights of the last layer
+    # Reset the weights of the last layer
     self.online_convnet.set_weights(self.online_convnet_state)
-    self.target_convnet.set_weights(self.online_convnet_state)
+    # self.target_convnet.set_weights(self.online_convnet_state)
     self._sess.run(tf.compat.v1.global_variables_initializer())
-    #Reset the optimizer state
+    # Reset the optimizer state
     optimizer_reset = tf.compat.v1.variables_initializer(self.optimizer_state)
     self._sess.run(optimizer_reset)
-
 
   def _record_observation(self, observation):
     """Records an observation and update state.
