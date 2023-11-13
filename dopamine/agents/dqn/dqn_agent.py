@@ -478,12 +478,18 @@ class DQNAgent(object):
     # self.online_convnet.set_weights(self.online_convnet_state)
     # self.target_convnet.set_weights(self.online_convnet_state)
     for net in self.online_convnet.layers:
-      print(net.last_layer)
+      # print(net.last_layer)
       print("Resetting last layer!")
       net.last_layer.kernel.initializer.run(session=self._sess)
       net.last_layer.bias.initializer.run(session=self._sess)
-      print(dir(net))
 
+      print("Resetting dense1 layer!")
+      net.dense1.kernel.initializer.run(session=self._sess)
+      net.dense1.bias.initializer.run(session=self._sess)
+
+      print("Resetting dense2 layer!")
+      net.dense2.kernel.initializer.run(session=self._sess)
+      net.dense2.bias.initializer.run(session=self._sess)
     # self.online_convnet.last_layer.kernel.initializer.run(session=self._sess)
     # self.online_convnet.last_layer.bias.initializer.run(session=self._sess)
 
