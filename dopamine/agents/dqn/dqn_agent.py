@@ -102,7 +102,10 @@ class DQNAgent(object):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False,
-               reset_period=500):
+               reset_period=500,
+               reset_dense1=False,
+               reset_dense2=False,
+               reset_last_layer=False):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -187,6 +190,10 @@ class DQNAgent(object):
     self.optimizer_state = self.optimizer.variables()
 
     self.reset_period = reset_period
+    self.reset_dense1 = reset_dense1
+    self.reset_dense2 = reset_dense2
+    self.reset_last_layer = reset_last_layer
+
     tf.compat.v1.disable_v2_behavior()
     if isinstance(summary_writer, str):  # If we're passing in directory name.
       self.summary_writer = tf.compat.v1.summary.FileWriter(summary_writer)
@@ -477,18 +484,24 @@ class DQNAgent(object):
     # Reset the weights of the last layer
     # self.online_convnet.set_weights(self.online_convnet_state)
     # self.target_convnet.set_weights(self.online_convnet_state)
-    # print(net.last_layer)
-    print("Resetting last layer!")
-    self.online_convnet.layers[-1].last_layer.kernel.initializer.run(session=self._sess)
-    self.online_convnet.layers[-1].last_layer.bias.initializer.run(session=self._sess)
 
-    print("Resetting dense1 layer!")
-    self.online_convnet.layers[-1].dense1.kernel.initializer.run(session=self._sess)
-    self.online_convnet.layers[-1].dense1.bias.initializer.run(session=self._sess)
+    print("Resetting weights...")
+    if self.reset_last_layer:
+      print("Resetting last layer!")
+      self.online_convnet.layers[-1].last_layer.kernel.initializer.run(session=self._sess)
+      self.online_convnet.layers[-1].last_layer.bias.initializer.run(session=self._sess)
 
-    print("Resetting dense2 layer!")
-    self.online_convnet.layers[-1].dense2.kernel.initializer.run(session=self._sess)
-    self.online_convnet.layers[-1].dense2.bias.initializer.run(session=self._sess)
+    if self.reset_dense1:
+      print("Resetting dense1 layer!")
+      self.online_convnet.layers[-1].dense1.kernel.initializer.run(session=self._sess)
+      self.online_convnet.layers[-1].dense1.bias.initializer.run(session=self._sess)
+
+    if self.reset_dense2:
+      print("Resetting dense2 layer!")
+      self.online_convnet.layers[-1].dense2.kernel.initializer.run(session=self._sess)
+      self.online_convnet.layers[-1].dense2.bias.initializer.run(session=self._sess)
+
+    # Legacy code
     # self.online_convnet.last_layer.kernel.initializer.run(session=self._sess)
     # self.online_convnet.last_layer.bias.initializer.run(session=self._sess)
 
