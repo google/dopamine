@@ -482,7 +482,7 @@ class DQNAgent(object):
       print("Resetting last layer!")
       net.last_layer.kernel.initializer.run(session=self._sess)
       net.last_layer.bias.initializer.run(session=self._sess)
-      for layer in net:
+      for layer in net.layers:
         print(layer.name)
 
     # self.online_convnet.last_layer.kernel.initializer.run(session=self._sess)
