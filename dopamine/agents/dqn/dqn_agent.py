@@ -475,7 +475,9 @@ class DQNAgent(object):
 
   def ResetWeights(self):
     # Reset the weights of the last layer
-    self.online_convnet.set_weights(self.online_convnet_state)
+    # self.online_convnet.set_weights(self.online_convnet_state)
+    self.online_convnet.last_layer.kernel.initializer.run(session=self._sess)
+    self.online_convnet.last_layer.bias.initializer.run(session=self._sess)
     # self.target_convnet.set_weights(self.online_convnet_state)
     self._sess.run(tf.compat.v1.global_variables_initializer())
     # Reset the optimizer state
