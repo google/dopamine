@@ -102,8 +102,10 @@ class DeterministicSumTree(sum_tree.SumTree):
 
   def sample(self, rng, query_value=None):
     """Samples an element from the sum tree."""
-    rng = jax.device_put(rng, jax.devices('cpu')[0])
-    nodes = jax.device_put(jnp.asarray(self.nodes), jax.devices('cpu')[0])
+    rng = jax.device_put(rng, jax.local_devices(backend='cpu')[0])
+    nodes = jax.device_put(
+        jnp.asarray(self.nodes), jax.local_devices(backend='cpu')[0]
+    )
     query_value = (
         jax.random.uniform(rng) if query_value is None else query_value)
     query_value *= self._total_priority()
@@ -118,8 +120,10 @@ class DeterministicSumTree(sum_tree.SumTree):
     if self._total_priority() == 0.0:
       raise ValueError('Cannot sample from an empty sum tree.')
 
-    rng = jax.device_put(rng, jax.devices('cpu')[0])
-    nodes = jax.device_put(jnp.asarray(self.nodes), jax.devices('cpu')[0])
+    rng = jax.device_put(rng, jax.local_devices(backend='cpu')[0])
+    nodes = jax.device_put(
+        jnp.asarray(self.nodes), jax.local_devices(backend='cpu')[0]
+    )
     indices = parallel_stratified_sample(
         rng, nodes, np.arange(batch_size), batch_size, self.depth
     )
