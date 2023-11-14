@@ -105,7 +105,8 @@ class DQNAgent(object):
                reset_period=500,
                reset_dense1=False,
                reset_dense2=False,
-               reset_last_layer=False):
+               reset_last_layer=False,
+               reset_max=3):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -193,6 +194,8 @@ class DQNAgent(object):
     self.reset_dense1 = reset_dense1
     self.reset_dense2 = reset_dense2
     self.reset_last_layer = reset_last_layer
+    self.reset_max = reset_max
+    self.reset_counter = 0
 
     tf.compat.v1.disable_v2_behavior()
     if isinstance(summary_writer, str):  # If we're passing in directory name.
@@ -474,7 +477,8 @@ class DQNAgent(object):
       if self.training_steps % self.target_update_period == 0:
         self._sess.run(self._sync_qt_ops)
 
-      if self.training_steps % self.reset_period == 0:
+      if self.training_steps % self.reset_period == 0\
+              and self.reset_counter < self.reset_max:
         print("Resetting last layers...")
         self.ResetWeights()
 
@@ -484,6 +488,8 @@ class DQNAgent(object):
     # Reset the weights of the last layer
     # self.online_convnet.set_weights(self.online_convnet_state)
     # self.target_convnet.set_weights(self.online_convnet_state)
+    if self.reset_counter >= self.reset_max:
+        return
 
     print("Resetting weights...")
     if self.reset_last_layer:
@@ -509,6 +515,8 @@ class DQNAgent(object):
     # Reset the optimizer state
     optimizer_reset = tf.compat.v1.variables_initializer(self.optimizer_state)
     self._sess.run(optimizer_reset)
+
+    self.reset_counter += 1
 
   def _record_observation(self, observation):
     """Records an observation and update state.

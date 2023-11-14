@@ -604,10 +604,9 @@ class Runner(object):
 
     for iteration in range(self._start_iteration, self._num_iterations):
       # Modified
-      #if iteration % 25 == 0:
-      #  self._agent.ResetLastLayers()
-      #  sys.stdout.write("PATRIK")
-      #  sys.stdout.flush()
+      if iteration % 40 == 0:
+         self._agent.ResetWeights()
+         
       statistics = self._run_one_iteration(iteration)
       if self._use_legacy_logger:
         self._log_experiment(iteration, statistics)
