@@ -102,7 +102,7 @@ class DQNAgent(object):
                summary_writer=None,
                summary_writing_frequency=500,
                allow_partial_reload=False,
-               reset_period=500,
+               reset_period=None,
                reset_dense1=False,
                reset_dense2=False,
                reset_last_layer=False,
@@ -468,8 +468,9 @@ class DQNAgent(object):
       if self.training_steps % self.target_update_period == 0:
         self._sess.run(self._sync_qt_ops)
 
-      if self.training_steps % self.reset_period == 0\
-              and self.reset_counter < self.reset_max:
+      if (self.reset_period is not None and
+              self.training_steps % self.reset_period == 0\
+              and self.reset_counter < self.reset_max):
         print("Resetting last layers...")
         self.ResetWeights()
 
