@@ -248,15 +248,6 @@ class DQNAgent(object):
       self.summary_writer.add_graph(graph=tf.compat.v1.get_default_graph())
     self._sess.run(tf.compat.v1.global_variables_initializer())
 
-  # Modified
-  def ResetLastLayers(self):
-    self.online_convnet.reset_last_layer()
-    self.target_convnet.reset_last_layer()
-    #self._net_outputs = self.online_convnet(self.state_ph)
-    #self._q_argmax = tf.argmax(self._net_outputs.q_values, axis=1)[0]
-    #self._replay_net_outputs = self.online_convnet(self._replay.states)
-    #self._replay_next_target_net_outputs = self.target_convnet(
-     #   self._replay.next_states)
 
   def _create_network(self, name):
     """Builds the convolutional network used to compute the agent's Q-values.
