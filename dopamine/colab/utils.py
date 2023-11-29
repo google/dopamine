@@ -73,6 +73,8 @@ def load_baselines(base_dir, verbose=False):
         if sys.version_info.major >= 3:
           # pylint: disable=unexpected-keyword-arg
           single_agent_data = pickle.load(f, encoding='latin1')
+          for label in single_agent_data.columns:
+              single_agent_data[label]=pd.to_numeric(single_agent_data[label],errors='ignore')
           # pylint: enable=unexpected-keyword-arg
         else:
           single_agent_data = pickle.load(f)
