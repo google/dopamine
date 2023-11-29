@@ -173,7 +173,8 @@ class Runner(object):
                max_steps_per_episode=27000,
                clip_rewards=True,
                use_legacy_logger=True,
-               fine_grained_print_to_console=True):
+               fine_grained_print_to_console=True,
+               reset_period=None):
     """Initialize the Runner object in charge of running a full experiment.
 
     Args:
@@ -233,6 +234,8 @@ class Runner(object):
     self._summary_writer = self._agent.summary_writer
 
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)
+
+    self._reset_period = reset_period
 
     # Create a collector dispatcher for metrics reporting.
     self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
@@ -603,6 +606,11 @@ class Runner(object):
       return
 
     for iteration in range(self._start_iteration, self._num_iterations):
+      # Modified: Check if the reset period is reached, and if so, reset the weights.
+      if (self._reset_period is not None and
+              iteration != 0 and iteration % self._reset_period == 0):
+         self._agent.ResetWeights()
+
       statistics = self._run_one_iteration(iteration)
       if self._use_legacy_logger:
         self._log_experiment(iteration, statistics)

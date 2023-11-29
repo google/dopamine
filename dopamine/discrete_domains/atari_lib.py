@@ -158,6 +158,11 @@ class NatureDQNNetwork(tf.keras.Model):
                                         name='fully_connected')
     self.dense2 = tf.keras.layers.Dense(num_actions, name='fully_connected')
 
+  # Modification
+  def reset_last_layer(self):
+    """Reset the last layer of the network."""
+    self.dense2 = tf.keras.layers.Dense(self.num_actions, name='fully_connected')
+
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input.
 

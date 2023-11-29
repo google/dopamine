@@ -114,6 +114,7 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     self.num_atoms = num_atoms
     self.min_vals = min_vals
     self.max_vals = max_vals
+    self.activation_fn = activation_fn
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
@@ -127,6 +128,22 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
       self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms,
                                               name='fully_connected')
 
+   # Modified: saving the initial weights to load them after
+    # model.save_weights('model.h5')
+
+  # Modified
+  def reset_layer(self, layer):
+    a,b = layer.get_weights()[0].shape
+    layer.set_weights([np.random.randn(a,b), np.ones(layer.get_weights()[1].shape)])
+    
+  # Modified
+  def reset_last_layer(self):
+    """Reset the last layer(s) of the network."""
+    self.reset_layer(self.dense1)
+    self.reset_layer(self.dense2)
+    self.reset_layer(self.last_layer)
+
+  
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
     x = tf.cast(state, tf.float32)
@@ -157,6 +174,10 @@ class CartpoleDQNNetwork(tf.keras.Model):
     super(CartpoleDQNNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
         CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions)
+
+  # Modified
+  def reset_last_layer(self):
+    self.net.reset_last_layer()
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""

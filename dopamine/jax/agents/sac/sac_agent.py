@@ -283,7 +283,8 @@ class SACAgent(dqn_agent.JaxDQNAgent):
                summary_writing_frequency=500,
                allow_partial_reload=False,
                seed=None,
-               collector_allowlist=('tensorboard')):
+               collector_allowlist=('tensorboard'),
+               reset_period=None):
     r"""Initializes the agent and constructs the necessary components.
 
     Args:
@@ -386,6 +387,9 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     self.summary_writing_frequency = summary_writing_frequency
     self.allow_partial_reload = allow_partial_reload
     self._collector_allowlist = collector_allowlist
+
+    # Reset period is used to reset the agent's state every reset_period steps.
+    self.reset_period = reset_period
 
     self._rng = jax.random.PRNGKey(seed)
     state_shape = self.observation_shape + (stack_size,)
