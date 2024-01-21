@@ -25,17 +25,18 @@ from absl import flags
 from absl import logging
 from dopamine.discrete_domains import run_experiment as base_run_experiment
 from dopamine.discrete_domains import train as base_train
+from dopamine.labs.offline_rl.jax import offline_classy_cql_agent
 from dopamine.labs.offline_rl.jax import offline_dqn_agent
 from dopamine.labs.offline_rl.jax import offline_dr3_agent
-from dopamine.labs.offline_rl.jax import offline_dr3_with_validation_agent
 from dopamine.labs.offline_rl.jax import offline_rainbow_agent
 from dopamine.labs.offline_rl.jax import return_conditioned_bc_agent
 from dopamine.labs.offline_rl.jax import run_experiment
 from jax import config as jax_config
 
+
 AGENTS = [
     'jax_dqn', 'jax_dr3', 'jax_rainbow', 'jax_return_conditioned_bc',
-    'jax_dr3_with_validation']
+    'jax_classy_cql']
 
 # flags are defined when importing run_xm_preprocessing
 flags.DEFINE_enum('agent_name', 'jax_dqn', AGENTS, 'Name of the agent.')
@@ -77,8 +78,8 @@ def create_offline_agent(sess,
     agent = offline_rainbow_agent.OfflineJaxRainbowAgent
   elif agent_name == 'jax_return_conditioned_bc':
     agent = return_conditioned_bc_agent.JaxReturnConditionedBCAgent
-  elif agent_name == 'jax_dr3_with_validation':
-    agent = offline_dr3_with_validation_agent.OfflineJaxDR3WithValidationAgent
+  elif agent_name == 'jax_classy_cql':
+    agent = offline_classy_cql_agent.OfflineClassyCQLAgent
   else:
     raise ValueError('{} is not a valid agent name'.format(FLAGS.agent_name))
 

@@ -18,7 +18,7 @@ import collections
 from typing import Tuple
 
 from absl import logging
-from dopamine.discrete_domains import atari_lib
+from dopamine.google.experiments.two_hot import losses as classy_transforms
 from flax import linen as nn
 import gin
 import jax
@@ -26,6 +26,8 @@ import jax.numpy as jnp
 
 
 NetworkType = collections.namedtuple('network', ['q_values', 'representation'])
+ClassyNetworkType = collections.namedtuple(
+    'classy_network', ['q_values', 'logits', 'probabilities', 'representation'])
 
 
 def preprocess_atari_inputs(x):
@@ -228,13 +230,14 @@ class ParameterizedRainbowNetwork(nn.Module):
 
   num_actions: int
   num_atoms: int
-  dueling: bool = True
+  dueling: bool = False
   noisy: bool = False  # No exploration in offline RL, kept for compatibility.
   distributional: bool = True
   inputs_preprocessed: bool = False
   feature_dim: int = 512
   use_impala_encoder: bool = False
   nn_scale: int = 1
+  transform: classy_transforms.HistogramLoss | None = None
 
   def setup(self):
     if self.use_impala_encoder:
@@ -259,7 +262,7 @@ class ParameterizedRainbowNetwork(nn.Module):
     x = nn.Dense(
         features=self.feature_dim * self.nn_scale, kernel_init=initializer
     )(x)
-    x = nn.relu(x)
+    x = representation = nn.relu(x)
 
     if self.dueling:
       adv = nn.Dense(features=self.num_actions * self.num_atoms)(x)
@@ -271,9 +274,12 @@ class ParameterizedRainbowNetwork(nn.Module):
       x = nn.Dense(features=self.num_actions * self.num_atoms)(x)
       logits = x.reshape((self.num_actions, self.num_atoms))
 
-    if self.distributional:
-      probabilities = nn.softmax(logits)
+    probabilities = nn.softmax(logits)
+    if self.transform is not None:
+      q_values = jax.vmap(self.transform.transform_from_probs)(probabilities)
+    else:
       q_values = jnp.sum(support * probabilities, axis=1)
-      return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
-    q_values = jnp.sum(logits, axis=1)  # Sum over all the num_atoms
-    return atari_lib.DQNNetworkType(q_values)
+    if self.distributional:
+      return ClassyNetworkType(
+          q_values, logits, probabilities, representation)
+    return NetworkType(q_values, representation)

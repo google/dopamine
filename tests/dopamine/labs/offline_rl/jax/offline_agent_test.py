@@ -22,10 +22,14 @@ from absl.testing import parameterized
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.labs.offline_rl import fixed_replay
 from dopamine.labs.offline_rl.jax import networks
+from dopamine.labs.offline_rl.jax import offline_classy_cql_agent
 from dopamine.labs.offline_rl.jax import offline_dr3_agent
 import gin
 import jax
 from jax import numpy as jnp
+
+TargetType = offline_classy_cql_agent.TargetType
+ClassyLoss = offline_classy_cql_agent.ClassyLoss
 
 
 class OfflineAgentTest(parameterized.TestCase):
@@ -49,7 +53,8 @@ class OfflineAgentTest(parameterized.TestCase):
         'next_action': jnp.full(batch_size, 0, dtype=jnp.int32),
         'next_reward': jnp.full(batch_size, 1.0, dtype=jnp.float32),
         'terminal': jnp.full(batch_size, 0, dtype=jnp.uint8),
-        'indices': jnp.arange(batch_size, dtype=jnp.int32)
+        'indices': jnp.arange(batch_size, dtype=jnp.int32),
+        'return_to_go': jnp.full(batch_size, 1.0, dtype=jnp.float32),
     }
 
     gin.bind_parameter(
@@ -63,15 +68,21 @@ class OfflineAgentTest(parameterized.TestCase):
       agent_fn = offline_dr3_agent.OfflineJaxDR3Agent
       gin.bind_parameter(
           'JaxDQNAgent.network', networks.JAXDQNNetworkWithRepresentations)
+    elif agent_name == 'classy_cql':
+      agent_fn = offline_classy_cql_agent.OfflineClassyCQLAgent
+      gin.bind_parameter('OfflineClassyCQLAgent.use_tfds', False)
+      gin.bind_parameter('JaxFullRainbowAgent.vmax', 10)
+      gin.bind_parameter('JaxFullRainbowAgent.num_atoms', 51)
     else:
       raise ValueError(f'{agent_name} is a not a valid agent name.')
     return agent_fn
 
-  def test_train_step_updates_weights(self, agent_name='dr3'):
-
+  def _test_train_step_updates_weights(self, agent_name):
     create_agent_fn = self._create_agent_fn(agent_name)
     agent = create_agent_fn(
-        4, 'unused_string', replay_buffer_builder=self.create_replay_buffer)
+        num_actions=4,
+        replay_data_dir='unused_string',
+        replay_buffer_builder=self.create_replay_buffer)
 
     # We skip sampling from the replay buffer with a mock, and set the
     # replay elements directly to the batch we want to learn from.
@@ -88,6 +99,27 @@ class OfflineAgentTest(parameterized.TestCase):
       with self.subTest('param_set_{}'.format(i)):
         self.assertTrue((param1 != param2).any())
 
+  @parameterized.parameters('dr3', 'classy_cql')
+  def test_train_step_updates_weights(self, agent_name):
+    self._test_train_step_updates_weights(agent_name)
+
+  @parameterized.parameters(TargetType.MAXQ, TargetType.SARSA, TargetType.MC)
+  def test_target_type(self, target_type):
+    gin.bind_parameter(
+        'OfflineClassyCQLAgent.target_type', target_type)
+    self._test_train_step_updates_weights('classy_cql')
+
+  @parameterized.parameters(
+      ClassyLoss.HL_GAUSS, ClassyLoss.TWO_HOT, ClassyLoss.SCALAR)
+  def test_hl_loss_type(self, hl_loss_type):
+    gin.bind_parameter(
+        'OfflineClassyCQLAgent.hl_loss_type', hl_loss_type)
+    self._test_train_step_updates_weights('classy_cql')
+
+  def test_impala(self):
+    gin.bind_parameter('ParameterizedRainbowNetwork.use_impala_encoder', True)
+    gin.bind_parameter('offline_rl.jax.networks.ImpalaEncoder.nn_scale', 4)
+    self._test_train_step_updates_weights('classy_cql')
 
 if __name__ == '__main__':
   absltest.main()

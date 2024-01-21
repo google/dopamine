@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Helpers for using RLU Atari datasets for offline RL."""
-
 import rlds
 import tensorflow as tf
 import tensorflow_datasets as tfds
@@ -32,8 +31,9 @@ class BatchToTransition(object):
     self.next_action = next_action
     self.return_to_go = return_to_go
 
-  def create_transitions(self, batch, episode_return=None):
+  def create_transitions(self, batch, rtg_batch=None, episode_return=None):
     """Convert a batch to transition tuple."""
+
     all_states = tf.squeeze(batch[rlds.OBSERVATION], axis=-1)
     all_states = tf.transpose(all_states, perm=[1, 2, 0])
     rewards = batch[rlds.REWARD][self.stack_size-1:-1]
@@ -49,36 +49,43 @@ class BatchToTransition(object):
       transitions['episode_return'] = episode_return
     if self.next_action:
       transitions['next_action'] = batch[rlds.ACTION][self.total_frames - 1]
-    if self.return_to_go:
-      transitions['return_to_go'] = batch['return_to_go'][self.stack_size - 1]
+    if rtg_batch is not None:
+      transitions['return_to_go'] = rtg_batch[self.stack_size - 1]
     return transitions
 
 
-def get_transition_dataset_fn(stack_size, update_horizon=1, gamma=0.99,
-                              return_to_go=False):
+def get_transition_dataset_fn(
+    stack_size, update_horizon=1, gamma=0.99, return_to_go=False
+):
   """Creates a dataset of (s, a, r, s', a') transitions."""
   batch_fn_cls = BatchToTransition(
-      stack_size, update_horizon, gamma, return_to_go=return_to_go)
+      stack_size,
+      update_horizon,
+      gamma,
+      next_action=True,
+      return_to_go=return_to_go,
+  )
 
-  def _add_rtg(episode_data):
-    episode_data['return_to_go'] = tf.cumsum(
-        episode_data[rlds.REWARD], reverse=True)
-    return episode_data
+  def add_rtg(episode, episode_return):
+    scan_func = lambda return_so_far, curr: (return_so_far + curr['reward'],
+                                             episode_return - return_so_far)
+    return_to_go = episode.scan(initial_state=0.0, scan_func=scan_func)
+    return tf.data.Dataset.zip(episode, return_to_go)
 
   def make_transition_dataset(episode_data):
     """Converts an episode of steps to a dataset of custom transitions."""
     # Create a dataset of 2-step sequences with overlap of 1.
     episode = episode_data[rlds.STEPS]
     if return_to_go:
-      episode = episode.map(_add_rtg)
+      episode = add_rtg(episode, episode_data['episode_return'])
     batched_steps = rlds.transformations.batch(
         episode,
         size=stack_size + update_horizon,
         shift=1,
         drop_remainder=True)
     # pylint: disable=g-long-lambda
-    batch_fn = lambda x: batch_fn_cls.create_transitions(
-        x, episode_return=episode_data['episode_return'])
+    batch_fn = lambda x, y=None: batch_fn_cls.create_transitions(
+        x, rtg_batch=y, episode_return=episode_data['episode_return'])
     # pylint: enable=g-long-lambda
     return batched_steps.map(batch_fn,
                              num_parallel_calls=tf.data.AUTOTUNE)
