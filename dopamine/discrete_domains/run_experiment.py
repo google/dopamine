@@ -40,6 +40,7 @@ from dopamine.metrics import statistics_instance
 import gin.tf
 import numpy as np
 import tensorflow as tf
+import tqdm.auto as tqdm
 
 
 def load_gin_configs(gin_files, gin_bindings):
@@ -657,7 +658,11 @@ class Runner(object):
       )
       return
 
-    for iteration in range(self._start_iteration, self._num_iterations):
+    for iteration in tqdm.tqdm(
+        range(self._start_iteration, self._num_iterations),
+        initial=self._start_iteration,
+        total=self._num_iterations,
+    ):
       statistics = self._run_one_iteration(iteration)
       if self._use_legacy_logger:
         self._log_experiment(iteration, statistics)

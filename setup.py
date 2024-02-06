@@ -42,6 +42,7 @@ install_requires = [
     'pandas >= 0.24.2',
     'tf_slim >= 1.0',
     'tensorflow-probability >= 0.13.0',
+    'tqdm >= 4.64.1',
 ]
 
 dopamine_description = (
