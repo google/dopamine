@@ -24,16 +24,22 @@ import tensorflow as tf
 
 
 
-flags.DEFINE_string('base_dir', None,
-                    'Base directory to host all required sub-directories.')
+flags.DEFINE_string(
+    'base_dir', None, 'Base directory to host all required sub-directories.'
+)
 flags.DEFINE_multi_string(
-    'gin_files', [], 'List of paths to gin configuration files (e.g.'
-    '"dopamine/agents/dqn/dqn.gin").')
+    'gin_files',
+    [],
+    'List of paths to gin configuration files (e.g.'
+    '"dopamine/agents/dqn/dqn.gin").',
+)
 flags.DEFINE_multi_string(
-    'gin_bindings', [],
+    'gin_bindings',
+    [],
     'Gin bindings to override the values set in the config files '
     '(e.g. "DQNAgent.epsilon_train=0.1",'
-    '      "create_environment.game_name="Pong"").')
+    '      "create_environment.game_name="Pong"").',
+)
 
 FLAGS = flags.FLAGS
 
@@ -52,7 +58,8 @@ def main(unused_argv):
   gin_bindings = FLAGS.gin_bindings
   base_run_experiment.load_gin_configs(gin_files, gin_bindings)
   runner = run_experiment.TandemRunner(
-      base_dir, run_experiment.create_tandem_agents_and_checkpoints)
+      base_dir, run_experiment.create_tandem_agents_and_checkpoints
+  )
   runner.run_experiment()
 
 

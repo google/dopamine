@@ -61,12 +61,23 @@ def get_network_outputs(model, states, rng):
 
 
 @functools.partial(
-    jax.vmap, in_axes=(None, None, 0, 0, 0, 0, None, None, None, None))
-def target_output(model, target_network, next_states, next_actions, rewards,
-                  terminals, cumulative_gamma, double_dqn, target_type, rng):
+    jax.vmap, in_axes=(None, None, 0, 0, 0, 0, None, None, None, None)
+)
+def target_output(
+    model,
+    target_network,
+    next_states,
+    next_actions,
+    rewards,
+    terminals,
+    cumulative_gamma,
+    double_dqn,
+    target_type,
+    rng,
+):
   """Builds the C51 target distribution or DQN target Q-values."""
 
-  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
+  is_terminal_multiplier = 1.0 - terminals.astype(jnp.float32)
   # Incorporate terminal state to discount factor.
   gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
 
@@ -150,16 +161,18 @@ def train(
       # Fetch the logits for its selected action. We use vmap to perform this
       # indexing across the batch.
       chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
-      mean_td_loss = jnp.mean(classification_loss_fn(
-          target_probs, chosen_action_logits))
+      mean_td_loss = jnp.mean(
+          classification_loss_fn(target_probs, chosen_action_logits)
+      )
     else:
       mean_td_loss = jnp.mean(mse_loss_fn(target, replay_chosen_q))
 
     mc_loss = jnp.mean(mse_loss_fn(monte_carlo_returns, replay_chosen_q))
     dr3_loss = offline_dr3_agent.compute_dr3_loss(curr_repr, next_repr)
     bc_loss = jnp.mean(
-        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q)
-    mean_loss = (td_coefficient * mean_td_loss + bc_coefficient * bc_loss)
+        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q
+    )
+    mean_loss = td_coefficient * mean_td_loss + bc_coefficient * bc_loss
     avg_q_value = jnp.mean(replay_chosen_q)
     return mean_loss, (mean_td_loss, bc_loss, dr3_loss, mc_loss, avg_q_value)
 
@@ -195,19 +208,21 @@ def train(
 class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
   """Offline ClassyDQN agent with BC regularization (akin to CQL)."""
 
-  def __init__(self,
-               num_actions,
-               replay_data_dir,
-               network=networks.ParameterizedRainbowNetwork,
-               td_coefficient=1.0,
-               bc_coefficient=0.0,
-               summary_writer=None,
-               add_return_to_go=False,
-               target_type: TargetType = TargetType.MAXQ,
-               hl_loss_type: ClassyLoss = ClassyLoss.HL_GAUSS,
-               hl_gauss_sigma_ratio: float = 0.75,
-               replay_buffer_builder=None,
-               use_tfds=True):
+  def __init__(
+      self,
+      num_actions,
+      replay_data_dir,
+      network=networks.ParameterizedRainbowNetwork,
+      td_coefficient=1.0,
+      bc_coefficient=0.0,
+      summary_writer=None,
+      add_return_to_go=False,
+      target_type: TargetType = TargetType.MAXQ,
+      hl_loss_type: ClassyLoss = ClassyLoss.HL_GAUSS,
+      hl_gauss_sigma_ratio: float = 0.75,
+      replay_buffer_builder=None,
+      use_tfds=True,
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -254,7 +269,9 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
     num_atoms = gin.query_parameter('JaxFullRainbowAgent.num_atoms')
 
     assert hl_loss_type in [
-        ClassyLoss.HL_GAUSS, ClassyLoss.TWO_HOT, ClassyLoss.SCALAR
+        ClassyLoss.HL_GAUSS,
+        ClassyLoss.TWO_HOT,
+        ClassyLoss.SCALAR,
     ]
     match hl_loss_type:
       case ClassyLoss.HL_GAUSS:
@@ -283,8 +300,10 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
         dueling=False,  # Set dueling networks also to be False by default.
         replay_scheme='uniform',  # Uniform replay is default for offline RL.
         network=functools.partial(
-            networks.ParameterizedRainbowNetwork, transform=self._transform),
-        summary_writer=summary_writer)
+            networks.ParameterizedRainbowNetwork, transform=self._transform
+        ),
+        summary_writer=summary_writer,
+    )
 
   def train_step(self):
     """Runs a single training step."""
@@ -301,36 +320,53 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
     else:
       mc_returns = jnp.zeros_like(self.replay_elements['reward'])
 
-    (self.optimizer_state,
-     self.online_params, mean_loss, aux_info, self._rng) = train(
-         self.network_def, self.online_params, self.target_network_params,
-         self.optimizer, self.optimizer_state, states,
-         self.replay_elements['action'], next_states,
-         self.replay_elements['next_action'],
-         self.replay_elements['reward'], self.replay_elements['terminal'],
-         mc_returns, self._support, self.cumulative_gamma,
-         self._double_dqn, self._rng,
-         target_type=self._target_type,
-         bc_coefficient=self._bc_coefficient,
-         td_coefficient=self._td_coefficient)
+    (
+        self.optimizer_state,
+        self.online_params,
+        mean_loss,
+        aux_info,
+        self._rng,
+    ) = train(
+        self.network_def,
+        self.online_params,
+        self.target_network_params,
+        self.optimizer,
+        self.optimizer_state,
+        states,
+        self.replay_elements['action'],
+        next_states,
+        self.replay_elements['next_action'],
+        self.replay_elements['reward'],
+        self.replay_elements['terminal'],
+        mc_returns,
+        self._support,
+        self.cumulative_gamma,
+        self._double_dqn,
+        self._rng,
+        target_type=self._target_type,
+        bc_coefficient=self._bc_coefficient,
+        td_coefficient=self._td_coefficient,
+    )
 
     td_loss, bc_loss, dr3_loss, mc_loss, avg_q_value = aux_info
-    if (self.training_steps > 0 and
-        self.training_steps % self.summary_writing_frequency == 0):
+    if (
+        self.training_steps > 0
+        and self.training_steps % self.summary_writing_frequency == 0
+    ):
       if self.summary_writer is not None:
         with self.summary_writer.as_default():
-          tf.summary.scalar('Losses/Aggregate', mean_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/TD', td_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/BCLoss', bc_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/DR3Loss', dr3_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/MCLoss', mc_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/AvgQ', avg_q_value,
-                            step=self.training_steps)
+          tf.summary.scalar(
+              'Losses/Aggregate', mean_loss, step=self.training_steps
+          )
+          tf.summary.scalar('Losses/TD', td_loss, step=self.training_steps)
+          tf.summary.scalar('Losses/BCLoss', bc_loss, step=self.training_steps)
+          tf.summary.scalar(
+              'Losses/DR3Loss', dr3_loss, step=self.training_steps
+          )
+          tf.summary.scalar('Losses/MCLoss', mc_loss, step=self.training_steps)
+          tf.summary.scalar(
+              'Losses/AvgQ', avg_q_value, step=self.training_steps
+          )
         self.summary_writer.flush()
     if self._use_tfds:
       self.log_gradient_steps_per_epoch()
@@ -349,19 +385,23 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
           stack_size=self.stack_size,
           update_horizon=self.update_horizon,
           gamma=self.gamma,
-          observation_dtype=self.observation_dtype)
+          observation_dtype=self.observation_dtype,
+      )
 
     dataset_name = tfds_replay.get_atari_ds_name_from_replay(
-        self.replay_data_dir)
+        self.replay_data_dir
+    )
     return tfds_replay.JaxFixedReplayBufferTFDS(
         replay_capacity=gin.query_parameter(
-            'JaxFixedReplayBuffer.replay_capacity'),
+            'JaxFixedReplayBuffer.replay_capacity'
+        ),
         batch_size=gin.query_parameter('JaxFixedReplayBuffer.batch_size'),
         dataset_name=dataset_name,
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        return_to_go=self._add_return_to_go)
+        return_to_go=self._add_return_to_go,
+    )
 
   def log_gradient_steps_per_epoch(self):
     num_steps_per_epoch = self._replay.gradient_steps_per_epoch
@@ -369,9 +409,8 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
     if self.summary_writer is not None:
       with self.summary_writer.as_default():
         tf.summary.scalar(
-            'Info/EpochFractionSteps',
-            steps_per_epoch,
-            step=self.training_steps)
+            'Info/EpochFractionSteps', steps_per_epoch, step=self.training_steps
+        )
 
   def _sample_from_replay_buffer(self):
     if self._use_tfds:
@@ -395,9 +434,19 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
     """
     self._record_observation(observation)
     self._rng, self.action = rainbow_agent.select_action(
-        self.network_def, self.online_params, self.state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn, self._support)
+        self.network_def,
+        self.online_params,
+        self.state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action

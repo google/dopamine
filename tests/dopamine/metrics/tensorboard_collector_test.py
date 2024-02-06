@@ -33,17 +33,20 @@ class TensorboardCollectorTest(absltest.TestCase):
     tf.summary.create_file_writer = mock.MagicMock()
     base_dir = self.create_tempdir().full_path
     collector = tensorboard_collector.TensorboardCollector(base_dir)
-    self.assertEqual(collector._base_dir,
-                     osp.join(base_dir, 'metrics/tensorboard'))
+    self.assertEqual(
+        collector._base_dir, osp.join(base_dir, 'metrics/tensorboard')
+    )
     self.assertTrue(osp.exists(collector._base_dir))
     self.assertEqual(tf.summary.create_file_writer.call_count, 1)
-    self.assertEqual(tf.summary.create_file_writer.call_args[0][0],
-                     collector._base_dir)
+    self.assertEqual(
+        tf.summary.create_file_writer.call_args[0][0], collector._base_dir
+    )
 
   def test_write(self):
     tf.summary.create_file_writer = mock.MagicMock()
     collector = tensorboard_collector.TensorboardCollector(
-        self.create_tempdir().full_path)
+        self.create_tempdir().full_path
+    )
     self.assertEqual(1, tf.summary.create_file_writer.call_count)
 
     tf.summary.scalar = mock.MagicMock()
@@ -62,19 +65,22 @@ class TensorboardCollectorTest(absltest.TestCase):
   def test_no_write_with_unsupported_type(self):
     tf.summary.create_file_writer = mock.MagicMock()
     collector = tensorboard_collector.TensorboardCollector(
-        self.create_tempdir().full_path)
+        self.create_tempdir().full_path
+    )
     self.assertEqual(1, tf.summary.create_file_writer.call_count)
     tf.summary.scalar = mock.MagicMock()
     for i in range(10):
       stat = statistics_instance.StatisticsInstance(
-          'val', i, i, type='unsupported')
+          'val', i, i, type='unsupported'
+      )
       collector.write([stat])
       tf.summary.scalar.assert_not_called()
 
   def test_full_run(self):
     tf.summary.create_file_writer = mock.MagicMock()
     collector = tensorboard_collector.TensorboardCollector(
-        self.create_tempdir().full_path)
+        self.create_tempdir().full_path
+    )
     tf.summary.scalar = mock.MagicMock()
     collector.summary_writer.flush = mock.MagicMock()
     num_iterations = 3

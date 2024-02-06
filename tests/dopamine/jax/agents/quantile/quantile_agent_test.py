@@ -12,8 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for dopamine.jax.agents.quantile_agent.
-"""
+"""Tests for dopamine.jax.agents.quantile_agent."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -44,7 +43,8 @@ class JaxQuantileAgentTest(absltest.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = onp.zeros(
-        (1,) + self.observation_shape + (self.stack_size,))
+        (1,) + self.observation_shape + (self.stack_size,)
+    )
     gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.replay_capacity', 100)
     gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.batch_size', 2)
 
@@ -64,6 +64,7 @@ class JaxQuantileAgentTest(absltest.TestCase):
     # action being chosen.
     class MockQuantileNetwork(linen.Module):
       """Custom Jax network used in tests."""
+
       num_actions: int
       num_atoms: int
       inputs_preprocessed: bool = False
@@ -73,15 +74,18 @@ class JaxQuantileAgentTest(absltest.TestCase):
         def custom_init(key, shape, dtype=jnp.float32):
           del key
           to_pick_first_action = onp.ones(shape, dtype)
-          to_pick_first_action[:, :self.num_atoms] = onp.arange(
-              1, self.num_atoms + 1)
+          to_pick_first_action[:, : self.num_atoms] = onp.arange(
+              1, self.num_atoms + 1
+          )
           return to_pick_first_action
 
         x = x.astype(jnp.float32)
         x = x.reshape((-1))  # flatten
-        x = linen.Dense(features=self.num_actions * self.num_atoms,
-                        kernel_init=custom_init,
-                        bias_init=linen.initializers.ones)(x)
+        x = linen.Dense(
+            features=self.num_actions * self.num_atoms,
+            kernel_init=custom_init,
+            bias_init=linen.initializers.ones,
+        )(x)
         logits = x.reshape((self.num_actions, self.num_atoms))
         probabilities = linen.softmax(logits)
         qs = jnp.mean(logits, axis=1)
@@ -94,7 +98,8 @@ class JaxQuantileAgentTest(absltest.TestCase):
         min_replay_history=self._min_replay_history,
         epsilon_fn=lambda w, x, y, z: 0.0,  # No exploration.
         epsilon_eval=0.0,
-        epsilon_decay_period=self._epsilon_decay_period)
+        epsilon_decay_period=self._epsilon_decay_period,
+    )
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -112,22 +117,23 @@ class JaxQuantileAgentTest(absltest.TestCase):
     agent = self._create_test_agent()
     state = onp.ones((1, 28224))
     net_outputs = agent.network_def.apply(agent.online_params, state)
-    self.assertEqual(net_outputs.logits.shape,
-                     (self.num_actions, self._num_atoms))
-    self.assertEqual(net_outputs.probabilities.shape,
-                     net_outputs.logits.shape)
-    self.assertEqual(net_outputs.q_values.shape,
-                     (self.num_actions,))
+    self.assertEqual(
+        net_outputs.logits.shape, (self.num_actions, self._num_atoms)
+    )
+    self.assertEqual(net_outputs.probabilities.shape, net_outputs.logits.shape)
+    self.assertEqual(net_outputs.q_values.shape, (self.num_actions,))
     # Check probabilities are uniform for all except the first action.
     expected_probabilities = (
-        onp.ones_like(net_outputs.probabilities) * 1.0 / self._num_atoms)
+        onp.ones_like(net_outputs.probabilities) * 1.0 / self._num_atoms
+    )
     # The first action will have probability 1.0 at the highest quantile (it is
     # set this way by design in the mock network to guarantee that action 1 is
     # always selected).
     expected_probabilities[0] = onp.zeros(self._num_atoms)
     expected_probabilities[0, -1] = 1.0
-    onp.testing.assert_allclose(net_outputs.probabilities,
-                                expected_probabilities)
+    onp.testing.assert_allclose(
+        net_outputs.probabilities, expected_probabilities
+    )
 
   def testBeginEpisode(self):
     """Test the functionality of agent.begin_episode.
@@ -186,11 +192,13 @@ class JaxQuantileAgentTest(absltest.TestCase):
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
         expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+            (1,) + self.observation_shape, step
+        )
     onp.array_equal(agent.state, expected_state)
     onp.array_equal(
         agent._last_observation,
-        onp.ones(self.observation_shape) * (num_steps - 1))
+        onp.ones(self.observation_shape) * (num_steps - 1),
+    )
     onp.array_equal(agent._observation, observation[:, :, 0])
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
@@ -219,11 +227,12 @@ class JaxQuantileAgentTest(absltest.TestCase):
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
         expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+            (1,) + self.observation_shape, step
+        )
     onp.array_equal(agent.state, expected_state)
     onp.array_equal(
-        agent._last_observation,
-        onp.full(self.observation_shape, num_steps - 1))
+        agent._last_observation, onp.full(self.observation_shape, num_steps - 1)
+    )
     onp.array_equal(agent._observation, observation[:, :, 0])
     # We expect one more than num_steps because of the call to begin_episode.
     onp.array_equal(agent.training_steps, num_steps + 1)

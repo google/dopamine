@@ -91,7 +91,7 @@ class MockEnvironment(object):
     return self.ale.getScreenGrayscale(observation)
 
   def step(self, action):
-    reward = -1. if action > 0 else 1.
+    reward = -1.0 if action > 0 else 1.0
     self.num_steps += 1
     is_terminal = self.num_steps >= self.max_steps
 
@@ -146,6 +146,7 @@ class AtariPreprocessingTest(tf.test.TestCase):
     # The first observation is 2, the second 0; max is 2.
     observation, _, _, _ = env.step(0)
     self.assertTrue((observation == 8).all())
+
 
 if __name__ == '__main__':
   tf.compat.v1.disable_v2_behavior()

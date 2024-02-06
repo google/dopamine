@@ -51,7 +51,8 @@ class DQNAgentTest(tf.test.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.zero_state = np.zeros(
-        (1,) + self.observation_shape + (self.stack_size,))
+        (1,) + self.observation_shape + (self.stack_size,)
+    )
     gin.bind_parameter('WrappedReplayBuffer.replay_capacity', 100)
 
   def _create_test_agent(self, sess, allow_partial_reload=False):
@@ -67,15 +68,18 @@ class DQNAgentTest(tf.test.TestCase):
         # that it gets picked by the argmax.
         super(MockDQNNetwork, self).__init__(**kwargs)
         weights_initializer = np.tile(
-            np.arange(num_actions, 0, -1), (stack_size, 1))
+            np.arange(num_actions, 0, -1), (stack_size, 1)
+        )
         self.layer = tf.keras.layers.Dense(
             num_actions,
             kernel_initializer=tf.constant_initializer(weights_initializer),
-            bias_initializer=tf.ones_initializer())
+            bias_initializer=tf.ones_initializer(),
+        )
 
       def call(self, state):
         inputs = tf.constant(
-            np.zeros((state.shape[0], stack_size)), dtype=tf.float32)
+            np.zeros((state.shape[0], stack_size)), dtype=tf.float32
+        )
         return atari_lib.DQNNetworkType(self.layer((inputs)))
 
     agent = dqn_agent.DQNAgent(
@@ -90,7 +94,8 @@ class DQNAgentTest(tf.test.TestCase):
         update_period=self.update_period,
         target_update_period=self.target_update_period,
         epsilon_eval=0.0,  # No exploration during evaluation.
-        allow_partial_reload=allow_partial_reload)
+        allow_partial_reload=allow_partial_reload,
+    )
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -167,11 +172,13 @@ class DQNAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1,) + self.observation_shape, step)
+              (1,) + self.observation_shape, step
+          )
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.ones(self.observation_shape) * (num_steps - 1))
+          np.ones(self.observation_shape) * (num_steps - 1),
+      )
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # No training happens in eval mode.
       self.assertEqual(agent.training_steps, 0)
@@ -205,7 +212,8 @@ class DQNAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[:, :, :, stack_pos] = np.full(
-              (1,) + self.observation_shape, step)
+              (1,) + self.observation_shape, step
+          )
         self.assertEqual(agent._replay.add.call_count, step)
         mock_args, _ = agent._replay.add.call_args
         self.assertAllEqual(last_observation[:, :, 0], mock_args[0])
@@ -215,7 +223,8 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.full(self.observation_shape, num_steps - 1))
+          np.full(self.observation_shape, num_steps - 1),
+      )
       self.assertAllEqual(agent._observation, observation[:, :, 0])
       # We expect one more than num_steps because of the call to begin_episode.
       self.assertEqual(agent.training_steps, num_steps + 1)
@@ -262,7 +271,8 @@ class DQNAgentTest(tf.test.TestCase):
         stack_pos = step - num_steps - 1
         if stack_pos >= -self.stack_size:
           expected_state[..., stack_pos] = np.full(
-              (1,) + self.observation_shape, step)
+              (1,) + self.observation_shape, step
+          )
         self.assertEqual(agent._replay.add.call_count, step)
         mock_args, _ = agent._replay.add.call_args
         self.assertAllEqual(last_observation[..., 0], mock_args[0])
@@ -272,7 +282,8 @@ class DQNAgentTest(tf.test.TestCase):
       self.assertAllEqual(agent.state, expected_state)
       self.assertAllEqual(
           agent._last_observation,
-          np.full(self.observation_shape, num_steps - 1))
+          np.full(self.observation_shape, num_steps - 1),
+      )
       self.assertAllEqual(agent._observation, observation[..., 0])
       # We expect one more than num_steps because of the call to begin_episode.
       self.assertEqual(agent.training_steps, num_steps + 1)
@@ -309,13 +320,16 @@ class DQNAgentTest(tf.test.TestCase):
     steps_schedule = [
         (0, 1.0),  # step < warmup_steps
         (16, 0.91),  # bonus = 0.9 * 90 / 100 = 0.81
-        (decay_period + warmup_steps + 1, epsilon)]  # step > decay+warmup
+        (decay_period + warmup_steps + 1, epsilon),
+    ]  # step > decay+warmup
     for step, expected_epsilon in steps_schedule:
-      self.assertNear(dqn_agent.linearly_decaying_epsilon(decay_period,
-                                                          step,
-                                                          warmup_steps,
-                                                          epsilon),
-                      expected_epsilon, 0.01)
+      self.assertNear(
+          dqn_agent.linearly_decaying_epsilon(
+              decay_period, step, warmup_steps, epsilon
+          ),
+          expected_epsilon,
+          0.01,
+      )
 
   def testBundlingWithNonexistentDirectory(self):
     with tf.compat.v1.Session() as sess:
@@ -391,7 +405,8 @@ class DQNAgentTest(tf.test.TestCase):
 
       biases_0 = sess.run([
           agents[0].target_convnet.layer.bias,
-          agents[0].online_convnet.layer.bias])
+          agents[0].online_convnet.layer.bias,
+      ])
       self.assertAllEqual(biases_0[0], tf.zeros(4))
       self.assertAllEqual(biases_0[1], biases_0[0])
 

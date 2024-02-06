@@ -83,12 +83,15 @@ class LoggerTest(parameterized.TestCase):
     self.assertEqual(expected_dictionary, exp_logger.data)
     iteration_number = 7
     exp_logger.log_to_file('log', iteration_number)
-    log_file = os.path.join(self._test_subdir,
-                            'log_{}'.format(iteration_number))
+    log_file = os.path.join(
+        self._test_subdir, 'log_{}'.format(iteration_number)
+    )
     with tf.io.gfile.GFile(log_file, 'rb') as f:
       contents = f.read()
-    self.assertEqual(contents, pickle.dumps(expected_dictionary,
-                                            protocol=pickle.HIGHEST_PROTOCOL))
+    self.assertEqual(
+        contents,
+        pickle.dumps(expected_dictionary, protocol=pickle.HIGHEST_PROTOCOL),
+    )
 
   @parameterized.parameters((2), (4))
   def testGarbageCollectionWithDefaults(self, logs_duration):
@@ -105,8 +108,9 @@ class LoggerTest(parameterized.TestCase):
     for iteration_number in range(total_log_files):
       exp_logger.log_to_file('log', iteration_number)
     for iteration_number in range(total_log_files):
-      log_file = os.path.join(self._test_subdir,
-                              'log_{}'.format(iteration_number))
+      log_file = os.path.join(
+          self._test_subdir, 'log_{}'.format(iteration_number)
+      )
       if iteration_number < deleted_log_files:
         self.assertFalse(tf.io.gfile.exists(log_file))
       else:

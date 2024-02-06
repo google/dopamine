@@ -21,6 +21,7 @@ from typing import Any
 @dataclasses.dataclass
 class StatisticsInstance:
   """Statistics to be passed to each of the collectors."""
+
   name: str
   value: Any
   step: int

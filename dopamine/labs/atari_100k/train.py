@@ -42,8 +42,9 @@ AGENTS = ['DER', 'DrQ', 'OTRainbow', 'DrQ_eps', 'SPR']
 # flags are defined when importing run_xm_preprocessing
 flags.DEFINE_enum('agent', 'DER', AGENTS, 'Name of the agent.')
 flags.DEFINE_integer('run_number', 1, 'Run number.')
-flags.DEFINE_boolean('max_episode_eval', True,
-                     'Whether to use `MaxEpisodeEvalRunner` or not.')
+flags.DEFINE_boolean(
+    'max_episode_eval', True, 'Whether to use `MaxEpisodeEvalRunner` or not.'
+)
 flags.DEFINE_boolean(
     'legacy_runner',
     False,
@@ -76,7 +77,8 @@ def create_agent(
   return atari_100k_rainbow_agent.Atari100kRainbowAgent(
       num_actions=environment.action_space.n,
       seed=seed,
-      summary_writer=summary_writer)
+      summary_writer=summary_writer,
+  )
 
 
 def set_random_seed(seed):

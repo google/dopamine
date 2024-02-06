@@ -28,10 +28,23 @@ import tensorflow as tf
 
 
 @functools.partial(jax.jit, static_argnums=(0, 3, 10, 11, 12))
-def train(network_def, online_params, target_params, optimizer, optimizer_state,
-          states, actions, next_states, rewards, terminals, cumulative_gamma,
-          loss_type='huber', double_dqn=True):
+def train(
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    cumulative_gamma,
+    loss_type='huber',
+    double_dqn=True,
+):
   """Run the training step."""
+
   def loss_fn(params, target):
     def q_online(state):
       return network_def.apply(params, state)
@@ -51,13 +64,15 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   def q_target(state):
     return network_def.apply(target_params, state)
 
-  target = target_q(q_online,
-                    q_target,
-                    next_states,
-                    rewards,
-                    terminals,
-                    cumulative_gamma,
-                    double_dqn)
+  target = target_q(
+      q_online,
+      q_target,
+      next_states,
+      rewards,
+      terminals,
+      cumulative_gamma,
+      double_dqn,
+  )
   grad_fn = jax.value_and_grad(loss_fn)
   loss, grad = grad_fn(online_params, target)
   updates, optimizer_state = optimizer.update(grad, optimizer_state)
@@ -65,22 +80,31 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   return optimizer_state, online_params, loss
 
 
-def target_q(online_network, target_network, next_states, rewards, terminals,
-             cumulative_gamma, double_dqn):
+def target_q(
+    online_network,
+    target_network,
+    next_states,
+    rewards,
+    terminals,
+    cumulative_gamma,
+    double_dqn,
+):
   """Compute the target Q-value."""
   if double_dqn:
-    next_state_q_vals_for_argmax = jax.vmap(
-        online_network, in_axes=(0))(next_states).q_values
+    next_state_q_vals_for_argmax = jax.vmap(online_network, in_axes=(0))(
+        next_states
+    ).q_values
   else:
-    next_state_q_vals_for_argmax = jax.vmap(
-        target_network, in_axes=(0))(next_states).q_values
+    next_state_q_vals_for_argmax = jax.vmap(target_network, in_axes=(0))(
+        next_states
+    ).q_values
   next_state_q_vals_for_argmax = jnp.squeeze(next_state_q_vals_for_argmax)
   next_argmax = jnp.argmax(next_state_q_vals_for_argmax, axis=1)
-  q_values = jax.vmap(
-      target_network, in_axes=(0))(next_states).q_values
+  q_values = jax.vmap(target_network, in_axes=(0))(next_states).q_values
   replay_next_qt_max = jax.vmap(lambda t, u: t[u])(q_values, next_argmax)
-  return jax.lax.stop_gradient(rewards + cumulative_gamma * replay_next_qt_max *
-                               (1. - terminals))
+  return jax.lax.stop_gradient(
+      rewards + cumulative_gamma * replay_next_qt_max * (1.0 - terminals)
+  )
 
 
 @gin.configurable
@@ -94,18 +118,20 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
   def _build_networks_and_optimizer(self):
     self._rng, active_rng, passive_rng = jax.random.split(self._rng, 3)
     # Initialize active networks.
-    self.active_online_params = self.network_def.init(active_rng,
-                                                      x=self.state)
+    self.active_online_params = self.network_def.init(active_rng, x=self.state)
     self.active_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.active_optimizer_state = self.active_optimizer.init(
-        self.active_online_params)
+        self.active_online_params
+    )
     self.active_target_params = self.active_online_params
     # Initialize passive network with the regular network.
-    self.passive_online_params = self.network_def.init(passive_rng,
-                                                       x=self.state)
+    self.passive_online_params = self.network_def.init(
+        passive_rng, x=self.state
+    )
     self.passive_optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.passive_optimizer_state = self.passive_optimizer.init(
-        self.passive_online_params)
+        self.passive_online_params
+    )
     self.passive_target_params = self.passive_online_params
 
   def _sync_weights(self):
@@ -114,18 +140,20 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
     self.passive_target_params = self.passive_online_params
 
   def _select_action(self, params):
-    self._rng, action = dqn_agent.select_action(self.network_def,
-                                                params,
-                                                self.state,
-                                                self._rng,
-                                                self.num_actions,
-                                                self.eval_mode,
-                                                self.epsilon_eval,
-                                                self.epsilon_train,
-                                                self.epsilon_decay_period,
-                                                self.training_steps,
-                                                self.min_replay_history,
-                                                self.epsilon_fn)
+    self._rng, action = dqn_agent.select_action(
+        self.network_def,
+        params,
+        self.state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+    )
     action = onp.asarray(action)
     return action
 
@@ -153,7 +181,8 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
       params = self.active_online_params
       if not self.eval_mode:
         self._store_transition(
-            self._last_observation, self.action, reward, False)
+            self._last_observation, self.action, reward, False
+        )
         self._train_step()
 
     action = self._select_action(params)
@@ -189,29 +218,39 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
                 self.replay_elements['reward'],
                 self.replay_elements['terminal'],
                 self.cumulative_gamma,
-                self._double_dqn))
-        (self.passive_optimizer_state, self.passive_online_params,
-         passive_loss) = dqn_agent.train(
-             self.network_def,
-             self.passive_online_params,
-             self.passive_target_params,
-             self.passive_optimizer,
-             self.passive_optimizer_state,
-             self.replay_elements['state'],
-             self.replay_elements['action'],
-             self.replay_elements['next_state'],
-             self.replay_elements['reward'],
-             self.replay_elements['terminal'],
-             self.cumulative_gamma,
-             self._double_dqn)
-        if (self.summary_writer is not None and
-            self.training_steps > 0 and
-            self.training_steps % self.summary_writing_frequency == 0):
+                self._double_dqn,
+            )
+        )
+        (
+            self.passive_optimizer_state,
+            self.passive_online_params,
+            passive_loss,
+        ) = dqn_agent.train(
+            self.network_def,
+            self.passive_online_params,
+            self.passive_target_params,
+            self.passive_optimizer,
+            self.passive_optimizer_state,
+            self.replay_elements['state'],
+            self.replay_elements['action'],
+            self.replay_elements['next_state'],
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            self.cumulative_gamma,
+            self._double_dqn,
+        )
+        if (
+            self.summary_writer is not None
+            and self.training_steps > 0
+            and self.training_steps % self.summary_writing_frequency == 0
+        ):
           with self.summary_writer.as_default():
-            tf.summary.scalar('Losses/Active', active_loss,
-                              step=self.training_steps)
-            tf.summary.scalar('Losses/Passive', passive_loss,
-                              step=self.training_steps)
+            tf.summary.scalar(
+                'Losses/Active', active_loss, step=self.training_steps
+            )
+            tf.summary.scalar(
+                'Losses/Passive', passive_loss, step=self.training_steps
+            )
           self.summary_writer.flush()
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
@@ -262,8 +301,8 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
       checkpoint_dir: str, path to the checkpoint saved.
       iteration_number: int, checkpoint version, used when restoring the replay
         buffer.
-      bundle_dictionary: dict, containing additional Python objects owned by
-        the agent.
+      bundle_dictionary: dict, containing additional Python objects owned by the
+        agent.
 
     Returns:
       bool, True if unbundling was successful.
@@ -286,8 +325,9 @@ class TandemDQNAgent(dqn_agent.JaxDQNAgent):
       self.passive_target_params = bundle_dictionary['passive_target_params']
       # We recreate the optimizer with the new online weights.
       self.active_optimizer_state = bundle_dictionary['active_optimizer_state']
-      self.passive_optimizer_state = (
-          bundle_dictionary['passive_optimizer_state'])
+      self.passive_optimizer_state = bundle_dictionary[
+          'passive_optimizer_state'
+      ]
     elif not self.allow_partial_reload:
       return False
     else:

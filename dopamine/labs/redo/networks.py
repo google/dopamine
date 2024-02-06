@@ -32,6 +32,7 @@ class IdentityLayer(nn.Module):
 @gin.configurable
 class ScalableNatureDQNNetwork(nn.Module):
   """The convolutional network used to compute the agent's Q-values."""
+
   num_actions: int
   width: int = 1
   layer_names = []
@@ -55,7 +56,7 @@ class ScalableNatureDQNNetwork(nn.Module):
 
     initializer = nn.initializers.xavier_uniform()
     # TODO(evcu) maybe remove this
-    x = x.astype(jnp.float32) / 255.
+    x = x.astype(jnp.float32) / 255.0
     features = (32, 64, 64)
     kernel_sizes = (8, 4, 3)
     strides = (4, 2, 1)
@@ -65,7 +66,8 @@ class ScalableNatureDQNNetwork(nn.Module):
           features=_scale_width(n_feature),
           kernel_size=(kernel_size, kernel_size),
           strides=(stride, stride),
-          kernel_init=initializer)
+          kernel_init=initializer,
+      )
       x = layer(x)
       x = nn.relu(x)
       x = self._record_activations(x, layer)
@@ -76,7 +78,8 @@ class ScalableNatureDQNNetwork(nn.Module):
     x = nn.relu(x)
     x = self._record_activations(x, layer)
     layer = nn.Dense(
-        features=self.num_actions, kernel_init=initializer, name='final_layer')
+        features=self.num_actions, kernel_init=initializer, name='final_layer'
+    )
     q_values = layer(x)
     q_values = self._record_activations(q_values, layer)
     return atari_lib.DQNNetworkType(q_values)
@@ -84,6 +87,7 @@ class ScalableNatureDQNNetwork(nn.Module):
 
 class Stack(nn.Module):
   """Stack of pooling and convolutional blocks with residual connections."""
+
   num_ch: int
   num_blocks: int = 2
   layer_names = []
@@ -107,21 +111,25 @@ class Stack(nn.Module):
         kernel_size=(3, 3),
         strides=1,
         kernel_init=initializer,
-        padding='SAME')
+        padding='SAME',
+    )
     conv_out = layer(x)
     conv_out = nn.max_pool(
-        conv_out, window_shape=(3, 3), padding='SAME', strides=(2, 2))
+        conv_out, window_shape=(3, 3), padding='SAME', strides=(2, 2)
+    )
     for _ in range(self.num_blocks):
       block_input = conv_out
       conv_out = nn.relu(conv_out)
       conv_out = self._record_activations(conv_out, layer)
       layer = nn.Conv(
-          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME')
+          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME'
+      )
       conv_out = layer(conv_out)
       conv_out = nn.relu(conv_out)
       conv_out = self._record_activations(conv_out, layer)
       layer = nn.Conv(
-          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME')
+          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME'
+      )
       conv_out = layer(conv_out)
       conv_out += block_input
     return conv_out
@@ -129,6 +137,7 @@ class Stack(nn.Module):
 
 class ScalableDQNResNet(nn.Module):
   """ResNet used to compute the agent's Q-values."""
+
   num_actions: int
   width: int
   layer_names = []
@@ -152,7 +161,7 @@ class ScalableDQNResNet(nn.Module):
 
     initializer = nn.initializers.xavier_uniform()
 
-    x = x.astype(jnp.float32) / 255.
+    x = x.astype(jnp.float32) / 255.0
     for stack_size in [32, 64, 64]:
       stack = Stack(num_ch=stack_size * self.width)
       x = stack(x)
@@ -171,7 +180,8 @@ class ScalableDQNResNet(nn.Module):
     x = nn.relu(x)
     x = self._record_activations(x, layer)
     layer = nn.Dense(
-        features=self.num_actions, kernel_init=initializer, name='final_layer')
+        features=self.num_actions, kernel_init=initializer, name='final_layer'
+    )
     q_values = layer(x)
     q_values = self._record_activations(q_values, layer)
     return atari_lib.DQNNetworkType(q_values)
@@ -180,6 +190,7 @@ class ScalableDQNResNet(nn.Module):
 ### Rainbow Networks ###
 class ScalableRainbowNetwork(nn.Module):
   """Convolutional network used to compute the agent's return distributions."""
+
   num_actions: int
   num_atoms: int
   width: int
@@ -204,9 +215,10 @@ class ScalableRainbowNetwork(nn.Module):
       return int(math.ceil(n * self.width))
 
     initializer = nn.initializers.variance_scaling(
-        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform')
+        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform'
+    )
     if not self.inputs_preprocessed:
-      x = x.astype(jnp.float32) / 255.
+      x = x.astype(jnp.float32) / 255.0
     features = (32, 64, 64)
     kernel_sizes = (8, 4, 3)
     strides = (4, 2, 1)
@@ -216,7 +228,8 @@ class ScalableRainbowNetwork(nn.Module):
           features=_scale_width(n_feature),
           kernel_size=(kernel_size, kernel_size),
           strides=(stride, stride),
-          kernel_init=initializer)
+          kernel_init=initializer,
+      )
       x = layer(x)
       x = nn.relu(x)
       x = self._record_activations(x, layer)
@@ -229,7 +242,8 @@ class ScalableRainbowNetwork(nn.Module):
     layer = nn.Dense(
         features=self.num_actions * self.num_atoms,
         kernel_init=initializer,
-        name='final_layer')
+        name='final_layer',
+    )
     x = layer(x)
     x = self._record_activations(x, layer)
     logits = x.reshape((self.num_actions, self.num_atoms))
@@ -249,6 +263,7 @@ class FullRainbowNetwork(nn.Module):
     dueling: bool, Whether to use dueling network architecture.
     distributional: bool, whether to use distributional RL.
   """
+
   num_actions: int
   num_atoms: int
   noisy: bool = True
@@ -270,18 +285,20 @@ class FullRainbowNetwork(nn.Module):
     #   key = jax.random.PRNGKey(int(time.time() * 1e6))
 
     if not self.inputs_preprocessed:
-      x = x.astype(jnp.float32) / 255.
+      x = x.astype(jnp.float32) / 255.0
 
     hidden_sizes = [32, 64, 64]
     kernel_sizes = [8, 4, 3]
     stride_sizes = [4, 2, 1]
-    for hidden_size, kernel_size, stride_size in zip(hidden_sizes, kernel_sizes,
-                                                     stride_sizes):
+    for hidden_size, kernel_size, stride_size in zip(
+        hidden_sizes, kernel_sizes, stride_sizes
+    ):
       layer = nn.Conv(
           features=hidden_size,
           kernel_size=(kernel_size, kernel_size),
           strides=(stride_size, stride_size),
-          kernel_init=nn.initializers.xavier_uniform())
+          kernel_init=nn.initializers.xavier_uniform(),
+      )
       x = layer(x)
       x = nn.relu(x)
       x = self._record_activations(x, layer)
@@ -295,11 +312,13 @@ class FullRainbowNetwork(nn.Module):
     if self.dueling:
       layer = nn.Dense(
           features=self.num_actions * self.num_atoms,
-          kernel_init=nn.initializers.xavier_uniform())
+          kernel_init=nn.initializers.xavier_uniform(),
+      )
       adv = layer(x)
       adv = self._record_activations(adv, layer)
       layer = nn.Dense(
-          features=self.num_atoms, kernel_init=nn.initializers.xavier_uniform())
+          features=self.num_atoms, kernel_init=nn.initializers.xavier_uniform()
+      )
       value = layer(x)
       value = self._record_activations(value, layer)
       adv = adv.reshape((self.num_actions, self.num_atoms))
@@ -308,7 +327,8 @@ class FullRainbowNetwork(nn.Module):
     else:
       layer = nn.Dense(
           features=self.num_actions * self.num_atoms,
-          kernel_init=nn.initializers.xavier_uniform())
+          kernel_init=nn.initializers.xavier_uniform(),
+      )
       x = layer(x)
       logits = x.reshape((self.num_actions, self.num_atoms))
       logits = self._record_activations(logits, layer)

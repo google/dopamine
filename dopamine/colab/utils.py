@@ -26,25 +26,73 @@ import sys
 
 import numpy as np
 import pandas as pd
-
 import tensorflow as tf
 
 FILE_PREFIX = 'log'
 ITERATION_PREFIX = 'iteration_'
 
-ALL_GAMES = ['AirRaid', 'Alien', 'Amidar', 'Assault', 'Asterix', 'Asteroids',
-             'Atlantis', 'BankHeist', 'BattleZone', 'BeamRider', 'Berzerk',
-             'Bowling', 'Boxing', 'Breakout', 'Carnival', 'Centipede',
-             'ChopperCommand', 'CrazyClimber', 'DemonAttack', 'DoubleDunk',
-             'ElevatorAction', 'Enduro', 'FishingDerby', 'Freeway', 'Frostbite',
-             'Gopher', 'Gravitar', 'Hero', 'IceHockey', 'Jamesbond',
-             'JourneyEscape', 'Kangaroo', 'Krull', 'KungFuMaster',
-             'MontezumaRevenge', 'MsPacman', 'NameThisGame', 'Phoenix',
-             'Pitfall', 'Pong', 'Pooyan', 'PrivateEye', 'Qbert', 'Riverraid',
-             'RoadRunner', 'Robotank', 'Seaquest', 'Skiing', 'Solaris',
-             'SpaceInvaders', 'StarGunner', 'Tennis', 'TimePilot', 'Tutankham',
-             'UpNDown', 'Venture', 'VideoPinball', 'WizardOfWor', 'YarsRevenge',
-             'Zaxxon']
+ALL_GAMES = [
+    'AirRaid',
+    'Alien',
+    'Amidar',
+    'Assault',
+    'Asterix',
+    'Asteroids',
+    'Atlantis',
+    'BankHeist',
+    'BattleZone',
+    'BeamRider',
+    'Berzerk',
+    'Bowling',
+    'Boxing',
+    'Breakout',
+    'Carnival',
+    'Centipede',
+    'ChopperCommand',
+    'CrazyClimber',
+    'DemonAttack',
+    'DoubleDunk',
+    'ElevatorAction',
+    'Enduro',
+    'FishingDerby',
+    'Freeway',
+    'Frostbite',
+    'Gopher',
+    'Gravitar',
+    'Hero',
+    'IceHockey',
+    'Jamesbond',
+    'JourneyEscape',
+    'Kangaroo',
+    'Krull',
+    'KungFuMaster',
+    'MontezumaRevenge',
+    'MsPacman',
+    'NameThisGame',
+    'Phoenix',
+    'Pitfall',
+    'Pong',
+    'Pooyan',
+    'PrivateEye',
+    'Qbert',
+    'Riverraid',
+    'RoadRunner',
+    'Robotank',
+    'Seaquest',
+    'Skiing',
+    'Solaris',
+    'SpaceInvaders',
+    'StarGunner',
+    'Tennis',
+    'TimePilot',
+    'Tutankham',
+    'UpNDown',
+    'Venture',
+    'VideoPinball',
+    'WizardOfWor',
+    'YarsRevenge',
+    'Zaxxon',
+]
 MUJOCO_GAMES = ['Ant', 'HalfCheetah', 'Hopper', 'Humanoid', 'Walker2d']
 
 
@@ -65,8 +113,9 @@ def load_baselines(base_dir, verbose=False):
       if not tf.io.gfile.exists(game_data_file):
         if verbose:
           # pylint: disable=superfluous-parens
-          print('Unable to load data for agent {} on game {}'.format(agent,
-                                                                     game))
+          print(
+              'Unable to load data for agent {} on game {}'.format(agent, game)
+          )
           # pylint: enable=superfluous-parens
         continue
       with tf.io.gfile.GFile(game_data_file, 'rb') as f:
@@ -82,14 +131,16 @@ def load_baselines(base_dir, verbose=False):
         # avoid this.
         for field_name in single_agent_data.keys():
           try:
-            single_agent_data[field_name] = (
-                single_agent_data[field_name].astype(np.float64))
+            single_agent_data[field_name] = single_agent_data[
+                field_name
+            ].astype(np.float64)
           except ValueError:
             # This will catch any non-numerics that cannot be cast to float64.
             continue
         if game in experimental_data:
           experimental_data[game] = experimental_data[game].merge(
-              single_agent_data, how='outer')
+              single_agent_data, how='outer'
+          )
         else:
           experimental_data[game] = single_agent_data
   return experimental_data
@@ -100,8 +151,8 @@ def load_statistics(log_path, iteration_number=None, verbose=True):
 
   Args:
     log_path: string, provides the full path to the training/eval statistics.
-    iteration_number: The iteration number of the statistics object we want
-      to read. If set to None, load the latest version.
+    iteration_number: The iteration number of the statistics object we want to
+      read. If set to None, load the latest version.
     verbose: Whether to output information about the load procedure.
 
   Returns:
@@ -161,7 +212,7 @@ def get_latest_iteration(path):
     raise ValueError('No log data found at {}'.format(path))
 
   def extract_iteration(x):
-    return int(x[x.rfind('_') + 1:])
+    return int(x[x.rfind('_') + 1 :])
 
   latest_iteration = max(extract_iteration(x) for x in log_files)
   return latest_iteration
@@ -202,13 +253,14 @@ def summarize_data(data, summary_keys):
   return summary
 
 
-def read_experiment(log_path,
-                    parameter_set=None,
-                    job_descriptor='',
-                    iteration_number=None,
-                    summary_keys=('train_episode_returns',
-                                  'eval_episode_returns'),
-                    verbose=False):
+def read_experiment(
+    log_path,
+    parameter_set=None,
+    job_descriptor='',
+    iteration_number=None,
+    summary_keys=('train_episode_returns', 'eval_episode_returns'),
+    verbose=False,
+):
   """Reads in a set of experimental results from log_path.
 
   The provided parameter_set is an ordered_dict which
@@ -257,8 +309,9 @@ def read_experiment(log_path,
   expected_num_rows = num_parameter_settings * expected_num_iterations
 
   # Create DataFrame with predicted number of rows.
-  data_frame = pd.DataFrame(index=np.arange(0, expected_num_rows),
-                            columns=column_names)
+  data_frame = pd.DataFrame(
+      index=np.arange(0, expected_num_rows), columns=column_names
+  )
   row_index = 0
 
   # Now take their cross product. This generates tuples of the form
@@ -269,20 +322,25 @@ def read_experiment(log_path,
       name = job_descriptor.format(*parameter_tuple)
     else:
       # Construct name for values.
-      name = '-'.join([keys[i] + '_' + str(parameter_tuple[i])
-                       for i in range(len(keys))])
+      name = '-'.join(
+          [keys[i] + '_' + str(parameter_tuple[i]) for i in range(len(keys))]
+      )
 
     experiment_path = '{}/{}/logs'.format(log_path, name)
 
     raw_data, last_iteration = load_statistics(
-        experiment_path, iteration_number=iteration_number, verbose=verbose)
+        experiment_path, iteration_number=iteration_number, verbose=verbose
+    )
 
     summary = summarize_data(raw_data, summary_keys)
     for iteration in range(last_iteration + 1):
       # The row contains all the parameters, the iteration, and finally the
       # requested values.
-      row_data = (list(parameter_tuple) + [iteration] +
-                  [summary[key][iteration] for key in summary_keys])
+      row_data = (
+          list(parameter_tuple)
+          + [iteration]
+          + [summary[key][iteration] for key in summary_keys]
+      )
       data_frame.loc[row_index] = row_data
 
       row_index += 1

@@ -31,6 +31,7 @@ import abc
 
 class Plotter(object):
   """Abstract base class for plotters."""
+
   __metaclass__ = abc.ABCMeta
 
   def __init__(self, parameter_dict=None):
@@ -42,8 +43,8 @@ class Plotter(object):
 
     Args:
       parameter_dict: None or dict of parameter specifications for
-        visualization. If an expected parameter is present, its value will
-        be used, otherwise it will use defaults.
+        visualization. If an expected parameter is present, its value will be
+        used, otherwise it will use defaults.
     """
     self.parameters = {'x': 0, 'y': 0}
     self.parameters.update(self._defaults)
@@ -58,14 +59,17 @@ class Plotter(object):
     except AttributeError:
       self.plot.set_axis_bgcolor(self.parameters['bg_color'])
     if 'xlabel' in self.parameters:
-      self.plot.set_xlabel(self.parameters['xlabel'],
-                           fontsize=self.parameters['fontsize'] - 2)
+      self.plot.set_xlabel(
+          self.parameters['xlabel'], fontsize=self.parameters['fontsize'] - 2
+      )
     if 'ylabel' in self.parameters:
-      self.plot.set_ylabel(self.parameters['ylabel'],
-                           fontsize=self.parameters['fontsize'] - 2)
+      self.plot.set_ylabel(
+          self.parameters['ylabel'], fontsize=self.parameters['fontsize'] - 2
+      )
     if 'title' in self.parameters:
-      self.plot.set_title(self.parameters['title'],
-                          fontsize=self.parameters['fontsize'] + 2)
+      self.plot.set_title(
+          self.parameters['title'], fontsize=self.parameters['fontsize'] + 2
+      )
     if 'xticks' in self.parameters:
       self.plot.set_xticks(self.parameters['xticks'])
     if 'xticklabels' in self.parameters:

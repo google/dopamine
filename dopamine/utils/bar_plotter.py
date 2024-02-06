@@ -23,6 +23,7 @@ from __future__ import division
 from __future__ import print_function
 
 
+
 from dopamine.utils import plotter
 import gin
 import matplotlib
@@ -51,9 +52,11 @@ class BarPlotter(plotter.Plotter):
       'colors': COLORS,
       'max_width': 500,
       'figsize': (12, 9),
-      'font': {'family': 'Bitstream Vera Sans',
-               'weight': 'regular',
-               'size': 26},
+      'font': {
+          'family': 'Bitstream Vera Sans',
+          'weight': 'regular',
+          'size': 26,
+      },
   }
 
   def __init__(self, parameter_dict=None):
@@ -66,8 +69,8 @@ class BarPlotter(plotter.Plotter):
 
     Args:
       parameter_dict: None or dict of parameter specifications for
-        visualization. If an expected parameter is present, its value will
-        be used, otherwise it will use defaults.
+        visualization. If an expected parameter is present, its value will be
+        used, otherwise it will use defaults.
     """
     super(BarPlotter, self).__init__(parameter_dict)
     assert 'get_bar_data_fn' in self.parameters
@@ -91,8 +94,11 @@ class BarPlotter(plotter.Plotter):
     bar_data = self.parameters['get_bar_data_fn']()
     num_actions, num_bins = bar_data.shape
     for i in range(num_actions):
-      self.plot.bar(np.arange(num_bins), bar_data[i],
-                    color=self.parameters['colors'][i % num_colors])
+      self.plot.bar(
+          np.arange(num_bins),
+          bar_data[i],
+          color=self.parameters['colors'][i % num_colors],
+      )
     if 'legend' in self.parameters:
       self.plot.legend(self.parameters['legend'])
     self.fig.canvas.draw()
@@ -101,9 +107,8 @@ class BarPlotter(plotter.Plotter):
     if self.plot_surface is None:
       self.plot_surface = pygame.Surface((width, height))
     plot_buffer = np.frombuffer(self.fig.canvas.buffer_rgba(), np.uint32)
-    surf_buffer = np.frombuffer(self.plot_surface.get_buffer(),
-                                dtype=np.int32)
+    surf_buffer = np.frombuffer(self.plot_surface.get_buffer(), dtype=np.int32)
     np.copyto(surf_buffer, plot_buffer)
     return pygame.transform.smoothscale(
-        self.plot_surface,
-        (self.parameters['width'], self.parameters['height']))
+        self.plot_surface, (self.parameters['width'], self.parameters['height'])
+    )

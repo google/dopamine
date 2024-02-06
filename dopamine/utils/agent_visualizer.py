@@ -27,6 +27,7 @@ import os
 import subprocess
 
 
+
 import gin
 import numpy as np
 from PIL import Image
@@ -37,14 +38,16 @@ import pygame
 class AgentVisualizer(object):
   """Code to visualize an agent's behaviour."""
 
-  def __init__(self,
-               record_path,
-               plotters,
-               screen_width=160,
-               screen_height=210,
-               render_rate=1,
-               file_types=('png', ''),
-               filename_format='frame_{:06d}'):
+  def __init__(
+      self,
+      record_path,
+      plotters,
+      screen_width=160,
+      screen_height=210,
+      render_rate=1,
+      file_types=('png', ''),
+      filename_format='frame_{:06d}',
+  ):
     """Constructor for the AgentVisualizer class.
 
     This class generates a series of images built by a set of Plotters. These
@@ -70,15 +73,16 @@ class AgentVisualizer(object):
     self.file_types = file_types
     self.filename_format = filename_format
     self.step = 0
-    self.record_frame = np.zeros((self.screen_height, self.screen_width, 3),
-                                 dtype=np.uint8)
+    self.record_frame = np.zeros(
+        (self.screen_height, self.screen_width, 3), dtype=np.uint8
+    )
     # This is necessary to avoid a `pygame.error: No available video device`
     # error.
     os.environ['SDL_VIDEODRIVER'] = 'dummy'
     pygame.init()
-    self.screen = pygame.display.set_mode((self.screen_width,
-                                           self.screen_height),
-                                          0, 32)
+    self.screen = pygame.display.set_mode(
+        (self.screen_width, self.screen_height), 0, 32
+    )
 
   def visualize(self):
     if self.step % self.render_rate == 0:
@@ -91,10 +95,10 @@ class AgentVisualizer(object):
 
   def save_frame(self):
     """Save a frame to disk and generate a video, if enabled."""
-    screen_buffer = (
-        np.frombuffer(self.screen.get_buffer(), dtype=np.int32)
-        .reshape(self.screen_height, self.screen_width))
-    sb = screen_buffer[:, 0:self.screen_width]
+    screen_buffer = np.frombuffer(
+        self.screen.get_buffer(), dtype=np.int32
+    ).reshape(self.screen_height, self.screen_width)
+    sb = screen_buffer[:, 0 : self.screen_width]
     self.record_frame[..., 2] = sb % 256
     self.record_frame[..., 1] = (sb >> 8) % 256
     self.record_frame[..., 0] = (sb >> 16) % 256
@@ -102,8 +106,9 @@ class AgentVisualizer(object):
     for file_type in self.file_types:
       if not file_type:
         continue
-      filename = (
-          self.filename_format.format(frame_number) + '.{}'.format(file_type))
+      filename = self.filename_format.format(frame_number) + '.{}'.format(
+          file_type
+      )
       im = Image.fromarray(self.record_frame)
       im.save(os.path.join(self.record_path, filename))
 
@@ -121,6 +126,21 @@ class AgentVisualizer(object):
     os.chdir(self.record_path)
     file_regex = self.filename_format.replace('{:', '%').replace('}', '')
     file_regex += '.png'
-    subprocess.call(['ffmpeg', '-r', '30', '-f', 'image2', '-s', '1920x1080',
-                     '-i', file_regex, '-vcodec', 'libx264', '-crf', '25',
-                     '-pix_fmt', 'yuv420p', video_file])
+    subprocess.call([
+        'ffmpeg',
+        '-r',
+        '30',
+        '-f',
+        'image2',
+        '-s',
+        '1920x1080',
+        '-i',
+        file_regex,
+        '-vcodec',
+        'libx264',
+        '-crf',
+        '25',
+        '-pix_fmt',
+        'yuv420p',
+        video_file,
+    ])

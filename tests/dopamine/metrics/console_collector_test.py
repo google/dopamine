@@ -33,36 +33,43 @@ class ConsoleCollectorTest(absltest.TestCase):
 
   def test_valid_creation(self):
     collector = console_collector.ConsoleCollector(
-        self._tmpdir, save_to_file=self._save_to_file)
-    self.assertEqual(collector._base_dir,
-                     osp.join(self._tmpdir, 'metrics/console'))
+        self._tmpdir, save_to_file=self._save_to_file
+    )
+    self.assertEqual(
+        collector._base_dir, osp.join(self._tmpdir, 'metrics/console')
+    )
     self.assertTrue(osp.exists(collector._base_dir))
-    self.assertEqual(collector._log_file,
-                     osp.join(self._tmpdir, 'metrics/console/console.log'))
+    self.assertEqual(
+        collector._log_file,
+        osp.join(self._tmpdir, 'metrics/console/console.log'),
+    )
 
   def test_valid_creation_no_base_dir(self):
     collector = console_collector.ConsoleCollector(
-        None, save_to_file=self._save_to_file)
+        None, save_to_file=self._save_to_file
+    )
     self.assertIsNone(collector._base_dir)
     self.assertIsNone(collector._log_file)
 
   def test_valid_creation_no_save_to_file(self):
     collector = console_collector.ConsoleCollector(
-        self._tmpdir, save_to_file=False)
-    self.assertEqual(collector._base_dir,
-                     osp.join(self._tmpdir, 'metrics/console'))
+        self._tmpdir, save_to_file=False
+    )
+    self.assertEqual(
+        collector._base_dir, osp.join(self._tmpdir, 'metrics/console')
+    )
     self.assertTrue(osp.exists(collector._base_dir))
     self.assertIsNone(collector._log_file)
 
   def test_step_with_fine_grained_logging(self):
     collector = console_collector.ConsoleCollector(
-        self._tmpdir, save_to_file=True)
+        self._tmpdir, save_to_file=True
+    )
     num_steps = 100
     logging.info = mock.MagicMock()
     collector._log_file_writer.write = mock.MagicMock()
     for i in range(num_steps):
-      stat_str = (
-          f'[Iteration {i}]: val = {i}\n')
+      stat_str = f'[Iteration {i}]: val = {i}\n'
       collector.write([statistics_instance.StatisticsInstance('val', i, i)])
       logging.info.assert_called_with(stat_str)
       collector._log_file_writer.write.assert_called_with(stat_str)
@@ -71,19 +78,24 @@ class ConsoleCollectorTest(absltest.TestCase):
 
   def test_no_write_with_unsupported_type(self):
     collector = console_collector.ConsoleCollector(
-        self._tmpdir, save_to_file=True)
+        self._tmpdir, save_to_file=True
+    )
     num_steps = 100
     logging.info = mock.MagicMock()
     collector._log_file_writer.write = mock.MagicMock()
     for i in range(num_steps):
-      collector.write([statistics_instance.StatisticsInstance(
-          'val', i, i, type='unsupported')])
+      collector.write([
+          statistics_instance.StatisticsInstance(
+              'val', i, i, type='unsupported'
+          )
+      ])
       logging.info.assert_not_called()
       collector._log_file_writer.write.assert_not_called()
 
   def test_full_run(self):
     collector = console_collector.ConsoleCollector(
-        self._tmpdir, save_to_file=True)
+        self._tmpdir, save_to_file=True
+    )
     num_iterations = 2
     num_steps = 4
     for i in range(num_iterations):
@@ -91,8 +103,7 @@ class ConsoleCollectorTest(absltest.TestCase):
       collector._log_file_writer.write = mock.MagicMock()
       collector._log_file_writer.close = mock.MagicMock()
       for j in range(1, num_steps * (i + 1)):
-        collector.write([
-            statistics_instance.StatisticsInstance('val', j, i)])
+        collector.write([statistics_instance.StatisticsInstance('val', j, i)])
         stat_str = f'[Iteration {i}]: val = {j}\n'
         logging.info.assert_called_with(stat_str)
         collector._log_file_writer.write.assert_called_with(stat_str)

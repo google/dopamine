@@ -49,15 +49,17 @@ import tensorflow as tf
 
 
 try:
-  logging.warning(
-      ('Setting tf to CPU only, to avoid OOM. '
-       'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
-       'for more information.'))
+  logging.warning((
+      'Setting tf to CPU only, to avoid OOM. '
+      'See https://jax.readthedocs.io/en/latest/gpu_memory_allocation.html '
+      'for more information.'
+  ))
   tf.config.set_visible_devices([], 'GPU')
 except tf.errors.NotFoundError:
-  logging.info(
-      ('Unable to modify visible devices. '
-       'If you don\'t have a GPU, this is expected.'))
+  logging.info((
+      'Unable to modify visible devices. '
+      "If you don't have a GPU, this is expected."
+  ))
 
 
 gin.constant('sac_agent.IMAGE_DTYPE', onp.uint8)
@@ -65,23 +67,25 @@ gin.constant('sac_agent.STATE_DTYPE', onp.float32)
 
 
 @functools.partial(jax.jit, static_argnums=(0, 1, 2))
-def train(network_def: nn.Module,
-          optim: optax.GradientTransformation,
-          alpha_optim: optax.GradientTransformation,
-          optimizer_state: jnp.ndarray,
-          alpha_optimizer_state: jnp.ndarray,
-          network_params: flax.core.FrozenDict,
-          target_params: flax.core.FrozenDict,
-          log_alpha: jnp.ndarray,
-          key: jnp.ndarray,
-          states: jnp.ndarray,
-          actions: jnp.ndarray,
-          next_states: jnp.ndarray,
-          rewards: jnp.ndarray,
-          terminals: jnp.ndarray,
-          cumulative_gamma: float,
-          target_entropy: float,
-          reward_scale_factor: float) -> Mapping[str, Any]:
+def train(
+    network_def: nn.Module,
+    optim: optax.GradientTransformation,
+    alpha_optim: optax.GradientTransformation,
+    optimizer_state: jnp.ndarray,
+    alpha_optimizer_state: jnp.ndarray,
+    network_params: flax.core.FrozenDict,
+    target_params: flax.core.FrozenDict,
+    log_alpha: jnp.ndarray,
+    key: jnp.ndarray,
+    states: jnp.ndarray,
+    actions: jnp.ndarray,
+    next_states: jnp.ndarray,
+    rewards: jnp.ndarray,
+    terminals: jnp.ndarray,
+    cumulative_gamma: float,
+    target_entropy: float,
+    reward_scale_factor: float,
+) -> Mapping[str, Any]:
   """Run the training step.
 
   Returns a list of updated values and losses.
@@ -116,10 +120,15 @@ def train(network_def: nn.Module,
   actions = jnp.reshape(actions, (batch_size, -1))  # Flatten
 
   def loss_fn(
-      params: flax.core.FrozenDict, log_alpha: flax.core.FrozenDict,
-      state: jnp.ndarray, action: jnp.ndarray, reward: jnp.ndarray,
-      next_state: jnp.ndarray, terminal: jnp.ndarray,
-      rng: jnp.ndarray) -> Tuple[jnp.ndarray, Mapping[str, jnp.ndarray]]:
+      params: flax.core.FrozenDict,
+      log_alpha: flax.core.FrozenDict,
+      state: jnp.ndarray,
+      action: jnp.ndarray,
+      reward: jnp.ndarray,
+      next_state: jnp.ndarray,
+      terminal: jnp.ndarray,
+      rng: jnp.ndarray,
+  ) -> Tuple[jnp.ndarray, Mapping[str, jnp.ndarray]]:
     """Calculates the loss for one transition.
 
     Args:
@@ -140,19 +149,22 @@ def train(network_def: nn.Module,
 
     # J_Q(\theta) from equation (5) in paper.
     q_value_1, q_value_2 = network_def.apply(
-        params, state, action, method=network_def.critic)
+        params, state, action, method=network_def.critic
+    )
     q_value_1 = jnp.squeeze(q_value_1)
     q_value_2 = jnp.squeeze(q_value_2)
 
     target_outputs = network_def.apply(target_params, next_state, rng1, True)
     target_q_value_1, target_q_value_2 = target_outputs.critic
     target_q_value = jnp.squeeze(
-        jnp.minimum(target_q_value_1, target_q_value_2))
+        jnp.minimum(target_q_value_1, target_q_value_2)
+    )
 
     alpha_value = jnp.exp(log_alpha)  # pytype: disable=wrong-arg-types  # numpy-scalars
     log_prob = target_outputs.actor.log_probability
     target = reward_scale_factor * reward + cumulative_gamma * (
-        target_q_value - alpha_value * log_prob) * (1. - terminal)
+        target_q_value - alpha_value * log_prob
+    ) * (1.0 - terminal)
     target = jax.lax.stop_gradient(target)
     critic_loss_1 = losses.mse_loss(q_value_1, target)
     critic_loss_2 = losses.mse_loss(q_value_2, target)
@@ -160,14 +172,17 @@ def train(network_def: nn.Module,
 
     # J_{\pi}(\phi) from equation (9) in paper.
     mean_action, sampled_action, action_log_prob = network_def.apply(
-        params, state, rng2, method=network_def.actor)
+        params, state, rng2, method=network_def.actor
+    )
 
     # We use frozen_params so that gradients can flow back to the actor without
     # being used to update the critic.
     q_value_no_grad_1, q_value_no_grad_2 = network_def.apply(
-        frozen_params, state, sampled_action, method=network_def.critic)
+        frozen_params, state, sampled_action, method=network_def.critic
+    )
     no_grad_q_value = jnp.squeeze(
-        jnp.minimum(q_value_no_grad_1, q_value_no_grad_2))
+        jnp.minimum(q_value_no_grad_1, q_value_no_grad_2)
+    )
     alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))  # pytype: disable=wrong-arg-types  # numpy-scalars
     policy_loss = jnp.mean(alpha_value * action_log_prob - no_grad_q_value)
 
@@ -185,16 +200,25 @@ def train(network_def: nn.Module,
         'critic_value_2': q_value_2,
         'target_value_1': target_q_value_1,
         'target_value_2': target_q_value_2,
-        'mean_action': mean_action
+        'mean_action': mean_action,
     }
 
   grad_fn = jax.vmap(
       jax.value_and_grad(loss_fn, argnums=(0, 1), has_aux=True),
-      in_axes=(None, None, 0, 0, 0, 0, 0, 0))
+      in_axes=(None, None, 0, 0, 0, 0, 0, 0),
+  )
 
   rng = jnp.stack(jax.random.split(key, num=batch_size))
-  (_, aux_vars), gradients = grad_fn(network_params, log_alpha, states, actions,
-                                     rewards, next_states, terminals, rng)
+  (_, aux_vars), gradients = grad_fn(
+      network_params,
+      log_alpha,
+      states,
+      actions,
+      rewards,
+      next_states,
+      terminals,
+      rng,
+  )
 
   # This calculates the mean gradient/aux_vars using the individual
   # gradients/aux_vars from each item in the batch.
@@ -203,11 +227,13 @@ def train(network_def: nn.Module,
   network_gradient, alpha_gradient = gradients
 
   # Apply gradients to all the optimizers.
-  updates, optimizer_state = optim.update(network_gradient, optimizer_state,
-                                          params=network_params)
+  updates, optimizer_state = optim.update(
+      network_gradient, optimizer_state, params=network_params
+  )
   network_params = optax.apply_updates(network_params, updates)
   alpha_updates, alpha_optimizer_state = alpha_optim.update(
-      alpha_gradient, alpha_optimizer_state, params=log_alpha)
+      alpha_gradient, alpha_optimizer_state, params=log_alpha
+  )
   log_alpha = optax.apply_updates(log_alpha, alpha_updates)
 
   # Compile everything in a dict.
@@ -250,7 +276,8 @@ def select_action(network_def, params, state, rng, eval_mode=False):
   """
   rng, rng2 = jax.random.split(rng)
   greedy_a, sampled_a, _ = network_def.apply(
-      params, state, rng2, method=network_def.actor)
+      params, state, rng2, method=network_def.actor
+  )
   return rng, jnp.where(eval_mode, greedy_a, sampled_a)
 
 
@@ -258,32 +285,34 @@ def select_action(network_def, params, state, rng, eval_mode=False):
 class SACAgent(dqn_agent.JaxDQNAgent):
   """A JAX implementation of the SAC agent."""
 
-  def __init__(self,
-               action_shape,
-               action_limits,
-               observation_shape,
-               action_dtype=jnp.float32,
-               observation_dtype=jnp.float32,
-               reward_scale_factor=1.0,
-               stack_size=1,
-               network=continuous_networks.SACNetwork,
-               num_layers=2,
-               hidden_units=256,
-               gamma=0.99,
-               update_horizon=1,
-               min_replay_history=20000,
-               update_period=1,
-               target_update_type='soft',
-               target_update_period=1000,
-               target_smoothing_coefficient=0.005,
-               target_entropy=None,
-               eval_mode=False,
-               optimizer='adam',
-               summary_writer=None,
-               summary_writing_frequency=500,
-               allow_partial_reload=False,
-               seed=None,
-               collector_allowlist=('tensorboard')):
+  def __init__(
+      self,
+      action_shape,
+      action_limits,
+      observation_shape,
+      action_dtype=jnp.float32,
+      observation_dtype=jnp.float32,
+      reward_scale_factor=1.0,
+      stack_size=1,
+      network=continuous_networks.SACNetwork,
+      num_layers=2,
+      hidden_units=256,
+      gamma=0.99,
+      update_horizon=1,
+      min_replay_history=20000,
+      update_period=1,
+      target_update_type='soft',
+      target_update_period=1000,
+      target_smoothing_coefficient=0.005,
+      target_entropy=None,
+      eval_mode=False,
+      optimizer='adam',
+      summary_writer=None,
+      summary_writing_frequency=500,
+      allow_partial_reload=False,
+      seed=None,
+      collector_allowlist='tensorboard',
+  ):
     r"""Initializes the agent and constructs the necessary components.
 
     Args:
@@ -339,8 +368,10 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       action_dim = functools.reduce(operator.mul, action_shape, 1.0)
       target_entropy = -0.5 * action_dim
     seed = int(time.time() * 1e6) if seed is None else seed
-    logging.info('Creating %s agent with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating %s agent with the following parameters:',
+        self.__class__.__name__,
+    )
     logging.info('\t action_shape: %s', action_shape)
     logging.info('\t action_dtype: %s', action_dtype)
     logging.info('\t action_limits: %s', action_limits)
@@ -355,8 +386,9 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     logging.info('\t update_period: %d', update_period)
     logging.info('\t target_update_type: %s', target_update_type)
     logging.info('\t target_update_period: %d', target_update_period)
-    logging.info('\t target_smoothing_coefficient: %f',
-                 target_smoothing_coefficient)
+    logging.info(
+        '\t target_smoothing_coefficient: %f', target_smoothing_coefficient
+    )
     logging.info('\t target_entropy: %f', target_entropy)
     logging.info('\t optimizer: %s', optimizer)
     logging.info('\t seed: %d', seed)
@@ -369,8 +401,9 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     self.stack_size = stack_size
     self.action_limits = action_limits
     action_limits = tuple(tuple(x.reshape(-1)) for x in action_limits)
-    self.network_def = network(action_shape, num_layers, hidden_units,
-                               action_limits)
+    self.network_def = network(
+        action_shape, num_layers, hidden_units, action_limits
+    )
     self.gamma = gamma
     self.update_horizon = update_horizon
     self.cumulative_gamma = math.pow(gamma, update_horizon)
@@ -425,20 +458,26 @@ class SACAgent(dqn_agent.JaxDQNAgent):
         gamma=self.gamma,
         observation_dtype=self.observation_dtype,
         action_shape=self.action_shape,
-        action_dtype=self.action_dtype)
+        action_dtype=self.action_dtype,
+    )
 
   def _maybe_sync_weights(self):
     """Syncs the target weights with the online weights."""
-    if (self.target_update_type == 'hard' and
-        self.training_steps % self.target_update_period != 0):
+    if (
+        self.target_update_type == 'hard'
+        and self.training_steps % self.target_update_period != 0
+    ):
       return
 
     def _sync_weights(target_p, online_p):
-      return (self.target_smoothing_coefficient * online_p +
-              (1 - self.target_smoothing_coefficient) * target_p)
+      return (
+          self.target_smoothing_coefficient * online_p
+          + (1 - self.target_smoothing_coefficient) * target_p
+      )
 
-    self.target_params = jax.tree_map(_sync_weights, self.target_params,
-                                      self.network_params)
+    self.target_params = jax.tree_map(
+        _sync_weights, self.target_params, self.network_params
+    )
 
   def begin_episode(self, observation):
     """Returns the agent's first action for this episode.
@@ -456,14 +495,22 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       self._train_step()
 
     if self._replay.add_count > self.min_replay_history:
-      self._rng, self.action = select_action(self.network_def,
-                                             self.network_params, self.state,
-                                             self._rng, self.eval_mode)
+      self._rng, self.action = select_action(
+          self.network_def,
+          self.network_params,
+          self.state,
+          self._rng,
+          self.eval_mode,
+      )
     else:
       self._rng, action_rng = jax.random.split(self._rng)
-      self.action = jax.random.uniform(action_rng, self.action_shape,
-                                       self.action_dtype, self.action_limits[0],
-                                       self.action_limits[1])
+      self.action = jax.random.uniform(
+          action_rng,
+          self.action_shape,
+          self.action_dtype,
+          self.action_limits[0],
+          self.action_limits[1],
+      )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -488,14 +535,22 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       self._train_step()
 
     if self._replay.add_count > self.min_replay_history:
-      self._rng, self.action = select_action(self.network_def,
-                                             self.network_params, self.state,
-                                             self._rng, self.eval_mode)
+      self._rng, self.action = select_action(
+          self.network_def,
+          self.network_params,
+          self.state,
+          self._rng,
+          self.eval_mode,
+      )
     else:
       self._rng, action_rng = jax.random.split(self._rng)
-      self.action = jax.random.uniform(action_rng, self.action_shape,
-                                       self.action_dtype, self.action_limits[0],
-                                       self.action_limits[1])
+      self.action = jax.random.uniform(
+          action_rng,
+          self.action_shape,
+          self.action_dtype,
+          self.action_limits[0],
+          self.action_limits[1],
+      )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -515,37 +570,54 @@ class SACAgent(dqn_agent.JaxDQNAgent):
         self._rng, key = jax.random.split(self._rng)
 
         train_returns = train(
-            self.network_def, self.network_optimizer, self.alpha_optimizer,
-            self.optimizer_state, self.alpha_optimizer_state,
-            self.network_params, self.target_params, self.log_alpha,
-            key, self.replay_elements['state'],
-            self.replay_elements['action'], self.replay_elements['next_state'],
-            self.replay_elements['reward'], self.replay_elements['terminal'],
-            self.cumulative_gamma, self.target_entropy,
-            self.reward_scale_factor)
+            self.network_def,
+            self.network_optimizer,
+            self.alpha_optimizer,
+            self.optimizer_state,
+            self.alpha_optimizer_state,
+            self.network_params,
+            self.target_params,
+            self.log_alpha,
+            key,
+            self.replay_elements['state'],
+            self.replay_elements['action'],
+            self.replay_elements['next_state'],
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            self.cumulative_gamma,
+            self.target_entropy,
+            self.reward_scale_factor,
+        )
 
         self.network_params = train_returns['network_params']
         self.optimizer_state = train_returns['optimizer_state']
         self.log_alpha = train_returns['log_alpha']
         self.alpha_optimizer_state = train_returns['alpha_optimizer_state']
 
-        if (self.summary_writer is not None and
-            self.training_steps > 0 and
-            self.training_steps % self.summary_writing_frequency == 0):
+        if (
+            self.summary_writer is not None
+            and self.training_steps > 0
+            and self.training_steps % self.summary_writing_frequency == 0
+        ):
 
           statistics = []
           for k in train_returns:
             if k.startswith('Losses') or k.startswith('Values'):
-              self.summary_writer.scalar(k, train_returns[k],
-                                         self.training_steps)
+              self.summary_writer.scalar(
+                  k, train_returns[k], self.training_steps
+              )
               if hasattr(self, 'collector_dispatcher'):
                 statistics.append(
                     statistics_instance.StatisticsInstance(
-                        k, onp.asarray(train_returns[k]),
-                        step=self.training_steps))
+                        k,
+                        onp.asarray(train_returns[k]),
+                        step=self.training_steps,
+                    )
+                )
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
-                statistics, collector_allowlist=self._collector_allowlist)
+                statistics, collector_allowlist=self._collector_allowlist
+            )
           self.summary_writer.flush()
         self._maybe_sync_weights()
     self.training_steps += 1

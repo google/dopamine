@@ -32,13 +32,15 @@ class SumTreeTest(tf.test.TestCase):
     self._tree = sum_tree.SumTree(capacity=100)
 
   def testNegativeCapacity(self):
-    with self.assertRaises(ValueError,
-                           msg='Sum tree capacity should be positive. Got: -1'):
+    with self.assertRaises(
+        ValueError, msg='Sum tree capacity should be positive. Got: -1'
+    ):
       sum_tree.SumTree(capacity=-1)
 
   def testSetNegativeValue(self):
-    with self.assertRaises(ValueError,
-                           msg='Sum tree values should be nonnegative. Got -1'):
+    with self.assertRaises(
+        ValueError, msg='Sum tree values should be nonnegative. Got -1'
+    ):
       self._tree.set(node_index=0, value=-1)
 
   def testSmallCapacityConstructor(self):
@@ -67,8 +69,9 @@ class SumTreeTest(tf.test.TestCase):
     self.assertGreaterEqual(len(self._tree.nodes[-1]), 100)
 
   def testSampleFromEmptyTree(self):
-    with self.assertRaises(Exception,
-                           msg='Cannot sample from an empty sum tree.'):
+    with self.assertRaises(
+        Exception, msg='Cannot sample from an empty sum tree.'
+    ):
       self._tree.sample()
 
   def testSampleWithInvalidQueryValue(self):
@@ -133,8 +136,9 @@ class SumTreeTest(tf.test.TestCase):
     self.assertLess(counts[2], counts[3])
 
   def testStratifiedSamplingFromEmptyTree(self):
-    with self.assertRaises(Exception,
-                           msg='Cannot sample from an empty sum tree.'):
+    with self.assertRaises(
+        Exception, msg='Cannot sample from an empty sum tree.'
+    ):
       self._tree.stratified_sample(5)
 
   def testStratifiedSampling(self):
@@ -153,6 +157,7 @@ class SumTreeTest(tf.test.TestCase):
     for i in range(1, k):
       self._tree.set(node_index=i, value=i)
       self.assertEqual(self._tree.max_recorded_priority, i)
+
 
 if __name__ == '__main__':
   tf.compat.v1.disable_v2_behavior()

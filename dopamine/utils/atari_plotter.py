@@ -12,11 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""AtariPlotter used for rendering Atari 2600 frames.
-"""
+"""AtariPlotter used for rendering Atari 2600 frames."""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
 
 
 from dopamine.utils import plotter
@@ -43,13 +43,14 @@ class AtariPlotter(plotter.Plotter):
 
     Args:
       parameter_dict: None or dict of parameter specifications for
-        visualization. If an expected parameter is present, its value will
-        be used, otherwise it will use defaults.
+        visualization. If an expected parameter is present, its value will be
+        used, otherwise it will use defaults.
     """
     super(AtariPlotter, self).__init__(parameter_dict)
     assert 'environment' in self.parameters
-    self.game_surface = pygame.Surface((self.parameters['input_width'],
-                                        self.parameters['input_height']))
+    self.game_surface = pygame.Surface(
+        (self.parameters['input_width'], self.parameters['input_height'])
+    )
 
   def draw(self):
     """Render the Atari 2600 frame.
@@ -58,13 +59,14 @@ class AtariPlotter(plotter.Plotter):
       object to be rendered by AgentVisualizer.
     """
     environment = self.parameters['environment']
-    numpy_surface = np.frombuffer(self.game_surface.get_buffer(),
-                                  dtype=np.int32)
+    numpy_surface = np.frombuffer(
+        self.game_surface.get_buffer(), dtype=np.int32
+    )
     obs = environment.render(mode='rgb_array').astype(np.int32)
     obs = np.transpose(obs)
     obs = np.swapaxes(obs, 1, 2)
     obs = obs[2] | (obs[1] << 8) | (obs[0] << 16)
     np.copyto(numpy_surface, obs.ravel())
-    return pygame.transform.scale(self.game_surface,
-                                  (self.parameters['width'],
-                                   self.parameters['height']))
+    return pygame.transform.scale(
+        self.game_surface, (self.parameters['width'], self.parameters['height'])
+    )

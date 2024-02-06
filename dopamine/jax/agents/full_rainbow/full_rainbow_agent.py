@@ -45,29 +45,50 @@ import tensorflow as tf
 
 
 @gin.configurable
-def zero_epsilon(unused_decay_period, unused_step, unused_warmup_steps,
-                 unused_epsilon):
+def zero_epsilon(
+    unused_decay_period, unused_step, unused_warmup_steps, unused_epsilon
+):
   return 0.0
 
 
 @functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 10, 11))
-def select_action(network_def, params, state, rng, num_actions, eval_mode,
-                  epsilon_eval, epsilon_train, epsilon_decay_period,
-                  training_steps, min_replay_history, epsilon_fn, support):
+def select_action(
+    network_def,
+    params,
+    state,
+    rng,
+    num_actions,
+    eval_mode,
+    epsilon_eval,
+    epsilon_train,
+    epsilon_decay_period,
+    training_steps,
+    min_replay_history,
+    epsilon_fn,
+    support,
+):
   """Select an action from the set of available actions."""
   epsilon = jnp.where(
-      eval_mode, epsilon_eval,
-      epsilon_fn(epsilon_decay_period, training_steps, min_replay_history,
-                 epsilon_train))
+      eval_mode,
+      epsilon_eval,
+      epsilon_fn(
+          epsilon_decay_period,
+          training_steps,
+          min_replay_history,
+          epsilon_train,
+      ),
+  )
 
   rng, rng1, rng2, rng3 = jax.random.split(rng, num=4)
   p = jax.random.uniform(rng1)
   best_actions = jnp.argmax(
-      network_def.apply(params, state, key=rng2, eval_mode=eval_mode,
-                        support=support).q_values)
-  return rng, jnp.where(p <= epsilon,
-                        jax.random.randint(rng3, (), 0, num_actions),
-                        best_actions)
+      network_def.apply(
+          params, state, key=rng2, eval_mode=eval_mode, support=support
+      ).q_values
+  )
+  return rng, jnp.where(
+      p <= epsilon, jax.random.randint(rng3, (), 0, num_actions), best_actions
+  )
 
 
 @functools.partial(jax.vmap, in_axes=(None, 0, None))
@@ -80,12 +101,36 @@ def get_q_values(model, states, rng):
   return model(states, key=rng).q_values
 
 
-@functools.partial(jax.jit, static_argnames=('network_def', 'optimizer',
-                                             'cumulative_gamma', 'double_dqn',
-                                             'distributional', 'mse_loss'))
-def train(network_def, online_params, target_params, optimizer, optimizer_state,
-          states, actions, next_states, rewards, terminals, loss_weights,
-          support, cumulative_gamma, double_dqn, distributional, mse_loss, rng):
+@functools.partial(
+    jax.jit,
+    static_argnames=(
+        'network_def',
+        'optimizer',
+        'cumulative_gamma',
+        'double_dqn',
+        'distributional',
+        'mse_loss',
+    ),
+)
+def train(
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    loss_weights,
+    support,
+    cumulative_gamma,
+    double_dqn,
+    distributional,
+    mse_loss,
+    rng,
+):
   """Run a training step."""
 
   # Split the current rng into 2 for updating the rng after this call
@@ -99,6 +144,7 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
 
   def loss_fn(params, target, loss_multipliers):
     """Computes the distributional loss for C51 or huber loss for DQN."""
+
     def q_online(state, key):
       return network_def.apply(params, state, key=key, support=support)
 
@@ -109,7 +155,8 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
       # indexing across the batch.
       chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
       loss = jax.vmap(losses.softmax_cross_entropy_loss_with_logits)(
-          target, chosen_action_logits)
+          target, chosen_action_logits
+      )
     else:
       q_values = get_q_values(q_online, states, rng)
       q_values = jnp.squeeze(q_values)
@@ -123,25 +170,46 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
 
   # Use the weighted mean loss for gradient computation.
   grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
-  target = target_output(q_online, q_target, next_states, rewards,
-                         terminals, support, cumulative_gamma, double_dqn,
-                         distributional, rng1)
+  target = target_output(
+      q_online,
+      q_target,
+      next_states,
+      rewards,
+      terminals,
+      support,
+      cumulative_gamma,
+      double_dqn,
+      distributional,
+      rng1,
+  )
 
   # Get the unweighted loss without taking its mean for updating priorities.
   (mean_loss, loss), grad = grad_fn(online_params, target, loss_weights)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state,
-                                              params=online_params)
+  updates, optimizer_state = optimizer.update(
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss, mean_loss, rng2
 
 
 @functools.partial(
-    jax.vmap, in_axes=(None, None, 0, 0, 0, None, None, None, None, None))
-def target_output(model, target_network, next_states, rewards, terminals,
-                  support, cumulative_gamma, double_dqn, distributional, rng):
+    jax.vmap, in_axes=(None, None, 0, 0, 0, None, None, None, None, None)
+)
+def target_output(
+    model,
+    target_network,
+    next_states,
+    rewards,
+    terminals,
+    support,
+    cumulative_gamma,
+    double_dqn,
+    distributional,
+    rng,
+):
   """Builds the C51 target distribution or DQN target Q-values."""
 
-  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
+  is_terminal_multiplier = 1.0 - terminals.astype(jnp.float32)
   # Incorporate terminal state to discount factor.
   gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
 
@@ -161,7 +229,8 @@ def target_output(model, target_network, next_states, rewards, terminals,
     next_probabilities = probabilities[next_qt_argmax]
     target_support = rewards + gamma_with_terminal * support
     target = rainbow_agent.project_distribution(
-        target_support, next_probabilities, support)
+        target_support, next_probabilities, support
+    )
   else:
     # Compute the target Q-value
     next_q_values = jnp.squeeze(target_network_dist.q_values)
@@ -175,23 +244,25 @@ def target_output(model, target_network, next_states, rewards, terminals,
 class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
   """A compact implementation of the full Rainbow agent."""
 
-  def __init__(self,
-               num_actions,
-               noisy=True,
-               dueling=True,
-               double_dqn=True,
-               distributional=True,
-               mse_loss=False,
-               num_updates_per_train_step=1,
-               network=networks.FullRainbowNetwork,
-               num_atoms=51,
-               vmax=10.,
-               vmin=None,
-               epsilon_fn=dqn_agent.linearly_decaying_epsilon,
-               replay_scheme='prioritized',
-               summary_writer=None,
-               seed=None,
-               preprocess_fn=None):
+  def __init__(
+      self,
+      num_actions,
+      noisy=True,
+      dueling=True,
+      double_dqn=True,
+      distributional=True,
+      mse_loss=False,
+      num_updates_per_train_step=1,
+      network=networks.FullRainbowNetwork,
+      num_atoms=51,
+      vmax=10.0,
+      vmin=None,
+      epsilon_fn=dqn_agent.linearly_decaying_epsilon,
+      replay_scheme='prioritized',
+      summary_writer=None,
+      seed=None,
+      preprocess_fn=None,
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -217,12 +288,14 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
         replay memory.
       summary_writer: SummaryWriter object, for outputting training statistics.
       seed: int, a seed for Jax RNG and initialization.
-      preprocess_fn: function expecting the input state as parameter which
-        it preprocesses (such as normalizing the pixel values between 0 and 1)
+      preprocess_fn: function expecting the input state as parameter which it
+        preprocesses (such as normalizing the pixel values between 0 and 1)
         before passing it to the Q-network. Defaults to None.
     """
-    logging.info('Creating %s agent with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating %s agent with the following parameters:',
+        self.__class__.__name__,
+    )
     logging.info('\t double_dqn: %s', double_dqn)
     logging.info('\t noisy_networks: %s', noisy)
     logging.info('\t dueling_dqn: %s', dueling)
@@ -230,8 +303,9 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     logging.info('\t mse_loss: %d', mse_loss)
     logging.info('\t num_atoms: %d', num_atoms)
     logging.info('\t replay_scheme: %s', replay_scheme)
-    logging.info('\t num_updates_per_train_step: %d',
-                 num_updates_per_train_step)
+    logging.info(
+        '\t num_updates_per_train_step: %d', num_updates_per_train_step
+    )
     # We need this because some tools convert round floats into ints.
     vmax = float(vmax)
     self._num_atoms = num_atoms
@@ -248,20 +322,24 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     super().__init__(
         num_actions=num_actions,
         network=functools.partial(
-            network, num_atoms=num_atoms,
+            network,
+            num_atoms=num_atoms,
             noisy=self._noisy,
             dueling=self._dueling,
-            distributional=self._distributional),
+            distributional=self._distributional,
+        ),
         epsilon_fn=zero_epsilon if self._noisy else epsilon_fn,
         summary_writer=summary_writer,
         seed=seed,
-        preprocess_fn=preprocess_fn)
+        preprocess_fn=preprocess_fn,
+    )
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
     state = self.preprocess_fn(self.state)
-    self.online_params = self.network_def.init(rng, x=state,
-                                               support=self._support)
+    self.online_params = self.network_def.init(
+        rng, x=state, support=self._support
+    )
     self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
     self.target_network_params = self.online_params
@@ -275,7 +353,8 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype)
+        observation_dtype=self.observation_dtype,
+    )
 
   def _training_step_update(self):
     """Gradient update during every training step."""
@@ -297,14 +376,27 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       # Uniform weights if not using prioritized replay.
       loss_weights = jnp.ones(states.shape[0])
 
-    (self.optimizer_state, self.online_params,
-     loss, mean_loss, self._rng) = train(
-         self.network_def, self.online_params, self.target_network_params,
-         self.optimizer, self.optimizer_state, states,
-         self.replay_elements['action'], next_states,
-         self.replay_elements['reward'], self.replay_elements['terminal'],
-         loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._mse_loss, self._rng)
+    (self.optimizer_state, self.online_params, loss, mean_loss, self._rng) = (
+        train(
+            self.network_def,
+            self.online_params,
+            self.target_network_params,
+            self.optimizer,
+            self.optimizer_state,
+            states,
+            self.replay_elements['action'],
+            next_states,
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            loss_weights,
+            self._support,
+            self.cumulative_gamma,
+            self._double_dqn,
+            self._distributional,
+            self._mse_loss,
+            self._rng,
+        )
+    )
 
     if self._replay_scheme == 'prioritized':
       # Rainbow and prioritized replay are parametrized by an exponent
@@ -314,38 +406,48 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       # small nonzero value to the loss to avoid 0 priority items. While
       # technically this may be okay, setting all items to 0 priority will
       # cause troubles, and also result in 1.0 / 0.0 = NaN correction terms.
-      self._replay.set_priority(self.replay_elements['indices'],
-                                jnp.sqrt(loss + 1e-10))
+      self._replay.set_priority(
+          self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+      )
 
-    if (self.summary_writer is not None and
-        self.training_steps > 0 and
-        self.training_steps % self.summary_writing_frequency == 0):
+    if (
+        self.summary_writer is not None
+        and self.training_steps > 0
+        and self.training_steps % self.summary_writing_frequency == 0
+    ):
       with self.summary_writer.as_default():
-        tf.summary.scalar('CrossEntropyLoss', mean_loss,
-                          step=self.training_steps)
+        tf.summary.scalar(
+            'CrossEntropyLoss', mean_loss, step=self.training_steps
+        )
       self.summary_writer.flush()
       if hasattr(self, 'collector_dispatcher'):
         self.collector_dispatcher.write(
-            [statistics_instance.StatisticsInstance(
-                'Loss', onp.asarray(mean_loss), step=self.training_steps),
-             ],
-            collector_allowlist=self._collector_allowlist)
+            [
+                statistics_instance.StatisticsInstance(
+                    'Loss', onp.asarray(mean_loss), step=self.training_steps
+                ),
+            ],
+            collector_allowlist=self._collector_allowlist,
+        )
 
-  def _store_transition(self,
-                        last_observation,
-                        action,
-                        reward,
-                        is_terminal,
-                        *args,
-                        priority=None,
-                        episode_end=False):
+  def _store_transition(
+      self,
+      last_observation,
+      action,
+      reward,
+      is_terminal,
+      *args,
+      priority=None,
+      episode_end=False
+  ):
     """Stores a transition when in training mode."""
     is_prioritized = isinstance(
         self._replay,
-        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer)
+        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer,
+    )
     if is_prioritized and priority is None:
       if self._replay_scheme == 'uniform':
-        priority = 1.
+        priority = 1.0
       else:
         priority = self._replay.sum_tree.max_recorded_priority
 
@@ -357,7 +459,8 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
           is_terminal,
           *args,
           priority=priority,
-          episode_end=episode_end)
+          episode_end=episode_end
+      )
 
   def _train_step(self):
     """Runs a single training step.
@@ -389,10 +492,20 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
 
     state = self.preprocess_fn(self.state)
     self._rng, self.action = select_action(
-        self.network_def, self.online_params, state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn, self._support)
+        self.network_def,
+        self.online_params,
+        state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -407,9 +520,19 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
 
     state = self.preprocess_fn(self.state)
     self._rng, self.action = select_action(
-        self.network_def, self.online_params, state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn, self._support)
+        self.network_def,
+        self.online_params,
+        state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action

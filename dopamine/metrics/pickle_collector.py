@@ -40,8 +40,8 @@ class PickleCollector(collector.Collector):
     return 'pickle'
 
   def write(
-      self,
-      statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
+      self, statistics: Sequence[statistics_instance.StatisticsInstance]
+  ) -> None:
     # This Collector is trying to write metrics as close as possible to what
     # is currently written by the Dopamine Logger, so as to be as compatible
     # with user's plotting setups.

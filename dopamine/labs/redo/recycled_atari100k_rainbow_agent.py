@@ -21,35 +21,36 @@ from dopamine.labs.redo import weight_recyclers
 from dopamine.metrics import statistics_instance
 import gin
 import jax
-
 import jax.numpy as jnp
 import optax
 
 
 @gin.configurable
 class RecycledAtari100kRainbowAgent(
-    atari_100k_rainbow_agent.Atari100kRainbowAgent):
+    atari_100k_rainbow_agent.Atari100kRainbowAgent
+):
   """Atari100k Ranibow Agent with recycled parameters."""
 
-  def __init__(self,
-               num_actions,
-               network='nature',
-               reset_mode=None,
-               width=1,
-               batch_size_statistics=256,
-               target_update_strategy='training_step',
-               weight_decay=0.0,
-               summary_writer=None,
-               is_debugging=False):
+  def __init__(
+      self,
+      num_actions,
+      network='nature',
+      reset_mode=None,
+      width=1,
+      batch_size_statistics=256,
+      target_update_strategy='training_step',
+      weight_decay=0.0,
+      summary_writer=None,
+      is_debugging=False,
+  ):
     network_name = network
     if network == 'nature':
       network = networks.FullRainbowNetwork
     else:
       raise ValueError(f'Invalid network: {network}')
     super().__init__(
-        num_actions,
-        network=network,
-        summary_writer=summary_writer)
+        num_actions, network=network, summary_writer=summary_writer
+    )
 
     # For DrQ or DER agents dueling is enabled. In this case, the last
     # dense layer is connected to two layers. We put these two layers in one
@@ -63,7 +64,8 @@ class RecycledAtari100kRainbowAgent(
       # TODO(gsokar) we may compare the performance with adamw.
       # lets keep it under a condition till we check its effect.
       self.optimizer = optax.chain(
-          optax.add_decayed_weights(weight_decay), self.optimizer)
+          optax.add_decayed_weights(weight_decay), self.optimizer
+      )
       self.optimizer_state = self.optimizer.init(self.online_params)
 
     self.batch_size_statistics = batch_size_statistics
@@ -72,7 +74,8 @@ class RecycledAtari100kRainbowAgent(
     if reset_mode is not None:
       if reset_mode == 'neurons':
         self.weight_recycler = weight_recyclers.NeuronRecycler(
-            network.layer_names, network=network_name)
+            network.layer_names, network=network_name
+        )
       elif reset_mode == 'weights':
         self.weight_recycler = weight_recyclers.LayerReset(network.layer_names)
       else:
@@ -87,14 +90,17 @@ class RecycledAtari100kRainbowAgent(
     for k, v in log_dict.items():
       stats.append(statistics_instance.StatisticsInstance(k, v, step=step))
     self.collector_dispatcher.write(
-        stats, collector_allowlist=self._collector_allowlist)
+        stats, collector_allowlist=self._collector_allowlist
+    )
 
   def _train_step(self):
     if self._replay.add_count > self.min_replay_history:
       if self.training_steps % self.update_period == 0:
         for step in range(self._num_updates_per_train_step):
-          self.gradient_step = ((self.training_steps // self.update_period) *
-                                self._num_updates_per_train_step) + step
+          self.gradient_step = (
+              (self.training_steps // self.update_period)
+              * self._num_updates_per_train_step
+          ) + step
           self._training_step_update()
           if self.target_update_strategy == 'update_step':
             if self.gradient_step % self.target_update_period == 0:
@@ -115,7 +121,8 @@ class RecycledAtari100kRainbowAgent(
     self._rng, rng1, rng2 = jax.random.split(self._rng, num=3)
     states = self.train_preprocess_fn(self.replay_elements['state'], rng=rng1)
     next_states = self.train_preprocess_fn(
-        self.replay_elements['next_state'], rng=rng2)
+        self.replay_elements['next_state'], rng=rng2
+    )
 
     if self._replay_scheme == 'prioritized':
       probs = self.replay_elements['sampling_probabilities']
@@ -126,24 +133,37 @@ class RecycledAtari100kRainbowAgent(
       # Uniform weights if not using prioritized replay.
       loss_weights = jnp.ones(states.shape[0])
 
-    (self.optimizer_state, self.online_params,
-     loss, mean_loss, self._rng) = full_rainbow_agent.train(
-         self.network_def, self.online_params, self.target_network_params,
-         self.optimizer, self.optimizer_state, states,
-         self.replay_elements['action'], next_states,
-         self.replay_elements['reward'], self.replay_elements['terminal'],
-         loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._rng)
+    (self.optimizer_state, self.online_params, loss, mean_loss, self._rng) = (
+        full_rainbow_agent.train(
+            self.network_def,
+            self.online_params,
+            self.target_network_params,
+            self.optimizer,
+            self.optimizer_state,
+            states,
+            self.replay_elements['action'],
+            next_states,
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            loss_weights,
+            self._support,
+            self.cumulative_gamma,
+            self._double_dqn,
+            self._distributional,
+            self._rng,
+        )
+    )
 
     if self._replay_scheme == 'prioritized':
-      self._replay.set_priority(self.replay_elements['indices'],
-                                jnp.sqrt(loss + 1e-10))
+      self._replay.set_priority(
+          self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+      )
 
     # We are using # gradient_update_steps in our calculations and logging.
     update_step = self.gradient_step
     is_logging = (
-        update_step > 0 and
-        update_step % self.summary_writing_frequency == 0)
+        update_step > 0 and update_step % self.summary_writing_frequency == 0
+    )
     if is_logging:
       self._log_stats({'CrossEntropyLoss': float(mean_loss)}, update_step)
 
@@ -153,30 +173,37 @@ class RecycledAtari100kRainbowAgent(
     # Neuron/layer recycling starts if reset_mode is not None.
     # Otherwise, we log dead neurons over training for standard agent.
     is_intermediated = self.weight_recycler.is_intermediated_required(
-        update_step)
+        update_step
+    )
     # get intermediate activation per layer to calculate neuron score
-    intermediates = self.get_intermediates(
-        online_params) if is_intermediated else None
-    log_dict_neurons = (
-        self.weight_recycler.maybe_log_deadneurons(update_step, intermediates))
+    intermediates = (
+        self.get_intermediates(online_params) if is_intermediated else None
+    )
+    log_dict_neurons = self.weight_recycler.maybe_log_deadneurons(
+        update_step, intermediates
+    )
     # logging dead neurons.
     self._log_stats(log_dict_neurons, update_step)
     if self.is_debugging:
       log_dict_intersected = (
           self.weight_recycler.intersected_dead_neurons_with_last_reset(
-              intermediates, update_step))
+              intermediates, update_step
+          )
+      )
       self._log_stats(log_dict_intersected, update_step)
 
     # Neuron/layer recyling.
     self._rng, key = jax.random.split(self._rng)
     online_params, opt_state = self.weight_recycler.maybe_update_weights(
-        update_step, intermediates, online_params, key, self.optimizer_state)
+        update_step, intermediates, online_params, key, self.optimizer_state
+    )
     self.optimizer_state = opt_state
     return online_params
 
   def _sample_batch_for_statistics(self):
     samples = self._replay.sample_transition_batch(
-        batch_size=self.batch_size_statistics)
+        batch_size=self.batch_size_statistics
+    )
     types = self._replay.get_transition_elements()
     for element, element_type in zip(samples, types):
       if element_type.name == 'state':
@@ -188,6 +215,7 @@ class RecycledAtari100kRainbowAgent(
     # TODO(gsokar) add a check if batch_size equals batch_size_statistics
     # then no need to sample a new batch from buffer.
     batch = self._sample_batch_for_statistics()
+
     def apply_data(x):
       filter_rep = lambda l, _: l.name is not None and 'act' in l.name
       self._rng, key = jax.random.split(self._rng)
@@ -197,7 +225,8 @@ class RecycledAtari100kRainbowAgent(
           support=self._support,
           key=key,
           capture_intermediates=filter_rep,
-          mutable=['intermediates'])
+          mutable=['intermediates'],
+      )
 
     _, state = jax.vmap(apply_data)(batch)
     return state['intermediates']

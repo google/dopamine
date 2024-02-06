@@ -36,7 +36,8 @@ import numpy as np
 def create_deepmind_control_environment(
     domain_name: str = gin.REQUIRED,
     task_name: str = gin.REQUIRED,
-    use_image_observations: bool = gin.REQUIRED) -> gym.Env:
+    use_image_observations: bool = gin.REQUIRED,
+) -> gym.Env:
   """Wraps a Deepmind Control Suite environment with some basic preprocessing.
 
   Args:
@@ -49,7 +50,8 @@ def create_deepmind_control_environment(
     A Gym environment with some standard preprocessing.
   """
   env = suite.load(
-      domain_name, task_name, environment_kwargs={'flat_observation': True})
+      domain_name, task_name, environment_kwargs={'flat_observation': True}
+  )
 
   # Wrap the returned environment in a class which conforms to the API expected
   # by Dopamine.
@@ -110,7 +112,8 @@ class DeepmindControlPreprocessing(gym.Env):
     """The action space for the processed environment."""
     action_spec = self.environment.action_spec()
     return spaces.Box(
-        low=action_spec.minimum, high=action_spec.maximum, dtype=np.float32)
+        low=action_spec.minimum, high=action_spec.maximum, dtype=np.float32
+    )
 
   @property
   def reward_range(self) -> Tuple[float, float]:
@@ -132,8 +135,8 @@ class DeepmindControlPreprocessing(gym.Env):
     return self._get_observation(timestep)
 
   def step(
-      self,
-      action: np.ndarray) -> Tuple[np.ndarray, float, bool, Mapping[Any, Any]]:
+      self, action: np.ndarray
+  ) -> Tuple[np.ndarray, float, bool, Mapping[Any, Any]]:
     """Steps the environment.
 
     Args:
@@ -164,22 +167,25 @@ class DeepmindControlPreprocessing(gym.Env):
 
   def _get_observation(self, timestep: dm_env.TimeStep) -> np.ndarray:
     return np.concatenate(
-        [timestep.observation[k] for k in timestep.observation])
+        [timestep.observation[k] for k in timestep.observation]
+    )
 
 
 class DeepmindControlWithImagesPreprocessing(DeepmindControlPreprocessing):
   """A DM Control Suite preprocessing wrapper for image observations."""
 
-  def __init__(self,
-               env: control.Environment,
-               observation_shape: Tuple[int, int] = (84, 84)):
+  def __init__(
+      self,
+      env: control.Environment,
+      observation_shape: Tuple[int, int] = (84, 84),
+  ):
     """Constructor for preprocessing wrapper.
 
     Args:
       env: The environment to wrap.
-      observation_shape: The size to reshape the images to. This corresponds
-        to (height, width). The output shape will be (height, width, 3), with
-        3 corresponding to RGB channels.
+      observation_shape: The size to reshape the images to. This corresponds to
+        (height, width). The output shape will be (height, width, 3), with 3
+        corresponding to RGB channels.
     """
     super(DeepmindControlWithImagesPreprocessing, self).__init__(env)
 
@@ -187,7 +193,15 @@ class DeepmindControlWithImagesPreprocessing(DeepmindControlPreprocessing):
 
   @property
   def observation_space(self) -> spaces.Box:
-    return spaces.Box(low=0, high=255, shape=(*self._shape, 3,), dtype=np.uint8)
+    return spaces.Box(
+        low=0,
+        high=255,
+        shape=(
+            *self._shape,
+            3,
+        ),
+        dtype=np.uint8,
+    )
 
   def _get_observation(self, timestep: dm_env.TimeStep) -> np.ndarray:
     return self._render_image()

@@ -67,7 +67,8 @@ class SACEncoderNetworkTest(absltest.TestCase):
     # This test only matters if the gradients are non-zero for the dense layer.
     # The actor's Dense layer is Dense_1.
     self.assertNotEqual(
-        jnp.sum(jnp.abs(grad['params']['Dense_1']['kernel'])), 0.0)
+        jnp.sum(jnp.abs(grad['params']['Dense_1']['kernel'])), 0.0
+    )
 
     # It suffices to check that the final conv gradients are 0.
     self.assertEqual(jnp.sum(jnp.abs(grad['params']['Conv_3']['kernel'])), 0.0)
@@ -86,11 +87,13 @@ class SACEncoderNetworkTest(absltest.TestCase):
     # This test only matters if the gradients are non-zero for the dense layer.
     # The critic's Dense layer is Dense_0.
     self.assertNotEqual(
-        jnp.sum(jnp.abs(grad['params']['Dense_0']['kernel'])), 0.0)
+        jnp.sum(jnp.abs(grad['params']['Dense_0']['kernel'])), 0.0
+    )
 
     # It suffices to check the final conv gradients are not 0.
     self.assertNotEqual(
-        jnp.sum(jnp.abs(grad['params']['Conv_3']['kernel'])), 0.0)
+        jnp.sum(jnp.abs(grad['params']['Conv_3']['kernel'])), 0.0
+    )
     self.assertNotEqual(jnp.sum(jnp.abs(grad['params']['Conv_3']['bias'])), 0.0)
 
 

@@ -26,11 +26,9 @@ import jax
 class MaxEpisodeEvalRunner(run_experiment.Runner):
   """Runner for evaluating using a fixed number of episodes rather than steps."""
 
-  def __init__(self,
-               base_dir,
-               create_agent_fn,
-               num_eval_episodes=100,
-               max_noops=30):
+  def __init__(
+      self, base_dir, create_agent_fn, num_eval_episodes=100, max_noops=30
+  ):
     """Specify the number of evaluation episodes."""
     super().__init__(base_dir, create_agent_fn)
     self._num_eval_episodes = num_eval_episodes
@@ -53,7 +51,8 @@ class MaxEpisodeEvalRunner(run_experiment.Runner):
     """Executes `num_noops` no-ops in the environment."""
     self._agent._rng, rng = jax.random.split(self._agent._rng)  # pylint: disable=protected-access
     num_noops = jax.random.randint(
-        rng, shape=(), minval=0, maxval=self._max_noops)
+        rng, shape=(), minval=0, maxval=self._max_noops
+    )
     for _ in range(num_noops):
       # Assumes raw action 0 is always no-op
       self._environment.environment.ale.act(0)
@@ -81,23 +80,25 @@ class MaxEpisodeEvalRunner(run_experiment.Runner):
     """
     step_count = 0
     num_episodes = 0
-    sum_returns = 0.
+    sum_returns = 0.0
 
     while num_episodes < max_episodes:
       episode_length, episode_return = self._run_one_episode()
       statistics.append({
           '{}_episode_lengths'.format(run_mode_str): episode_length,
-          '{}_episode_returns'.format(run_mode_str): episode_return
+          '{}_episode_returns'.format(run_mode_str): episode_return,
       })
       step_count += episode_length
       sum_returns += episode_return
       num_episodes += 1
       # We use sys.stdout.write instead of logging so as to flush frequently
       # without generating a line break.
-      sys.stdout.write('Steps executed: {} '.format(step_count) +
-                       'Episode length: {} '.format(episode_length) +
-                       'Num episodes: {} '.format(num_episodes) +
-                       'Return: {}\r'.format(episode_return))
+      sys.stdout.write(
+          'Steps executed: {} '.format(step_count)
+          + 'Episode length: {} '.format(episode_length)
+          + 'Num episodes: {} '.format(num_episodes)
+          + 'Return: {}\r'.format(episode_return)
+      )
       sys.stdout.flush()
     return step_count, sum_returns, num_episodes
 
@@ -115,9 +116,12 @@ class MaxEpisodeEvalRunner(run_experiment.Runner):
     # Perform the evaluation phase -- no learning.
     self._agent.eval_mode = True
     _, sum_returns, num_episodes = self._run_one_phase_fix_episodes(
-        self._num_eval_episodes, statistics, 'eval')
+        self._num_eval_episodes, statistics, 'eval'
+    )
     average_return = sum_returns / num_episodes if num_episodes > 0 else 0.0
-    logging.info('Average undiscounted return per evaluation episode: %.2f',
-                 average_return)
+    logging.info(
+        'Average undiscounted return per evaluation episode: %.2f',
+        average_return,
+    )
     statistics.append({'eval_average_return': average_return})
     return num_episodes, average_return

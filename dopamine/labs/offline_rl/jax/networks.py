@@ -27,7 +27,8 @@ import jax.numpy as jnp
 
 NetworkType = collections.namedtuple('network', ['q_values', 'representation'])
 ClassyNetworkType = collections.namedtuple(
-    'classy_network', ['q_values', 'logits', 'probabilities', 'representation'])
+    'classy_network', ['q_values', 'logits', 'probabilities', 'representation']
+)
 
 
 def preprocess_atari_inputs(x):
@@ -185,34 +186,25 @@ class JAXDQNNetworkWithRepresentations(nn.Module):
       x = preprocess_atari_inputs(x)
     logging.info('Creating Nature DQN network')
     x = nn.Conv(
-        features=32,
-        kernel_size=(8, 8),
-        strides=(4, 4),
-        kernel_init=initializer)(
-            x)
+        features=32, kernel_size=(8, 8), strides=(4, 4), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = nn.Conv(
-        features=64,
-        kernel_size=(4, 4),
-        strides=(2, 2),
-        kernel_init=initializer)(
-            x)
+        features=64, kernel_size=(4, 4), strides=(2, 2), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = nn.Conv(
-        features=64,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        kernel_init=initializer)(
-            x)
+        features=64, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape(-1)  # flatten
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     representation = nn.relu(x)  # Use penultimate layer as representation
     if stop_grad_representation:
       representation = jax.lax.stop_gradient(representation)
-    q_values = nn.Dense(
-        features=self.num_actions, kernel_init=initializer)(
-            representation)
+    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(
+        representation
+    )
     return NetworkType(q_values, representation)
 
 
@@ -280,6 +272,5 @@ class ParameterizedRainbowNetwork(nn.Module):
     else:
       q_values = jnp.sum(support * probabilities, axis=1)
     if self.distributional:
-      return ClassyNetworkType(
-          q_values, logits, probabilities, representation)
+      return ClassyNetworkType(q_values, logits, probabilities, representation)
     return NetworkType(q_values, representation)

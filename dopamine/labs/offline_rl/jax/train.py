@@ -35,15 +35,23 @@ from jax import config as jax_config
 
 
 AGENTS = [
-    'jax_dqn', 'jax_dr3', 'jax_rainbow', 'jax_return_conditioned_bc',
-    'jax_classy_cql']
+    'jax_dqn',
+    'jax_dr3',
+    'jax_rainbow',
+    'jax_return_conditioned_bc',
+    'jax_classy_cql',
+]
 
 # flags are defined when importing run_xm_preprocessing
 flags.DEFINE_enum('agent_name', 'jax_dqn', AGENTS, 'Name of the agent.')
-flags.DEFINE_string('replay_dir', None, 'Directory from which to load the '
-                    'replay data')
-flags.DEFINE_string('replay_dir_suffix', 'replay_logs', 'Data is to be read '
-                    'from "replay_dir/.../{replay_dir_suffix}"')
+flags.DEFINE_string(
+    'replay_dir', None, 'Directory from which to load the replay data'
+)
+flags.DEFINE_string(
+    'replay_dir_suffix',
+    'replay_logs',
+    'Data is to be read from "replay_dir/.../{replay_dir_suffix}"',
+)
 flags.DEFINE_bool('use_tfds', True, 'Use tfds data')
 flags.DEFINE_boolean('disable_jit', False, 'Whether to use jit or not.')
 
@@ -51,11 +59,9 @@ flags.DEFINE_boolean('disable_jit', False, 'Whether to use jit or not.')
 FLAGS = flags.FLAGS
 
 
-def create_offline_agent(sess,
-                         environment,
-                         agent_name,
-                         replay_data_dir,
-                         summary_writer=None):
+def create_offline_agent(
+    sess, environment, agent_name, replay_data_dir, summary_writer=None
+):
   """Creates an online agent.
 
   Args:
@@ -88,13 +94,15 @@ def create_offline_agent(sess,
         num_actions=environment.action_space.n,
         replay_data_dir=replay_data_dir,
         summary_writer=summary_writer,
-        use_tfds=FLAGS.use_tfds)
+        use_tfds=FLAGS.use_tfds,
+    )
   else:
     return agent(
         sess,
         num_actions=environment.action_space.n,
         replay_data_dir=replay_data_dir,
-        summary_writer=summary_writer)
+        summary_writer=summary_writer,
+    )
 
 
 def create_replay_dir(xm_parameters):
@@ -124,15 +132,21 @@ def main(unused_argv):
 
   xm_xid = None if 'xm_xid' not in FLAGS else FLAGS.xm_xid
   xm_wid = None if 'xm_wid' not in FLAGS else FLAGS.xm_wid
-  xm_parameters = (None
-                   if 'xm_parameters' not in FLAGS else FLAGS.xm_parameters)
+  xm_parameters = None if 'xm_parameters' not in FLAGS else FLAGS.xm_parameters
   base_dir, gin_files, gin_bindings = base_train.run_xm_preprocessing(
-      xm_xid, xm_wid, xm_parameters, FLAGS.base_dir,
-      FLAGS.custom_base_dir_from_hparams, FLAGS.gin_files, FLAGS.gin_bindings)
+      xm_xid,
+      xm_wid,
+      xm_parameters,
+      FLAGS.base_dir,
+      FLAGS.custom_base_dir_from_hparams,
+      FLAGS.gin_files,
+      FLAGS.gin_bindings,
+  )
   create_agent = functools.partial(
       create_offline_agent,
       agent_name=FLAGS.agent_name,
-      replay_data_dir=create_replay_dir(xm_parameters))
+      replay_data_dir=create_replay_dir(xm_parameters),
+  )
   base_run_experiment.load_gin_configs(gin_files, gin_bindings)
   runner = run_experiment.FixedReplayRunner(base_dir, create_agent)
   runner.run_experiment()

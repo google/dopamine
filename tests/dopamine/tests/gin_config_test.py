@@ -20,7 +20,6 @@ import shutil
 
 from absl import flags
 from absl import logging
-
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import run_experiment
 import gin.tf
@@ -39,7 +38,8 @@ class GinConfigTest(tf.test.TestCase):
     super(GinConfigTest, self).setUp()
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     self._checkpoint_dir = os.path.join(self._base_dir, 'checkpoints')
     self._logging_dir = os.path.join(self._base_dir, 'logs')
     self._videos_dir = os.path.join(self._base_dir, 'videos')
@@ -52,13 +52,17 @@ class GinConfigTest(tf.test.TestCase):
     gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     gin_bindings = [
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'dqn'"
+        "create_agent.agent_name = 'dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer,
-                          tf.compat.v1.train.RMSPropOptimizer)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
+    self.assertIsInstance(
+        runner._agent.optimizer, tf.compat.v1.train.RMSPropOptimizer
+    )
     self.assertNear(0.00025, runner._agent.optimizer._learning_rate, 0.0001)
     shutil.rmtree(self._base_dir)
 
@@ -71,12 +75,13 @@ class GinConfigTest(tf.test.TestCase):
         'TrainRunner.base_dir = "{}"'.format(self._base_dir),
         'Runner.log_every_n = 1729',
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'dqn'"
+        "create_agent.agent_name = 'dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
     runner = run_experiment.TrainRunner(
         create_agent_fn=run_experiment.create_agent,
-        create_environment_fn=atari_lib.create_atari_environment)
+        create_environment_fn=atari_lib.create_atari_environment,
+    )
     self.assertEqual(runner._base_dir, self._base_dir)
     self.assertEqual(runner._log_every_n, 1729)
     shutil.rmtree(self._base_dir)
@@ -90,13 +95,17 @@ class GinConfigTest(tf.test.TestCase):
         'DQNAgent.optimizer = @tf.train.RMSPropOptimizer()',
         'tf.train.RMSPropOptimizer.learning_rate = 100',
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'dqn'"
+        "create_agent.agent_name = 'dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer,
-                          tf.compat.v1.train.RMSPropOptimizer)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
+    self.assertIsInstance(
+        runner._agent.optimizer, tf.compat.v1.train.RMSPropOptimizer
+    )
     self.assertEqual(100, runner._agent.optimizer._learning_rate)
     shutil.rmtree(self._base_dir)
 
@@ -109,14 +118,18 @@ class GinConfigTest(tf.test.TestCase):
         'DQNAgent.optimizer = @tf.train.AdamOptimizer()',
         'tf.train.AdamOptimizer.learning_rate = 100',
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'dqn'"
+        "create_agent.agent_name = 'dqn'",
     ]
 
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer,
-                          tf.compat.v1.train.AdamOptimizer)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
+    self.assertIsInstance(
+        runner._agent.optimizer, tf.compat.v1.train.AdamOptimizer
+    )
     self.assertEqual(100, runner._agent.optimizer._lr)
     shutil.rmtree(self._base_dir)
 
@@ -124,18 +137,20 @@ class GinConfigTest(tf.test.TestCase):
     """Test RainbowAgent default configuration using default gin."""
     logging.info('####### Training the RAINBOW agent #####')
     logging.info('####### RAINBOW base_dir: %s', self._base_dir)
-    gin_files = [
-        'dopamine/agents/rainbow/configs/rainbow.gin'
-    ]
+    gin_files = ['dopamine/agents/rainbow/configs/rainbow.gin']
     gin_bindings = [
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'rainbow'"
+        "create_agent.agent_name = 'rainbow'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer,
-                          tf.compat.v1.train.AdamOptimizer)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
+    self.assertIsInstance(
+        runner._agent.optimizer, tf.compat.v1.train.AdamOptimizer
+    )
     self.assertNear(0.0000625, runner._agent.optimizer._lr, 0.0001)
     shutil.rmtree(self._base_dir)
 
@@ -150,23 +165,28 @@ class GinConfigTest(tf.test.TestCase):
         'RainbowAgent.optimizer = @tf.train.RMSPropOptimizer()',
         'tf.train.RMSPropOptimizer.learning_rate = 100',
         'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
-        "create_agent.agent_name = 'rainbow'"
+        "create_agent.agent_name = 'rainbow'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
-    self.assertIsInstance(runner._agent.optimizer,
-                          tf.compat.v1.train.RMSPropOptimizer)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
+    self.assertIsInstance(
+        runner._agent.optimizer, tf.compat.v1.train.RMSPropOptimizer
+    )
     self.assertEqual(100, runner._agent.optimizer._learning_rate)
     shutil.rmtree(self._base_dir)
 
   def testDefaultDQNConfig(self):
     """Verify the default DQN configuration."""
     run_experiment.load_gin_configs(
-        ['dopamine/agents/dqn/configs/dqn.gin'], [])
+        ['dopamine/agents/dqn/configs/dqn.gin'], []
+    )
     agent = run_experiment.create_agent(
-        None,
-        atari_lib.create_atari_environment(game_name='Pong'))
+        None, atari_lib.create_atari_environment(game_name='Pong')
+    )
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 1)
     self.assertEqual(agent.min_replay_history, 20000)
@@ -181,14 +201,15 @@ class GinConfigTest(tf.test.TestCase):
   def testDefaultC51Config(self):
     """Verify the default C51 configuration."""
     run_experiment.load_gin_configs(
-        ['dopamine/agents/rainbow/configs/c51.gin'], [])
+        ['dopamine/agents/rainbow/configs/c51.gin'], []
+    )
     agent = run_experiment.create_agent(
-        None,
-        atari_lib.create_atari_environment(game_name='Pong'))
+        None, atari_lib.create_atari_environment(game_name='Pong')
+    )
     self.assertEqual(agent._num_atoms, 51)
     support = self.evaluate(agent._support)
-    self.assertEqual(min(support), -10.)
-    self.assertEqual(max(support), 10.)
+    self.assertEqual(min(support), -10.0)
+    self.assertEqual(max(support), 10.0)
     self.assertLen(support, 51)
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 1)
@@ -204,14 +225,15 @@ class GinConfigTest(tf.test.TestCase):
   def testDefaultRainbowConfig(self):
     """Verify the default Rainbow configuration."""
     run_experiment.load_gin_configs(
-        ['dopamine/agents/rainbow/configs/rainbow.gin'], [])
+        ['dopamine/agents/rainbow/configs/rainbow.gin'], []
+    )
     agent = run_experiment.create_agent(
-        None,
-        atari_lib.create_atari_environment(game_name='Pong'))
+        None, atari_lib.create_atari_environment(game_name='Pong')
+    )
     self.assertEqual(agent._num_atoms, 51)
     support = self.evaluate(agent._support)
-    self.assertEqual(min(support), -10.)
-    self.assertEqual(max(support), 10.)
+    self.assertEqual(min(support), -10.0)
+    self.assertEqual(max(support), 10.0)
     self.assertLen(support, 51)
     self.assertEqual(agent.gamma, 0.99)
     self.assertEqual(agent.update_horizon, 3)
@@ -229,16 +251,22 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/' +
-                 'implicit_quantile/configs/implicit_quantile_icml.gin']
+    gin_files = [
+        'dopamine/agents/'
+        + 'implicit_quantile/configs/implicit_quantile_icml.gin'
+    ]
     gin_bindings = [
         'Runner.num_iterations=0',
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
     self.assertEqual(1000000, runner._agent._replay.memory._replay_capacity)
     shutil.rmtree(self._base_dir)
 
@@ -247,17 +275,23 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/implicit_quantile/configs/' +
-                 'implicit_quantile_icml.gin']
+    gin_files = [
+        'dopamine/agents/implicit_quantile/configs/'
+        + 'implicit_quantile_icml.gin'
+    ]
     gin_bindings = [
         'Runner.num_iterations=0',
         'WrappedPrioritizedReplayBuffer.replay_capacity = 1000',
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
     self.assertEqual(1000, runner._agent._replay.memory._replay_capacity)
     shutil.rmtree(self._base_dir)
 
@@ -266,17 +300,23 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('###### Training the Implicit Quantile agent #####')
     self._base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     logging.info('###### IQN base dir: %s', self._base_dir)
-    gin_files = ['dopamine/agents/implicit_quantile/configs/' +
-                 'implicit_quantile.gin']
+    gin_files = [
+        'dopamine/agents/implicit_quantile/configs/'
+        + 'implicit_quantile.gin'
+    ]
     gin_bindings = [
         'Runner.num_iterations=0',
         'WrappedPrioritizedReplayBuffer.replay_capacity = 1000',
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
-    runner = run_experiment.Runner(self._base_dir, run_experiment.create_agent,
-                                   atari_lib.create_atari_environment)
+    runner = run_experiment.Runner(
+        self._base_dir,
+        run_experiment.create_agent,
+        atari_lib.create_atari_environment,
+    )
     self.assertEqual(1000, runner._agent._replay.memory._replay_capacity)
     shutil.rmtree(self._base_dir)
 

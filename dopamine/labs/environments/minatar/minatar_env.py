@@ -91,22 +91,23 @@ class StickyMinAtarEnv(MinAtarEnv):
 
 
 @gin.configurable
-def create_minatar_env(game_name,
-                       sticky_actions=False,
-                       action_repeat_probability=0.25,
-                       seed=None):
+def create_minatar_env(
+    game_name, sticky_actions=False, action_repeat_probability=0.25, seed=None
+):
   """Helper function for creating Minatar environment."""
   if sticky_actions:
     return StickyMinAtarEnv(
         game_name,
         action_repeat_probability=action_repeat_probability,
-        seed=seed)
+        seed=seed,
+    )
   return MinAtarEnv(game_name)
 
 
 @gin.configurable
 class MinatarDQNNetwork(nn.Module):
   """JAX DQN Network for Minatar environments."""
+
   num_actions: int
   inputs_preprocessed: bool = True
 
@@ -114,8 +115,9 @@ class MinatarDQNNetwork(nn.Module):
   def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
     initializer = nn.initializers.xavier_uniform()
     x = x.astype(jnp.float32)
-    x = nn.Conv(features=16, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=16, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape(-1)  # flatten
     q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
@@ -125,6 +127,7 @@ class MinatarDQNNetwork(nn.Module):
 @gin.configurable
 class MinatarRainbowNetwork(nn.Module):
   """Jax Rainbow network for Minatar."""
+
   num_actions: int
   num_atoms: int
   inputs_preprocessed: bool = True
@@ -133,12 +136,14 @@ class MinatarRainbowNetwork(nn.Module):
   def __call__(self, x: jnp.ndarray, support: jnp.ndarray) -> jnp.ndarray:
     initializer = nn.initializers.xavier_uniform()
     x = x.astype(jnp.float32)
-    x = nn.Conv(features=16, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=16, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape(-1)  # flatten
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
+    x = nn.Dense(
+        features=self.num_actions * self.num_atoms, kernel_init=initializer
+    )(x)
     logits = x.reshape((self.num_actions, self.num_atoms))
     probabilities = nn.softmax(logits)
     q_values = jnp.sum(support * probabilities, axis=1)
@@ -148,6 +153,7 @@ class MinatarRainbowNetwork(nn.Module):
 @gin.configurable
 class MinatarQuantileNetwork(nn.Module):
   """Convolutional network used to compute the agent's return quantiles."""
+
   num_actions: int
   num_atoms: int
   inputs_preprocessed: bool = True
@@ -155,16 +161,17 @@ class MinatarQuantileNetwork(nn.Module):
   @nn.compact
   def __call__(self, x: jnp.ndarray) -> jnp.ndarray:
     initializer = jax.nn.initializers.variance_scaling(
-        scale=1.0 / jnp.sqrt(3.0),
-        mode='fan_in',
-        distribution='uniform')
+        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform'
+    )
     x = x.astype(jnp.float32)
-    x = nn.Conv(features=16, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=16, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape(-1)  # flatten
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
+    x = nn.Dense(
+        features=self.num_actions * self.num_atoms, kernel_init=initializer
+    )(x)
     logits = x.reshape((self.num_actions, self.num_atoms))
     probabilities = nn.softmax(logits)
     q_values = jnp.mean(logits, axis=1)

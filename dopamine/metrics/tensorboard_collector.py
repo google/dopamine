@@ -26,7 +26,8 @@ class TensorboardCollector(collector.Collector):
   def __init__(self, base_dir: str):
     if not isinstance(base_dir, str):
       raise ValueError(
-          'Must specify a base directory for TensorboardCollector.')
+          'Must specify a base directory for TensorboardCollector.'
+      )
     super().__init__(base_dir)
     self.summary_writer = tf.summary.create_file_writer(self._base_dir)
 
@@ -34,8 +35,8 @@ class TensorboardCollector(collector.Collector):
     return 'tensorboard'
 
   def write(
-      self,
-      statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
+      self, statistics: Sequence[statistics_instance.StatisticsInstance]
+  ) -> None:
     with self.summary_writer.as_default():
       for s in statistics:
         if not self.check_type(s.type):

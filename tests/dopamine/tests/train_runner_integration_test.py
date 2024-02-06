@@ -20,7 +20,6 @@ import shutil
 
 from absl import flags
 from absl import logging
-
 from dopamine.discrete_domains import train
 import tensorflow as tf
 
@@ -36,7 +35,8 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     super(TrainRunnerIntegrationTest, self).setUp()
     FLAGS.base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     self._checkpoint_dir = os.path.join(FLAGS.base_dir, 'checkpoints')
     self._logging_dir = os.path.join(FLAGS.base_dir, 'logs')
 
@@ -50,7 +50,7 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
         'Runner.num_iterations=1',
         'Runner.max_steps_per_episode=100',
         'dqn_agent.JaxDQNAgent.min_replay_history=500',
-        'WrappedReplayBuffer.replay_capacity=100'
+        'WrappedReplayBuffer.replay_capacity=100',
     ]
     FLAGS.alsologtostderr = True
 
@@ -58,11 +58,13 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     """Verify that files have been created."""
     # Check checkpoint files
     self.assertTrue(
-        os.path.exists(os.path.join(self._checkpoint_dir, 'ckpt.0')))
+        os.path.exists(os.path.join(self._checkpoint_dir, 'ckpt.0'))
+    )
     self.assertTrue(
         os.path.exists(
-            os.path.join(self._checkpoint_dir,
-                         'sentinel_checkpoint_complete.0')))
+            os.path.join(self._checkpoint_dir, 'sentinel_checkpoint_complete.0')
+        )
+    )
     # Check log files
     self.assertTrue(os.path.exists(os.path.join(self._logging_dir, 'log_0')))
 

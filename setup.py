@@ -45,7 +45,8 @@ install_requires = [
 ]
 
 dopamine_description = (
-    'Dopamine: A framework for flexible Reinforcement Learning research')
+    'Dopamine: A framework for flexible Reinforcement Learning research'
+)
 
 setup(
     name='dopamine_rl',
@@ -57,27 +58,22 @@ setup(
     author='The Dopamine Team',
     classifiers=[
         'Development Status :: 4 - Beta',
-
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
-
         'License :: OSI Approved :: Apache Software License',
-
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3 :: Only',
-
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
-
     ],
     keywords='dopamine, reinforcement, machine, learning, research',
     include_package_data=True,

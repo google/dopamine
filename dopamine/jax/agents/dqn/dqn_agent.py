@@ -21,7 +21,6 @@ import math
 import time
 
 from absl import logging
-
 from dopamine.agents.dqn import dqn_agent
 from dopamine.jax import losses
 from dopamine.jax import networks
@@ -43,8 +42,14 @@ identity_epsilon = dqn_agent.identity_epsilon
 
 
 @gin.configurable
-def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
-                     eps=1.5e-4, centered=False):
+def create_optimizer(
+    name='adam',
+    learning_rate=6.25e-5,
+    beta1=0.9,
+    beta2=0.999,
+    eps=1.5e-4,
+    centered=False,
+):
   """Create an optimizer for training.
 
   Currently, only the Adam and RMSProp optimizers are supported.
@@ -61,27 +66,47 @@ def create_optimizer(name='adam', learning_rate=6.25e-5, beta1=0.9, beta2=0.999,
     An optax optimizer.
   """
   if name == 'adam':
-    logging.info('Creating Adam optimizer with settings lr=%f, beta1=%f, '
-                 'beta2=%f, eps=%f', learning_rate, beta1, beta2, eps)
+    logging.info(
+        'Creating Adam optimizer with settings lr=%f, beta1=%f, '
+        'beta2=%f, eps=%f',
+        learning_rate,
+        beta1,
+        beta2,
+        eps,
+    )
     return optax.adam(learning_rate, b1=beta1, b2=beta2, eps=eps)
   elif name == 'rmsprop':
-    logging.info('Creating RMSProp optimizer with settings lr=%f, beta2=%f, '
-                 'eps=%f', learning_rate, beta2, eps)
-    return optax.rmsprop(learning_rate, decay=beta2, eps=eps,
-                         centered=centered)
+    logging.info(
+        'Creating RMSProp optimizer with settings lr=%f, beta2=%f, eps=%f',
+        learning_rate,
+        beta2,
+        eps,
+    )
+    return optax.rmsprop(learning_rate, decay=beta2, eps=eps, centered=centered)
   elif name == 'sgd':
-    logging.info('Creating SGD optimizer with settings '
-                 'lr=%f', learning_rate)
+    logging.info('Creating SGD optimizer with settings lr=%f', learning_rate)
     return optax.sgd(learning_rate)
   else:
     raise ValueError('Unsupported optimizer {}'.format(name))
 
 
 @functools.partial(jax.jit, static_argnums=(0, 3, 10, 11))
-def train(network_def, online_params, target_params, optimizer, optimizer_state,
-          states, actions, next_states, rewards, terminals, cumulative_gamma,
-          loss_type='mse'):
+def train(
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    cumulative_gamma,
+    loss_type='mse',
+):
   """Run the training step."""
+
   def loss_fn(params, target):
     def q_online(state):
       return network_def.apply(params, state)
@@ -96,15 +121,12 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
   def q_target(state):
     return network_def.apply(target_params, state)
 
-  target = target_q(q_target,
-                    next_states,
-                    rewards,
-                    terminals,
-                    cumulative_gamma)
+  target = target_q(q_target, next_states, rewards, terminals, cumulative_gamma)
   grad_fn = jax.value_and_grad(loss_fn)
   loss, grad = grad_fn(online_params, target)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state,
-                                              params=online_params)
+  updates, optimizer_state = optimizer.update(
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss
 
@@ -121,8 +143,9 @@ def target_q(target_network, next_states, rewards, terminals, cumulative_gamma):
   #          (or) 0 if S_t is a terminal state,
   # and
   #   N is the update horizon (by default, N=1).
-  return jax.lax.stop_gradient(rewards + cumulative_gamma * replay_next_qt_max *
-                               (1. - terminals))
+  return jax.lax.stop_gradient(
+      rewards + cumulative_gamma * replay_next_qt_max * (1.0 - terminals)
+  )
 
 
 @gin.configurable
@@ -147,14 +170,25 @@ def linearly_decaying_epsilon(decay_period, step, warmup_steps, epsilon):
   """
   steps_left = decay_period + warmup_steps - step
   bonus = (1.0 - epsilon) * steps_left / decay_period
-  bonus = jnp.clip(bonus, 0., 1. - epsilon)
+  bonus = jnp.clip(bonus, 0.0, 1.0 - epsilon)
   return epsilon + bonus
 
 
 @functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 10, 11))
-def select_action(network_def, params, state, rng, num_actions, eval_mode,
-                  epsilon_eval, epsilon_train, epsilon_decay_period,
-                  training_steps, min_replay_history, epsilon_fn):
+def select_action(
+    network_def,
+    params,
+    state,
+    rng,
+    num_actions,
+    eval_mode,
+    epsilon_eval,
+    epsilon_train,
+    epsilon_decay_period,
+    training_steps,
+    min_replay_history,
+    epsilon_fn,
+):
   """Select an action from the set of available actions.
 
   Chooses an action randomly with probability self._calculate_epsilon(), and
@@ -180,48 +214,56 @@ def select_action(network_def, params, state, rng, num_actions, eval_mode,
     rng: Jax random number generator.
     action: int, the selected action.
   """
-  epsilon = jnp.where(eval_mode,
-                      epsilon_eval,
-                      epsilon_fn(epsilon_decay_period,
-                                 training_steps,
-                                 min_replay_history,
-                                 epsilon_train))
+  epsilon = jnp.where(
+      eval_mode,
+      epsilon_eval,
+      epsilon_fn(
+          epsilon_decay_period,
+          training_steps,
+          min_replay_history,
+          epsilon_train,
+      ),
+  )
 
   rng, rng1, rng2 = jax.random.split(rng, num=3)
   p = jax.random.uniform(rng1)
-  return rng, jnp.where(p <= epsilon,
-                        jax.random.randint(rng2, (), 0, num_actions),
-                        jnp.argmax(network_def.apply(params, state).q_values))
+  return rng, jnp.where(
+      p <= epsilon,
+      jax.random.randint(rng2, (), 0, num_actions),
+      jnp.argmax(network_def.apply(params, state).q_values),
+  )
 
 
 @gin.configurable
 class JaxDQNAgent(object):
   """A JAX implementation of the DQN agent."""
 
-  def __init__(self,
-               num_actions,
-               observation_shape=NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=NATURE_DQN_DTYPE,
-               stack_size=NATURE_DQN_STACK_SIZE,
-               network=networks.NatureDQNNetwork,
-               gamma=0.99,
-               update_horizon=1,
-               min_replay_history=20000,
-               update_period=4,
-               target_update_period=8000,
-               epsilon_fn=linearly_decaying_epsilon,
-               epsilon_train=0.01,
-               epsilon_eval=0.001,
-               epsilon_decay_period=250000,
-               eval_mode=False,
-               optimizer='adam',
-               summary_writer=None,
-               summary_writing_frequency=500,
-               allow_partial_reload=False,
-               seed=None,
-               loss_type='mse',
-               preprocess_fn=None,
-               collector_allowlist=('tensorboard',)):
+  def __init__(
+      self,
+      num_actions,
+      observation_shape=NATURE_DQN_OBSERVATION_SHAPE,
+      observation_dtype=NATURE_DQN_DTYPE,
+      stack_size=NATURE_DQN_STACK_SIZE,
+      network=networks.NatureDQNNetwork,
+      gamma=0.99,
+      update_horizon=1,
+      min_replay_history=20000,
+      update_period=4,
+      target_update_period=8000,
+      epsilon_fn=linearly_decaying_epsilon,
+      epsilon_train=0.01,
+      epsilon_eval=0.001,
+      epsilon_decay_period=250000,
+      eval_mode=False,
+      optimizer='adam',
+      summary_writer=None,
+      summary_writing_frequency=500,
+      allow_partial_reload=False,
+      seed=None,
+      loss_type='mse',
+      preprocess_fn=None,
+      collector_allowlist=('tensorboard',),
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Note: We are using the Adam optimizer by default for JaxDQN, which differs
@@ -242,9 +284,9 @@ class JaxDQNAgent(object):
         before the agent begins training its value function.
       update_period: int, period between DQN updates.
       target_update_period: int, update period for the target network.
-      epsilon_fn: function expecting 4 parameters:
-        (decay_period, step, warmup_steps, epsilon). This function should return
-        the epsilon value used for exploration during training.
+      epsilon_fn: function expecting 4 parameters: (decay_period, step,
+        warmup_steps, epsilon). This function should return the epsilon value
+        used for exploration during training.
       epsilon_train: float, the value to which the agent's epsilon is eventually
         decayed during training.
       epsilon_eval: float, epsilon used when evaluating the agent.
@@ -261,16 +303,18 @@ class JaxDQNAgent(object):
       seed: int, a seed for DQN's internal RNG, used for initialization and
         sampling actions. If None, will use the current time in nanoseconds.
       loss_type: str, whether to use Huber or MSE loss during training.
-      preprocess_fn: function expecting the input state as parameter which
-        it preprocesses (such as normalizing the pixel values between 0 and 1)
+      preprocess_fn: function expecting the input state as parameter which it
+        preprocesses (such as normalizing the pixel values between 0 and 1)
         before passing it to the Q-network. Defaults to None.
       collector_allowlist: list of str, if using CollectorDispatcher, this can
         be used to specify which Collectors to log to.
     """
     assert isinstance(observation_shape, tuple)
     seed = int(time.time() * 1e6) if seed is None else seed
-    logging.info('Creating %s agent with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating %s agent with the following parameters:',
+        self.__class__.__name__,
+    )
     logging.info('\t gamma: %f', gamma)
     logging.info('\t update_horizon: %f', update_horizon)
     logging.info('\t min_replay_history: %d', min_replay_history)
@@ -294,8 +338,9 @@ class JaxDQNAgent(object):
       self.network_def = network(num_actions=num_actions)
       self.preprocess_fn = networks.identity_preprocess_fn
     else:
-      self.network_def = network(num_actions=num_actions,
-                                 inputs_preprocessed=True)
+      self.network_def = network(
+          num_actions=num_actions, inputs_preprocessed=True
+      )
       self.preprocess_fn = preprocess_fn
     self.gamma = gamma
     self.update_horizon = update_horizon
@@ -349,7 +394,8 @@ class JaxDQNAgent(object):
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype)
+        observation_dtype=self.observation_dtype,
+    )
 
   def _sample_from_replay_buffer(self):
     samples = self._replay.sample_transition_batch()
@@ -397,18 +443,20 @@ class JaxDQNAgent(object):
     if not self.eval_mode:
       self._train_step()
 
-    self._rng, self.action = select_action(self.network_def,
-                                           self.online_params,
-                                           self.preprocess_fn(self.state),
-                                           self._rng,
-                                           self.num_actions,
-                                           self.eval_mode,
-                                           self.epsilon_eval,
-                                           self.epsilon_train,
-                                           self.epsilon_decay_period,
-                                           self.training_steps,
-                                           self.min_replay_history,
-                                           self.epsilon_fn)
+    self._rng, self.action = select_action(
+        self.network_def,
+        self.online_params,
+        self.preprocess_fn(self.state),
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -432,18 +480,20 @@ class JaxDQNAgent(object):
       self._store_transition(self._last_observation, self.action, reward, False)
       self._train_step()
 
-    self._rng, self.action = select_action(self.network_def,
-                                           self.online_params,
-                                           self.preprocess_fn(self.state),
-                                           self._rng,
-                                           self.num_actions,
-                                           self.eval_mode,
-                                           self.epsilon_eval,
-                                           self.epsilon_train,
-                                           self.epsilon_decay_period,
-                                           self.training_steps,
-                                           self.min_replay_history,
-                                           self.epsilon_fn)
+    self._rng, self.action = select_action(
+        self.network_def,
+        self.online_params,
+        self.preprocess_fn(self.state),
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -461,10 +511,12 @@ class JaxDQNAgent(object):
       argspec = inspect.getfullargspec(self._store_transition)
       if 'episode_end' in argspec.args or 'episode_end' in argspec.kwonlyargs:
         self._store_transition(
-            self._observation, self.action, reward, terminal, episode_end=True)
+            self._observation, self.action, reward, terminal, episode_end=True
+        )
       else:
         logging.warning(
-            '_store_transition function doesn\'t have episode_end arg.')
+            "_store_transition function doesn't have episode_end arg."
+        )
         self._store_transition(self._observation, self.action, reward, terminal)
 
   def _train_step(self):
@@ -496,32 +548,40 @@ class JaxDQNAgent(object):
             self.replay_elements['reward'],
             self.replay_elements['terminal'],
             self.cumulative_gamma,
-            self._loss_type)
-        if (self.summary_writer is not None and
-            self.training_steps > 0 and
-            self.training_steps % self.summary_writing_frequency == 0):
+            self._loss_type,
+        )
+        if (
+            self.summary_writer is not None
+            and self.training_steps > 0
+            and self.training_steps % self.summary_writing_frequency == 0
+        ):
           with self.summary_writer.as_default():
             tf.summary.scalar('HuberLoss', loss, step=self.training_steps)
           self.summary_writer.flush()
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
-                [statistics_instance.StatisticsInstance(
-                    'Loss', onp.asarray(loss), step=self.training_steps),
-                 ],
-                collector_allowlist=self._collector_allowlist)
+                [
+                    statistics_instance.StatisticsInstance(
+                        'Loss', onp.asarray(loss), step=self.training_steps
+                    ),
+                ],
+                collector_allowlist=self._collector_allowlist,
+            )
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 
     self.training_steps += 1
 
-  def _store_transition(self,
-                        last_observation,
-                        action,
-                        reward,
-                        is_terminal,
-                        *args,
-                        priority=None,
-                        episode_end=False):
+  def _store_transition(
+      self,
+      last_observation,
+      action,
+      reward,
+      is_terminal,
+      *args,
+      priority=None,
+      episode_end=False
+  ):
     """Stores a transition when in training mode.
 
     Stores the following tuple in the replay buffer (last_observation, action,
@@ -539,15 +599,16 @@ class JaxDQNAgent(object):
         is 1. If the replay scheme is prioritized, the default priority is the
         maximum ever seen [Schaul et al., 2015].
       episode_end: bool, whether this transition is the last for the episode.
-        This can be different than terminal when ending the episode because
-        of a timeout, for example.
+        This can be different than terminal when ending the episode because of a
+        timeout, for example.
     """
     is_prioritized = isinstance(
         self._replay,
-        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer)
+        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer,
+    )
     if is_prioritized and priority is None:
       if self._replay_scheme == 'uniform':
-        priority = 1.
+        priority = 1.0
       else:
         priority = self._replay.sum_tree.max_recorded_priority
 
@@ -559,7 +620,8 @@ class JaxDQNAgent(object):
           is_terminal,
           *args,
           priority=priority,
-          episode_end=episode_end)
+          episode_end=episode_end
+      )
 
   def bundle_and_checkpoint(self, checkpoint_dir, iteration_number):
     """Returns a self-contained bundle of the agent's state.
@@ -586,7 +648,7 @@ class JaxDQNAgent(object):
         'training_steps': self.training_steps,
         'online_params': self.online_params,
         'optimizer_state': self.optimizer_state,
-        'target_params': self.target_network_params
+        'target_params': self.target_network_params,
     }
     return bundle_dictionary
 
@@ -602,8 +664,8 @@ class JaxDQNAgent(object):
       checkpoint_dir: str, path to the checkpoint saved.
       iteration_number: int, checkpoint version, used when restoring the replay
         buffer.
-      bundle_dictionary: dict, containing additional Python objects owned by
-        the agent.
+      bundle_dictionary: dict, containing additional Python objects owned by the
+        agent.
 
     Returns:
       bool, True if unbundling was successful.

@@ -32,18 +32,24 @@ ATARI_REPLAY_DIR = None
 
 flags.DEFINE_string('replay_dir', ATARI_REPLAY_DIR, 'Data dir.')
 flags.DEFINE_string(
-    'replay_dir_suffix', 'replay_logs', 'Data is to be read '
-    'from "replay_dir/.../{replay_dir_suffix}"')
+    'replay_dir_suffix',
+    'replay_logs',
+    'Data is to be read from "replay_dir/.../{replay_dir_suffix}"',
+)
 
-flags.DEFINE_string('base_dir', None,
-                    'Base directory to host all required sub-directories.')
+flags.DEFINE_string(
+    'base_dir', None, 'Base directory to host all required sub-directories.'
+)
 flags.DEFINE_multi_string(
-    'gin_files', [], 'List of paths to gin configuration files.')
+    'gin_files', [], 'List of paths to gin configuration files.'
+)
 flags.DEFINE_multi_string(
-    'gin_bindings', [],
+    'gin_bindings',
+    [],
     'Gin bindings to override the values set in the config files '
     '(e.g. "DQNAgent.epsilon_train=0.1",'
-    '      "create_environment.game_name="Pong"").')
+    '      "create_environment.game_name="Pong"").',
+)
 
 
 FLAGS = flags.FLAGS
@@ -64,8 +70,8 @@ def create_agent_recycled(
     sess: A `tf.compat.v1.Session` object for running associated ops.
     environment: A gym environment (e.g. Atari 2600).
     agent_name: str, name of the agent to create.
-    summary_writer: A Tensorflow summary writer to pass to the agent
-      for in-agent training statistics in Tensorboard.
+    summary_writer: A Tensorflow summary writer to pass to the agent for
+      in-agent training statistics in Tensorboard.
     debug_mode: bool, whether to output Tensorboard summaries. If set to true,
       the agent will output in-episode statistics to Tensorboard. Disabled by
       default as this results in slower training.
@@ -86,10 +92,12 @@ def create_agent_recycled(
     )
   elif agent_name.startswith('rainbow'):
     return recycled_rainbow_agent.RecycledRainbowAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer)
+        num_actions=environment.action_space.n, summary_writer=summary_writer
+    )
   elif agent_name.startswith('atari100k'):
     return recycled_atari100k_rainbow_agent.RecycledAtari100kRainbowAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer)
+        num_actions=environment.action_space.n, summary_writer=summary_writer
+    )
   else:
     raise ValueError('Unknown agent: {}'.format(agent_name))
 

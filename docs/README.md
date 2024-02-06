@@ -160,9 +160,9 @@ which informs Dopamine of where it should store experimental data.
 #### Checkpointing
 
 By default, Dopamine will save an experiment checkpoint every iteration: one
-training and one evaluation phase, following a standard set by [Mnih et al][dqn].
-Checkpoints are saved in the `checkpoints` subdirectory under `base_dir`. At a
-high-level, the following are checkpointed:
+training and one evaluation phase, following a standard set by
+[Mnih et al][dqn]. Checkpoints are saved in the `checkpoints` subdirectory under
+`base_dir`. At a high-level, the following are checkpointed:
 
 *   Experiment statistics (number of iterations performed, learning curves,
     etc.). This happens in
@@ -195,8 +195,8 @@ log files are generated in
 [`dopamine/atari/run_experiment.py`](https://github.com/google/dopamine/blob/master/dopamine/atari/run_experiment.py)
 and more specifically in
 [`dopamine/common/logger.py`](https://github.com/google/dopamine/blob/master/dopamine/common/logger.py),
-and are pickle files containing a dictionary mapping iteration keys
-(e.g., `"iteration_47"`) to dictionaries containing data.
+and are pickle files containing a dictionary mapping iteration keys (e.g.,
+`"iteration_47"`) to dictionaries containing data.
 
 A simple way to read log data from multiple experiments is to use the provided
 [`read_experiment`](https://github.com/google/dopamine/blob/master/docs/api_docs/python/utils/read_experiment.md)
@@ -264,35 +264,37 @@ We provide a series of files for all 4 agents on all 60 games. These are all
 
 *   The raw logs are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_raw_logs_files.tar.gz)
-    *  You can view this
-       [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/load_statistics.ipynb)
-       for instructions on how to load and visualize them.
+    *   You can view this
+        [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/load_statistics.ipynb)
+        for instructions on how to load and visualize them.
 *   The compiled pickle files are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_pkl_files.tar.gz)
-    *  We make use of these compiled pickle files in both
-       [agents](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/agents.ipynb)
-       and the
-       [statistics](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/load_statistics.ipynb)
-       colabs.
+    *   We make use of these compiled pickle files in both
+        [agents](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/agents.ipynb)
+        and the
+        [statistics](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/load_statistics.ipynb)
+        colabs.
 *   The Tensorboard event files are available
     [here](https://storage.cloud.google.com/download-dopamine-rl/compiled_tb_event_files.tar.gz)
-    *  We provide a
-       [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/tensorboard.ipynb)
-       where you can start Tensorboard directly from the colab using `ngrok`.
-       In the provided example your Tensorboard will look something like this:
+    *   We provide a
+        [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/tensorboard.ipynb)
+        where you can start Tensorboard directly from the colab using `ngrok`.
+        In the provided example your Tensorboard will look something like this:
 
 <div align="center">
   <img src="https://google.github.io/dopamine/images/all_asterix_tb.png"><br><br>
 </div>
 
-    *  You can also view these with Tensorboard on your machine. For instance, after
-       uncompressing the files you can run:
+~~~
+*  You can also view these with Tensorboard on your machine. For instance, after
+   uncompressing the files you can run:
 
-       ```
-       tensorboard --logdir c51/Asterix/
-       ```
+   ```
+   tensorboard --logdir c51/Asterix/
+   ```
 
-       to display the training runs for C51 on Asterix:
+   to display the training runs for C51 on Asterix:
+~~~
 
 <div align="center">
   <img src="https://google.github.io/dopamine/images/c51_asterix_tb.png"><br><br>
@@ -302,15 +304,16 @@ We provide a series of files for all 4 agents on all 60 games. These are all
     all 60 games are available. The format for each of the files is:
     `https://storage.cloud.google.com/download-dopamine-rl/lucid/${AGENT}/${GAME}/${RUN}/tf_ckpt-199.${SUFFIX}`,
     where:
-    *  `AGENT` can be "dqn", "c51", "rainbow", or "iqn".
-    *  `GAME` can be any of the 60 games.
-    *  `RUN` can be 1, 2, 3, 4, or 5
-    *  `SUFFIX` can be one of `data-00000-of-00001`, `index`, or `meta`.
-*   You can also download all of these as a single `.tar.gz` file. **Note**: these files are quite large, over 15Gb each.
-    *  [DQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/dqn_checkpoints.tar.gz)
-    *  [C51 checkpoints](https://storage.cloud.google.com/download-dopamine-rl/c51_checkpoints.tar.gz)
-    *  [Rainbow checkpoints](https://storage.cloud.google.com/download-dopamine-rl/rainbow_checkpoints.tar.gz)
-    *  [IQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/iqn_checkpoints.tar.gz)
+    *   `AGENT` can be "dqn", "c51", "rainbow", or "iqn".
+    *   `GAME` can be any of the 60 games.
+    *   `RUN` can be 1, 2, 3, 4, or 5
+    *   `SUFFIX` can be one of `data-00000-of-00001`, `index`, or `meta`.
+*   You can also download all of these as a single `.tar.gz` file. **Note**:
+    these files are quite large, over 15Gb each.
+    *   [DQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/dqn_checkpoints.tar.gz)
+    *   [C51 checkpoints](https://storage.cloud.google.com/download-dopamine-rl/c51_checkpoints.tar.gz)
+    *   [Rainbow checkpoints](https://storage.cloud.google.com/download-dopamine-rl/rainbow_checkpoints.tar.gz)
+    *   [IQN checkpoints](https://storage.cloud.google.com/download-dopamine-rl/iqn_checkpoints.tar.gz)
 
 [dqn]: https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
 [c51]: http://proceedings.mlr.press/v70/bellemare17a.html

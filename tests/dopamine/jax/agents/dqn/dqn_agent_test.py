@@ -60,6 +60,7 @@ class DQNAgentTest(absltest.TestCase):
     # action 0 will be selected by an argmax.
     class MockDQNNetwork(nn.Module):
       """The Jax network used in tests."""
+
       num_actions: int
       inputs_preprocessed: bool = False
 
@@ -72,11 +73,14 @@ class DQNAgentTest(absltest.TestCase):
           to_pick_first_action = onp.zeros(shape, dtype)
           to_pick_first_action[:, 0] = 1
           return to_pick_first_action
+
         x = x.astype(jnp.float32)
         x = x.reshape((-1))  # flatten
-        x = nn.Dense(features=self.num_actions,
-                     kernel_init=custom_init,
-                     bias_init=nn.initializers.ones)(x)
+        x = nn.Dense(
+            features=self.num_actions,
+            kernel_init=custom_init,
+            bias_init=nn.initializers.ones,
+        )(x)
         return atari_lib.DQNNetworkType(x)
 
     agent = dqn_agent.JaxDQNAgent(
@@ -90,7 +94,8 @@ class DQNAgentTest(absltest.TestCase):
         update_period=self.update_period,
         target_update_period=self.target_update_period,
         epsilon_eval=0.0,  # No exploration during evaluation.
-        allow_partial_reload=allow_partial_reload)
+        allow_partial_reload=allow_partial_reload,
+    )
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -127,10 +132,11 @@ class DQNAgentTest(absltest.TestCase):
 
     # Test with a non-None preprocess_fn.
     def preprocess_fn(x):
-      return x * 10.
+      return x * 10.0
 
-    agent = MockDQNAgent(num_actions=5, network=MockNetwork,
-                         preprocess_fn=preprocess_fn)
+    agent = MockDQNAgent(
+        num_actions=5, network=MockNetwork, preprocess_fn=preprocess_fn
+    )
     self.assertEqual(5, agent.network_def.num_actions)
     self.assertTrue(agent.network_def.inputs_preprocessed)
 
@@ -150,8 +156,9 @@ class DQNAgentTest(absltest.TestCase):
     expected_state = self.zero_state
     expected_state[..., -1] = onp.ones(self.observation_shape)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(agent._observation,
-                                    first_observation[:, :, 0]))
+    self.assertTrue(
+        onp.array_equal(agent._observation, first_observation[:, :, 0])
+    )
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
 
@@ -166,8 +173,9 @@ class DQNAgentTest(absltest.TestCase):
     # observation.
     expected_state[:, :, -1] = onp.full(self.observation_shape, 2)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(agent._observation,
-                                    second_observation[:, :, 0]))
+    self.assertTrue(
+        onp.array_equal(agent._observation, second_observation[:, :, 0])
+    )
     # training_steps is incremented since we set eval_mode to False.
     self.assertEqual(agent.training_steps, 1)
 
@@ -194,9 +202,12 @@ class DQNAgentTest(absltest.TestCase):
       if stack_pos >= -self.stack_size:
         expected_state[:, :, stack_pos] = onp.full(self.observation_shape, step)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(
-        agent._last_observation,
-        onp.ones(self.observation_shape) * (num_steps - 1)))
+    self.assertTrue(
+        onp.array_equal(
+            agent._last_observation,
+            onp.ones(self.observation_shape) * (num_steps - 1),
+        )
+    )
     self.assertTrue(onp.array_equal(agent._observation, observation[:, :, 0]))
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
@@ -235,9 +246,12 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(1, mock_args[2])  # Reward received.
       self.assertFalse(mock_args[3])  # is_terminal
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(
-        agent._last_observation,
-        onp.full(self.observation_shape, num_steps - 1)))
+    self.assertTrue(
+        onp.array_equal(
+            agent._last_observation,
+            onp.full(self.observation_shape, num_steps - 1),
+        )
+    )
     self.assertTrue(onp.array_equal(agent._observation, observation[:, :, 0]))
     # We expect one more than num_steps because of the call to begin_episode.
     self.assertEqual(agent.training_steps, num_steps + 1)
@@ -288,9 +302,12 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(1, mock_args[2])  # Reward received.
       self.assertFalse(mock_args[3])  # is_terminal
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(
-        agent._last_observation,
-        onp.full(self.observation_shape, num_steps - 1)))
+    self.assertTrue(
+        onp.array_equal(
+            agent._last_observation,
+            onp.full(self.observation_shape, num_steps - 1),
+        )
+    )
     self.assertTrue(onp.array_equal(agent._observation, observation[..., 0]))
     # We expect one more than num_steps because of the call to begin_episode.
     self.assertEqual(agent.training_steps, num_steps + 1)
@@ -376,14 +393,16 @@ class DQNAgentTest(absltest.TestCase):
     steps_schedule = [
         (0, 1.0),  # step < warmup_steps
         (16, 0.91),  # bonus = 0.9 * 90 / 100 = 0.81
-        (decay_period + warmup_steps + 1, epsilon)]  # step > decay+warmup
+        (decay_period + warmup_steps + 1, epsilon),
+    ]  # step > decay+warmup
     for step, expected_epsilon in steps_schedule:
       onp.testing.assert_almost_equal(
-          dqn_agent.linearly_decaying_epsilon(decay_period,
-                                              step,
-                                              warmup_steps,
-                                              epsilon),
-          expected_epsilon, 0.01)
+          dqn_agent.linearly_decaying_epsilon(
+              decay_period, step, warmup_steps, epsilon
+          ),
+          expected_epsilon,
+          0.01,
+      )
 
 
 if __name__ == '__main__':

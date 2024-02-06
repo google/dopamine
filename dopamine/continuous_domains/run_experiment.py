@@ -40,15 +40,15 @@ load_gin_configs = base_run_experiment.load_gin_configs
 def create_continuous_agent(
     environment: gym_lib.GymPreprocessing,
     agent_name: str,
-    summary_writer: Optional[tensorboard.SummaryWriter] = None
+    summary_writer: Optional[tensorboard.SummaryWriter] = None,
 ) -> dqn_agent.JaxDQNAgent:
   """Creates an agent.
 
   Args:
     environment:  A gym environment.
     agent_name: str, name of the agent to create.
-    summary_writer: A Tensorflow summary writer to pass to the agent
-      for in-agent training statistics in Tensorboard.
+    summary_writer: A Tensorflow summary writer to pass to the agent for
+      in-agent training statistics in Tensorboard.
 
   Returns:
     An RL agent.
@@ -62,12 +62,15 @@ def create_continuous_agent(
     assert isinstance(environment.observation_space, spaces.Box)
     return sac_agent.SACAgent(
         action_shape=environment.action_space.shape,
-        action_limits=(environment.action_space.low,
-                       environment.action_space.high),
+        action_limits=(
+            environment.action_space.low,
+            environment.action_space.high,
+        ),
         observation_shape=environment.observation_space.shape,
         action_dtype=environment.action_space.dtype,
         observation_dtype=environment.observation_space.dtype,
-        summary_writer=summary_writer)
+        summary_writer=summary_writer,
+    )
   else:
     raise ValueError(f'Unknown agent: {agent_name}')
 
@@ -105,19 +108,21 @@ class ContinuousRunner(base_run_experiment.Runner):
   JAX/Flax agents.
   """
 
-  def __init__(self,
-               base_dir,
-               create_agent_fn,
-               create_environment_fn=gym_lib.create_gym_environment,
-               checkpoint_file_prefix='ckpt',
-               logging_file_prefix='log',
-               log_every_n=1,
-               num_iterations=200,
-               training_steps=250000,
-               evaluation_steps=125000,
-               max_steps_per_episode=1000,
-               clip_rewards=False,
-               use_legacy_logger=True):
+  def __init__(
+      self,
+      base_dir,
+      create_agent_fn,
+      create_environment_fn=gym_lib.create_gym_environment,
+      checkpoint_file_prefix='ckpt',
+      logging_file_prefix='log',
+      log_every_n=1,
+      num_iterations=200,
+      training_steps=250000,
+      evaluation_steps=125000,
+      max_steps_per_episode=1000,
+      clip_rewards=False,
+      use_legacy_logger=True,
+  ):
     """Initialize the Runner object in charge of running a full experiment.
 
     Args:
@@ -159,15 +164,18 @@ class ContinuousRunner(base_run_experiment.Runner):
     self._create_directories()
     self._summary_writer = tensorboard.SummaryWriter(base_dir)
     self._environment = create_environment_fn()
-    self._agent = create_agent_fn(self._environment,
-                                  summary_writer=self._summary_writer)
+    self._agent = create_agent_fn(
+        self._environment, summary_writer=self._summary_writer
+    )
     self._initialize_checkpointer_and_maybe_resume(checkpoint_file_prefix)
 
     # Create a collector dispatcher for metrics reporting.
     self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
-        self._base_dir)
+        self._base_dir
+    )
     set_collector_dispatcher_fn = getattr(
-        self._agent, 'set_collector_dispatcher', None)
+        self._agent, 'set_collector_dispatcher', None
+    )
     if callable(set_collector_dispatcher_fn):
       set_collector_dispatcher_fn(self._collector_dispatcher)
 
@@ -189,12 +197,15 @@ class ContinuousRunner(base_run_experiment.Runner):
       return True
     return self._fine_grained_print_to_console_enabled
 
-  def _save_tensorboard_summaries(self, iteration,
-                                  num_episodes_train,
-                                  average_reward_train,
-                                  num_episodes_eval,
-                                  average_reward_eval,
-                                  average_steps_per_second):
+  def _save_tensorboard_summaries(
+      self,
+      iteration,
+      num_episodes_train,
+      average_reward_train,
+      num_episodes_eval,
+      average_reward_eval,
+      average_steps_per_second,
+  ):
     """Save statistics as tensorboard summaries.
 
     Args:
@@ -205,11 +216,13 @@ class ContinuousRunner(base_run_experiment.Runner):
       average_reward_eval: float, The average evaluation reward.
       average_steps_per_second: float, The average number of steps per second.
     """
-    metrics = [('Train/NumEpisodes', num_episodes_train),
-               ('Train/AverageReturns', average_reward_train),
-               ('Train/AverageStepsPerSecond', average_steps_per_second),
-               ('Eval/NumEpisodes', num_episodes_eval),
-               ('Eval/AverageReturns', average_reward_eval)]
+    metrics = [
+        ('Train/NumEpisodes', num_episodes_train),
+        ('Train/AverageReturns', average_reward_train),
+        ('Train/AverageStepsPerSecond', average_steps_per_second),
+        ('Eval/NumEpisodes', num_episodes_eval),
+        ('Eval/AverageReturns', average_reward_eval),
+    ]
     for name, value in metrics:
       self._summary_writer.scalar(name, value, iteration)
     self._summary_writer.flush()
@@ -223,8 +236,12 @@ class ContinuousTrainRunner(ContinuousRunner):
   for JAX/Flax agents.
   """
 
-  def __init__(self, base_dir, create_agent_fn,
-               create_environment_fn=gym_lib.create_gym_environment):
+  def __init__(
+      self,
+      base_dir,
+      create_agent_fn,
+      create_environment_fn=gym_lib.create_gym_environment,
+  ):
     """Initialize the TrainRunner object in charge of running a full experiment.
 
     Args:
@@ -254,31 +271,38 @@ class ContinuousTrainRunner(ContinuousRunner):
     """
     statistics = iteration_statistics.IterationStatistics()
     num_episodes_train, average_reward_train, average_steps_per_second = (
-        self._run_train_phase(statistics))
+        self._run_train_phase(statistics)
+    )
 
     if self._has_collector_dispatcher:
       self._collector_dispatcher.write([
-          statistics_instance.StatisticsInstance('Train/NumEpisodes',
-                                                 num_episodes_train,
-                                                 iteration),
-          statistics_instance.StatisticsInstance('Train/AverageReturns',
-                                                 average_reward_train,
-                                                 iteration),
-          statistics_instance.StatisticsInstance('Train/AverageStepsPerSecond',
-                                                 average_steps_per_second,
-                                                 iteration),
+          statistics_instance.StatisticsInstance(
+              'Train/NumEpisodes', num_episodes_train, iteration
+          ),
+          statistics_instance.StatisticsInstance(
+              'Train/AverageReturns', average_reward_train, iteration
+          ),
+          statistics_instance.StatisticsInstance(
+              'Train/AverageStepsPerSecond', average_steps_per_second, iteration
+          ),
       ])
-    self._save_tensorboard_summaries(iteration, num_episodes_train,
-                                     average_reward_train,
-                                     average_steps_per_second)
+    self._save_tensorboard_summaries(
+        iteration,
+        num_episodes_train,
+        average_reward_train,
+        average_steps_per_second,
+    )
     return statistics.data_lists
 
-  def _save_tensorboard_summaries(self, iteration, num_episodes,
-                                  average_reward, average_steps_per_second):
+  def _save_tensorboard_summaries(
+      self, iteration, num_episodes, average_reward, average_steps_per_second
+  ):
     """Save statistics as tensorboard summaries."""
-    metrics = [('Train/NumEpisodes', num_episodes),
-               ('Train/AverageReturns', average_reward),
-               ('Train/AverageStepsPerSecond', average_steps_per_second)]
+    metrics = [
+        ('Train/NumEpisodes', num_episodes),
+        ('Train/AverageReturns', average_reward),
+        ('Train/AverageStepsPerSecond', average_steps_per_second),
+    ]
     for name, value in metrics:
       self._summary_writer.scalar(name, value, iteration)
     self._summary_writer.flush()

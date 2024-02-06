@@ -38,12 +38,17 @@ def get_q_values(model, states, returns_to_condition):
   return jnp.squeeze(outputs.q_values)
 
 
-@functools.partial(
-    jax.jit,
-    static_argnames=('network_def', 'optimizer'))
+@functools.partial(jax.jit, static_argnames=('network_def', 'optimizer'))
 def train(
-    network_def, online_params, optimizer, optimizer_state,
-    states, actions, returns_to_condition, support):
+    network_def,
+    online_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    returns_to_condition,
+    support,
+):
   """Run a training step."""
 
   def loss_fn(params):
@@ -56,10 +61,12 @@ def train(
           support=support,
           return_to_condition=return_to_condition,
       )
+
     q_values = get_q_values(q_func, states, returns_to_condition)
     replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
     bc_loss = jnp.mean(
-        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q)
+        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q
+    )
     return bc_loss
 
   grad_fn = jax.value_and_grad(loss_fn, has_aux=False)
@@ -67,7 +74,8 @@ def train(
   # outputs[1] correspond to the per-example TD loss.
   loss, grad = grad_fn(online_params)
   updates, optimizer_state = optimizer.update(
-      grad, optimizer_state, params=online_params)
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss
 
@@ -86,7 +94,8 @@ class WrappedNetworkDef(object):
         self._max_return - self._min_return
     ) * return_multiplier + self._max_return
     self._return_to_condition = jnp.array(
-        return_to_condition, dtype=jnp.float32)
+        return_to_condition, dtype=jnp.float32
+    )
 
   def apply(self, params, x, support, key=None):
     del key
@@ -99,15 +108,12 @@ class WrappedNetworkDef(object):
 
 
 @gin.configurable
-class JaxReturnConditionedBCAgent(
-    offline_rainbow_agent.OfflineJaxRainbowAgent):
+class JaxReturnConditionedBCAgent(offline_rainbow_agent.OfflineJaxRainbowAgent):
   """Return conditioned Behavior cloning agent."""
 
-  def __init__(self,
-               num_actions,
-               replay_data_dir,
-               summary_writer=None,
-               use_tfds=True):
+  def __init__(
+      self, num_actions, replay_data_dir, summary_writer=None, use_tfds=True
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -124,7 +130,8 @@ class JaxReturnConditionedBCAgent(
         bc_coefficient=1.0,
         td_coefficient=0.0,
         use_tfds=use_tfds,
-        summary_writer=summary_writer)
+        summary_writer=summary_writer,
+    )
     self._create_wrapped_network()
 
   def _training_step_update(self):
@@ -143,12 +150,13 @@ class JaxReturnConditionedBCAgent(
         self._support,
     )
 
-    if (self.training_steps > 0 and
-        self.training_steps % self.summary_writing_frequency == 0):
+    if (
+        self.training_steps > 0
+        and self.training_steps % self.summary_writing_frequency == 0
+    ):
       if self.summary_writer is not None:
         with self.summary_writer.as_default():
-          tf.summary.scalar('Losses/BCLoss', bc_loss,
-                            step=self.training_steps)
+          tf.summary.scalar('Losses/BCLoss', bc_loss, step=self.training_steps)
         self.summary_writer.flush()
     if self._use_tfds:
       self.log_gradient_steps_per_epoch()
@@ -158,8 +166,11 @@ class JaxReturnConditionedBCAgent(
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
     self.online_params = self.network_def.init(
-        rng, x=self.state, support=self._support,
-        return_to_condition=jnp.array(0.0, dtype=jnp.float32))
+        rng,
+        x=self.state,
+        support=self._support,
+        return_to_condition=jnp.array(0.0, dtype=jnp.float32),
+    )
     self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
     self.target_network_params = self.online_params
@@ -167,7 +178,8 @@ class JaxReturnConditionedBCAgent(
   def _create_wrapped_network(self):
     min_return, max_return = self._replay.min_max_returns
     self.wrapped_network_def = WrappedNetworkDef(
-        self.network_def, min_return, max_return)
+        self.network_def, min_return, max_return
+    )
 
   def set_return_to_condition(self, return_multiplier):
     self.wrapped_network_def.set_return_to_condition(return_multiplier)
@@ -188,10 +200,20 @@ class JaxReturnConditionedBCAgent(
   def _get_action(self):
     state = self.preprocess_fn(self.state)
     self._rng, self.action = rainbow_agent.select_action(
-        self.wrapped_network_def, self.online_params, state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn, self._support)
+        self.wrapped_network_def,
+        self.online_params,
+        state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 

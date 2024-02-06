@@ -22,14 +22,20 @@ from absl import logging
 
 from dopamine.continuous_domains import run_experiment
 
-flags.DEFINE_string('base_dir', None,
-                    'Base directory to host all required sub-directories.')
+flags.DEFINE_string(
+    'base_dir', None, 'Base directory to host all required sub-directories.'
+)
 flags.DEFINE_multi_string(
-    'gin_files', [], 'List of paths to gin configuration files (e.g.'
-    '"dopamine/jax/agents/sac/configs/sac.gin").')
+    'gin_files',
+    [],
+    'List of paths to gin configuration files (e.g.'
+    '"dopamine/jax/agents/sac/configs/sac.gin").',
+)
 flags.DEFINE_multi_string(
-    'gin_bindings', [],
-    'Gin bindings to override the values set in the config files.')
+    'gin_bindings',
+    [],
+    'Gin bindings to override the values set in the config files.',
+)
 
 FLAGS = flags.FLAGS
 

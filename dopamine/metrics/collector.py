@@ -38,8 +38,9 @@ import tensorflow as tf
 class Collector(abc.ABC):
   """Abstract class for defining metric collectors."""
 
-  def __init__(self, base_dir: Optional[str],
-               extra_supported_types: Sequence[str] = ()):
+  def __init__(
+      self, base_dir: Optional[str], extra_supported_types: Sequence[str] = ()
+  ):
     if base_dir is not None:
       self._base_dir = osp.join(base_dir, 'metrics', self.get_name())
       # Try to create logging directory.
@@ -61,8 +62,8 @@ class Collector(abc.ABC):
 
   @abc.abstractmethod
   def write(
-      self,
-      statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
+      self, statistics: Sequence[statistics_instance.StatisticsInstance]
+  ) -> None:
     pass
 
   def flush(self) -> None:

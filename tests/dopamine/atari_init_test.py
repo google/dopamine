@@ -34,12 +34,13 @@ class AtariInitTest(tf.test.TestCase):
     super(AtariInitTest, self).setUp()
     FLAGS.base_dir = os.path.join(
         '/tmp/dopamine_tests',
-        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'))
+        datetime.datetime.utcnow().strftime('run_%Y_%m_%d_%H_%M_%S'),
+    )
     FLAGS.gin_files = ['dopamine/agents/dqn/configs/dqn.gin']
     # `num_iterations` set to zero to prevent runner execution.
     FLAGS.gin_bindings = [
         'Runner.num_iterations=0',
-        'WrappedReplayBuffer.replay_capacity = 100'  # To prevent OOM.
+        'WrappedReplayBuffer.replay_capacity = 100',  # To prevent OOM.
     ]
     FLAGS.alsologtostderr = True
 

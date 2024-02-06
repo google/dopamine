@@ -12,8 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for implicit quantile agent.
-"""
+"""Tests for implicit quantile agent."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -41,7 +40,8 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.ones_state = onp.ones(
-        (1,) + self.observation_shape + (self.stack_size,))
+        (1,) + self.observation_shape + (self.stack_size,)
+    )
     gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)
     gin.bind_parameter('OutOfGraphReplayBuffer.batch_size', 2)
 
@@ -54,6 +54,7 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
 
     class MockImplicitQuantileNetwork(linen.Module):
       """Custom Jax model used in tests."""
+
       num_actions: int
       quantile_embedding_dim: int
       inputs_preprocessed: bool = False
@@ -64,9 +65,11 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
         x = x.reshape((-1))  # flatten
         state_net_tiled = jnp.tile(x, [num_quantiles, 1])
         x *= state_net_tiled
-        quantile_values = linen.Dense(features=self.num_actions,
-                                      kernel_init=linen.initializers.ones,
-                                      bias_init=linen.initializers.zeros)(x)
+        quantile_values = linen.Dense(
+            features=self.num_actions,
+            kernel_init=linen.initializers.ones,
+            bias_init=linen.initializers.zeros,
+        )(x)
         quantiles = jnp.ones([num_quantiles, 1])
         return atari_lib.ImplicitQuantileNetworkType(quantile_values, quantiles)
 
@@ -77,7 +80,8 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
         num_tau_samples=2,
         num_tau_prime_samples=3,
         num_quantile_samples=4,
-        epsilon_eval=0.0)
+        epsilon_eval=0.0,
+    )
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -97,14 +101,16 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     self.assertEqual(agent._replay._batch_size, 2)
     for params in [agent.online_params, agent.target_network_params]:
       agent._rng, rng_input = jax.random.split(agent._rng)
-      output = agent.network_def.apply(params,
-                                       self.ones_state,
-                                       num_quantiles=agent.num_quantile_samples,
-                                       rng=rng_input)
-      self.assertEqual(output.quantile_values.shape[0],
-                       agent.num_quantile_samples)
-      self.assertEqual(output.quantiles.shape[0],
-                       agent.num_quantile_samples)
+      output = agent.network_def.apply(
+          params,
+          self.ones_state,
+          num_quantiles=agent.num_quantile_samples,
+          rng=rng_input,
+      )
+      self.assertEqual(
+          output.quantile_values.shape[0], agent.num_quantile_samples
+      )
+      self.assertEqual(output.quantiles.shape[0], agent.num_quantile_samples)
       self.assertEqual(output.quantiles.shape[1], 1)
     # Check the setting of num_actions.
     self.assertEqual(self._num_actions, agent.num_actions)
@@ -119,8 +125,13 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
       agent._rng, rng_input = jax.random.split(agent._rng)
       q_values = jnp.mean(
           agent.network_def.apply(
-              params, self.ones_state, num_quantiles=agent.num_quantile_samples,
-              rng=rng_input).quantile_values, axis=0)
+              params,
+              self.ones_state,
+              num_quantiles=agent.num_quantile_samples,
+              rng=rng_input,
+          ).quantile_values,
+          axis=0,
+      )
       onp.array_equal(q_values, expected_q_values)
       self.assertEqual(jnp.argmax(q_values, axis=0), 0)
 
@@ -128,14 +139,20 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     agent = self._create_test_agent()
     batch_size = 32
     batch_states = onp.ones(
-        (batch_size,) + self.observation_shape + (self.stack_size,))
+        (batch_size,) + self.observation_shape + (self.stack_size,)
+    )
     for params in [agent.online_params, agent.target_network_params]:
       agent._rng, rng_input = jax.random.split(agent._rng)
       model_output = jax.vmap(
           lambda n, p, x, y, z: n.apply(p, x=x, num_quantiles=y, rng=z),
-          in_axes=(None, None, 0, None, None))(
-              agent.network_def, params, batch_states, agent.num_tau_samples,
-              rng_input)
+          in_axes=(None, None, 0, None, None),
+      )(
+          agent.network_def,
+          params,
+          batch_states,
+          agent.num_tau_samples,
+          rng_input,
+      )
       quantile_values = model_output.quantile_values
       quantile_values = jnp.squeeze(quantile_values)
       self.assertEqual(quantile_values.shape[0], batch_size)
@@ -158,8 +175,9 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     expected_state = onp.zeros(self.observation_shape + (self.stack_size,))
     expected_state[:, :, -1] = onp.ones(self.observation_shape)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(agent._observation,
-                                    first_observation[:, :, 0]))
+    self.assertTrue(
+        onp.array_equal(agent._observation, first_observation[:, :, 0])
+    )
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
     # This will now cause training to happen.
@@ -173,8 +191,9 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     # observation.
     expected_state[:, :, -1] = onp.full(self.observation_shape, 2)
     self.assertTrue(onp.array_equal(agent.state, expected_state))
-    self.assertTrue(onp.array_equal(agent._observation,
-                                    second_observation[:, :, 0]))
+    self.assertTrue(
+        onp.array_equal(agent._observation, second_observation[:, :, 0])
+    )
     # training_steps is incremented since we set eval_mode to False.
     self.assertEqual(agent.training_steps, 1)
 

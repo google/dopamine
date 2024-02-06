@@ -35,9 +35,7 @@ def huber_loss(
     Huber loss.
   """
   x = jnp.abs(targets - predictions)
-  return jnp.where(x <= delta,
-                   0.5 * x**2,
-                   0.5 * delta**2 + delta * (x - delta))
+  return jnp.where(x <= delta, 0.5 * x**2, 0.5 * delta**2 + delta * (x - delta))
 
 
 def mse_loss(targets: jnp.ndarray, predictions: jnp.ndarray) -> jnp.ndarray:

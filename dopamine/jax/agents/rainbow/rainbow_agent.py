@@ -53,10 +53,23 @@ import tensorflow as tf
 
 
 @functools.partial(jax.jit, static_argnums=(0, 3, 12))
-def train(network_def, online_params, target_params, optimizer, optimizer_state,
-          states, actions, next_states, rewards, terminals, loss_weights,
-          support, cumulative_gamma):
+def train(
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    loss_weights,
+    support,
+    cumulative_gamma,
+):
   """Run a training step."""
+
   def loss_fn(params, target, loss_multipliers):
     def q_online(state):
       return network_def.apply(params, state, support)
@@ -66,8 +79,8 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     # indexing across the batch.
     chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
     loss = jax.vmap(losses.softmax_cross_entropy_loss_with_logits)(
-        target,
-        chosen_action_logits)
+        target, chosen_action_logits
+    )
     mean_loss = jnp.mean(loss_multipliers * loss)
     return mean_loss, loss
 
@@ -75,24 +88,23 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     return network_def.apply(target_params, state, support)
 
   grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
-  target = target_distribution(q_target,
-                               next_states,
-                               rewards,
-                               terminals,
-                               support,
-                               cumulative_gamma)
+  target = target_distribution(
+      q_target, next_states, rewards, terminals, support, cumulative_gamma
+  )
 
   # Get the unweighted loss without taking its mean for updating priorities.
   (mean_loss, loss), grad = grad_fn(online_params, target, loss_weights)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state,
-                                              params=online_params)
+  updates, optimizer_state = optimizer.update(
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss, mean_loss
 
 
 @functools.partial(jax.vmap, in_axes=(None, 0, 0, 0, None, None))
-def target_distribution(target_network, next_states, rewards, terminals,
-                        support, cumulative_gamma):
+def target_distribution(
+    target_network, next_states, rewards, terminals, support, cumulative_gamma
+):
   """Builds the C51 target distribution as per Bellemare et al. (2017).
 
   First, we compute the support of the Bellman target, r + gamma Z'. Where Z'
@@ -118,7 +130,7 @@ def target_distribution(target_network, next_states, rewards, terminals,
   Returns:
     The target distribution from the replay.
   """
-  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
+  is_terminal_multiplier = 1.0 - terminals.astype(jnp.float32)
   # Incorporate terminal state to discount factor.
   gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
   target_support = rewards + gamma_with_terminal * support
@@ -128,13 +140,26 @@ def target_distribution(target_network, next_states, rewards, terminals,
   probabilities = jnp.squeeze(next_state_target_outputs.probabilities)
   next_probabilities = probabilities[next_qt_argmax]
   return jax.lax.stop_gradient(
-      project_distribution(target_support, next_probabilities, support))
+      project_distribution(target_support, next_probabilities, support)
+  )
 
 
 @functools.partial(jax.jit, static_argnums=(0, 4, 5, 6, 7, 8, 10, 11))
-def select_action(network_def, params, state, rng, num_actions, eval_mode,
-                  epsilon_eval, epsilon_train, epsilon_decay_period,
-                  training_steps, min_replay_history, epsilon_fn, support):
+def select_action(
+    network_def,
+    params,
+    state,
+    rng,
+    num_actions,
+    eval_mode,
+    epsilon_eval,
+    epsilon_train,
+    epsilon_decay_period,
+    training_steps,
+    min_replay_history,
+    epsilon_fn,
+    support,
+):
   """Select an action from the set of available actions.
 
   Chooses an action randomly with probability self._calculate_epsilon(), and
@@ -161,49 +186,56 @@ def select_action(network_def, params, state, rng, num_actions, eval_mode,
     rng: Jax random number generator.
     action: int, the selected action.
   """
-  epsilon = jnp.where(eval_mode,
-                      epsilon_eval,
-                      epsilon_fn(epsilon_decay_period,
-                                 training_steps,
-                                 min_replay_history,
-                                 epsilon_train))
+  epsilon = jnp.where(
+      eval_mode,
+      epsilon_eval,
+      epsilon_fn(
+          epsilon_decay_period,
+          training_steps,
+          min_replay_history,
+          epsilon_train,
+      ),
+  )
 
   rng, rng1, rng2 = jax.random.split(rng, num=3)
   p = jax.random.uniform(rng1)
   return rng, jnp.where(
       p <= epsilon,
       jax.random.randint(rng2, (), 0, num_actions),
-      jnp.argmax(network_def.apply(params, state, support).q_values))
+      jnp.argmax(network_def.apply(params, state, support).q_values),
+  )
 
 
 @gin.configurable
 class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
   """A compact implementation of a simplified Rainbow agent."""
 
-  def __init__(self,
-               num_actions,
-               observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
-               stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
-               network=networks.RainbowNetwork,
-               num_atoms=51,
-               vmin=None,
-               vmax=10.,
-               gamma=0.99,
-               update_horizon=1,
-               min_replay_history=20000,
-               update_period=4,
-               target_update_period=8000,
-               epsilon_fn=dqn_agent.linearly_decaying_epsilon,
-               epsilon_train=0.01,
-               epsilon_eval=0.001,
-               epsilon_decay_period=250000,
-               replay_scheme='prioritized',
-               optimizer='adam',
-               seed=None,
-               summary_writer=None,
-               summary_writing_frequency=500,
-               allow_partial_reload=False):
+  def __init__(
+      self,
+      num_actions,
+      observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
+      observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
+      stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+      network=networks.RainbowNetwork,
+      num_atoms=51,
+      vmin=None,
+      vmax=10.0,
+      gamma=0.99,
+      update_horizon=1,
+      min_replay_history=20000,
+      update_period=4,
+      target_update_period=8000,
+      epsilon_fn=dqn_agent.linearly_decaying_epsilon,
+      epsilon_train=0.01,
+      epsilon_eval=0.001,
+      epsilon_decay_period=250000,
+      replay_scheme='prioritized',
+      optimizer='adam',
+      seed=None,
+      summary_writer=None,
+      summary_writing_frequency=500,
+      allow_partial_reload=False,
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -226,9 +258,9 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         before the agent begins training its value function.
       update_period: int, period between DQN updates.
       target_update_period: int, update period for the target network.
-      epsilon_fn: function expecting 4 parameters:
-        (decay_period, step, warmup_steps, epsilon). This function should return
-        the epsilon value used for exploration during training.
+      epsilon_fn: function expecting 4 parameters: (decay_period, step,
+        warmup_steps, epsilon). This function should return the epsilon value
+        used for exploration during training.
       epsilon_train: float, the value to which the agent's epsilon is eventually
         decayed during training.
       epsilon_eval: float, epsilon used when evaluating the agent.
@@ -258,8 +290,7 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         observation_shape=observation_shape,
         observation_dtype=observation_dtype,
         stack_size=stack_size,
-        network=functools.partial(network,
-                                  num_atoms=num_atoms),
+        network=functools.partial(network, num_atoms=num_atoms),
         gamma=gamma,
         update_horizon=update_horizon,
         min_replay_history=min_replay_history,
@@ -273,13 +304,15 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         seed=seed,
         summary_writer=summary_writer,
         summary_writing_frequency=summary_writing_frequency,
-        allow_partial_reload=allow_partial_reload)
+        allow_partial_reload=allow_partial_reload,
+    )
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
     state = self.preprocess_fn(self.state)
-    self.online_params = self.network_def.init(rng, x=state,
-                                               support=self._support)
+    self.online_params = self.network_def.init(
+        rng, x=state, support=self._support
+    )
     self.optimizer = dqn_agent.create_optimizer(self._optimizer_name)
     self.optimizer_state = self.optimizer.init(self.online_params)
     self.target_network_params = self.online_params
@@ -295,7 +328,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype)
+        observation_dtype=self.observation_dtype,
+    )
 
   # TODO(psc): Refactor this so we have a class _select_action that calls
   # select_action with the right parameters. This will allow us to avoid
@@ -315,19 +349,21 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
     if not self.eval_mode:
       self._train_step()
 
-    self._rng, self.action = select_action(self.network_def,
-                                           self.online_params,
-                                           self.preprocess_fn(self.state),
-                                           self._rng,
-                                           self.num_actions,
-                                           self.eval_mode,
-                                           self.epsilon_eval,
-                                           self.epsilon_train,
-                                           self.epsilon_decay_period,
-                                           self.training_steps,
-                                           self.min_replay_history,
-                                           self.epsilon_fn,
-                                           self._support)
+    self._rng, self.action = select_action(
+        self.network_def,
+        self.online_params,
+        self.preprocess_fn(self.state),
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     # TODO(psc): Why a numpy array? Why not an int?
     self.action = onp.asarray(self.action)
     return self.action
@@ -352,19 +388,21 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
       self._store_transition(self._last_observation, self.action, reward, False)
       self._train_step()
 
-    self._rng, self.action = select_action(self.network_def,
-                                           self.online_params,
-                                           self.preprocess_fn(self.state),
-                                           self._rng,
-                                           self.num_actions,
-                                           self.eval_mode,
-                                           self.epsilon_eval,
-                                           self.epsilon_train,
-                                           self.epsilon_decay_period,
-                                           self.training_steps,
-                                           self.min_replay_history,
-                                           self.epsilon_fn,
-                                           self._support)
+    self._rng, self.action = select_action(
+        self.network_def,
+        self.online_params,
+        self.preprocess_fn(self.state),
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 
@@ -407,7 +445,8 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
             self.replay_elements['terminal'],
             loss_weights,
             self._support,
-            self.cumulative_gamma)
+            self.cumulative_gamma,
+        )
 
         if self._replay_scheme == 'prioritized':
           # Rainbow and prioritized replay are parametrized by an exponent
@@ -417,22 +456,29 @@ class JaxRainbowAgent(dqn_agent.JaxDQNAgent):
           # small nonzero value to the loss to avoid 0 priority items. While
           # technically this may be okay, setting all items to 0 priority will
           # cause troubles, and also result in 1.0 / 0.0 = NaN correction terms.
-          self._replay.set_priority(self.replay_elements['indices'],
-                                    jnp.sqrt(loss + 1e-10))
+          self._replay.set_priority(
+              self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+          )
 
-        if (self.summary_writer is not None and
-            self.training_steps > 0 and
-            self.training_steps % self.summary_writing_frequency == 0):
+        if (
+            self.summary_writer is not None
+            and self.training_steps > 0
+            and self.training_steps % self.summary_writing_frequency == 0
+        ):
           with self.summary_writer.as_default():
-            tf.summary.scalar('CrossEntropyLoss', mean_loss,
-                              step=self.training_steps)
+            tf.summary.scalar(
+                'CrossEntropyLoss', mean_loss, step=self.training_steps
+            )
           self.summary_writer.flush()
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
-                [statistics_instance.StatisticsInstance(
-                    'Loss', onp.asarray(mean_loss), step=self.training_steps),
-                 ],
-                collector_allowlist=self._collector_allowlist)
+                [
+                    statistics_instance.StatisticsInstance(
+                        'Loss', onp.asarray(mean_loss), step=self.training_steps
+                    ),
+                ],
+                collector_allowlist=self._collector_allowlist,
+            )
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 
@@ -447,11 +493,11 @@ def project_distribution(supports, weights, target_support):
   In the rest of the comments we will refer to this equation simply as Eq7.
 
   Args:
-    supports: Jax array of shape (num_dims) defining supports for
-      the distribution.
-    weights: Jax array of shape (num_dims) defining weights on the
-      original support points. Although for the CategoricalDQN agent these
-      weights are probabilities, it is not required that they are.
+    supports: Jax array of shape (num_dims) defining supports for the
+      distribution.
+    weights: Jax array of shape (num_dims) defining weights on the original
+      support points. Although for the CategoricalDQN agent these weights are
+      probabilities, it is not required that they are.
     target_support: Jax array of shape (num_dims) defining support of the
       projected distribution. The values must be monotonically increasing. Vmin
       and Vmax will be inferred from the first and last elements of this Jax

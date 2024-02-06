@@ -27,10 +27,12 @@ def step(i, args):  # pylint: disable=unused-argument
   query_value, index, nodes = args
   left_child = index * 2 + 1
   left_sum = nodes[left_child]
-  index = jax.lax.cond(query_value < left_sum, lambda x: x, lambda x: x + 1,
-                       left_child)
-  query_value = jax.lax.cond(query_value < left_sum, lambda x: x,
-                             lambda x: x - left_sum, query_value)
+  index = jax.lax.cond(
+      query_value < left_sum, lambda x: x, lambda x: x + 1, left_child
+  )
+  query_value = jax.lax.cond(
+      query_value < left_sum, lambda x: x, lambda x: x - left_sum, query_value
+  )
   return query_value, index, nodes
 
 
@@ -54,8 +56,9 @@ def parallel_stratified_sample(rng, nodes, i, n, depth):
   upper_bound = (i + 1) / n
   lower_bound = i / n
   query = jax.random.uniform(rng, minval=lower_bound, maxval=upper_bound)
-  _, index, _ = jax.lax.fori_loop(0, depth, step,
-                                  (query * total_priority, 0, nodes))
+  _, index, _ = jax.lax.fori_loop(
+      0, depth, step, (query * total_priority, 0, nodes)
+  )
   return index
 
 
@@ -71,8 +74,8 @@ class DeterministicSumTree(sum_tree.SumTree):
     """Creates the sum tree data structure for the given replay capacity.
 
     Args:
-      capacity: int, the maximum number of elements that can be stored in
-        this data structure.
+      capacity: int, the maximum number of elements that can be stored in this
+        data structure.
 
     Raises:
       ValueError: If requested capacity is not positive.
@@ -80,12 +83,13 @@ class DeterministicSumTree(sum_tree.SumTree):
     assert isinstance(capacity, int)
     if capacity <= 0:
       raise ValueError(
-          'Sum tree capacity should be positive. Got: {}'.format(capacity))
+          'Sum tree capacity should be positive. Got: {}'.format(capacity)
+      )
 
     self.depth = int(np.ceil(np.log2(capacity)))
     self.low_idx = (2**self.depth) - 1  # pri_idx + low_idx -> tree_idx
     self.high_idx = capacity + self.low_idx
-    self.nodes = np.zeros(2**(self.depth + 1) - 1)  # Double precision.
+    self.nodes = np.zeros(2 ** (self.depth + 1) - 1)  # Double precision.
     self.capacity = capacity
 
     self.highest_set = 0
@@ -95,8 +99,8 @@ class DeterministicSumTree(sum_tree.SumTree):
   def _total_priority(self):
     """Returns the sum of all priorities stored in this sum tree.
 
-        Returns:
-          float, sum of priorities stored in this sum tree.
+    Returns:
+      float, sum of priorities stored in this sum tree.
     """
     return self.nodes[0]
 
@@ -107,11 +111,13 @@ class DeterministicSumTree(sum_tree.SumTree):
         jnp.asarray(self.nodes), jax.local_devices(backend='cpu')[0]
     )
     query_value = (
-        jax.random.uniform(rng) if query_value is None else query_value)
+        jax.random.uniform(rng) if query_value is None else query_value
+    )
     query_value *= self._total_priority()
 
-    _, index, _ = jax.lax.fori_loop(0, self.depth, step,
-                                    (query_value, 0, nodes))
+    _, index, _ = jax.lax.fori_loop(
+        0, self.depth, step, (query_value, 0, nodes)
+    )
 
     return np.minimum(index - self.low_idx, self.highest_set)
 
@@ -150,16 +156,17 @@ class DeterministicSumTree(sum_tree.SumTree):
     This operation takes O(log(capacity)).
     Args:
         node_index: int, the index of the leaf node to be updated.
-        value: float, the value which we assign to the node. This value must
-          be nonnegative. Setting value = 0 will cause the element to never
-          be sampled.
+        value: float, the value which we assign to the node. This value must be
+          nonnegative. Setting value = 0 will cause the element to never be
+          sampled.
 
     Raises:
         ValueError: If the given value is negative.
     """
     if value < 0.0:
       raise ValueError(
-          'Sum tree values should be nonnegative. Got {}'.format(value))
+          'Sum tree values should be nonnegative. Got {}'.format(value)
+      )
     self.highest_set = max(node_index, self.highest_set)
     node_index = node_index + self.low_idx
     self.max_recorded_priority = max(value, self.max_recorded_priority)
@@ -173,5 +180,6 @@ class DeterministicSumTree(sum_tree.SumTree):
       node_index = (node_index - 1) // 2
 
     self.nodes[node_index] += delta_value
-    assert node_index == 0, ('Sum tree traversal failed, final node index '
-                             'is not 0.')
+    assert (
+        node_index == 0
+    ), 'Sum tree traversal failed, final node index is not 0.'

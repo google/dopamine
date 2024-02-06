@@ -37,8 +37,7 @@ import tensorflow as tf
 # ... is defined the 'shape' field of ReplayElement. The tensor type is
 # given by the 'type' field. The 'name' field is for convenience and ease of
 # debugging.
-ReplayElement = (
-    collections.namedtuple('shape_type', ['name', 'shape', 'type']))
+ReplayElement = collections.namedtuple('shape_type', ['name', 'shape', 'type'])
 
 # A prefix that can not collide with variable names for checkpoint files.
 STORE_FILENAME_PREFIX = '$store$_'
@@ -73,8 +72,10 @@ def invalid_range(cursor, replay_capacity, stack_size, update_horizon):
       np.array of size stack_size with the invalid indices.
   """
   assert cursor < replay_capacity
-  return np.array([(cursor - update_horizon + i) % replay_capacity
-                   for i in range(stack_size + update_horizon)])
+  return np.array([
+      (cursor - update_horizon + i) % replay_capacity
+      for i in range(stack_size + update_horizon)
+  ])
 
 
 @gin.configurable
@@ -152,11 +153,14 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     """
     assert isinstance(observation_shape, tuple)
     if replay_capacity < update_horizon + stack_size:
-      raise ValueError('There is not enough capacity to cover '
-                       'update_horizon and stack_size.')
+      raise ValueError(
+          'There is not enough capacity to cover update_horizon and stack_size.'
+      )
 
-    logging.info('Creating a %s replay memory with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating a %s replay memory with the following parameters:',
+        self.__class__.__name__,
+    )
     logging.info('\t observation_shape: %s', str(observation_shape))
     logging.info('\t observation_dtype: %s', str(observation_dtype))
     logging.info('\t terminal_dtype: %s', str(terminal_dtype))
@@ -202,7 +206,8 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     # product using the precomputed vector <gamma^0, gamma^1, ..., gamma^{n-1}>.
     self._cumulative_discount_vector = np.array(
         [math.pow(self._gamma, n) for n in range(update_horizon + 1)],
-        dtype=np.float32)
+        dtype=np.float32,
+    )
     self._next_experience_is_episode_start = True
     self._episode_end_indices = set()
 
@@ -214,7 +219,8 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
           storage_element.shape
       )
       self._store[storage_element.name] = np.empty(
-          array_shape, dtype=storage_element.type)
+          array_shape, dtype=storage_element.type
+      )
 
   def get_add_args_signature(self):
     """The signature of the add function.
@@ -229,16 +235,17 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
   def get_storage_signature(self):
     """Returns a default list of elements to be stored in this replay memory.
 
-        Note - Derived classes may return a different signature.
-        Returns:
-            list of ReplayElements defining the type of the contents stored.
+    Note - Derived classes may return a different signature.
+    Returns:
+        list of ReplayElements defining the type of the contents stored.
     """
     storage_elements = [
-        ReplayElement('observation', self._observation_shape,
-                      self._observation_dtype),
+        ReplayElement(
+            'observation', self._observation_shape, self._observation_dtype
+        ),
         ReplayElement('action', self._action_shape, self._action_dtype),
         ReplayElement('reward', self._reward_shape, self._reward_dtype),
-        ReplayElement('terminal', (), self._terminal_dtype)
+        ReplayElement('terminal', (), self._terminal_dtype),
     ]
 
     for extra_replay_element in self._extra_storage_types:
@@ -246,23 +253,25 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     return storage_elements
 
   def _add_zero_transition(self):
-    """Adds a padding transition filled with zeros (Used in episode beginnings).
-    """
+    """Adds a padding transition filled with zeros (Used in episode beginnings)."""
     zero_transition = []
     for element_type in self.get_add_args_signature():
       zero_transition.append(
-          np.zeros(element_type.shape, dtype=element_type.type))
+          np.zeros(element_type.shape, dtype=element_type.type)
+      )
     self._episode_end_indices.discard(self.cursor())  # If present
     self._add(*zero_transition)
 
-  def add(self,
-          observation,
-          action,
-          reward,
-          terminal,
-          *args,
-          priority=None,
-          episode_end=False):
+  def add(
+      self,
+      observation,
+      action,
+      reward,
+      terminal,
+      *args,
+      priority=None,
+      episode_end=False
+  ):
     """Adds a transition to the replay memory.
 
     This function checks the types and handles the padding at the beginning
@@ -329,8 +338,12 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
       self._store[arg_name][cursor] = transition[arg_name]
 
     self.add_count += 1
-    self.invalid_range = invalid_range(self.cursor(), self._replay_length,
-                                       self._stack_size, self._update_horizon)
+    self.invalid_range = invalid_range(
+        self.cursor(),
+        self._replay_length,
+        self._stack_size,
+        self._update_horizon,
+    )
 
   def _check_args_length(self, *args):
     """Check if args passed to the add method have the same length as storage.
@@ -342,8 +355,11 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
         ValueError: If args have wrong length.
     """
     if len(args) != len(self.get_add_args_signature()):
-      raise ValueError('Add expects {} elements, received {}'.format(
-          len(self.get_add_args_signature()), len(args)))
+      raise ValueError(
+          'Add expects {} elements, received {}'.format(
+              len(self.get_add_args_signature()), len(args)
+          )
+      )
 
   def _check_add_types(self, *args):
     """Checks if args passed to the add method match those of the storage.
@@ -356,7 +372,8 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     """
     self._check_args_length(*args)
     for i, (arg_element, store_element) in enumerate(
-        zip(args, self.get_add_args_signature())):
+        zip(args, self.get_add_args_signature())
+    ):
       if hasattr(arg_element, 'shape'):
         arg_shape = arg_element.shape
       elif isinstance(arg_element, tuple) or isinstance(arg_element, list):
@@ -369,8 +386,11 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
       assert arg_shape[0] == self._n_envs
       arg_shape = arg_shape[1:]
       if arg_shape != store_element_shape:
-        raise ValueError('arg {} has shape {}, expected {}'.format(
-            i, arg_shape, store_element_shape))
+        raise ValueError(
+            'arg {} has shape {}, expected {}'.format(
+                i, arg_shape, store_element_shape
+            )
+        )
 
   def is_empty(self):
     """Is the Replay Buffer empty?"""
@@ -397,12 +417,14 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     return self.add_count % self._replay_length
 
   def parallel_get_stack(self, element_name, indices_t, indices_b, first_valid):
-    indices_t = np.arange(-self._stack_size + 1, 1)[:,
-                                                    None] + indices_t[None, :]
+    indices_t = (
+        np.arange(-self._stack_size + 1, 1)[:, None] + indices_t[None, :]
+    )
     indices_b = indices_b[None, :].repeat(self._stack_size, axis=0)
     mask = indices_t >= first_valid
-    result = self.get_from_store(element_name, indices_t % self._replay_length,
-                                 indices_b)
+    result = self.get_from_store(
+        element_name, indices_t % self._replay_length, indices_b
+    )
     mask = mask.reshape(*mask.shape, *([1] * (len(result.shape) - 2)))
     result = result * mask
     result = np.moveaxis(result, 0, -1)
@@ -450,9 +472,12 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     # If the episode ends before the update horizon, without a terminal signal,
     # it is invalid.
     for i in modulo_range(index_t, self._update_horizon, self._replay_length):
-      if (i.item(), index_b.item(
-      )) in self._episode_end_indices and not self._store['terminal'][i,
-                                                                      index_b]:
+      if (
+          i.item(),
+          index_b.item(),
+      ) in self._episode_end_indices and not self._store['terminal'][
+          i, index_b
+      ]:
         return False, 0
 
     return True, ep_start
@@ -506,37 +531,48 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
       min_id = self._stack_size - 1
       max_id = self.cursor() - self._update_horizon - self._subseq_len
       if max_id <= min_id:
-        raise RuntimeError('Cannot sample a batch with fewer than stack size '
-                           '({}) + update_horizon ({}) transitions.'.format(
-                               self._stack_size, self._update_horizon))
-    t_indices = jax.random.randint(rng, (batch_size,), min_id,
-                                   max_id) % self._replay_length
+        raise RuntimeError(
+            'Cannot sample a batch with fewer than stack size '
+            '({}) + update_horizon ({}) transitions.'.format(
+                self._stack_size, self._update_horizon
+            )
+        )
+    t_indices = (
+        jax.random.randint(rng, (batch_size,), min_id, max_id)
+        % self._replay_length
+    )
     b_indices = jax.random.randint(rng, (batch_size,), 0, self._n_envs)
     allowed_attempts = self._max_sample_attempts
     t_indices = np.array(t_indices)
     censor_before = np.zeros_like(t_indices)
     for i in range(len(t_indices)):
-      is_valid, ep_start = self.is_valid_transition(t_indices[i:i + 1],
-                                                    b_indices[i:i + 1])
+      is_valid, ep_start = self.is_valid_transition(
+          t_indices[i : i + 1], b_indices[i : i + 1]
+      )
       censor_before[i] = ep_start
       if not is_valid:
         if allowed_attempts == 0:
           raise RuntimeError(
               'Max sample attempts: Tried {} times but only sampled {}'
               ' valid indices. Batch size is {}'.format(
-                  self._max_sample_attempts, i, batch_size))
+                  self._max_sample_attempts, i, batch_size
+              )
+          )
         while not is_valid and allowed_attempts > 0:
           # If index i is not valid keep sampling others. Note that this
           # is not stratified.
           self._rng, rng = jax.random.split(self._rng)
-          t_index = jax.random.randint(rng, (1,), min_id,
-                                       max_id) % self._replay_length
+          t_index = (
+              jax.random.randint(rng, (1,), min_id, max_id)
+              % self._replay_length
+          )
           b_index = jax.random.randint(rng, (1,), 0, self._n_envs)
           allowed_attempts -= 1
           t_indices[i] = t_index
           b_indices[i] = b_index
           is_valid, first_valid = self.is_valid_transition(
-              t_indices[i:i + 1], b_indices[i:i + 1])
+              t_indices[i : i + 1], b_indices[i : i + 1]
+          )
           censor_before[i] = first_valid
     return t_indices, b_indices, censor_before
 
@@ -607,35 +643,44 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     assert len(b_indices) == batch_size
     transition_elements = self.get_transition_elements(batch_size)
     state_indices = t_indices[:, None] + np.arange(subseq_len)[None, :]
-    state_indices = state_indices.reshape(
-        batch_size * subseq_len) % self._replay_length
-    b_indices = b_indices[:, None].repeat(
-        subseq_len, axis=1).reshape(batch_size * subseq_len)
-    censor_before = censor_before[:, None].repeat(
-        subseq_len, axis=1).reshape(batch_size * subseq_len)
+    state_indices = (
+        state_indices.reshape(batch_size * subseq_len) % self._replay_length
+    )
+    b_indices = (
+        b_indices[:, None]
+        .repeat(subseq_len, axis=1)
+        .reshape(batch_size * subseq_len)
+    )
+    censor_before = (
+        censor_before[:, None]
+        .repeat(subseq_len, axis=1)
+        .reshape(batch_size * subseq_len)
+    )
 
     # shape: horizon X batch_size*subseq_len
     # Offset by one; a `d
-    trajectory_indices = (np.arange(-1, update_horizon - 1)[:, None] +
-                          state_indices[None, :]) % self._replay_length
+    trajectory_indices = (
+        np.arange(-1, update_horizon - 1)[:, None] + state_indices[None, :]
+    ) % self._replay_length
     trajectory_b_indices = b_indices[None,].repeat(update_horizon, axis=0)
-    trajectory_terminals = self._store['terminal'][trajectory_indices,
-                                                   trajectory_b_indices]
+    trajectory_terminals = self._store['terminal'][
+        trajectory_indices, trajectory_b_indices
+    ]
     trajectory_terminals[0, :] = 0
     is_terminal_transition = trajectory_terminals.any(0)
     valid_mask = (1 - trajectory_terminals).cumprod(0)
     trajectory_discount_vector = valid_mask * (
         cumulative_discount_vector[:update_horizon, None]
     )
-    trajectory_rewards = self._store['reward'][(trajectory_indices + 1) %
-                                               self._replay_length,
-                                               trajectory_b_indices]
+    trajectory_rewards = self._store['reward'][
+        (trajectory_indices + 1) % self._replay_length, trajectory_b_indices
+    ]
 
     returns = np.cumsum(trajectory_discount_vector * trajectory_rewards, axis=0)
 
-    update_horizons = jnp.ones(
-        batch_size * subseq_len, dtype=jnp.int32) * (
-            update_horizon - 1)
+    update_horizons = jnp.ones(batch_size * subseq_len, dtype=jnp.int32) * (
+        update_horizon - 1
+    )
     returns = returns[update_horizons, np.arange(batch_size * subseq_len)]
 
     next_indices = (state_indices + update_horizons) % self._replay_length
@@ -703,40 +748,63 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     batch_size = self._batch_size if batch_size is None else batch_size
 
     transition_elements = [
-        ReplayElement('state', (batch_size, subseq_len) + self._state_shape,
-                      self._observation_dtype),
-        ReplayElement('action', (batch_size, subseq_len) + self._action_shape,
-                      self._action_dtype),
-        ReplayElement('reward', (batch_size, subseq_len) + self._reward_shape,
-                      self._reward_dtype),
-        ReplayElement('return', (batch_size, subseq_len) + self._reward_shape,
-                      self._reward_dtype),
+        ReplayElement(
+            'state',
+            (batch_size, subseq_len) + self._state_shape,
+            self._observation_dtype,
+        ),
+        ReplayElement(
+            'action',
+            (batch_size, subseq_len) + self._action_shape,
+            self._action_dtype,
+        ),
+        ReplayElement(
+            'reward',
+            (batch_size, subseq_len) + self._reward_shape,
+            self._reward_dtype,
+        ),
+        ReplayElement(
+            'return',
+            (batch_size, subseq_len) + self._reward_shape,
+            self._reward_dtype,
+        ),
         ReplayElement('discount', (), self._reward_dtype),
     ]
     if self._use_next_state:
       transition_elements += [
-          ReplayElement('next_state',
-                        (batch_size, subseq_len) + self._state_shape,
-                        self._observation_dtype),
-          ReplayElement('next_action',
-                        (batch_size, subseq_len) + self._action_shape,
-                        self._action_dtype),
-          ReplayElement('next_reward',
-                        (batch_size, subseq_len) + self._reward_shape,
-                        self._reward_dtype),
+          ReplayElement(
+              'next_state',
+              (batch_size, subseq_len) + self._state_shape,
+              self._observation_dtype,
+          ),
+          ReplayElement(
+              'next_action',
+              (batch_size, subseq_len) + self._action_shape,
+              self._action_dtype,
+          ),
+          ReplayElement(
+              'next_reward',
+              (batch_size, subseq_len) + self._reward_shape,
+              self._reward_dtype,
+          ),
       ]
     transition_elements += [
-        ReplayElement('terminal', (batch_size, subseq_len),
-                      self._terminal_dtype),
-        ReplayElement('same_trajectory', (batch_size, subseq_len),
-                      self._terminal_dtype),
-        ReplayElement('indices', (batch_size,), np.int32)
+        ReplayElement(
+            'terminal', (batch_size, subseq_len), self._terminal_dtype
+        ),
+        ReplayElement(
+            'same_trajectory', (batch_size, subseq_len), self._terminal_dtype
+        ),
+        ReplayElement('indices', (batch_size,), np.int32),
     ]
     for element in self._extra_storage_types:
       transition_elements.append(
-          ReplayElement(element.name,
-                        (batch_size, subseq_len) + tuple(element.shape),
-                        element.type))
+          ReplayElement(
+              element.name,
+              (batch_size, subseq_len) + tuple(element.shape),
+              element.type,
+          )
+      )
     return transition_elements
 
   def _generate_filename(self, checkpoint_dir, name, suffix):
@@ -782,7 +850,7 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
           # STORE_FILENAME_PREFIX indicates that the variable is contained in
           # self._store.
           if attr.startswith(STORE_FILENAME_PREFIX):
-            array_name = attr[len(STORE_FILENAME_PREFIX):]
+            array_name = attr[len(STORE_FILENAME_PREFIX) :]
             np.save(outfile, self._store[array_name], allow_pickle=False)
           # Some numpy arrays might not be part of storage
           elif isinstance(self.__dict__[attr], np.ndarray):
@@ -794,8 +862,9 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
       # that is four versions old.
       stale_iteration_number = iteration_number - CHECKPOINT_DURATION
       if stale_iteration_number >= 0:
-        stale_filename = self._generate_filename(checkpoint_dir, attr,
-                                                 stale_iteration_number)
+        stale_filename = self._generate_filename(
+            checkpoint_dir, attr, stale_iteration_number
+        )
         try:
           tf.io.gfile.remove(stale_filename)
         except tf.errors.NotFoundError:
@@ -818,8 +887,9 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     for attr in save_elements:
       filename = self._generate_filename(checkpoint_dir, attr, suffix)
       if not tf.io.gfile.exists(filename):
-        raise tf.errors.NotFoundError(None, None,
-                                      'Missing file: {}'.format(filename))
+        raise tf.errors.NotFoundError(
+            None, None, 'Missing file: {}'.format(filename)
+        )
     # If we've reached this point then we have verified that all expected files
     # are available.
     for attr in save_elements:
@@ -827,7 +897,7 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
       with tf.io.gfile.GFile(filename, 'rb') as f:
         with gzip.GzipFile(fileobj=f) as infile:
           if attr.startswith(STORE_FILENAME_PREFIX):
-            array_name = attr[len(STORE_FILENAME_PREFIX):]
+            array_name = attr[len(STORE_FILENAME_PREFIX) :]
             self._store[array_name] = np.load(infile, allow_pickle=False)
           elif isinstance(self.__dict__[attr], np.ndarray):
             self.__dict__[attr] = np.load(infile, allow_pickle=False)
@@ -840,26 +910,29 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
 
 @gin.configurable
 class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
-    JaxSubsequenceParallelEnvReplayBuffer):
+    JaxSubsequenceParallelEnvReplayBuffer
+):
   """Deterministic version of prioritized replay buffer."""
 
-  def __init__(self,
-               observation_shape,
-               stack_size,
-               replay_capacity,
-               batch_size,
-               update_horizon=1,
-               subseq_len=0,
-               n_envs=1,
-               gamma=0.99,
-               max_sample_attempts=1000,
-               extra_storage_types=None,
-               observation_dtype=np.uint8,
-               terminal_dtype=np.uint8,
-               action_shape=(),
-               action_dtype=np.int32,
-               reward_shape=(),
-               reward_dtype=np.float32):
+  def __init__(
+      self,
+      observation_shape,
+      stack_size,
+      replay_capacity,
+      batch_size,
+      update_horizon=1,
+      subseq_len=0,
+      n_envs=1,
+      gamma=0.99,
+      max_sample_attempts=1000,
+      extra_storage_types=None,
+      observation_dtype=np.uint8,
+      terminal_dtype=np.uint8,
+      action_shape=(),
+      action_dtype=np.int32,
+      reward_shape=(),
+      reward_dtype=np.float32,
+  ):
     super().__init__(
         observation_shape=observation_shape,
         stack_size=stack_size,
@@ -876,7 +949,8 @@ class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
         action_shape=action_shape,
         action_dtype=action_dtype,
         reward_shape=reward_shape,
-        reward_dtype=reward_dtype)
+        reward_dtype=reward_dtype,
+    )
 
     self.sum_tree = sum_tree.DeterministicSumTree(int(replay_capacity))
 
@@ -923,15 +997,18 @@ class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
     t_indices, b_indices = self.unravel_indices(indices)  # pylint: disable=unbalanced-tuple-unpacking
     censor_before = np.zeros_like(t_indices)
     for i in range(len(indices)):
-      is_valid, ep_start = self.is_valid_transition(t_indices[i:i + 1],
-                                                    b_indices[i:i + 1])
+      is_valid, ep_start = self.is_valid_transition(
+          t_indices[i : i + 1], b_indices[i : i + 1]
+      )
       censor_before[i] = ep_start
       if not is_valid:
         if allowed_attempts == 0:
           raise RuntimeError(
               'Max sample attempts: Tried {} times but only sampled {}'
               ' valid indices. Batch size is {}'.format(
-                  self._max_sample_attempts, i, batch_size))
+                  self._max_sample_attempts, i, batch_size
+              )
+          )
         while (not is_valid) and allowed_attempts > 0:
           # If index i is not valid keep sampling others. Note that this
           # is not stratified.
@@ -942,8 +1019,9 @@ class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
           allowed_attempts -= 1
           t_indices[i] = t_index
           b_indices[i] = b_index
-          is_valid, ep_start = self.is_valid_transition(t_indices[i:i + 1],
-                                                        b_indices[i:i + 1])
+          is_valid, ep_start = self.is_valid_transition(
+              t_indices[i : i + 1], b_indices[i : i + 1]
+          )
           censor_before[i] = ep_start
     return t_indices, b_indices, censor_before
 
@@ -970,8 +1048,9 @@ class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
 
   def set_priority(self, indices, priorities):
     """Sets the priority of the given elements according to Schaul et al."""
-    assert indices.dtype == np.int32, ('Indices must be integers, '
-                                       'given: {}'.format(indices.dtype))
+    assert (
+        indices.dtype == np.int32
+    ), 'Indices must be integers, given: {}'.format(indices.dtype)
     priorities = np.asarray(priorities)
     indices = np.asarray(indices)
     for index, priority in zip(indices, priorities):
@@ -980,14 +1059,15 @@ class PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
   def get_priority(self, indices):
     """Fetches the priorities correspond to a batch of memory indices."""
     assert indices.shape, 'Indices must be an array.'
-    assert indices.dtype == np.int32, ('Indices must be int32s, '
-                                       'given: {}'.format(indices.dtype))
+    assert (
+        indices.dtype == np.int32
+    ), 'Indices must be int32s, given: {}'.format(indices.dtype)
     priority_batch = self.sum_tree.get(indices)
     return priority_batch
 
   def get_transition_elements(self, batch_size=None):
     """Returns a 'type signature' for sample_transition_batch."""
-    parent_transition_type = (super().get_transition_elements(batch_size))
+    parent_transition_type = super().get_transition_elements(batch_size)
     probablilities_type = [
         ReplayElement('sampling_probabilities', (batch_size,), np.float32)
     ]

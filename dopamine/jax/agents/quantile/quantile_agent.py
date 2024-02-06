@@ -37,8 +37,9 @@ import tensorflow as tf
 
 
 @functools.partial(jax.vmap, in_axes=(None, 0, 0, 0, None))
-def target_distribution(target_network, next_states, rewards, terminals,
-                        cumulative_gamma):
+def target_distribution(
+    target_network, next_states, rewards, terminals, cumulative_gamma
+):
   """Builds the Quantile target distribution as per Dabney et al. (2017).
 
   Args:
@@ -51,7 +52,7 @@ def target_distribution(target_network, next_states, rewards, terminals,
   Returns:
     The target distribution from the replay.
   """
-  is_terminal_multiplier = 1. - terminals.astype(jnp.float32)
+  is_terminal_multiplier = 1.0 - terminals.astype(jnp.float32)
   # Incorporate terminal state to discount factor.
   gamma_with_terminal = cumulative_gamma * is_terminal_multiplier
   next_state_target_outputs = target_network(next_states)
@@ -63,10 +64,23 @@ def target_distribution(target_network, next_states, rewards, terminals,
 
 
 @functools.partial(jax.jit, static_argnums=(0, 3, 10, 11, 12))
-def train(network_def, online_params, target_params, optimizer, optimizer_state,
-          states, actions, next_states, rewards, terminals, kappa, num_atoms,
-          cumulative_gamma):
+def train(
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    kappa,
+    num_atoms,
+    cumulative_gamma,
+):
   """Run a training step."""
+
   def loss_fn(params, target):
     def q_online(state):
       return network_def.apply(params, state)
@@ -76,20 +90,25 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     # Fetch the logits for its selected action. We use vmap to perform this
     # indexing across the batch.
     chosen_action_logits = jax.vmap(lambda x, y: x[y])(logits, actions)
-    bellman_errors = (target[:, None, :] -
-                      chosen_action_logits[:, :, None])  # Input `u' of Eq. 9.
+    bellman_errors = (
+        target[:, None, :] - chosen_action_logits[:, :, None]
+    )  # Input `u' of Eq. 9.
     # Eq. 9 of paper.
-    huber_loss = (
-        (jnp.abs(bellman_errors) <= kappa).astype(jnp.float32) *
-        0.5 * bellman_errors ** 2 +
-        (jnp.abs(bellman_errors) > kappa).astype(jnp.float32) *
-        kappa * (jnp.abs(bellman_errors) - 0.5 * kappa))
+    huber_loss = (jnp.abs(bellman_errors) <= kappa).astype(
+        jnp.float32
+    ) * 0.5 * bellman_errors**2 + (jnp.abs(bellman_errors) > kappa).astype(
+        jnp.float32
+    ) * kappa * (
+        jnp.abs(bellman_errors) - 0.5 * kappa
+    )
 
-    tau_hat = ((jnp.arange(num_atoms, dtype=jnp.float32) + 0.5) /
-               num_atoms)  # Quantile midpoints.  See Lemma 2 of paper.
+    tau_hat = (
+        jnp.arange(num_atoms, dtype=jnp.float32) + 0.5
+    ) / num_atoms  # Quantile midpoints.  See Lemma 2 of paper.
     # Eq. 10 of paper.
     tau_bellman_diff = jnp.abs(
-        tau_hat[None, :, None] - (bellman_errors < 0).astype(jnp.float32))
+        tau_hat[None, :, None] - (bellman_errors < 0).astype(jnp.float32)
+    )
     quantile_huber_loss = tau_bellman_diff * huber_loss
     # Sum over tau dimension, average over target value dimension.
     loss = jnp.sum(jnp.mean(quantile_huber_loss, 2), 1)
@@ -99,14 +118,13 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
     return network_def.apply(target_params, state)
 
   grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
-  target = target_distribution(q_target,
-                               next_states,
-                               rewards,
-                               terminals,
-                               cumulative_gamma)
+  target = target_distribution(
+      q_target, next_states, rewards, terminals, cumulative_gamma
+  )
   (mean_loss, loss), grad = grad_fn(online_params, target)
-  updates, optimizer_state = optimizer.update(grad, optimizer_state,
-                                              params=online_params)
+  updates, optimizer_state = optimizer.update(
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss, mean_loss
 
@@ -115,29 +133,31 @@ def train(network_def, online_params, target_params, optimizer, optimizer_state,
 class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
   """An implementation of Quantile regression DQN agent."""
 
-  def __init__(self,
-               num_actions,
-               observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
-               stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
-               network=networks.QuantileNetwork,
-               kappa=1.0,
-               num_atoms=200,
-               gamma=0.99,
-               update_horizon=1,
-               min_replay_history=50000,
-               update_period=4,
-               target_update_period=10000,
-               epsilon_fn=dqn_agent.linearly_decaying_epsilon,
-               epsilon_train=0.1,
-               epsilon_eval=0.05,
-               epsilon_decay_period=1000000,
-               replay_scheme='prioritized',
-               optimizer='adam',
-               summary_writer=None,
-               summary_writing_frequency=500,
-               seed=None,
-               allow_partial_reload=False):
+  def __init__(
+      self,
+      num_actions,
+      observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
+      observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
+      stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+      network=networks.QuantileNetwork,
+      kappa=1.0,
+      num_atoms=200,
+      gamma=0.99,
+      update_horizon=1,
+      min_replay_history=50000,
+      update_period=4,
+      target_update_period=10000,
+      epsilon_fn=dqn_agent.linearly_decaying_epsilon,
+      epsilon_train=0.1,
+      epsilon_eval=0.05,
+      epsilon_decay_period=1000000,
+      replay_scheme='prioritized',
+      optimizer='adam',
+      summary_writer=None,
+      summary_writing_frequency=500,
+      seed=None,
+      allow_partial_reload=False,
+  ):
     """Initializes the agent and constructs the Graph.
 
     Args:
@@ -166,8 +186,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
       epsilon_eval: Float, epsilon during evaluation.
       epsilon_decay_period: Int, number of steps for epsilon to decay.
       replay_scheme: String, replay memory scheme to be used. Choices are:
-        uniform - Standard (DQN) replay buffer (Mnih et al., 2015)
-        prioritized - Prioritized replay buffer (Schaul et al., 2015)
+        uniform - Standard (DQN) replay buffer (Mnih et al., 2015) prioritized -
+        Prioritized replay buffer (Schaul et al., 2015)
       optimizer: str, name of optimizer to use.
       summary_writer: SummaryWriter object for outputting training statistics.
         Summary writing disabled if set to None.
@@ -201,7 +221,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         summary_writer=summary_writer,
         summary_writing_frequency=summary_writing_frequency,
         seed=seed,
-        allow_partial_reload=allow_partial_reload)
+        allow_partial_reload=allow_partial_reload,
+    )
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
@@ -221,7 +242,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype)
+        observation_dtype=self.observation_dtype,
+    )
 
   def _train_step(self):
     """Runs a single training step.
@@ -249,7 +271,8 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
             self.replay_elements['terminal'],
             self._kappa,
             self._num_atoms,
-            self.cumulative_gamma)
+            self.cumulative_gamma,
+        )
         if self._replay_scheme == 'prioritized':
           # The original prioritized experience replay uses a linear exponent
           # schedule 0.4 -> 1.0. Comparing the schedule to a fixed exponent of
@@ -266,25 +289,32 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
           # small nonzero value to the loss to avoid 0 priority items. While
           # technically this may be okay, setting all items to 0 priority will
           # cause troubles, and also result in 1.0 / 0.0 = NaN correction terms.
-          self._replay.set_priority(self.replay_elements['indices'],
-                                    jnp.sqrt(loss + 1e-10))
+          self._replay.set_priority(
+              self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+          )
 
           # Weight the loss by the inverse priorities.
           loss = loss_weights * loss
           mean_loss = jnp.mean(loss)
-        if (self.summary_writer is not None and
-            self.training_steps > 0 and
-            self.training_steps % self.summary_writing_frequency == 0):
+        if (
+            self.summary_writer is not None
+            and self.training_steps > 0
+            and self.training_steps % self.summary_writing_frequency == 0
+        ):
           with self.summary_writer.as_default():
-            tf.summary.scalar('QuantileLoss', mean_loss,
-                              step=self.training_steps)
+            tf.summary.scalar(
+                'QuantileLoss', mean_loss, step=self.training_steps
+            )
           self.summary_writer.flush()
           if hasattr(self, 'collector_dispatcher'):
             self.collector_dispatcher.write(
-                [statistics_instance.StatisticsInstance(
-                    'Loss', np.asarray(mean_loss), step=self.training_steps),
-                 ],
-                collector_allowlist=self._collector_allowlist)
+                [
+                    statistics_instance.StatisticsInstance(
+                        'Loss', np.asarray(mean_loss), step=self.training_steps
+                    ),
+                ],
+                collector_allowlist=self._collector_allowlist,
+            )
       if self.training_steps % self.target_update_period == 0:
         self._sync_weights()
 

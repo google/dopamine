@@ -12,8 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Tests for implicit quantile agent.
-"""
+"""Tests for implicit quantile agent."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -37,7 +36,8 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
     self.ones_state = np.ones(
-        (1,) + self.observation_shape + (self.stack_size,))
+        (1,) + self.observation_shape + (self.stack_size,)
+    )
 
   def _create_test_agent(self, sess):
     # This dummy network allows us to deterministically anticipate that the
@@ -55,18 +55,22 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
         super(MockImplicitQuantileNetwork, self).__init__(**kwargs)
         self.num_actions = num_actions
         self.layer = tf.keras.layers.Dense(
-            self.num_actions, kernel_initializer=tf.ones_initializer(),
-            bias_initializer=tf.zeros_initializer())
+            self.num_actions,
+            kernel_initializer=tf.ones_initializer(),
+            bias_initializer=tf.zeros_initializer(),
+        )
 
       def call(self, state, num_quantiles):
         batch_size = state.get_shape().as_list()[0]
         inputs = tf.constant(
-            np.ones((batch_size*num_quantiles, self.num_actions)),
-            dtype=tf.float32)
+            np.ones((batch_size * num_quantiles, self.num_actions)),
+            dtype=tf.float32,
+        )
         quantiles_shape = [num_quantiles * batch_size, 1]
         quantiles = tf.ones(quantiles_shape)
-        return atari_lib.ImplicitQuantileNetworkType(self.layer(inputs),
-                                                     quantiles)
+        return atari_lib.ImplicitQuantileNetworkType(
+            self.layer(inputs), quantiles
+        )
 
     agent = implicit_quantile_agent.ImplicitQuantileAgent(
         sess=sess,
@@ -75,7 +79,8 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
         kappa=1.0,
         num_tau_samples=2,
         num_tau_prime_samples=3,
-        num_quantile_samples=4)
+        num_quantile_samples=4,
+    )
     # This ensures non-random action choices (since epsilon_eval = 0.0) and
     # skips the train_step.
     agent.eval_mode = True
@@ -100,10 +105,13 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
       self.assertEqual(agent._replay.batch_size, 32)
 
       # quantile values, q-values, q-argmax at sample action time:
-      self.assertEqual(agent._net_outputs.quantile_values.shape[0],
-                       agent.num_quantile_samples)
-      self.assertEqual(agent._net_outputs.quantile_values.shape[1],
-                       agent.num_actions)
+      self.assertEqual(
+          agent._net_outputs.quantile_values.shape[0],
+          agent.num_quantile_samples,
+      )
+      self.assertEqual(
+          agent._net_outputs.quantile_values.shape[1], agent.num_actions
+      )
       self.assertEqual(agent._q_values.shape[0], agent.num_actions)
 
       # Check the setting of num_actions.
@@ -111,20 +119,28 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
 
       # input quantiles, quantile values, and output q-values at loss
       # computation time.
-      self.assertEqual(agent._replay_net_quantile_values.shape[0],
-                       agent.num_tau_samples * agent._replay.batch_size)
-      self.assertEqual(agent._replay_net_quantile_values.shape[1],
-                       agent.num_actions)
+      self.assertEqual(
+          agent._replay_net_quantile_values.shape[0],
+          agent.num_tau_samples * agent._replay.batch_size,
+      )
+      self.assertEqual(
+          agent._replay_net_quantile_values.shape[1], agent.num_actions
+      )
 
-      self.assertEqual(agent._replay_net_target_quantile_values.shape[0],
-                       agent.num_tau_prime_samples * agent._replay.batch_size)
-      self.assertEqual(agent._replay_net_target_quantile_values.shape[1],
-                       agent.num_actions)
+      self.assertEqual(
+          agent._replay_net_target_quantile_values.shape[0],
+          agent.num_tau_prime_samples * agent._replay.batch_size,
+      )
+      self.assertEqual(
+          agent._replay_net_target_quantile_values.shape[1], agent.num_actions
+      )
 
-      self.assertEqual(agent._replay_net_target_q_values.shape[0],
-                       agent._replay.batch_size)
-      self.assertEqual(agent._replay_net_target_q_values.shape[1],
-                       agent.num_actions)
+      self.assertEqual(
+          agent._replay_net_target_q_values.shape[0], agent._replay.batch_size
+      )
+      self.assertEqual(
+          agent._replay_net_target_q_values.shape[1], agent.num_actions
+      )
 
   def test_q_value_computation(self):
     with self.test_session(use_gpu=False) as sess:
@@ -135,8 +151,9 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
       state = self.ones_state
       feed_dict = {agent.state_ph: state}
 
-      q_values, q_argmax = sess.run([agent._q_values, agent._q_argmax],
-                                    feed_dict)
+      q_values, q_argmax = sess.run(
+          [agent._q_values, agent._q_argmax], feed_dict
+      )
 
       q_values_arr = np.ones([agent.num_actions]) * q_value
       self.assertAllEqual(q_values, q_values_arr)
@@ -154,23 +171,27 @@ class ImplicitQuantileAgentTest(tf.test.TestCase):
     with self.test_session(use_gpu=False) as sess:
       agent = self._create_test_agent(sess)
 
-      replay_quantile_vals, replay_target_quantile_vals = sess.run(
-          [agent._replay_net_quantile_values,
-           agent._replay_net_target_quantile_values])
+      replay_quantile_vals, replay_target_quantile_vals = sess.run([
+          agent._replay_net_quantile_values,
+          agent._replay_net_target_quantile_values,
+      ])
 
       batch_size = agent._replay.batch_size
-      replay_quantile_vals = replay_quantile_vals.reshape([
-          agent.num_tau_samples, batch_size, agent.num_actions])
-      replay_target_quantile_vals = replay_target_quantile_vals.reshape([
-          agent.num_tau_prime_samples, batch_size, agent.num_actions])
+      replay_quantile_vals = replay_quantile_vals.reshape(
+          [agent.num_tau_samples, batch_size, agent.num_actions]
+      )
+      replay_target_quantile_vals = replay_target_quantile_vals.reshape(
+          [agent.num_tau_prime_samples, batch_size, agent.num_actions]
+      )
       for i in range(agent.num_tau_samples):
         for j in range(agent._replay.batch_size):
           self.assertEqual(replay_quantile_vals[i][j][0], agent.num_actions)
 
       for i in range(agent.num_tau_prime_samples):
         for j in range(agent._replay.batch_size):
-          self.assertEqual(replay_target_quantile_vals[i][j][0],
-                           agent.num_actions)
+          self.assertEqual(
+              replay_target_quantile_vals[i][j][0], agent.num_actions
+          )
 
 
 if __name__ == '__main__':

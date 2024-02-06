@@ -27,6 +27,7 @@ from jax import numpy as jnp
 @dataclasses.dataclass
 class SACEncoderOutputs:
   """The output of a SACEncoder."""
+
   critic_z: jnp.ndarray
   actor_z: jnp.ndarray
 
@@ -53,28 +54,20 @@ class SACEncoderNetwork(nn.Module):
 
     kernel_init = nn.initializers.orthogonal()
     x = nn.Conv(
-        features=32,
-        kernel_size=(3, 3),
-        strides=(2, 2),
-        kernel_init=kernel_init)(x)
+        features=32, kernel_size=(3, 3), strides=(2, 2), kernel_init=kernel_init
+    )(x)
     x = nn.relu(x)
     x = nn.Conv(
-        features=32,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        kernel_init=kernel_init)(x)
+        features=32, kernel_size=(3, 3), strides=(1, 1), kernel_init=kernel_init
+    )(x)
     x = nn.relu(x)
     x = nn.Conv(
-        features=32,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        kernel_init=kernel_init)(x)
+        features=32, kernel_size=(3, 3), strides=(1, 1), kernel_init=kernel_init
+    )(x)
     x = nn.relu(x)
     x = nn.Conv(
-        features=32,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        kernel_init=kernel_init)(x)
+        features=32, kernel_size=(3, 3), strides=(1, 1), kernel_init=kernel_init
+    )(x)
     x = nn.relu(x)
     x = jnp.reshape(x, -1)  # Flatten
 
@@ -84,9 +77,9 @@ class SACEncoderNetwork(nn.Module):
 
     # Only the critic should train the convolution layers, so stop the
     # gradients from the actor.
-    actor_z = nn.Dense(
-        features=50, kernel_init=kernel_init)(
-            jax.lax.stop_gradient(x))
+    actor_z = nn.Dense(features=50, kernel_init=kernel_init)(
+        jax.lax.stop_gradient(x)
+    )
     actor_z = nn.LayerNorm()(actor_z)
     actor_z = nn.tanh(actor_z)
 
@@ -100,6 +93,7 @@ class SACConvNetwork(nn.Module):
   This uses the SAC-AE network for processing images. For more information,
   view SACEncoderNetwork.
   """
+
   action_shape: Tuple[int, ...]
   num_layers: int = 2
   hidden_units: int = 256
@@ -108,13 +102,15 @@ class SACConvNetwork(nn.Module):
   def setup(self):
     self._encoder = SACEncoderNetwork()
     self._sac_network = continuous_networks.SACNetwork(
-        self.action_shape, self.num_layers,
-        self.hidden_units, self.action_limits)
+        self.action_shape,
+        self.num_layers,
+        self.hidden_units,
+        self.action_limits,
+    )
 
-  def __call__(self,
-               state: jnp.ndarray,
-               key: jnp.ndarray,
-               mean_action: bool = True) -> continuous_networks.SacOutput:
+  def __call__(
+      self, state: jnp.ndarray, key: jnp.ndarray, mean_action: bool = True
+  ) -> continuous_networks.SacOutput:
     """Calls the SAC actor/critic networks.
 
     This has two important purposes:
@@ -135,13 +131,16 @@ class SACConvNetwork(nn.Module):
     encoding = self._encoder(state)
 
     actor_output = self._sac_network.actor(encoding.actor_z, key)
-    action = actor_output.mean_action if mean_action else actor_output.sampled_action
+    action = (
+        actor_output.mean_action if mean_action else actor_output.sampled_action
+    )
     critic_output = self._sac_network.critic(encoding.critic_z, action)
 
     return continuous_networks.SacOutput(actor_output, critic_output)
 
-  def actor(self, state: jnp.ndarray,
-            key: jnp.ndarray) -> continuous_networks.SacActorOutput:
+  def actor(
+      self, state: jnp.ndarray, key: jnp.ndarray
+  ) -> continuous_networks.SacActorOutput:
     """Calls the SAC actor network.
 
     This can be called using network_def.apply(..., method=network_def.actor).
@@ -158,8 +157,9 @@ class SACConvNetwork(nn.Module):
     encoding = self._encoder(state)
     return self._sac_network.actor(encoding.actor_z, key)
 
-  def critic(self, state: jnp.ndarray,
-             action: jnp.ndarray) -> continuous_networks.SacCriticOutput:
+  def critic(
+      self, state: jnp.ndarray, action: jnp.ndarray
+  ) -> continuous_networks.SacCriticOutput:
     """Calls the SAC critic network.
 
     SAC uses two Q networks to reduce overestimation bias.

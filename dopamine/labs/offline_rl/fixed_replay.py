@@ -26,20 +26,22 @@ import tensorflow as tf
 class JaxFixedReplayBuffer(fixed_replay_buffer.FixedReplayBuffer):
   """Replay Buffers for loading existing data."""
 
-  def __init__(self,
-               data_dir,
-               observation_shape,
-               stack_size,
-               replay_capacity,
-               batch_size,
-               replay_suffix=None,
-               replay_file_start_index=0,
-               replay_file_end_index=None,
-               replay_transitions_start_index=0,
-               num_buffers_to_load=5,
-               update_horizon=1,
-               gamma=0.99,
-               observation_dtype=np.uint8):
+  def __init__(
+      self,
+      data_dir,
+      observation_shape,
+      stack_size,
+      replay_capacity,
+      batch_size,
+      replay_suffix=None,
+      replay_file_start_index=0,
+      replay_file_end_index=None,
+      replay_transitions_start_index=0,
+      num_buffers_to_load=5,
+      update_horizon=1,
+      gamma=0.99,
+      observation_dtype=np.uint8,
+  ):
     """Initialize the FixedReplayBuffer class.
 
     Args:
@@ -65,11 +67,13 @@ class JaxFixedReplayBuffer(fixed_replay_buffer.FixedReplayBuffer):
         np.uint8 for Atari 2600.
     """
 
-    logging.info('Creating %s with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating %s with the following parameters:', self.__class__.__name__
+    )
     logging.info('\t replay_capacity: %d', replay_capacity)
-    logging.info('\t replay_transitions_start_index %d',
-                 replay_transitions_start_index)
+    logging.info(
+        '\t replay_transitions_start_index %d', replay_transitions_start_index
+    )
     logging.info('\t replay_file_start_index %d', replay_file_start_index)
     logging.info('\t replay_file_end_index %s', replay_file_end_index)
     logging.info('\t replay_suffix %s', replay_suffix)
@@ -88,33 +92,42 @@ class JaxFixedReplayBuffer(fixed_replay_buffer.FixedReplayBuffer):
         batch_size=batch_size,
         update_horizon=update_horizon,
         gamma=gamma,
-        observation_dtype=observation_dtype)
+        observation_dtype=observation_dtype,
+    )
 
   def _load_buffer(self, suffix):
     """Loads a OutOfGraphReplayBuffer replay buffer."""
     try:
       # pytype: disable=attribute-error
-      logging.info('Starting to load from ckpt %d from %s', int(suffix),
-                   self._data_dir)
+      logging.info(
+          'Starting to load from ckpt %d from %s', int(suffix), self._data_dir
+      )
 
       replay_buffer = circular_replay_buffer.OutOfGraphReplayBuffer(
-          *self._args, **self._kwargs)
+          *self._args, **self._kwargs
+      )
       replay_buffer.load(self._data_dir, suffix)
       # pylint: disable = protected-access
       replay_capacity = replay_buffer._replay_capacity
       end_index = (
-          self._replay_transitions_start_index + replay_capacity +
-          replay_buffer._stack_size)
+          self._replay_transitions_start_index
+          + replay_capacity
+          + replay_buffer._stack_size
+      )
       logging.info('Capacity: %d', replay_buffer._replay_capacity)
       logging.info('Start index: %d', self._replay_transitions_start_index)
       logging.info('End index: %d', end_index)
       for name, array in replay_buffer._store.items():
         # This frees unused RAM if replay_capacity is smaller than 1M
         replay_buffer._store[name] = array[
-            self._replay_transitions_start_index:end_index].copy()
+            self._replay_transitions_start_index : end_index
+        ].copy()
         logging.info('%s: %s', name, replay_buffer._store[name].shape)
-      logging.info('Loaded replay buffer from ckpt %d from %s', int(suffix),
-                   self._data_dir)
+      logging.info(
+          'Loaded replay buffer from ckpt %d from %s',
+          int(suffix),
+          self._data_dir,
+      )
       # pylint: enable=protected-access
       # pytype: enable=attribute-error
       return replay_buffer

@@ -28,9 +28,7 @@ import tensorflow as tf
 class ConsoleCollector(collector.Collector):
   """Collector class for reporting statistics to the console."""
 
-  def __init__(self,
-               base_dir: Union[str, None],
-               save_to_file: bool = True):
+  def __init__(self, base_dir: Union[str, None], save_to_file: bool = True):
     super().__init__(base_dir)
     if self._base_dir is not None and save_to_file:
       self._log_file = osp.join(self._base_dir, 'console.log')
@@ -42,8 +40,8 @@ class ConsoleCollector(collector.Collector):
     return 'console'
 
   def write(
-      self,
-      statistics: Sequence[statistics_instance.StatisticsInstance]) -> None:
+      self, statistics: Sequence[statistics_instance.StatisticsInstance]
+  ) -> None:
     step_string = ''
     for s in statistics:
       if not self.check_type(s.type):

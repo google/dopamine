@@ -50,32 +50,35 @@ import tensorflow as tf
 class RainbowAgent(dqn_agent.DQNAgent):
   """A compact implementation of a simplified Rainbow agent."""
 
-  def __init__(self,
-               sess,
-               num_actions,
-               observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
-               observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
-               stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
-               network=atari_lib.RainbowNetwork,
-               num_atoms=51,
-               vmin=None,
-               vmax=10.,
-               gamma=0.99,
-               update_horizon=1,
-               min_replay_history=20000,
-               update_period=4,
-               target_update_period=8000,
-               epsilon_fn=dqn_agent.linearly_decaying_epsilon,
-               epsilon_train=0.01,
-               epsilon_eval=0.001,
-               epsilon_decay_period=250000,
-               replay_scheme='prioritized',
-               tf_device='/cpu:*',
-               use_staging=False,
-               optimizer=tf.compat.v1.train.AdamOptimizer(
-                   learning_rate=0.00025, epsilon=0.0003125),
-               summary_writer=None,
-               summary_writing_frequency=500):
+  def __init__(
+      self,
+      sess,
+      num_actions,
+      observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
+      observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
+      stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+      network=atari_lib.RainbowNetwork,
+      num_atoms=51,
+      vmin=None,
+      vmax=10.0,
+      gamma=0.99,
+      update_horizon=1,
+      min_replay_history=20000,
+      update_period=4,
+      target_update_period=8000,
+      epsilon_fn=dqn_agent.linearly_decaying_epsilon,
+      epsilon_train=0.01,
+      epsilon_eval=0.001,
+      epsilon_decay_period=250000,
+      replay_scheme='prioritized',
+      tf_device='/cpu:*',
+      use_staging=False,
+      optimizer=tf.compat.v1.train.AdamOptimizer(
+          learning_rate=0.00025, epsilon=0.0003125
+      ),
+      summary_writer=None,
+      summary_writing_frequency=500,
+  ):
     """Initializes the agent and constructs the components of its graph.
 
     Args:
@@ -86,10 +89,10 @@ class RainbowAgent(dqn_agent.DQNAgent):
       observation_dtype: tf.DType, specifies the type of the observations. Note
         that if your inputs are continuous, you should set this to tf.float32.
       stack_size: int, number of frames to use in state stack.
-      network: tf.Keras.Model, expects four parameters:
-        (num_actions, num_atoms, support, network_type).  This class is used to
-        generate network instances that are used by the agent. Each
-        instantiation would have different set of variables. See
+      network: tf.Keras.Model, expects four parameters: (num_actions, num_atoms,
+        support, network_type).  This class is used to generate network
+        instances that are used by the agent. Each instantiation would have
+        different set of variables. See
         dopamine.discrete_domains.atari_lib.RainbowNetwork as an example.
       num_atoms: int, the number of buckets of the value function distribution.
       vmin: float, the value distribution support is [vmin, vmax]. If None, we
@@ -102,9 +105,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
         before the agent begins training its value function.
       update_period: int, period between DQN updates.
       target_update_period: int, update period for the target network.
-      epsilon_fn: function expecting 4 parameters:
-        (decay_period, step, warmup_steps, epsilon). This function should return
-        the epsilon value used for exploration during training.
+      epsilon_fn: function expecting 4 parameters: (decay_period, step,
+        warmup_steps, epsilon). This function should return the epsilon value
+        used for exploration during training.
       epsilon_train: float, the value to which the agent's epsilon is eventually
         decayed during training.
       epsilon_eval: float, epsilon used when evaluating the agent.
@@ -152,7 +155,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
         use_staging=use_staging,
         optimizer=self.optimizer,
         summary_writer=summary_writer,
-        summary_writing_frequency=summary_writing_frequency)
+        summary_writing_frequency=summary_writing_frequency,
+    )
 
   def _create_network(self, name):
     """Builds a convolutional network that outputs Q-value distributions.
@@ -160,11 +164,13 @@ class RainbowAgent(dqn_agent.DQNAgent):
     Args:
       name: str, this name is passed to the tf.keras.Model and used to create
         variable scope under the hood by the tf.keras.Model.
+
     Returns:
       network: tf.keras.Model, the network instantiated by the Keras model.
     """
-    network = self.network(self.num_actions, self._num_atoms, self._support,
-                           name=name)
+    network = self.network(
+        self.num_actions, self._num_atoms, self._support, name=name
+    )
     return network
 
   def _build_replay_buffer(self, use_staging):
@@ -190,7 +196,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
         use_staging=use_staging,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype.as_numpy_dtype)
+        observation_dtype=self.observation_dtype.as_numpy_dtype,
+    )
 
   def _build_target_distribution(self):
     """Builds the C51 target distribution as per Bellemare et al. (2017).
@@ -221,7 +228,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
 
     # size of target_support: batch_size x num_atoms
 
-    is_terminal_multiplier = 1. - tf.cast(self._replay.terminals, tf.float32)
+    is_terminal_multiplier = 1.0 - tf.cast(self._replay.terminals, tf.float32)
     # Incorporate terminal state to discount factor.
     # size of gamma_with_terminal: batch_size x 1
     gamma_with_terminal = self.cumulative_gamma * is_terminal_multiplier
@@ -231,19 +238,23 @@ class RainbowAgent(dqn_agent.DQNAgent):
 
     # size of next_qt_argmax: 1 x batch_size
     next_qt_argmax = tf.argmax(
-        self._replay_next_target_net_outputs.q_values, axis=1)[:, None]
+        self._replay_next_target_net_outputs.q_values, axis=1
+    )[:, None]
     batch_indices = tf.range(tf.cast(batch_size, tf.int64))[:, None]
     # size of next_qt_argmax: batch_size x 2
     batch_indexed_next_qt_argmax = tf.concat(
-        [batch_indices, next_qt_argmax], axis=1)
+        [batch_indices, next_qt_argmax], axis=1
+    )
 
     # size of next_probabilities: batch_size x num_atoms
     next_probabilities = tf.gather_nd(
         self._replay_next_target_net_outputs.probabilities,
-        batch_indexed_next_qt_argmax)
+        batch_indexed_next_qt_argmax,
+    )
 
-    return project_distribution(target_support, next_probabilities,
-                                self._support)
+    return project_distribution(
+        target_support, next_probabilities, self._support
+    )
 
   def _build_train_op(self):
     """Builds a training op.
@@ -258,12 +269,13 @@ class RainbowAgent(dqn_agent.DQNAgent):
     # size of reshaped_actions: batch_size x 2.
     reshaped_actions = tf.concat([indices, self._replay.actions[:, None]], 1)
     # For each element of the batch, fetch the logits for its selected action.
-    chosen_action_logits = tf.gather_nd(self._replay_net_outputs.logits,
-                                        reshaped_actions)
+    chosen_action_logits = tf.gather_nd(
+        self._replay_net_outputs.logits, reshaped_actions
+    )
 
     loss = tf.nn.softmax_cross_entropy_with_logits(
-        labels=target_distribution,
-        logits=chosen_action_logits)
+        labels=target_distribution, logits=chosen_action_logits
+    )
 
     if self._replay_scheme == 'prioritized':
       # The original prioritized experience replay uses a linear exponent
@@ -282,7 +294,8 @@ class RainbowAgent(dqn_agent.DQNAgent):
       # technically this may be okay, setting all items to 0 priority will cause
       # troubles, and also result in 1.0 / 0.0 = NaN correction terms.
       update_priorities_op = self._replay.tf_set_priority(
-          self._replay.indices, tf.sqrt(loss + 1e-10))
+          self._replay.indices, tf.sqrt(loss + 1e-10)
+      )
 
       # Weight the loss by the inverse priorities.
       loss = loss_weights * loss
@@ -298,12 +311,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
       # impact performance in our experiments.
       return self.optimizer.minimize(tf.reduce_mean(loss)), loss
 
-  def _store_transition(self,
-                        last_observation,
-                        action,
-                        reward,
-                        is_terminal,
-                        priority=None):
+  def _store_transition(
+      self, last_observation, action, reward, is_terminal, priority=None
+  ):
     """Stores a transition when in training mode.
 
     Executes a tf session and executes replay buffer ops in order to store the
@@ -323,7 +333,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
     """
     if priority is None:
       if self._replay_scheme == 'uniform':
-        priority = 1.
+        priority = 1.0
       else:
         priority = self._replay.memory.sum_tree.max_recorded_priority
 
@@ -331,8 +341,9 @@ class RainbowAgent(dqn_agent.DQNAgent):
       self._replay.add(last_observation, action, reward, is_terminal, priority)
 
 
-def project_distribution(supports, weights, target_support,
-                         validate_args=False):
+def project_distribution(
+    supports, weights, target_support, validate_args=False
+):
   """Projects a batch of (support, weights) onto target_support.
 
   Based on equation (7) in (Bellemare et al., 2017):
@@ -361,8 +372,8 @@ def project_distribution(supports, weights, target_support,
       distribution. The values must be monotonically increasing. Vmin and Vmax
       will be inferred from the first and last elements of this tensor,
       respectively. The values in this tensor must be equally spaced.
-    validate_args: Whether we will verify the contents of the
-      target_support parameter.
+    validate_args: Whether we will verify the contents of the target_support
+      parameter.
 
   Returns:
     A Tensor of shape (batch_size, num_dims) with the projection of a batch of
@@ -384,25 +395,35 @@ def project_distribution(supports, weights, target_support,
     validate_deps.append(
         tf.Assert(
             tf.reduce_all(tf.equal(tf.shape(supports), tf.shape(weights))),
-            [supports, weights]))
+            [supports, weights],
+        )
+    )
     # Assert that elements of supports and target_support have the same shape.
     validate_deps.append(
         tf.Assert(
             tf.reduce_all(
-                tf.equal(tf.shape(supports)[1], tf.shape(target_support))),
-            [supports, target_support]))
+                tf.equal(tf.shape(supports)[1], tf.shape(target_support))
+            ),
+            [supports, target_support],
+        )
+    )
     # Assert that target_support has a single dimension.
     validate_deps.append(
         tf.Assert(
-            tf.equal(tf.size(tf.shape(target_support)), 1), [target_support]))
+            tf.equal(tf.size(tf.shape(target_support)), 1), [target_support]
+        )
+    )
     # Assert that the target_support is monotonically increasing.
     validate_deps.append(
-        tf.Assert(tf.reduce_all(target_support_deltas > 0), [target_support]))
+        tf.Assert(tf.reduce_all(target_support_deltas > 0), [target_support])
+    )
     # Assert that the values in target_support are equally spaced.
     validate_deps.append(
         tf.Assert(
             tf.reduce_all(tf.equal(target_support_deltas, delta_z)),
-            [target_support]))
+            [target_support],
+        )
+    )
 
   with tf.control_dependencies(validate_deps):
     # Ex: `v_min, v_max = 4, 8`.
@@ -438,8 +459,9 @@ def project_distribution(supports, weights, target_support,
     #                                  [ 7.]
     #                                  [ 8.]]]`.
     reshaped_target_support = tf.tile(target_support[:, None], [batch_size, 1])
-    reshaped_target_support = tf.reshape(reshaped_target_support,
-                                         [batch_size, num_dims, 1])
+    reshaped_target_support = tf.reshape(
+        reshaped_target_support, [batch_size, num_dims, 1]
+    )
     # numerator = `|clipped_support - z_i|` in Eq7.
     # Ex: `numerator = [[[[ 0.  0.  0.  2.  4.]
     #                     [ 1.  1.  1.  1.  3.]

@@ -59,9 +59,11 @@ NATURE_DQN_STACK_SIZE = 4  # Number of frames in the state stack.
 
 DQNNetworkType = collections.namedtuple('dqn_network', ['q_values'])
 RainbowNetworkType = collections.namedtuple(
-    'c51_network', ['q_values', 'logits', 'probabilities'])
+    'c51_network', ['q_values', 'logits', 'probabilities']
+)
 ImplicitQuantileNetworkType = collections.namedtuple(
-    'iqn_network', ['quantile_values', 'quantiles'])
+    'iqn_network', ['quantile_values', 'quantiles']
+)
 
 
 
@@ -112,9 +114,10 @@ def maybe_transform_variable_names(variables, legacy_checkpoint_load=False):
 
   Args:
     variables: list, of all variables to be transformed.
-    legacy_checkpoint_load: bool, if True the variable names are mapped to
-        the legacy names as appeared in `tf.slim` based agents. Use this if
-        you want to load checkpoints saved before tf.keras.Model upgrade.
+    legacy_checkpoint_load: bool, if True the variable names are mapped to the
+      legacy names as appeared in `tf.slim` based agents. Use this if you want
+      to load checkpoints saved before tf.keras.Model upgrade.
+
   Returns:
     dict or None, of <new_names, var>.
   """
@@ -147,15 +150,34 @@ class NatureDQNNetwork(tf.keras.Model):
     activation_fn = tf.keras.activations.relu
     # Setting names of the layers manually to make variable names more similar
     # with tf.slim variable names/checkpoints.
-    self.conv1 = tf.keras.layers.Conv2D(32, [8, 8], strides=4, padding='same',
-                                        activation=activation_fn, name='Conv')
-    self.conv2 = tf.keras.layers.Conv2D(64, [4, 4], strides=2, padding='same',
-                                        activation=activation_fn, name='Conv')
-    self.conv3 = tf.keras.layers.Conv2D(64, [3, 3], strides=1, padding='same',
-                                        activation=activation_fn, name='Conv')
+    self.conv1 = tf.keras.layers.Conv2D(
+        32,
+        [8, 8],
+        strides=4,
+        padding='same',
+        activation=activation_fn,
+        name='Conv',
+    )
+    self.conv2 = tf.keras.layers.Conv2D(
+        64,
+        [4, 4],
+        strides=2,
+        padding='same',
+        activation=activation_fn,
+        name='Conv',
+    )
+    self.conv3 = tf.keras.layers.Conv2D(
+        64,
+        [3, 3],
+        strides=1,
+        padding='same',
+        activation=activation_fn,
+        name='Conv',
+    )
     self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
-                                        name='fully_connected')
+    self.dense1 = tf.keras.layers.Dense(
+        512, activation=activation_fn, name='fully_connected'
+    )
     self.dense2 = tf.keras.layers.Dense(num_actions, name='fully_connected')
 
   def call(self, state):
@@ -169,6 +191,7 @@ class NatureDQNNetwork(tf.keras.Model):
     given at `.__init__()` call.
     Args:
       state: Tensor, input tensor.
+
     Returns:
       collections.namedtuple, output ops (graph mode) or output tensors (eager).
     """
@@ -200,26 +223,52 @@ class RainbowNetwork(tf.keras.Model):
     self.num_actions = num_actions
     self.num_atoms = num_atoms
     self.support = support
+
     def kernel_initializer():
       return tf.keras.initializers.VarianceScaling(
-          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
+          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform'
+      )
+
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
-        32, [8, 8], strides=4, padding='same', activation=activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        32,
+        [8, 8],
+        strides=4,
+        padding='same',
+        activation=activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.conv2 = tf.keras.layers.Conv2D(
-        64, [4, 4], strides=2, padding='same', activation=activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        64,
+        [4, 4],
+        strides=2,
+        padding='same',
+        activation=activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.conv3 = tf.keras.layers.Conv2D(
-        64, [3, 3], strides=1, padding='same', activation=activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        64,
+        [3, 3],
+        strides=1,
+        padding='same',
+        activation=activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
-        512, activation=activation_fn,
-        kernel_initializer=kernel_initializer(), name='fully_connected')
+        512,
+        activation=activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='fully_connected',
+    )
     self.dense2 = tf.keras.layers.Dense(
-        num_actions * num_atoms, kernel_initializer=kernel_initializer(),
-        name='fully_connected')
+        num_actions * num_atoms,
+        kernel_initializer=kernel_initializer(),
+        name='fully_connected',
+    )
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input.
@@ -230,6 +279,7 @@ class RainbowNetwork(tf.keras.Model):
 
     Args:
       state: Tensor, input tensor.
+
     Returns:
       collections.namedtuple, output ops (graph mode) or output tensors (eager).
     """
@@ -263,27 +313,53 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     self.quantile_embedding_dim = quantile_embedding_dim
     # We need the activation function during `call`, therefore set the field.
     self.activation_fn = tf.keras.activations.relu
+
     def kernel_initializer():
       return tf.keras.initializers.VarianceScaling(
-          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform')
+          scale=1.0 / np.sqrt(3.0), mode='fan_in', distribution='uniform'
+      )
+
     self.kernel_initializer = kernel_initializer
     # Defining layers.
     self.conv1 = tf.keras.layers.Conv2D(
-        32, [8, 8], strides=4, padding='same', activation=self.activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        32,
+        [8, 8],
+        strides=4,
+        padding='same',
+        activation=self.activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.conv2 = tf.keras.layers.Conv2D(
-        64, [4, 4], strides=2, padding='same', activation=self.activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        64,
+        [4, 4],
+        strides=2,
+        padding='same',
+        activation=self.activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.conv3 = tf.keras.layers.Conv2D(
-        64, [3, 3], strides=1, padding='same', activation=self.activation_fn,
-        kernel_initializer=kernel_initializer(), name='Conv')
+        64,
+        [3, 3],
+        strides=1,
+        padding='same',
+        activation=self.activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='Conv',
+    )
     self.flatten = tf.keras.layers.Flatten()
     self.dense1 = tf.keras.layers.Dense(
-        512, activation=self.activation_fn,
-        kernel_initializer=kernel_initializer(), name='fully_connected')
+        512,
+        activation=self.activation_fn,
+        kernel_initializer=kernel_initializer(),
+        name='fully_connected',
+    )
     self.dense2 = tf.keras.layers.Dense(
-        num_actions, kernel_initializer=kernel_initializer(),
-        name='fully_connected')
+        num_actions,
+        kernel_initializer=kernel_initializer(),
+        name='fully_connected',
+    )
 
   def call(self, state, num_quantiles):
     """Creates the output tensor/op given the state tensor as input.
@@ -295,6 +371,7 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     Args:
       state: `tf.Tensor`, contains the agent's current state.
       num_quantiles: int, number of quantile inputs.
+
     Returns:
       collections.namedtuple, that contains (quantile_values, quantiles).
     """
@@ -309,19 +386,25 @@ class ImplicitQuantileNetwork(tf.keras.Model):
     state_net_tiled = tf.tile(x, [num_quantiles, 1])
     quantiles_shape = [num_quantiles * batch_size, 1]
     quantiles = tf.random.uniform(
-        quantiles_shape, minval=0, maxval=1, dtype=tf.float32)
+        quantiles_shape, minval=0, maxval=1, dtype=tf.float32
+    )
     quantile_net = tf.tile(quantiles, [1, self.quantile_embedding_dim])
     pi = tf.constant(math.pi)
-    quantile_net = tf.cast(tf.range(
-        1, self.quantile_embedding_dim + 1, 1), tf.float32) * pi * quantile_net
+    quantile_net = (
+        tf.cast(tf.range(1, self.quantile_embedding_dim + 1, 1), tf.float32)
+        * pi
+        * quantile_net
+    )
     quantile_net = tf.cos(quantile_net)
     # Create the quantile layer in the first call. This is because
     # number of output units depends on the input shape. Therefore, we can only
     # create the layer during the first forward call, not during `.__init__()`.
     if not hasattr(self, 'dense_quantile'):
       self.dense_quantile = tf.keras.layers.Dense(
-          state_vector_length, activation=self.activation_fn,
-          kernel_initializer=self.kernel_initializer())
+          state_vector_length,
+          activation=self.activation_fn,
+          kernel_initializer=self.kernel_initializer(),
+      )
     quantile_net = self.dense_quantile(quantile_net)
     x = tf.multiply(state_net_tiled, quantile_net)
     x = self.dense1(x)
@@ -346,8 +429,13 @@ class AtariPreprocessing(object):
   Evaluation Protocols and Open Problems for General Agents".
   """
 
-  def __init__(self, environment, frame_skip=4, terminal_on_life_loss=False,
-               screen_size=84):
+  def __init__(
+      self,
+      environment,
+      frame_skip=4,
+      terminal_on_life_loss=False,
+      screen_size=84,
+  ):
     """Constructor for an Atari 2600 preprocessor.
 
     Args:
@@ -361,11 +449,15 @@ class AtariPreprocessing(object):
       ValueError: if frame_skip or screen_size are not strictly positive.
     """
     if frame_skip <= 0:
-      raise ValueError('Frame skip should be strictly positive, got {}'.
-                       format(frame_skip))
+      raise ValueError(
+          'Frame skip should be strictly positive, got {}'.format(frame_skip)
+      )
     if screen_size <= 0:
-      raise ValueError('Target screen size should be strictly positive, got {}'.
-                       format(screen_size))
+      raise ValueError(
+          'Target screen size should be strictly positive, got {}'.format(
+              screen_size
+          )
+      )
 
     self.environment = environment
     self.terminal_on_life_loss = terminal_on_life_loss
@@ -377,7 +469,7 @@ class AtariPreprocessing(object):
     # frames.
     self.screen_buffer = [
         np.empty((obs_dims.shape[0], obs_dims.shape[1]), dtype=np.uint8),
-        np.empty((obs_dims.shape[0], obs_dims.shape[1]), dtype=np.uint8)
+        np.empty((obs_dims.shape[0], obs_dims.shape[1]), dtype=np.uint8),
     ]
 
     self.game_over = False
@@ -387,8 +479,12 @@ class AtariPreprocessing(object):
   def observation_space(self):
     # Return the observation space adjusted to match the shape of the processed
     # observations.
-    return Box(low=0, high=255, shape=(self.screen_size, self.screen_size, 1),
-               dtype=np.uint8)
+    return Box(
+        low=0,
+        high=255,
+        shape=(self.screen_size, self.screen_size, 1),
+        dtype=np.uint8,
+    )
 
   @property
   def action_space(self):
@@ -424,10 +520,9 @@ class AtariPreprocessing(object):
     This calls the Gym API's render() method.
 
     Args:
-      mode: Mode argument for the environment's render() method.
-        Valid values (str) are:
-          'rgb_array': returns the raw ALE image.
-          'human': renders to display via the Gym renderer.
+      mode: Mode argument for the environment's render() method. Valid values
+        (str) are: 'rgb_array': returns the raw ALE image. 'human': renders to
+        display via the Gym renderer.
 
     Returns:
       if mode='rgb_array': numpy array, the most recent screen.
@@ -456,7 +551,7 @@ class AtariPreprocessing(object):
         episode is over.
       info: Gym API's info data structure.
     """
-    accumulated_reward = 0.
+    accumulated_reward = 0.0
 
     for time_step in range(self.frame_skip):
       # We bypass the Gym observation altogether and directly fetch the
@@ -509,11 +604,16 @@ class AtariPreprocessing(object):
     """
     # Pool if there are enough screens to do so.
     if self.frame_skip > 1:
-      np.maximum(self.screen_buffer[0], self.screen_buffer[1],
-                 out=self.screen_buffer[0])
+      np.maximum(
+          self.screen_buffer[0],
+          self.screen_buffer[1],
+          out=self.screen_buffer[0],
+      )
 
-    transformed_image = cv2.resize(self.screen_buffer[0],
-                                   (self.screen_size, self.screen_size),
-                                   interpolation=cv2.INTER_AREA)
+    transformed_image = cv2.resize(
+        self.screen_buffer[0],
+        (self.screen_size, self.screen_size),
+        interpolation=cv2.INTER_AREA,
+    )
     int_image = np.asarray(transformed_image, dtype=np.uint8)
     return np.expand_dims(int_image, axis=2)

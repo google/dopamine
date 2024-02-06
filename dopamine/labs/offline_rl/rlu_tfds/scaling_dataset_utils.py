@@ -27,8 +27,9 @@ get_transition_dataset_fn = tfds_atari_utils.get_transition_dataset_fn
 load_data_splits = tfds_atari_utils.load_data_splits
 
 
-def _parallel_lookup(game, episodes_per_policy, max_checkpoints=50,
-                     num_datasets=5):
+def _parallel_lookup(
+    game, episodes_per_policy, max_checkpoints=50, num_datasets=5
+):
   """Get idxs to use for dataset splits to be loaded."""
 
   def _get_lookups(i, j, ds_chkpt, episodes_per_policy):
@@ -46,7 +47,10 @@ def _parallel_lookup(game, episodes_per_policy, max_checkpoints=50,
       )
     policy_value_lookup[policy_id] = np.mean(episode_returns)
     policy_ep_idx_lookup[policy_id] = (
-        len(info), episode_lengths, episode_returns)
+        len(info),
+        episode_lengths,
+        episode_returns,
+    )
     return policy_value_lookup, policy_ep_idx_lookup
 
   policy_value_lookup, policy_ep_idx_lookup = {}, {}
@@ -60,7 +64,8 @@ def _parallel_lookup(game, episodes_per_policy, max_checkpoints=50,
         # Use only the first 25 ckpts.
         if int(chkpt.split('_')[1]) < max_checkpoints:
           job = executor.submit(
-              _get_lookups, i, j, ds[chkpt], episodes_per_policy)
+              _get_lookups, i, j, ds[chkpt], episodes_per_policy
+          )
           jobs.append(job)
     for future in concurrent.futures.as_completed(jobs):
       try:
@@ -83,8 +88,11 @@ def choose_indices(
   """Create indices to be used for dataset creation."""
   episodes_per_policy = dataset_episodes // dataset_policies
   (policy_value_lookup, policy_ep_idx_lookup) = _parallel_lookup(
-      game, episodes_per_policy, num_datasets=num_datasets,
-      max_checkpoints=dataset_policies)
+      game,
+      episodes_per_policy,
+      num_datasets=num_datasets,
+      max_checkpoints=dataset_policies,
+  )
   policy_ids = list(policy_value_lookup.keys())
   num_ids = len(policy_ids)
   sorted_policy_ids = list(
@@ -93,14 +101,15 @@ def choose_indices(
   inexpert_policy_ids = sorted_policy_ids[: int(dataset_expertise * num_ids)]
   if returns_filter is not None:
     inexpert_policy_ids = inexpert_policy_ids[
-        int(returns_filter * len(inexpert_policy_ids)) :]
+        int(returns_filter * len(inexpert_policy_ids)) :
+    ]
 
   if len(inexpert_policy_ids) < dataset_policies:
     selected_policy_ids = inexpert_policy_ids
   else:
     selected_policy_ids = [
-        inexpert_policy_ids[int(i)] for i in
-        np.linspace(0, len(inexpert_policy_ids)-1, dataset_policies)
+        inexpert_policy_ids[int(i)]
+        for i in np.linspace(0, len(inexpert_policy_ids) - 1, dataset_policies)
     ]
   min_score, max_score = float('inf'), float('-inf')
   total_steps = 0
@@ -109,9 +118,10 @@ def choose_indices(
   for policy_id in selected_policy_ids:
     l, ep_lengths, ep_returns = policy_ep_idx_lookup[policy_id]
     x1 = episodes_per_policy // 2
-    start_idx, end_idx = max(l // 2 - x1, 0), min(l//2 + x1, l)
-    all_episode_idxs.append((
-        policy_id[0], policy_id[1], f'{start_idx}:{end_idx}'))
+    start_idx, end_idx = max(l // 2 - x1, 0), min(l // 2 + x1, l)
+    all_episode_idxs.append(
+        (policy_id[0], policy_id[1], f'{start_idx}:{end_idx}')
+    )
     # Book keeping
     total_steps += sum(ep_lengths[start_idx:end_idx])
     for ep_return in ep_returns[start_idx:end_idx]:

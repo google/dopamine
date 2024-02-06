@@ -52,8 +52,9 @@ class MyDQNAgent(dqn_agent.DQNAgent):
   """Sample DQN agent to visualize Q-values and rewards."""
 
   def __init__(self, sess, num_actions, summary_writer=None):
-    super(MyDQNAgent, self).__init__(sess, num_actions,
-                                     summary_writer=summary_writer)
+    super(MyDQNAgent, self).__init__(
+        sess, num_actions, summary_writer=summary_writer
+    )
     self.q_values = [[] for _ in range(num_actions)]
     self.rewards = []
 
@@ -63,8 +64,9 @@ class MyDQNAgent(dqn_agent.DQNAgent):
 
   def _select_action(self):
     action = super(MyDQNAgent, self)._select_action()
-    q_vals = self._sess.run(self._net_outputs.q_values,
-                            {self.state_ph: self.state})[0]
+    q_vals = self._sess.run(
+        self._net_outputs.q_values, {self.state_ph: self.state}
+    )[0]
     for i in range(len(q_vals)):
       self.q_values[i].append(q_vals[i])
     return action
@@ -72,7 +74,8 @@ class MyDQNAgent(dqn_agent.DQNAgent):
   def reload_checkpoint(self, checkpoint_path, use_legacy_checkpoint=False):
     if use_legacy_checkpoint:
       variables_to_restore = atari_lib.maybe_transform_variable_names(
-          tf.compat.v1.global_variables(), legacy_checkpoint_load=True)
+          tf.compat.v1.global_variables(), legacy_checkpoint_load=True
+      )
     else:
       global_vars = set([x.name for x in tf.compat.v1.global_variables()])
       ckpt_vars = [
@@ -81,7 +84,8 @@ class MyDQNAgent(dqn_agent.DQNAgent):
       ]
       include_vars = list(global_vars.intersection(set(ckpt_vars)))
       variables_to_restore = tf_slim.get_variables_to_restore(
-          include=include_vars)
+          include=include_vars
+      )
     if variables_to_restore:
       reloader = tf.compat.v1.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
@@ -100,8 +104,9 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
   """Sample Rainbow agent to visualize Q-values and rewards."""
 
   def __init__(self, sess, num_actions, summary_writer=None):
-    super(MyRainbowAgent, self).__init__(sess, num_actions,
-                                         summary_writer=summary_writer)
+    super(MyRainbowAgent, self).__init__(
+        sess, num_actions, summary_writer=summary_writer
+    )
     self.rewards = []
 
   def step(self, reward, observation):
@@ -111,7 +116,8 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
   def reload_checkpoint(self, checkpoint_path, use_legacy_checkpoint=False):
     if use_legacy_checkpoint:
       variables_to_restore = atari_lib.maybe_transform_variable_names(
-          tf.compat.v1.global_variables(), legacy_checkpoint_load=True)
+          tf.compat.v1.global_variables(), legacy_checkpoint_load=True
+      )
     else:
       global_vars = set([x.name for x in tf.compat.v1.global_variables()])
       ckpt_vars = [
@@ -120,7 +126,8 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
       ]
       include_vars = list(global_vars.intersection(set(ckpt_vars)))
       variables_to_restore = tf_slim.get_variables_to_restore(
-          include=include_vars)
+          include=include_vars
+      )
     if variables_to_restore:
       reloader = tf.compat.v1.train.Saver(var_list=variables_to_restore)
       reloader.restore(self._sess, checkpoint_path)
@@ -129,8 +136,9 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
       logging.info('Nothing to restore!')
 
   def get_probabilities(self):
-    return self._sess.run(tf.squeeze(self._net_outputs.probabilities),
-                          {self.state_ph: self.state})
+    return self._sess.run(
+        tf.squeeze(self._net_outputs.probabilities), {self.state_ph: self.state}
+    )
 
   def get_rewards(self):
     return [np.cumsum(self.rewards)]
@@ -139,15 +147,21 @@ class MyRainbowAgent(rainbow_agent.RainbowAgent):
 class MyRunner(run_experiment.Runner):
   """Sample Runner class to generate visualizations."""
 
-  def __init__(self, base_dir, trained_agent_ckpt_path, create_agent_fn,
-               use_legacy_checkpoint=False):
+  def __init__(
+      self,
+      base_dir,
+      trained_agent_ckpt_path,
+      create_agent_fn,
+      use_legacy_checkpoint=False,
+  ):
     self._trained_agent_ckpt_path = trained_agent_ckpt_path
     self._use_legacy_checkpoint = use_legacy_checkpoint
     super(MyRunner, self).__init__(base_dir, create_agent_fn)
 
   def _initialize_checkpointer_and_maybe_resume(self, checkpoint_file_prefix):
-    self._agent.reload_checkpoint(self._trained_agent_ckpt_path,
-                                  self._use_legacy_checkpoint)
+    self._agent.reload_checkpoint(
+        self._trained_agent_ckpt_path, self._use_legacy_checkpoint
+    )
     self._start_iteration = 0
 
   def _run_one_iteration(self, iteration):
@@ -165,18 +179,23 @@ class MyRunner(run_experiment.Runner):
     atari_params = {'environment': self._environment}
     atari_plot = atari_plotter.AtariPlotter(parameter_dict=atari_params)
     # Plot the rewards received next to it.
-    reward_params = {'x': atari_plot.parameters['width'],
-                     'xlabel': 'Timestep',
-                     'ylabel': 'Reward',
-                     'title': 'Rewards',
-                     'get_line_data_fn': self._agent.get_rewards}
+    reward_params = {
+        'x': atari_plot.parameters['width'],
+        'xlabel': 'Timestep',
+        'ylabel': 'Reward',
+        'title': 'Rewards',
+        'get_line_data_fn': self._agent.get_rewards,
+    }
     reward_plot = line_plotter.LinePlotter(parameter_dict=reward_params)
     action_names = [
-        'Action {}'.format(x) for x in range(self._agent.num_actions)]
+        'Action {}'.format(x) for x in range(self._agent.num_actions)
+    ]
     # Plot Q-values (DQN) or Q-value distributions (Rainbow).
-    q_params = {'x': atari_plot.parameters['width'] // 2,
-                'y': atari_plot.parameters['height'],
-                'legend': action_names}
+    q_params = {
+        'x': atari_plot.parameters['width'] // 2,
+        'y': atari_plot.parameters['height'],
+        'legend': action_names,
+    }
     if 'DQN' in self._agent.__class__.__name__:
       q_params['xlabel'] = 'Timestep'
       q_params['ylabel'] = 'Q-Value'
@@ -196,17 +215,22 @@ class MyRunner(run_experiment.Runner):
       q_params['get_bar_data_fn'] = self._agent.get_probabilities
       q_plot = bar_plotter.BarPlotter(parameter_dict=q_params)
     screen_width = (
-        atari_plot.parameters['width'] + reward_plot.parameters['width'])
+        atari_plot.parameters['width'] + reward_plot.parameters['width']
+    )
     screen_height = (
-        atari_plot.parameters['height'] + q_plot.parameters['height'])
+        atari_plot.parameters['height'] + q_plot.parameters['height']
+    )
     # Dimensions need to be divisible by 2:
     if screen_width % 2 > 0:
       screen_width += 1
     if screen_height % 2 > 0:
       screen_height += 1
     visualizer = agent_visualizer.AgentVisualizer(
-        record_path=record_path, plotters=[atari_plot, reward_plot, q_plot],
-        screen_width=screen_width, screen_height=screen_height)
+        record_path=record_path,
+        plotters=[atari_plot, reward_plot, q_plot],
+        screen_width=screen_width,
+        screen_height=screen_height,
+    )
     global_step = 0
     while global_step < num_global_steps:
       initial_observation = self._environment.reset()
@@ -227,24 +251,33 @@ class MyRunner(run_experiment.Runner):
 
 
 def create_dqn_agent(sess, environment, summary_writer=None):
-  return MyDQNAgent(sess, num_actions=environment.action_space.n,
-                    summary_writer=summary_writer)
+  return MyDQNAgent(
+      sess,
+      num_actions=environment.action_space.n,
+      summary_writer=summary_writer,
+  )
 
 
 def create_rainbow_agent(sess, environment, summary_writer=None):
-  return MyRainbowAgent(sess, num_actions=environment.action_space.n,
-                        summary_writer=summary_writer)
+  return MyRainbowAgent(
+      sess,
+      num_actions=environment.action_space.n,
+      summary_writer=summary_writer,
+  )
 
 
-def create_runner(base_dir, trained_agent_ckpt_path, agent='dqn',
-                  use_legacy_checkpoint=False):
+def create_runner(
+    base_dir, trained_agent_ckpt_path, agent='dqn', use_legacy_checkpoint=False
+):
   create_agent = create_dqn_agent if agent == 'dqn' else create_rainbow_agent
-  return MyRunner(base_dir, trained_agent_ckpt_path, create_agent,
-                  use_legacy_checkpoint)
+  return MyRunner(
+      base_dir, trained_agent_ckpt_path, create_agent, use_legacy_checkpoint
+  )
 
 
-def run(agent, game, num_steps, root_dir, restore_ckpt,
-        use_legacy_checkpoint=False):
+def run(
+    agent, game, num_steps, root_dir, restore_ckpt, use_legacy_checkpoint=False
+):
   """Main entrypoint for running and generating visualizations.
 
   Args:

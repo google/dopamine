@@ -19,7 +19,6 @@ import shutil
 
 from absl import flags
 from absl import logging
-
 from absl.testing import absltest
 from absl.testing import parameterized
 from dopamine.labs.atari_100k import train
@@ -31,8 +30,10 @@ FLAGS = flags.FLAGS
 def QuickAgentFlags():
   """Assigns flags for a quick run of an Atari 100k agent."""
   FLAGS.gin_bindings = [
-      'Runner.training_steps=100', 'MaxEpisodeEvalRunner.num_eval_episodes=2',
-      'Runner.num_iterations=1', 'Runner.max_steps_per_episode=100',
+      'Runner.training_steps=100',
+      'MaxEpisodeEvalRunner.num_eval_episodes=2',
+      'Runner.num_iterations=1',
+      'Runner.max_steps_per_episode=100',
       'JaxDQNAgent.min_replay_history=100',
       'OutOfGraphPrioritizedReplayBuffer.replay_capacity=10000',
   ]
@@ -63,11 +64,13 @@ class RunnerIntegrationTest(parameterized.TestCase):
     """Verify that files have been created."""
     # Check checkpoint files
     self.assertTrue(
-        os.path.exists(os.path.join(self._checkpoint_dir, 'ckpt.0')))
+        os.path.exists(os.path.join(self._checkpoint_dir, 'ckpt.0'))
+    )
     self.assertTrue(
         os.path.exists(
-            os.path.join(self._checkpoint_dir,
-                         'sentinel_checkpoint_complete.0')))
+            os.path.join(self._checkpoint_dir, 'sentinel_checkpoint_complete.0')
+        )
+    )
     # Check log files
     self.assertTrue(os.path.exists(os.path.join(self._logging_dir, 'log_0')))
 

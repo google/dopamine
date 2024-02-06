@@ -31,6 +31,7 @@ tfb = tfp.bijectors
 
 class SacActorOutput(NamedTuple):
   """The output of a SAC actor."""
+
   mean_action: jnp.ndarray
   sampled_action: jnp.ndarray
   log_probability: jnp.ndarray
@@ -38,12 +39,14 @@ class SacActorOutput(NamedTuple):
 
 class SacCriticOutput(NamedTuple):
   """The output of a SAC critic."""
+
   q_value1: jnp.ndarray
   q_value2: jnp.ndarray
 
 
 class SacOutput(NamedTuple):
   """The output of a SACNetwork, including the actor and critic outputs."""
+
   actor: SacActorOutput
   critic: SacCriticOutput
 
@@ -53,7 +56,8 @@ class _Tanh(tfb.Tanh):
   def _inverse(self, y):
     # We perform clipping in the _inverse function, as is done in TF-Agents.
     y = jnp.where(
-        jnp.less_equal(jnp.abs(y), 1.), tf.clip(y, -0.99999997, 0.99999997), y)
+        jnp.less_equal(jnp.abs(y), 1.0), tf.clip(y, -0.99999997, 0.99999997), y
+    )
     return jnp.arctanh(y)
 
 
@@ -76,17 +80,18 @@ def _transform_distribution(dist, mean, magnitude):
   return dist
 
 
-def _shifted_uniform(minval=0., maxval=1.0, dtype=jnp.float32):
-
+def _shifted_uniform(minval=0.0, maxval=1.0, dtype=jnp.float32):
   def init(key, shape, dtype=dtype):
     return jax.random.uniform(
-        key, shape=shape, minval=minval, maxval=maxval, dtype=dtype)
+        key, shape=shape, minval=minval, maxval=maxval, dtype=dtype
+    )
 
   return init
 
 
 class SACCriticNetwork(nn.Module):
   """A simple critic network used in SAC."""
+
   num_layers: int = 2
   hidden_units: int = 256
 
@@ -101,9 +106,9 @@ class SACCriticNetwork(nn.Module):
     x = jnp.concatenate((x, a))
 
     for _ in range(self.num_layers):
-      x = nn.Dense(
-          features=self.hidden_units, kernel_init=kernel_initializer)(
-              x)
+      x = nn.Dense(features=self.hidden_units, kernel_init=kernel_initializer)(
+          x
+      )
       x = nn.relu(x)
 
     return nn.Dense(features=1, kernel_init=kernel_initializer)(x)
@@ -112,6 +117,7 @@ class SACCriticNetwork(nn.Module):
 @gin.configurable
 class SACNetwork(nn.Module):
   """Non-convolutional value and policy networks for SAC."""
+
   action_shape: Tuple[int, ...]
   num_layers: int = 2
   hidden_units: int = 256
@@ -132,12 +138,12 @@ class SACNetwork(nn.Module):
         for _ in range(self.num_layers)
     ]
     self._actor_final_layer = nn.Dense(
-        features=action_dim * 2, kernel_init=kernel_initializer)
+        features=action_dim * 2, kernel_init=kernel_initializer
+    )
 
-  def __call__(self,
-               state: jnp.ndarray,
-               key: jnp.ndarray,
-               mean_action: bool = True) -> SacOutput:
+  def __call__(
+      self, state: jnp.ndarray, key: jnp.ndarray, mean_action: bool = True
+  ) -> SacOutput:
     """Calls the SAC actor/critic networks.
 
     This has two important purposes:
@@ -224,4 +230,5 @@ class SACNetwork(nn.Module):
       A named tuple containing the Q values of each network.
     """
     return SacCriticOutput(
-        self._critic1(state, action), self._critic2(state, action))
+        self._critic1(state, action), self._critic2(state, action)
+    )

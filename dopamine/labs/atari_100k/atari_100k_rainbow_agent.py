@@ -77,7 +77,7 @@ def select_action(
 
 @functools.partial(jax.vmap, in_axes=(0, 0, 0, None))
 def _crop_with_indices(img, x, y, cropped_shape):
-  cropped_image = (jax.lax.dynamic_slice(img, [x, y, 0], cropped_shape[1:]))
+  cropped_image = jax.lax.dynamic_slice(img, [x, y, 0], cropped_shape[1:])
   return cropped_image
 
 
@@ -86,9 +86,11 @@ def _per_image_random_crop(key, img, cropped_shape):
   batch_size, width, height = cropped_shape[:-1]
   key_x, key_y = jax.random.split(key, 2)
   x = jax.random.randint(
-      key_x, shape=(batch_size,), minval=0, maxval=img.shape[1] - width)
+      key_x, shape=(batch_size,), minval=0, maxval=img.shape[1] - width
+  )
   y = jax.random.randint(
-      key_y, shape=(batch_size,), minval=0, maxval=img.shape[2] - height)
+      key_y, shape=(batch_size,), minval=0, maxval=img.shape[2] - height
+  )
   return _crop_with_indices(img, x, y, cropped_shape)
 
 
@@ -117,7 +119,7 @@ def drq_image_augmentation(key, obs, img_pad=4):
 
 def preprocess_inputs_with_augmentation(x, data_augmentation=False, rng=None):
   """Input normalization and if specified, data augmentation."""
-  out = x.astype(jnp.float32) / 255.
+  out = x.astype(jnp.float32) / 255.0
   if data_augmentation:
     if rng is None:
       raise ValueError('Pass rng when using data augmentation')
@@ -129,13 +131,15 @@ def preprocess_inputs_with_augmentation(x, data_augmentation=False, rng=None):
 class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
   """A compact implementation of agents for Atari 100k."""
 
-  def __init__(self,
-               num_actions,
-               data_augmentation=False,
-               mse_loss=False,
-               summary_writer=None,
-               network=networks.FullRainbowNetwork,
-               seed=None):
+  def __init__(
+      self,
+      num_actions,
+      data_augmentation=False,
+      mse_loss=False,
+      summary_writer=None,
+      network=networks.FullRainbowNetwork,
+      seed=None,
+  ):
     """Creates the Rainbow-based agent for the Atari 100k benchmark.
 
     On Atari 100k, an agent is evaluated after 100k environment steps, which
@@ -155,7 +159,8 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
         preprocess_fn=preprocess_inputs_with_augmentation,
         summary_writer=summary_writer,
         network=network,
-        seed=seed)
+        seed=seed,
+    )
     logging.info('\t data_augmentation: %s', data_augmentation)
     self._data_augmentation = data_augmentation
     self._mse_loss = mse_loss
@@ -163,8 +168,8 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     # Preprocessing during training and evaluation can be possibly different,
     # for example, when using data augmentation during training.
     self.train_preprocess_fn = functools.partial(
-        preprocess_inputs_with_augmentation,
-        data_augmentation=data_augmentation)
+        preprocess_inputs_with_augmentation, data_augmentation=data_augmentation
+    )
     self.state_shape = self.state.shape
 
   def _training_step_update(self):
@@ -174,7 +179,8 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     self._rng, rng1, rng2 = jax.random.split(self._rng, num=3)
     states = self.train_preprocess_fn(self.replay_elements['state'], rng=rng1)
     next_states = self.train_preprocess_fn(
-        self.replay_elements['next_state'], rng=rng2)
+        self.replay_elements['next_state'], rng=rng2
+    )
 
     if self._replay_scheme == 'prioritized':
       probs = self.replay_elements['sampling_probabilities']
@@ -185,23 +191,38 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
       # Uniform weights if not using prioritized replay.
       loss_weights = jnp.ones(states.shape[0])
 
-    (self.optimizer_state, self.online_params,
-     loss, mean_loss, self._rng) = full_rainbow_agent.train(
-         self.network_def, self.online_params, self.target_network_params,
-         self.optimizer, self.optimizer_state, states,
-         self.replay_elements['action'], next_states,
-         self.replay_elements['reward'], self.replay_elements['terminal'],
-         loss_weights, self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._mse_loss, self._rng)
+    (self.optimizer_state, self.online_params, loss, mean_loss, self._rng) = (
+        full_rainbow_agent.train(
+            self.network_def,
+            self.online_params,
+            self.target_network_params,
+            self.optimizer,
+            self.optimizer_state,
+            states,
+            self.replay_elements['action'],
+            next_states,
+            self.replay_elements['reward'],
+            self.replay_elements['terminal'],
+            loss_weights,
+            self._support,
+            self.cumulative_gamma,
+            self._double_dqn,
+            self._distributional,
+            self._mse_loss,
+            self._rng,
+        )
+    )
 
     if self._replay_scheme == 'prioritized':
-      self._replay.set_priority(self.replay_elements['indices'],
-                                jnp.sqrt(loss + 1e-10))
+      self._replay.set_priority(
+          self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+      )
 
     if self.summary_writer is not None:
       with self.summary_writer.as_default():
-        tf.summary.scalar('CrossEntropyLoss', mean_loss,
-                          step=self.training_steps)
+        tf.summary.scalar(
+            'CrossEntropyLoss', mean_loss, step=self.training_steps
+        )
       self.summary_writer.flush()
 
   def step(self, reward=None, observation=None):
@@ -340,8 +361,10 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
       to_store = (onp.squeeze(x) for x in to_store)
       priority = onp.squeeze(priority)
     elif hasattr(self._replay, '_n_envs') and not reward.shape:
-      to_store = (onp.expand_dims(x, 0) if not (x.shape and x.shape[0] == 1)
-                  else x for x in to_store)
+      to_store = (
+          onp.expand_dims(x, 0) if not (x.shape and x.shape[0] == 1) else x
+          for x in to_store
+      )
       priority = onp.expand_dims(priority, 0)
     if not self.eval_mode:
       self._replay.add(*to_store, priority=priority, episode_end=episode_end)

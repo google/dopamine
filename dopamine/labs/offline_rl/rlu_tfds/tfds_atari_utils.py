@@ -21,9 +21,14 @@ import tensorflow_datasets as tfds
 class BatchToTransition(object):
   """Creates (s,a,r,s',a') transitions."""
 
-  def __init__(self, stack_size, update_horizon, gamma,
-               next_action=False,
-               return_to_go=False):
+  def __init__(
+      self,
+      stack_size,
+      update_horizon,
+      gamma,
+      next_action=False,
+      return_to_go=False,
+  ):
     self.stack_size = stack_size
     self.update_horizon = update_horizon
     self.total_frames = stack_size + update_horizon
@@ -36,13 +41,13 @@ class BatchToTransition(object):
 
     all_states = tf.squeeze(batch[rlds.OBSERVATION], axis=-1)
     all_states = tf.transpose(all_states, perm=[1, 2, 0])
-    rewards = batch[rlds.REWARD][self.stack_size-1:-1]
-    terminals = batch[rlds.IS_TERMINAL][self.stack_size: self.total_frames]
+    rewards = batch[rlds.REWARD][self.stack_size - 1 : -1]
+    terminals = batch[rlds.IS_TERMINAL][self.stack_size : self.total_frames]
     transitions = {
-        'state': all_states[:, :, :self.stack_size],
-        'action': batch[rlds.ACTION][self.stack_size-1],
+        'state': all_states[:, :, : self.stack_size],
+        'action': batch[rlds.ACTION][self.stack_size - 1],
         'reward': tf.reduce_sum(rewards * self.cumulative_discount),
-        'next_state': all_states[:, :, self.update_horizon:],
+        'next_state': all_states[:, :, self.update_horizon :],
         'terminal': tf.reduce_any(terminals),
     }
     if episode_return is not None:
@@ -67,8 +72,10 @@ def get_transition_dataset_fn(
   )
 
   def add_rtg(episode, episode_return):
-    scan_func = lambda return_so_far, curr: (return_so_far + curr['reward'],
-                                             episode_return - return_so_far)
+    scan_func = lambda return_so_far, curr: (
+        return_so_far + curr['reward'],
+        episode_return - return_so_far,
+    )
     return_to_go = episode.scan(initial_state=0.0, scan_func=scan_func)
     return tf.data.Dataset.zip(episode, return_to_go)
 
@@ -79,16 +86,15 @@ def get_transition_dataset_fn(
     if return_to_go:
       episode = add_rtg(episode, episode_data['episode_return'])
     batched_steps = rlds.transformations.batch(
-        episode,
-        size=stack_size + update_horizon,
-        shift=1,
-        drop_remainder=True)
+        episode, size=stack_size + update_horizon, shift=1, drop_remainder=True
+    )
     # pylint: disable=g-long-lambda
     batch_fn = lambda x, y=None: batch_fn_cls.create_transitions(
-        x, rtg_batch=y, episode_return=episode_data['episode_return'])
+        x, rtg_batch=y, episode_return=episode_data['episode_return']
+    )
     # pylint: enable=g-long-lambda
-    return batched_steps.map(batch_fn,
-                             num_parallel_calls=tf.data.AUTOTUNE)
+    return batched_steps.map(batch_fn, num_parallel_calls=tf.data.AUTOTUNE)
+
   return make_transition_dataset
 
 
@@ -101,7 +107,8 @@ def load_data_splits(dataset_name, data_splits):
       enable_ordering_guard=False,
   )
   return tfds.load(
-      dataset_name, split='+'.join(data_splits),
+      dataset_name,
+      split='+'.join(data_splits),
       read_config=read_config,
       shuffle_files=True,
   )
@@ -114,7 +121,7 @@ def uniformly_subsampled_atari_data(dataset_name, data_percent):
   for split, info in ds_builder.info.splits.items():
     # Convert `data_percent` to number of episodes to allow
     # for fractional percentages.
-    num_episodes = int((data_percent/100) * info.num_examples)
+    num_episodes = int((data_percent / 100) * info.num_examples)
     if num_episodes == 0:
       raise ValueError(f'{data_percent}% leads to 0 episodes in {split}!')
     # Sample first `data_percent` episodes from each of the data split
@@ -122,11 +129,13 @@ def uniformly_subsampled_atari_data(dataset_name, data_percent):
   return load_data_splits(dataset_name, data_splits)
 
 
-def create_atari_ds_loader(dataset,
-                           transition_fn=None,
-                           shuffle_num_episodes=1000,
-                           shuffle_num_steps=50000,
-                           cycle_length=100):
+def create_atari_ds_loader(
+    dataset,
+    transition_fn=None,
+    shuffle_num_episodes=1000,
+    shuffle_num_steps=50000,
+    cycle_length=100,
+):
   """Create uniformly subsampled Atari `game` dataset."""
   if transition_fn is None:
     transition_fn = get_transition_dataset_fn(4)
@@ -134,11 +143,16 @@ def create_atari_ds_loader(dataset,
   dataset = dataset.shuffle(shuffle_num_episodes)
   # Interleave the steps across many different episodes
   dataset = dataset.interleave(
-      transition_fn, cycle_length=cycle_length, block_length=1,
-      deterministic=False, num_parallel_calls=tf.data.AUTOTUNE)
+      transition_fn,
+      cycle_length=cycle_length,
+      block_length=1,
+      deterministic=False,
+      num_parallel_calls=tf.data.AUTOTUNE,
+  )
   # Shuffle steps in the dataset
   shuffled_dataset = dataset.shuffle(
-      shuffle_num_steps, reshuffle_each_iteration=True)
+      shuffle_num_steps, reshuffle_each_iteration=True
+  )
   return shuffled_dataset
 
 
@@ -150,18 +164,21 @@ def create_ds_iterator(ds, batch_size=32, repeat=True):
   return batch_ds.as_numpy_iterator()
 
 
-def build_tfds_replay(stack_size,
-                      update_horizon,
-                      gamma,
-                      return_to_go=False,
-                      dataset=None,
-                      game='Pong',
-                      run_number=1,
-                      batch_size=32,
-                      repeat_ds=True):
+def build_tfds_replay(
+    stack_size,
+    update_horizon,
+    gamma,
+    return_to_go=False,
+    dataset=None,
+    game='Pong',
+    run_number=1,
+    batch_size=32,
+    repeat_ds=True,
+):
   """Builds the tfds replay buffer."""
   transition_fn = get_transition_dataset_fn(
-      stack_size, update_horizon, gamma, return_to_go=return_to_go)
+      stack_size, update_horizon, gamma, return_to_go=return_to_go
+  )
   if dataset is None:
     dataset_name = f'rlu_atari_checkpoints_ordered/{game}_run_{run_number}'
     # Create a dataset of episodes sampling `data_percent`% episodes

@@ -26,7 +26,6 @@ from dopamine.discrete_domains import run_experiment
 from dopamine.labs.atari_100k import normalization_utils
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
-
 import gin
 import jax
 import numpy as np
@@ -34,7 +33,6 @@ import tensorflow as tf
 
 
 def create_env_wrapper(create_env_fn):
-
   def inner_create(*args, **kwargs):
     env = create_env_fn(*args, **kwargs)
     env.cum_length = 0
@@ -78,7 +76,8 @@ class DataEfficientAtariRunner(run_experiment.Runner):
             'Game name must not be None if logging normalized scores.'
         )
     super().__init__(
-        base_dir, create_agent_fn, create_environment_fn=create_environment_fn)
+        base_dir, create_agent_fn, create_environment_fn=create_environment_fn
+    )
 
     self._num_iterations = int(self._num_iterations)
     self._start_iteration = int(self._start_iteration)
@@ -106,21 +105,25 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     self.log_normalized_scores = log_normalized_scores
     # Create a collector dispatcher for metrics reporting.
     self._collector_dispatcher = collector_dispatcher.CollectorDispatcher(
-        self._base_dir)
+        self._base_dir
+    )
     set_collector_dispatcher_fn = getattr(
-        self._agent, 'set_collector_dispatcher', None)
+        self._agent, 'set_collector_dispatcher', None
+    )
     if callable(set_collector_dispatcher_fn):
       set_collector_dispatcher_fn(self._collector_dispatcher)
 
-  def _run_one_phase(self,
-                     envs,
-                     steps,
-                     max_episodes,
-                     statistics,
-                     run_mode_str,
-                     needs_reset=False,
-                     one_to_one=False,
-                     resume_state=None):
+  def _run_one_phase(
+      self,
+      envs,
+      steps,
+      max_episodes,
+      statistics,
+      run_mode_str,
+      needs_reset=False,
+      one_to_one=False,
+      resume_state=None,
+  ):
     """Runs the agent/environment loop until a desired number of steps.
 
     We terminate precisely when the desired number of steps has been reached,
@@ -147,7 +150,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     """
     step_count = 0
     num_episodes = 0
-    sum_returns = 0.
+    sum_returns = 0.0
 
     (episode_lengths, episode_returns, state, envs) = self._run_parallel(
         episodes=max_episodes,
@@ -161,7 +164,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     for episode_length, episode_return in zip(episode_lengths, episode_returns):
       statistics.append({
           '{}_episode_lengths'.format(run_mode_str): episode_length,
-          '{}_episode_returns'.format(run_mode_str): episode_return
+          '{}_episode_returns'.format(run_mode_str): episode_return,
       })
       if run_mode_str == 'train':
         # we use one extra frame at the starting
@@ -212,13 +215,15 @@ class DataEfficientAtariRunner(run_experiment.Runner):
 
     return initial_observation
 
-  def _run_parallel(self,
-                    envs,
-                    episodes=None,
-                    max_steps=None,
-                    one_to_one=False,
-                    needs_reset=True,
-                    resume_state=None):
+  def _run_parallel(
+      self,
+      envs,
+      episodes=None,
+      max_steps=None,
+      one_to_one=False,
+      needs_reset=True,
+      resume_state=None,
+  ):
     """Executes a full trajectory of the agent interacting with the environment.
 
     Args:
@@ -284,8 +289,10 @@ class DataEfficientAtariRunner(run_experiment.Runner):
         rewards[live_env_index] = reward
         terminals[live_env_index] = done
 
-        if (envs[env_id].game_over or
-            envs[env_id].cum_length == self._max_steps_per_episode):
+        if (
+            envs[env_id].game_over
+            or envs[env_id].cum_length == self._max_steps_per_episode
+        ):
           total_episodes += 1
           cum_rewards.append(envs[env_id].cum_reward)
           cum_lengths.append(envs[env_id].cum_length)
@@ -302,8 +309,9 @@ class DataEfficientAtariRunner(run_experiment.Runner):
               )
           )
           logging.info(log_str)
-          self._maybe_save_single_summary(self.num_steps + total_steps,
-                                          cum_rewards[-1], cum_lengths[-1])
+          self._maybe_save_single_summary(
+              self.num_steps + total_steps, cum_rewards[-1], cum_lengths[-1]
+          )
 
           if one_to_one:
             new_obses = delete_ind_from_array(new_obses, live_env_index, axis=1)
@@ -327,8 +335,9 @@ class DataEfficientAtariRunner(run_experiment.Runner):
         # Perform reward clipping.
         rewards = np.clip(rewards, -1, 1)
 
-      self._agent.log_transition(new_obs, actions, rewards, terminals,
-                                 episode_end)
+      self._agent.log_transition(
+          new_obs, actions, rewards, terminals, episode_end
+      )
 
       if (
           not live_envs
@@ -337,8 +346,14 @@ class DataEfficientAtariRunner(run_experiment.Runner):
       ):
         break
 
-    state = (new_obses, rewards, terminals, episode_end, cum_rewards,
-             cum_lengths)
+    state = (
+        new_obses,
+        rewards,
+        terminals,
+        episode_end,
+        cum_rewards,
+        cum_lengths,
+    )
     return cum_lengths, cum_rewards, state, envs
 
   def _run_train_phase(self, statistics):
@@ -494,11 +509,9 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     )
     return statistics.data_lists
 
-  def _maybe_save_single_summary(self,
-                                 iteration,
-                                 ep_return,
-                                 length,
-                                 save_if_eval=False):
+  def _maybe_save_single_summary(
+      self, iteration, ep_return, length, save_if_eval=False
+  ):
     prefix = 'Train/' if not self._agent.eval_mode else 'Eval/'
     if not self._agent.eval_mode or save_if_eval:
       with self._summary_writer.as_default():
@@ -540,14 +553,17 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     with self._summary_writer.as_default():
       tf.summary.scalar('Train/NumEpisodes', num_episodes_train, step=iteration)
       tf.summary.scalar(
-          'Train/AverageReturns', average_reward_train, step=iteration)
+          'Train/AverageReturns', average_reward_train, step=iteration
+      )
       tf.summary.scalar(
           'Train/AverageStepsPerSecond',
           average_steps_per_second,
-          step=iteration)
+          step=iteration,
+      )
       tf.summary.scalar('Eval/NumEpisodes', num_episodes_eval, step=iteration)
       tf.summary.scalar(
-          'Eval/AverageReturns', average_reward_eval, step=iteration)
+          'Eval/AverageReturns', average_reward_eval, step=iteration
+      )
       if self.log_normalized_scores:
         tf.summary.scalar(
             'Train/AverageNormalizedScore', norm_score_train, step=iteration
@@ -560,8 +576,11 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     """Runs a full experiment, spread over multiple iterations."""
     logging.info('Beginning training...')
     if self._num_iterations <= self._start_iteration:
-      logging.warning('num_iterations (%d) < start_iteration(%d)',
-                      self._num_iterations, self._start_iteration)
+      logging.warning(
+          'num_iterations (%d) < start_iteration(%d)',
+          self._num_iterations,
+          self._start_iteration,
+      )
       return
 
     for iteration in range(self._start_iteration, self._num_iterations):
@@ -575,11 +594,9 @@ class DataEfficientAtariRunner(run_experiment.Runner):
 class LoggedDataEfficientAtariRunner(DataEfficientAtariRunner):
   """Runner for loading/saving replay data."""
 
-  def __init__(self,
-               base_dir,
-               create_agent_fn,
-               load_replay_dir=None,
-               save_replay=False):
+  def __init__(
+      self, base_dir, create_agent_fn, load_replay_dir=None, save_replay=False
+  ):
     super().__init__(base_dir, create_agent_fn)
     self._load_replay_dir = load_replay_dir
     self._save_replay = save_replay

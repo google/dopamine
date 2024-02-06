@@ -56,8 +56,9 @@ def rainbow_network(num_actions, num_atoms, support, network_type, state):
   return network_type(net.q_values, net.logits, net.probabilities)
 
 
-def implicit_quantile_network(num_actions, quantile_embedding_dim,
-                              network_type, state, num_quantiles):
+def implicit_quantile_network(
+    num_actions, quantile_embedding_dim, network_type, state, num_quantiles
+):
   """The Implicit Quantile ConvNet.
 
   Args:
@@ -72,16 +73,18 @@ def implicit_quantile_network(num_actions, quantile_embedding_dim,
   """
   model = atari_lib.ImplicitQuantileNetwork(num_actions, quantile_embedding_dim)
   net = model(state, num_quantiles)
-  return network_type(quantile_values=net.quantile_values,
-                      quantiles=net.quantiles)
+  return network_type(
+      quantile_values=net.quantile_values, quantiles=net.quantiles
+  )
 
 
 ### Generic Gym networks ###
 
 
 @gin.configurable
-def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
-                                   num_atoms=None):
+def _basic_discrete_domain_network(
+    min_vals, max_vals, num_actions, state, num_atoms=None
+):
   """Builds a basic network for discrete domains, rescaling inputs to [-1, 1].
 
   Args:
@@ -95,8 +98,9 @@ def _basic_discrete_domain_network(min_vals, max_vals, num_actions, state,
   Returns:
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
-  layer = gym_lib.BasicDiscreteDomainNetwork(min_vals, max_vals, num_actions,
-                                             num_atoms)
+  layer = gym_lib.BasicDiscreteDomainNetwork(
+      min_vals, max_vals, num_actions, num_atoms
+  )
   return layer(state)
 
 
@@ -120,11 +124,9 @@ def cartpole_dqn_network(num_actions, network_type, state):
 
 
 @gin.configurable
-def fourier_dqn_network(min_vals,
-                        max_vals,
-                        num_actions,
-                        state,
-                        fourier_basis_order=3):
+def fourier_dqn_network(
+    min_vals, max_vals, num_actions, state, fourier_basis_order=3
+):
   """Builds the function approximator used to compute the agent's Q-values.
 
   It uses FourierBasis features and a linear layer.
@@ -139,8 +141,9 @@ def fourier_dqn_network(min_vals,
   Returns:
     The Q-values for DQN-style agents or logits for Rainbow-style agents.
   """
-  model = gym_lib.FourierDQNNetwork(min_vals, max_vals, num_actions,
-                                    fourier_basis_order)
+  model = gym_lib.FourierDQNNetwork(
+      min_vals, max_vals, num_actions, fourier_basis_order
+  )
   return model(state).q_values
 
 
@@ -163,8 +166,9 @@ def cartpole_fourier_dqn_network(num_actions, network_type, state):
 
 
 @gin.configurable
-def cartpole_rainbow_network(num_actions, num_atoms, support, network_type,
-                             state):
+def cartpole_rainbow_network(
+    num_actions, num_atoms, support, network_type, state
+):
   """Build the deep network used to compute the agent's Q-value distributions.
 
   Args:
@@ -221,8 +225,9 @@ def acrobot_fourier_dqn_network(num_actions, network_type, state):
 
 
 @gin.configurable
-def acrobot_rainbow_network(num_actions, num_atoms, support, network_type,
-                            state):
+def acrobot_rainbow_network(
+    num_actions, num_atoms, support, network_type, state
+):
   """Build the deep network used to compute the agent's Q-value distributions.
 
   Args:

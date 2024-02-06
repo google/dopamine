@@ -70,7 +70,8 @@ class CollectorDispatcher(object):
       self,
       base_dir: Optional[str],
       # TODO(psc): Consider using sets instead.
-      collectors: Sequence[str] = ('console', 'pickle', 'tensorboard')):
+      collectors: Sequence[str] = ('console', 'pickle', 'tensorboard'),
+  ):
     self._collectors = []
     for c in collectors:
       if c not in AVAILABLE_COLLECTORS:
@@ -82,7 +83,8 @@ class CollectorDispatcher(object):
   def write(
       self,
       statistics: Sequence[statistics_instance.StatisticsInstance],
-      collector_allowlist: Sequence[str] = ()) -> None:
+      collector_allowlist: Sequence[str] = (),
+  ) -> None:
     """Write a list of statistics to various collectors.
 
     Args:

@@ -74,8 +74,9 @@ class SumTree(object):
     """
     assert isinstance(capacity, int)
     if capacity <= 0:
-      raise ValueError('Sum tree capacity should be positive. Got: {}'.
-                       format(capacity))
+      raise ValueError(
+          'Sum tree capacity should be positive. Got: {}'.format(capacity)
+      )
 
     self.nodes = []
     tree_depth = int(math.ceil(np.log2(capacity)))
@@ -103,8 +104,8 @@ class SumTree(object):
     the (positive) value associated with node i (possibly unnormalized).
 
     Args:
-      query_value: float in [0, 1], used as the random value to select a
-      sample. If None, will select one randomly in [0, 1).
+      query_value: float in [0, 1], used as the random value to select a sample.
+        If None, will select one randomly in [0, 1).
 
     Returns:
       int, a random element from the sum tree.
@@ -116,7 +117,7 @@ class SumTree(object):
     if self._total_priority() == 0.0:
       raise Exception('Cannot sample from an empty sum tree.')
 
-    if query_value and (query_value < 0. or query_value > 1.):
+    if query_value and (query_value < 0.0 or query_value > 1.0):
       raise ValueError('query_value must be in [0, 1].')
 
     # Sample a value in range [0, R), where R is the value stored at the root.
@@ -150,6 +151,7 @@ class SumTree(object):
 
     Args:
       batch_size: int, the number of strata to use.
+
     Returns:
       list of batch_size elements sampled from the sum tree.
 
@@ -159,9 +161,9 @@ class SumTree(object):
     if self._total_priority() == 0.0:
       raise Exception('Cannot sample from an empty sum tree.')
 
-    bounds = np.linspace(0., 1., batch_size + 1)
+    bounds = np.linspace(0.0, 1.0, batch_size + 1)
     assert len(bounds) == batch_size + 1
-    segments = [(bounds[i], bounds[i+1]) for i in range(batch_size)]
+    segments = [(bounds[i], bounds[i + 1]) for i in range(batch_size)]
     query_values = [random.uniform(x[0], x[1]) for x in segments]
     return [self.sample(query_value=x) for x in query_values]
 
@@ -170,6 +172,7 @@ class SumTree(object):
 
     Args:
       node_index: The index of the leaf node.
+
     Returns:
       The value of the leaf node.
     """
@@ -189,8 +192,9 @@ class SumTree(object):
       ValueError: If the given value is negative.
     """
     if value < 0.0:
-      raise ValueError('Sum tree values should be nonnegative. Got {}'.
-                       format(value))
+      raise ValueError(
+          'Sum tree values should be nonnegative. Got {}'.format(value)
+      )
     self.max_recorded_priority = max(value, self.max_recorded_priority)
 
     delta_value = value - self.nodes[-1][node_index]
@@ -201,5 +205,6 @@ class SumTree(object):
       nodes_at_this_depth[node_index] += delta_value
       node_index //= 2
 
-    assert node_index == 0, ('Sum tree traversal failed, final node index '
-                             'is not 0.')
+    assert (
+        node_index == 0
+    ), 'Sum tree traversal failed, final node index is not 0.'

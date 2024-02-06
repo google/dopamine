@@ -50,8 +50,9 @@ class CollectorTest(absltest.TestCase):
 
   def test_valid_subclass(self):
     simple_collector = SimpleCollector(self._tmpdir)
-    self.assertEqual(simple_collector._base_dir,
-                     osp.join(self._tmpdir, 'metrics/simple'))
+    self.assertEqual(
+        simple_collector._base_dir, osp.join(self._tmpdir, 'metrics/simple')
+    )
     self.assertTrue(osp.exists(simple_collector._base_dir))
 
   def test_valid_subclass_with_no_basedir(self):

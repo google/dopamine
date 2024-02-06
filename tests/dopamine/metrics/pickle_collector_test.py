@@ -36,8 +36,9 @@ class PickleCollectorTest(absltest.TestCase):
 
   def test_valid_creation(self):
     collector = pickle_collector.PickleCollector(self._tmpdir)
-    self.assertEqual(collector._base_dir,
-                     osp.join(self._tmpdir, 'metrics/pickle'))
+    self.assertEqual(
+        collector._base_dir, osp.join(self._tmpdir, 'metrics/pickle')
+    )
     self.assertTrue(osp.exists(collector._base_dir))
 
   def test_write(self):
@@ -57,7 +58,8 @@ class PickleCollectorTest(absltest.TestCase):
     pickle.dump = mock.MagicMock()
     for i in range(10):
       stat = statistics_instance.StatisticsInstance(
-          'val', i, i, type='unsupported')
+          'val', i, i, type='unsupported'
+      )
       collector.write([stat])
     self.assertEqual(pickle.dump.call_count, 0)
     self.assertEmpty(collector._statistics)
@@ -65,9 +67,7 @@ class PickleCollectorTest(absltest.TestCase):
   def test_flush(self):
     collector = pickle_collector.PickleCollector(self._tmpdir)
     pickle.dump = mock.MagicMock()
-    collector.write([
-        statistics_instance.StatisticsInstance('val', 1, 2)
-    ])
+    collector.write([statistics_instance.StatisticsInstance('val', 1, 2)])
     collector.flush()
     expected_stats = {'iteration_2': {'val': [1]}}
     self.assertEqual(expected_stats, pickle.dump.call_args[0][0])

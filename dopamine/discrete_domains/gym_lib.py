@@ -38,10 +38,10 @@ import numpy as np
 import tensorflow as tf
 
 
-CARTPOLE_MIN_VALS = np.array([-2.4, -5., -math.pi/12., -math.pi*2.])
-CARTPOLE_MAX_VALS = np.array([2.4, 5., math.pi/12., math.pi*2.])
-ACROBOT_MIN_VALS = np.array([-1., -1., -1., -1., -5., -5.])
-ACROBOT_MAX_VALS = np.array([1., 1., 1., 1., 5., 5.])
+CARTPOLE_MIN_VALS = np.array([-2.4, -5.0, -math.pi / 12.0, -math.pi * 2.0])
+CARTPOLE_MAX_VALS = np.array([2.4, 5.0, math.pi / 12.0, math.pi * 2.0])
+ACROBOT_MIN_VALS = np.array([-1.0, -1.0, -1.0, -1.0, -5.0, -5.0])
+ACROBOT_MAX_VALS = np.array([1.0, 1.0, 1.0, 1.0, 5.0, 5.0])
 MOUNTAINCAR_MIN_VALS = np.array([-1.2, -0.07])
 MOUNTAINCAR_MAX_VALS = np.array([0.6, 0.07])
 gin.constant('gym_lib.CARTPOLE_OBSERVATION_SHAPE', (4, 1))
@@ -90,25 +90,29 @@ def create_gym_environment(environment_name=None, version='v0'):
 class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
   """The fully connected network used to compute the agent's Q-values.
 
-    This sub network used within various other models. Since it is an inner
-    block, we define it as a layer. These sub networks normalize their inputs to
-    lie in range [-1, 1], using min_/max_vals. It supports both DQN- and
-    Rainbow- style networks.
-    Attributes:
-      min_vals: float, minimum attainable values (must be same shape as
-        `state`).
-      max_vals: float, maximum attainable values (must be same shape as
-        `state`).
-      num_actions: int, number of actions.
-      num_atoms: int or None, if None will construct a DQN-style network,
-        otherwise will construct a Rainbow-style network.
-      name: str, used to create scope for network parameters.
-      activation_fn: function, passed to the layer constructors.
+  This sub network used within various other models. Since it is an inner
+  block, we define it as a layer. These sub networks normalize their inputs to
+  lie in range [-1, 1], using min_/max_vals. It supports both DQN- and
+  Rainbow- style networks.
+  Attributes:
+    min_vals: float, minimum attainable values (must be same shape as `state`).
+    max_vals: float, maximum attainable values (must be same shape as `state`).
+    num_actions: int, number of actions.
+    num_atoms: int or None, if None will construct a DQN-style network,
+      otherwise will construct a Rainbow-style network.
+    name: str, used to create scope for network parameters.
+    activation_fn: function, passed to the layer constructors.
   """
 
-  def __init__(self, min_vals, max_vals, num_actions,
-               num_atoms=None, name=None,
-               activation_fn=tf.keras.activations.relu):
+  def __init__(
+      self,
+      min_vals,
+      max_vals,
+      num_actions,
+      num_atoms=None,
+      name=None,
+      activation_fn=tf.keras.activations.relu,
+  ):
     super(BasicDiscreteDomainNetwork, self).__init__(name=name)
     self.num_actions = num_actions
     self.num_atoms = num_atoms
@@ -116,16 +120,20 @@ class BasicDiscreteDomainNetwork(tf.keras.layers.Layer):
     self.max_vals = max_vals
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
-    self.dense1 = tf.keras.layers.Dense(512, activation=activation_fn,
-                                        name='fully_connected')
-    self.dense2 = tf.keras.layers.Dense(512, activation=activation_fn,
-                                        name='fully_connected')
+    self.dense1 = tf.keras.layers.Dense(
+        512, activation=activation_fn, name='fully_connected'
+    )
+    self.dense2 = tf.keras.layers.Dense(
+        512, activation=activation_fn, name='fully_connected'
+    )
     if num_atoms is None:
-      self.last_layer = tf.keras.layers.Dense(num_actions,
-                                              name='fully_connected')
+      self.last_layer = tf.keras.layers.Dense(
+          num_actions, name='fully_connected'
+      )
     else:
-      self.last_layer = tf.keras.layers.Dense(num_actions * num_atoms,
-                                              name='fully_connected')
+      self.last_layer = tf.keras.layers.Dense(
+          num_actions * num_atoms, name='fully_connected'
+      )
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
@@ -156,7 +164,8 @@ class CartpoleDQNNetwork(tf.keras.Model):
     """
     super(CartpoleDQNNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
-        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions)
+        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions
+    )
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
@@ -186,7 +195,8 @@ class FourierBasis(object):
 
     # Removing first iterate because it corresponds to the constant bias
     self.multipliers = tf.constant(
-        [list(map(int, x)) for x in terms][1:], dtype=tf.float32)
+        [list(map(int, x)) for x in terms][1:], dtype=tf.float32
+    )
 
   def scale(self, values):
     shifted = values - self.min_vals
@@ -205,8 +215,9 @@ class FourierBasis(object):
 class FourierDQNNetwork(tf.keras.Model):
   """Keras model for DQN."""
 
-  def __init__(self, min_vals, max_vals, num_actions, fourier_basis_order=3,
-               name=None):
+  def __init__(
+      self, min_vals, max_vals, num_actions, fourier_basis_order=3, name=None
+  ):
     """Builds the function approximator used to compute the agent's Q-values.
 
     It uses the features of the FourierBasis class and a linear layer
@@ -231,8 +242,9 @@ class FourierDQNNetwork(tf.keras.Model):
     self.max_vals = max_vals
     # Defining layers.
     self.flatten = tf.keras.layers.Flatten()
-    self.last_layer = tf.keras.layers.Dense(num_actions, use_bias=False,
-                                            name='fully_connected')
+    self.last_layer = tf.keras.layers.Dense(
+        num_actions, use_bias=False, name='fully_connected'
+    )
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""
@@ -245,7 +257,8 @@ class FourierDQNNetwork(tf.keras.Model):
           x.get_shape().as_list()[-1],
           self.min_vals,
           self.max_vals,
-          order=self.fourier_basis_order)
+          order=self.fourier_basis_order,
+      )
     x = self.feature_generator.compute_features(x)
     x = self.last_layer(x)
     return atari_lib.DQNNetworkType(x)
@@ -265,7 +278,8 @@ class CartpoleFourierDQNNetwork(FourierDQNNetwork):
       name: str, used to create scope for network parameters.
     """
     super(CartpoleFourierDQNNetwork, self).__init__(
-        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, name=name)
+        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, name=name
+    )
 
 
 @gin.configurable
@@ -285,7 +299,8 @@ class CartpoleRainbowNetwork(tf.keras.Model):
     """
     super(CartpoleRainbowNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
-        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, num_atoms=num_atoms)
+        CARTPOLE_MIN_VALS, CARTPOLE_MAX_VALS, num_actions, num_atoms=num_atoms
+    )
     self.num_actions = num_actions
     self.num_atoms = num_atoms
     self.support = support
@@ -313,7 +328,8 @@ class AcrobotDQNNetwork(tf.keras.Model):
     """
     super(AcrobotDQNNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
-        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions)
+        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions
+    )
 
   def call(self, state):
     x = self.net(state)
@@ -335,7 +351,8 @@ class AcrobotFourierDQNNetwork(FourierDQNNetwork):
     """
 
     super(AcrobotFourierDQNNetwork, self).__init__(
-        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, name=name)
+        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, name=name
+    )
 
 
 @gin.configurable
@@ -355,7 +372,8 @@ class AcrobotRainbowNetwork(tf.keras.Model):
     """
     super(AcrobotRainbowNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
-        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, num_atoms=num_atoms)
+        ACROBOT_MIN_VALS, ACROBOT_MAX_VALS, num_actions, num_atoms=num_atoms
+    )
     self.num_actions = num_actions
     self.num_atoms = num_atoms
     self.support = support
@@ -401,7 +419,8 @@ class MountainCarDQNNetwork(tf.keras.Model):
     """
     super(MountainCarDQNNetwork, self).__init__(name=name)
     self.net = BasicDiscreteDomainNetwork(
-        MOUNTAINCAR_MIN_VALS, MOUNTAINCAR_MAX_VALS, num_actions)
+        MOUNTAINCAR_MIN_VALS, MOUNTAINCAR_MAX_VALS, num_actions
+    )
 
   def call(self, state):
     """Creates the output tensor/op given the state tensor as input."""

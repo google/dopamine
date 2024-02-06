@@ -60,14 +60,17 @@ class BraxEnv(object):
     self._state = self.env.reset(rng=rng)
     return self._state.obs  # pytype: disable=bad-return-type  # jax-ndarray
 
-  def step(self, action) -> Tuple[onp.ndarray, onp.ndarray, bool,
-                                  Mapping[Any, Any]]:
+  def step(
+      self, action
+  ) -> Tuple[onp.ndarray, onp.ndarray, bool, Mapping[Any, Any]]:
     self._state = jax.jit(self.env.step)(self._state, action)
     self.game_over = self._state.done
-    return (onp.array(self._state.obs),
-            onp.array(self._state.reward),
-            self._state.done,
-            self._state.info)
+    return (
+        onp.array(self._state.obs),
+        onp.array(self._state.reward),
+        self._state.done,
+        self._state.info,
+    )
 
 
 @gin.configurable
@@ -80,27 +83,29 @@ def create_brax_environment(env_name, seed=None) -> BraxEnv:
 def create_brax_agent(
     environment: BraxEnv,
     agent_name: str = 'sac_brax',
-    summary_writer: Optional[tensorboard.SummaryWriter] = None
+    summary_writer: Optional[tensorboard.SummaryWriter] = None,
 ) -> dqn_agent.JaxDQNAgent:
   """Creates an agent for Brax."""
   assert agent_name is not None
   if agent_name == 'sac_brax':
     return sac_agent.SACAgent(
         action_shape=(environment.action_space,),
-        action_limits=(-1 * onp.ones(environment.action_space),
-                       onp.ones(environment.action_space)),
+        action_limits=(
+            -1 * onp.ones(environment.action_space),
+            onp.ones(environment.action_space),
+        ),
         observation_shape=environment.observation_space,
         action_dtype=onp.float32,
         observation_dtype=onp.float64,
-        summary_writer=summary_writer)
+        summary_writer=summary_writer,
+    )
   else:
     raise ValueError(f'Unknown agent: {agent_name}')
 
 
 @gin.configurable
 def create_brax_runner(
-    base_dir: str,
-    schedule: str = 'continuous_train_and_eval'
+    base_dir: str, schedule: str = 'continuous_train_and_eval'
 ) -> run_experiment.ContinuousRunner:
   """Creates a Brax experiment Runner."""
   assert base_dir is not None

@@ -54,15 +54,18 @@ class FixedReplayRunner(run_experiment.Runner):
       if i % 100 == 0:
         # We use sys.stdout.write instead of logging so as to flush frequently
         # without generating a line break.
-        sys.stdout.write('Training step: {}/{}\r'.format(
-            i, self._training_steps))
+        sys.stdout.write(
+            'Training step: {}/{}\r'.format(i, self._training_steps)
+        )
         sys.stdout.flush()
 
       self._agent.train_step()
 
     time_delta = time.time() - start_time
-    logging.info('Average training steps per second: %.2f',
-                 self._training_steps / time_delta)
+    logging.info(
+        'Average training steps per second: %.2f',
+        self._training_steps / time_delta,
+    )
 
   def _run_one_iteration(self, iteration):
     """Runs one iteration of agent/environment interaction."""
@@ -76,21 +79,23 @@ class FixedReplayRunner(run_experiment.Runner):
 
     if self._has_collector_dispatcher:
       self._collector_dispatcher.write([
-          statistics_instance.StatisticsInstance('Eval/NumEpisodes',
-                                                 num_episodes_eval,
-                                                 iteration),
-          statistics_instance.StatisticsInstance('Eval/AverageReturns',
-                                                 average_reward_eval,
-                                                 iteration)
+          statistics_instance.StatisticsInstance(
+              'Eval/NumEpisodes', num_episodes_eval, iteration
+          ),
+          statistics_instance.StatisticsInstance(
+              'Eval/AverageReturns', average_reward_eval, iteration
+          ),
       ])
 
     if self._summary_writer is not None:
-      self._save_tensorboard_summaries(iteration, num_episodes_eval,
-                                       average_reward_eval)
+      self._save_tensorboard_summaries(
+          iteration, num_episodes_eval, average_reward_eval
+      )
     return statistics.data_lists
 
-  def _save_tensorboard_summaries(self, iteration, num_episodes_eval,
-                                  average_reward_eval):
+  def _save_tensorboard_summaries(
+      self, iteration, num_episodes_eval, average_reward_eval
+  ):
     """Save statistics as tensorboard summaries.
 
     Args:
@@ -99,7 +104,7 @@ class FixedReplayRunner(run_experiment.Runner):
       average_reward_eval: float, The average evaluation reward.
     """
     with self._summary_writer.as_default():
-      tf.summary.scalar('Eval/NumEpisodes', num_episodes_eval,
-                        step=iteration)
-      tf.summary.scalar('Eval/AverageReturns', average_reward_eval,
-                        step=iteration)
+      tf.summary.scalar('Eval/NumEpisodes', num_episodes_eval, step=iteration)
+      tf.summary.scalar(
+          'Eval/AverageReturns', average_reward_eval, step=iteration
+      )

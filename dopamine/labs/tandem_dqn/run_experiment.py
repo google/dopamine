@@ -29,16 +29,17 @@ import tensorflow as tf
 
 
 @gin.configurable
-def create_tandem_agents_and_checkpoints(sess, environment, agent_name='dqn',
-                                         summary_writer=None, debug_mode=False):
+def create_tandem_agents_and_checkpoints(
+    sess, environment, agent_name='dqn', summary_writer=None, debug_mode=False
+):
   """Creates a tandem agent.
 
   Args:
     sess: TF session, unused since we are in JAX.
     environment: A gym environment (e.g. Atari 2600).
     agent_name: str, name of the agent to create.
-    summary_writer: A Tensorflow summary writer to pass to the agent
-      for in-agent training statistics in Tensorboard.
+    summary_writer: A Tensorflow summary writer to pass to the agent for
+      in-agent training statistics in Tensorboard.
     debug_mode: bool, unused.
 
   Returns:
@@ -49,7 +50,8 @@ def create_tandem_agents_and_checkpoints(sess, environment, agent_name='dqn',
   del debug_mode
   if agent_name == 'dqn':
     return tandem_dqn_agent.TandemDQNAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer)
+        num_actions=environment.action_space.n, summary_writer=summary_writer
+    )
   else:
     raise ValueError('Unknown agent: {}'.format(agent_name))
 
@@ -58,10 +60,7 @@ def create_tandem_agents_and_checkpoints(sess, environment, agent_name='dqn',
 class TandemRunner(run_experiment.Runner):
   """Runner class to run Tandem RL experiments."""
 
-  def __init__(self,
-               base_dir,
-               create_agent_fn,
-               suite='atari'):
+  def __init__(self, base_dir, create_agent_fn, suite='atari'):
     if suite == 'atari':
       create_environment_fn = atari_lib.create_atari_environment
     elif suite == 'classic':
@@ -70,8 +69,9 @@ class TandemRunner(run_experiment.Runner):
       create_environment_fn = minatar_env.create_minatar_env
     else:
       raise ValueError(f'Unknown suite: {suite}')
-    super().__init__(base_dir, create_agent_fn,
-                     create_environment_fn=create_environment_fn)
+    super().__init__(
+        base_dir, create_agent_fn, create_environment_fn=create_environment_fn
+    )
 
   def _initialize_episode(self, agent_type='active'):
     """Initialization for a new episode.
@@ -95,7 +95,7 @@ class TandemRunner(run_experiment.Runner):
       The number of steps taken and the total reward.
     """
     step_number = 0
-    total_reward = 0.
+    total_reward = 0.0
 
     action = self._initialize_episode(agent_type)
     is_terminal = False
@@ -110,8 +110,10 @@ class TandemRunner(run_experiment.Runner):
       # Perform reward clipping.
       reward = np.clip(reward, -1, 1)
 
-      if (self._environment.game_over or
-          step_number == self._max_steps_per_episode):
+      if (
+          self._environment.game_over
+          or step_number == self._max_steps_per_episode
+      ):
         # Stop the run loop once we reach the true end of episode.
         break
       elif is_terminal:
@@ -127,8 +129,9 @@ class TandemRunner(run_experiment.Runner):
 
     return step_number, total_reward
 
-  def _run_one_phase(self, min_steps, statistics, run_mode_str,
-                     agent_type='active'):
+  def _run_one_phase(
+      self, min_steps, statistics, run_mode_str, agent_type='active'
+  ):
     """Runs the agent/environment loop until a desired number of steps.
 
     We follow the Machado et al., 2017 convention of running full episodes,
@@ -147,24 +150,28 @@ class TandemRunner(run_experiment.Runner):
     """
     step_count = 0
     num_episodes = 0
-    sum_returns = 0.
+    sum_returns = 0.0
 
     while step_count < min_steps:
       episode_length, episode_return = self._run_one_episode(agent_type)
       statistics.append({
-          '{}_{}_episode_lengths'.format(run_mode_str,
-                                         agent_type): episode_length,
-          '{}_{}_episode_returns'.format(run_mode_str,
-                                         agent_type): episode_return
+          '{}_{}_episode_lengths'.format(
+              run_mode_str, agent_type
+          ): episode_length,
+          '{}_{}_episode_returns'.format(
+              run_mode_str, agent_type
+          ): episode_return,
       })
       step_count += episode_length
       sum_returns += episode_return
       num_episodes += 1
       # We use sys.stdout.write instead of logging so as to flush frequently
       # without generating a line break.
-      sys.stdout.write('Steps executed: {} '.format(step_count) +
-                       'Episode length: {} '.format(episode_length) +
-                       'Return: {}\r'.format(episode_return))
+      sys.stdout.write(
+          'Steps executed: {} '.format(step_count)
+          + 'Episode length: {} '.format(episode_length)
+          + 'Return: {}\r'.format(episode_return)
+      )
       sys.stdout.flush()
     return step_count, sum_returns, num_episodes
 
@@ -183,10 +190,14 @@ class TandemRunner(run_experiment.Runner):
     # Perform the evaluation phase -- no learning.
     self._agent.eval_mode = True
     _, sum_returns, num_episodes = self._run_one_phase(
-        self._evaluation_steps, statistics, 'eval', agent_type)
+        self._evaluation_steps, statistics, 'eval', agent_type
+    )
     average_return = sum_returns / num_episodes if num_episodes > 0 else 0.0
-    logging.info('Average undiscounted return per eval episode (%s): %.2f',
-                 agent_type, average_return)
+    logging.info(
+        'Average undiscounted return per eval episode (%s): %.2f',
+        agent_type,
+        average_return,
+    )
     statistics.append({f'{agent_type}_eval_average_return': average_return})
     return num_episodes, average_return
 
@@ -207,29 +218,38 @@ class TandemRunner(run_experiment.Runner):
     statistics = iteration_statistics.IterationStatistics()
     logging.info('Starting iteration %d', iteration)
     num_episodes_train, average_reward_train, average_steps_per_second = (
-        self._run_train_phase(statistics))
+        self._run_train_phase(statistics)
+    )
     active_num_episodes_eval, active_average_reward_eval = self._run_eval_phase(
-        statistics, 'active')
+        statistics, 'active'
+    )
     passive_num_episodes_eval, passive_average_reward_eval = (
-        self._run_eval_phase(statistics, 'passive'))
+        self._run_eval_phase(statistics, 'passive')
+    )
 
-    self._save_tensorboard_summaries(iteration, num_episodes_train,
-                                     average_reward_train,
-                                     active_num_episodes_eval,
-                                     active_average_reward_eval,
-                                     passive_num_episodes_eval,
-                                     passive_average_reward_eval,
-                                     average_steps_per_second)
+    self._save_tensorboard_summaries(
+        iteration,
+        num_episodes_train,
+        average_reward_train,
+        active_num_episodes_eval,
+        active_average_reward_eval,
+        passive_num_episodes_eval,
+        passive_average_reward_eval,
+        average_steps_per_second,
+    )
     return statistics.data_lists
 
-  def _save_tensorboard_summaries(self, iteration,
-                                  num_episodes_train,
-                                  average_reward_train,
-                                  active_num_episodes_eval,
-                                  active_average_reward_eval,
-                                  passive_num_episodes_eval,
-                                  passive_average_reward_eval,
-                                  average_steps_per_second):
+  def _save_tensorboard_summaries(
+      self,
+      iteration,
+      num_episodes_train,
+      average_reward_train,
+      active_num_episodes_eval,
+      active_average_reward_eval,
+      passive_num_episodes_eval,
+      passive_average_reward_eval,
+      average_steps_per_second,
+  ):
     """Save statistics as tensorboard summaries.
 
     Args:
@@ -242,26 +262,35 @@ class TandemRunner(run_experiment.Runner):
       passive_average_reward_eval: float, The average passive evaluation reward.
       average_steps_per_second: float, The average number of steps per second.
     """
-    summary = tf.compat.v1.Summary(value=[
-        tf.compat.v1.Summary.Value(
-            tag='Train/NumEpisodes', simple_value=num_episodes_train),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageReturns', simple_value=average_reward_train),
-        tf.compat.v1.Summary.Value(
-            tag='Train/AverageStepsPerSecond',
-            simple_value=average_steps_per_second),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/ActiveNumEpisodes',
-            simple_value=active_num_episodes_eval),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/ActiveAverageReturns',
-            simple_value=active_average_reward_eval),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/PassiveNumEpisodes',
-            simple_value=passive_num_episodes_eval),
-        tf.compat.v1.Summary.Value(
-            tag='Eval/PassiveAverageReturns',
-            simple_value=passive_average_reward_eval)
-    ])
+    summary = tf.compat.v1.Summary(
+        value=[
+            tf.compat.v1.Summary.Value(
+                tag='Train/NumEpisodes', simple_value=num_episodes_train
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Train/AverageReturns', simple_value=average_reward_train
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Train/AverageStepsPerSecond',
+                simple_value=average_steps_per_second,
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Eval/ActiveNumEpisodes',
+                simple_value=active_num_episodes_eval,
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Eval/ActiveAverageReturns',
+                simple_value=active_average_reward_eval,
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Eval/PassiveNumEpisodes',
+                simple_value=passive_num_episodes_eval,
+            ),
+            tf.compat.v1.Summary.Value(
+                tag='Eval/PassiveAverageReturns',
+                simple_value=passive_average_reward_eval,
+            ),
+        ]
+    )
     self._summary_writer.add_summary(summary, iteration)
     self._summary_writer.flush()

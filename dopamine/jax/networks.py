@@ -27,15 +27,18 @@ import numpy as onp
 
 
 gin.constant('jax_networks.CARTPOLE_OBSERVATION_DTYPE', jnp.float64)
-gin.constant('jax_networks.CARTPOLE_MIN_VALS',
-             (-2.4, -5., -onp.pi/12., -onp.pi*2.))
-gin.constant('jax_networks.CARTPOLE_MAX_VALS',
-             (2.4, 5., onp.pi/12., onp.pi*2.))
+gin.constant(
+    'jax_networks.CARTPOLE_MIN_VALS',
+    (-2.4, -5.0, -onp.pi / 12.0, -onp.pi * 2.0),
+)
+gin.constant(
+    'jax_networks.CARTPOLE_MAX_VALS', (2.4, 5.0, onp.pi / 12.0, onp.pi * 2.0)
+)
 gin.constant('jax_networks.ACROBOT_OBSERVATION_DTYPE', jnp.float64)
-gin.constant('jax_networks.ACROBOT_MIN_VALS',
-             (-1., -1., -1., -1., -5., -5.))
-gin.constant('jax_networks.ACROBOT_MAX_VALS',
-             (1., 1., 1., 1., 5., 5.))
+gin.constant(
+    'jax_networks.ACROBOT_MIN_VALS', (-1.0, -1.0, -1.0, -1.0, -5.0, -5.0)
+)
+gin.constant('jax_networks.ACROBOT_MAX_VALS', (1.0, 1.0, 1.0, 1.0, 5.0, 5.0))
 gin.constant('jax_networks.LUNAR_OBSERVATION_DTYPE', jnp.float64)
 gin.constant('jax_networks.MOUNTAINCAR_OBSERVATION_DTYPE', jnp.float64)
 gin.constant('jax_networks.MOUNTAINCAR_MIN_VALS', (-1.2, -0.07))
@@ -44,7 +47,7 @@ gin.constant('jax_networks.MOUNTAINCAR_MAX_VALS', (0.6, 0.07))
 
 def preprocess_atari_inputs(x):
   """Input normalization for Atari 2600 input frames."""
-  return x.astype(jnp.float32) / 255.
+  return x.astype(jnp.float32) / 255.0
 
 
 identity_preprocess_fn = lambda x: x
@@ -53,6 +56,7 @@ identity_preprocess_fn = lambda x: x
 @gin.configurable
 class Stack(nn.Module):
   """Stack of pooling and convolutional blocks with residual connections."""
+
   num_ch: int
   num_blocks: int
   use_max_pooling: bool = True
@@ -65,20 +69,23 @@ class Stack(nn.Module):
         kernel_size=(3, 3),
         strides=1,
         kernel_init=initializer,
-        padding='SAME')(
-            x)
+        padding='SAME',
+    )(x)
     if self.use_max_pooling:
       conv_out = nn.max_pool(
-          conv_out, window_shape=(3, 3), padding='SAME', strides=(2, 2))
+          conv_out, window_shape=(3, 3), padding='SAME', strides=(2, 2)
+      )
 
     for _ in range(self.num_blocks):
       block_input = conv_out
       conv_out = nn.relu(conv_out)
-      conv_out = nn.Conv(features=self.num_ch, kernel_size=(3, 3),
-                         strides=1, padding='SAME')(conv_out)
+      conv_out = nn.Conv(
+          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME'
+      )(conv_out)
       conv_out = nn.relu(conv_out)
-      conv_out = nn.Conv(features=self.num_ch, kernel_size=(3, 3),
-                         strides=1, padding='SAME')(conv_out)
+      conv_out = nn.Conv(
+          features=self.num_ch, kernel_size=(3, 3), strides=1, padding='SAME'
+      )(conv_out)
       conv_out += block_input
 
     return conv_out
@@ -87,6 +94,7 @@ class Stack(nn.Module):
 @gin.configurable
 class ImpalaEncoder(nn.Module):
   """Impala Network which also outputs penultimate representation layers."""
+
   nn_scale: int = 1
   stack_sizes: Tuple[int, ...] = (16, 32, 32)
   num_blocks: int = 2
@@ -98,8 +106,8 @@ class ImpalaEncoder(nn.Module):
     logging.info('\t nn_scale: %s', self.nn_scale)
     logging.info('\t stack_sizes: %s', self.stack_sizes)
     self._stacks = [
-        Stack(num_ch=stack_size * self.nn_scale,
-              num_blocks=self.num_blocks) for stack_size in self.stack_sizes
+        Stack(num_ch=stack_size * self.nn_scale, num_blocks=self.num_blocks)
+        for stack_size in self.stack_sizes
     ]
 
   @nn.compact
@@ -113,6 +121,7 @@ class ImpalaEncoder(nn.Module):
 @gin.configurable
 class ImpalaDQNNetwork(nn.Module):
   """The convolutional network used to compute the agent's Q-values."""
+
   num_actions: int
   inputs_preprocessed: bool = False
   nn_scale: int = 1
@@ -129,8 +138,7 @@ class ImpalaDQNNetwork(nn.Module):
     x = x.reshape((-1))  # flatten
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions,
-                        kernel_init=initializer)(x)
+    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
     return atari_lib.DQNNetworkType(q_values)
 
 
@@ -138,6 +146,7 @@ class ImpalaDQNNetwork(nn.Module):
 @gin.configurable
 class NatureDQNNetwork(nn.Module):
   """The convolutional network used to compute the agent's Q-values."""
+
   num_actions: int
   inputs_preprocessed: bool = False
 
@@ -146,26 +155,29 @@ class NatureDQNNetwork(nn.Module):
     initializer = nn.initializers.xavier_uniform()
     if not self.inputs_preprocessed:
       x = preprocess_atari_inputs(x)
-    x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=32, kernel_size=(8, 8), strides=(4, 4), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(4, 4), strides=(2, 2),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(4, 4), strides=(2, 2), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape((-1))  # flatten
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     x = nn.relu(x)
-    q_values = nn.Dense(features=self.num_actions,
-                        kernel_init=initializer)(x)
+    q_values = nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
     return atari_lib.DQNNetworkType(q_values)
 
 
 @gin.configurable
 class ClassicControlDQNNetwork(nn.Module):
   """Jax DQN network for classic control environments."""
+
   num_actions: int
   num_layers: int = 2
   hidden_units: int = 512
@@ -181,9 +193,11 @@ class ClassicControlDQNNetwork(nn.Module):
     initializer = nn.initializers.xavier_uniform()
     self.layers = [
         nn.Dense(features=self.hidden_units, kernel_init=initializer)
-        for _ in range(self.num_layers)]
-    self.final_layer = nn.Dense(features=self.num_actions,
-                                kernel_init=initializer)
+        for _ in range(self.num_layers)
+    ]
+    self.final_layer = nn.Dense(
+        features=self.num_actions, kernel_init=initializer
+    )
 
   def __call__(self, x):
     if not self.inputs_preprocessed:
@@ -214,11 +228,13 @@ class FourierBasis(object):
   Value Function Approximation in Reinforcement Learning using the Fourier Basis
   """
 
-  def __init__(self,
-               nvars: int,
-               min_vals: Union[float, Sequence[float]] = 0.0,
-               max_vals: Optional[Union[float, Sequence[float]]] = None,
-               order: int = 3):
+  def __init__(
+      self,
+      nvars: int,
+      min_vals: Union[float, Sequence[float]] = 0.0,
+      max_vals: Optional[Union[float, Sequence[float]]] = None,
+      order: int = 3,
+  ):
     self.order = order
     self.min_vals = jnp.array(min_vals)
     self.max_vals = max_vals
@@ -227,7 +243,8 @@ class FourierBasis(object):
       assert len(self.min_vals) == len(self.max_vals)
       self.max_vals = jnp.array(self.max_vals)
       self.denominator = [
-          max_vals[i] - min_vals[i] for i in range(len(min_vals))]
+          max_vals[i] - min_vals[i] for i in range(len(min_vals))
+      ]
 
     # Removing first iterate because it corresponds to the constant bias
     self.multipliers = jnp.array([list(map(int, x)) for x in terms][1:])
@@ -248,6 +265,7 @@ class FourierBasis(object):
 @gin.configurable
 class JaxFourierDQNNetwork(nn.Module):
   """Fourier-basis for DQN-like agents."""
+
   num_actions: int
   min_vals: Optional[Sequence[float]] = None
   max_vals: Optional[Sequence[float]] = None
@@ -258,10 +276,15 @@ class JaxFourierDQNNetwork(nn.Module):
     initializer = nn.initializers.xavier_uniform()
     x = x.astype(jnp.float32)
     x = x.reshape((-1))  # flatten
-    x = FourierBasis(x.shape[-1], self.min_vals, self.max_vals,
-                     order=self.fourier_basis_order).compute_features(x)
-    q_values = nn.Dense(features=self.num_actions,
-                        kernel_init=initializer, use_bias=False)(x)
+    x = FourierBasis(
+        x.shape[-1],
+        self.min_vals,
+        self.max_vals,
+        order=self.fourier_basis_order,
+    ).compute_features(x)
+    q_values = nn.Dense(
+        features=self.num_actions, kernel_init=initializer, use_bias=False
+    )(x)
     return atari_lib.DQNNetworkType(q_values)
 
 
@@ -269,6 +292,7 @@ class JaxFourierDQNNetwork(nn.Module):
 @gin.configurable
 class RainbowNetwork(nn.Module):
   """Convolutional network used to compute the agent's return distributions."""
+
   num_actions: int
   num_atoms: int
   inputs_preprocessed: bool = False
@@ -276,25 +300,28 @@ class RainbowNetwork(nn.Module):
   @nn.compact
   def __call__(self, x, support):
     initializer = nn.initializers.variance_scaling(
-        scale=1.0 / jnp.sqrt(3.0),
-        mode='fan_in',
-        distribution='uniform')
+        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform'
+    )
     if not self.inputs_preprocessed:
       x = preprocess_atari_inputs(x)
-    x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=32, kernel_size=(8, 8), strides=(4, 4), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(4, 4), strides=(2, 2),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(4, 4), strides=(2, 2), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape((-1))  # flatten
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     x = nn.relu(x)
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
+    x = nn.Dense(
+        features=self.num_actions * self.num_atoms, kernel_init=initializer
+    )(x)
     logits = x.reshape((self.num_actions, self.num_atoms))
     probabilities = nn.softmax(logits)
     q_values = jnp.sum(support * probabilities, axis=1)
@@ -304,6 +331,7 @@ class RainbowNetwork(nn.Module):
 @gin.configurable
 class ClassicControlRainbowNetwork(nn.Module):
   """Jax Rainbow network for classic control environments."""
+
   num_actions: int
   num_atoms: int
   num_layers: int = 2
@@ -319,9 +347,11 @@ class ClassicControlRainbowNetwork(nn.Module):
     initializer = nn.initializers.xavier_uniform()
     self.layers = [
         nn.Dense(features=self.hidden_units, kernel_init=initializer)
-        for _ in range(self.num_layers)]
-    self.final_layer = nn.Dense(features=self.num_actions * self.num_atoms,
-                                kernel_init=initializer)
+        for _ in range(self.num_layers)
+    ]
+    self.final_layer = nn.Dense(
+        features=self.num_actions * self.num_atoms, kernel_init=initializer
+    )
 
   def __call__(self, x, support):
     if not self.inputs_preprocessed:
@@ -344,6 +374,7 @@ class ClassicControlRainbowNetwork(nn.Module):
 ### Implicit Quantile Networks ###
 class ImplicitQuantileNetwork(nn.Module):
   """The Implicit Quantile Network (Dabney et al., 2018).."""
+
   num_actions: int
   quantile_embedding_dim: int
   inputs_preprocessed: bool = False
@@ -351,19 +382,21 @@ class ImplicitQuantileNetwork(nn.Module):
   @nn.compact
   def __call__(self, x, num_quantiles, rng):
     initializer = nn.initializers.variance_scaling(
-        scale=1.0 / jnp.sqrt(3.0),
-        mode='fan_in',
-        distribution='uniform')
+        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform'
+    )
     if not self.inputs_preprocessed:
       x = preprocess_atari_inputs(x)
-    x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=32, kernel_size=(8, 8), strides=(4, 4), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(4, 4), strides=(2, 2),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(4, 4), strides=(2, 2), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape((-1))  # flatten
     state_vector_length = x.shape[-1]
@@ -374,16 +407,19 @@ class ImplicitQuantileNetwork(nn.Module):
     quantile_net = (
         jnp.arange(1, self.quantile_embedding_dim + 1, 1).astype(jnp.float32)
         * onp.pi
-        * quantile_net)
+        * quantile_net
+    )
     quantile_net = jnp.cos(quantile_net)
-    quantile_net = nn.Dense(features=state_vector_length,
-                            kernel_init=initializer)(quantile_net)
+    quantile_net = nn.Dense(
+        features=state_vector_length, kernel_init=initializer
+    )(quantile_net)
     quantile_net = nn.relu(quantile_net)
     x = state_net_tiled * quantile_net
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     x = nn.relu(x)
-    quantile_values = nn.Dense(features=self.num_actions,
-                               kernel_init=initializer)(x)
+    quantile_values = nn.Dense(
+        features=self.num_actions, kernel_init=initializer
+    )(x)
     return atari_lib.ImplicitQuantileNetworkType(quantile_values, quantiles)
 
 
@@ -391,6 +427,7 @@ class ImplicitQuantileNetwork(nn.Module):
 @gin.configurable
 class QuantileNetwork(nn.Module):
   """Convolutional network used to compute the agent's return quantiles."""
+
   num_actions: int
   num_atoms: int
   inputs_preprocessed: bool = False
@@ -398,25 +435,28 @@ class QuantileNetwork(nn.Module):
   @nn.compact
   def __call__(self, x):
     initializer = nn.initializers.variance_scaling(
-        scale=1.0 / jnp.sqrt(3.0),
-        mode='fan_in',
-        distribution='uniform')
+        scale=1.0 / jnp.sqrt(3.0), mode='fan_in', distribution='uniform'
+    )
     if not self.inputs_preprocessed:
       x = preprocess_atari_inputs(x)
-    x = nn.Conv(features=32, kernel_size=(8, 8), strides=(4, 4),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=32, kernel_size=(8, 8), strides=(4, 4), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(4, 4), strides=(2, 2),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(4, 4), strides=(2, 2), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
-    x = nn.Conv(features=64, kernel_size=(3, 3), strides=(1, 1),
-                kernel_init=initializer)(x)
+    x = nn.Conv(
+        features=64, kernel_size=(3, 3), strides=(1, 1), kernel_init=initializer
+    )(x)
     x = nn.relu(x)
     x = x.reshape((-1))  # flatten
     x = nn.Dense(features=512, kernel_init=initializer)(x)
     x = nn.relu(x)
-    x = nn.Dense(features=self.num_actions * self.num_atoms,
-                 kernel_init=initializer)(x)
+    x = nn.Dense(
+        features=self.num_actions * self.num_atoms, kernel_init=initializer
+    )(x)
     logits = x.reshape((self.num_actions, self.num_atoms))
     probabilities = nn.softmax(logits)
     q_values = jnp.mean(logits, axis=1)
@@ -432,6 +472,7 @@ class NoisyNetwork(nn.Module):
     rng_key: jax.interpreters.xla.DeviceArray, key for JAX RNG.
     eval_mode: bool, whether to turn off noise during evaluation.
   """
+
   rng_key: jax.Array
   eval_mode: bool = False
 
@@ -446,7 +487,6 @@ class NoisyNetwork(nn.Module):
 
   @nn.compact
   def __call__(self, x, features, bias=True, kernel_init=None):
-
     def mu_init(key, shape):
       # Initialization of mean noise parameters (Section 3.2)
       low = -1 / jnp.power(x.shape[0], 0.5)
@@ -486,10 +526,13 @@ class NoisyNetwork(nn.Module):
 ### FullRainbowNetwork ###
 def feature_layer(key, noisy, eval_mode=False):
   """Network feature layer depending on whether noisy_nets are used on or not."""
+
   def noisy_net(x, features):
     return NoisyNetwork(rng_key=key, eval_mode=eval_mode)(x, features)
+
   def dense_net(x, features):
     return nn.Dense(features, kernel_init=nn.initializers.xavier_uniform())(x)
+
   return noisy_net if noisy else dense_net
 
 
@@ -504,6 +547,7 @@ class FullRainbowNetwork(nn.Module):
     dueling: bool, Whether to use dueling network architecture.
     distributional: bool, whether to use distributional RL.
   """
+
   num_actions: int
   num_atoms: int
   noisy: bool = True
@@ -523,13 +567,15 @@ class FullRainbowNetwork(nn.Module):
     hidden_sizes = [32, 64, 64]
     kernel_sizes = [8, 4, 3]
     stride_sizes = [4, 2, 1]
-    for hidden_size, kernel_size, stride_size in zip(hidden_sizes, kernel_sizes,
-                                                     stride_sizes):
+    for hidden_size, kernel_size, stride_size in zip(
+        hidden_sizes, kernel_sizes, stride_sizes
+    ):
       x = nn.Conv(
           features=hidden_size,
           kernel_size=(kernel_size, kernel_size),
           strides=(stride_size, stride_size),
-          kernel_init=nn.initializers.xavier_uniform())(x)
+          kernel_init=nn.initializers.xavier_uniform(),
+      )(x)
       x = nn.relu(x)
     x = x.reshape((-1))  # flatten
 

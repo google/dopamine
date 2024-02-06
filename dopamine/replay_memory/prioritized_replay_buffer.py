@@ -34,27 +34,30 @@ import tensorflow as tf
 
 @gin.configurable
 class OutOfGraphPrioritizedReplayBuffer(
-    circular_replay_buffer.OutOfGraphReplayBuffer):
+    circular_replay_buffer.OutOfGraphReplayBuffer
+):
   """An out-of-graph Replay Buffer for Prioritized Experience Replay.
 
   See circular_replay_buffer.py for details.
   """
 
-  def __init__(self,
-               observation_shape,
-               stack_size,
-               replay_capacity,
-               batch_size,
-               update_horizon=1,
-               gamma=0.99,
-               max_sample_attempts=1000,
-               extra_storage_types=None,
-               observation_dtype=np.uint8,
-               terminal_dtype=np.uint8,
-               action_shape=(),
-               action_dtype=np.int32,
-               reward_shape=(),
-               reward_dtype=np.float32):
+  def __init__(
+      self,
+      observation_shape,
+      stack_size,
+      replay_capacity,
+      batch_size,
+      update_horizon=1,
+      gamma=0.99,
+      max_sample_attempts=1000,
+      extra_storage_types=None,
+      observation_dtype=np.uint8,
+      terminal_dtype=np.uint8,
+      action_shape=(),
+      action_dtype=np.int32,
+      reward_shape=(),
+      reward_dtype=np.float32,
+  ):
     """Initializes OutOfGraphPrioritizedReplayBuffer.
 
     Args:
@@ -64,8 +67,8 @@ class OutOfGraphPrioritizedReplayBuffer(
       batch_size: int.
       update_horizon: int, length of update ('n' in n-step update).
       gamma: float, the discount factor.
-      max_sample_attempts: int, the maximum number of attempts allowed to
-        get a sample.
+      max_sample_attempts: int, the maximum number of attempts allowed to get a
+        sample.
       extra_storage_types: list of ReplayElements defining the type of the extra
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
@@ -93,7 +96,8 @@ class OutOfGraphPrioritizedReplayBuffer(
         action_shape=action_shape,
         action_dtype=action_dtype,
         reward_shape=reward_shape,
-        reward_dtype=reward_dtype)
+        reward_dtype=reward_dtype,
+    )
 
     self.sum_tree = sum_tree.SumTree(replay_capacity)
 
@@ -107,8 +111,9 @@ class OutOfGraphPrioritizedReplayBuffer(
       list of ReplayElements defining the type of the argument signature needed
         by the add function.
     """
-    parent_add_signature = super(OutOfGraphPrioritizedReplayBuffer,
-                                 self).get_add_args_signature()
+    parent_add_signature = super(
+        OutOfGraphPrioritizedReplayBuffer, self
+    ).get_add_args_signature()
     add_signature = parent_add_signature + [
         ReplayElement('priority', (), np.float32)
     ]
@@ -159,8 +164,10 @@ class OutOfGraphPrioritizedReplayBuffer(
         if allowed_attempts == 0:
           raise RuntimeError(
               'Max sample attempts: Tried {} times but only sampled {}'
-              ' valid indices. Batch size is {}'.
-              format(self._max_sample_attempts, i, batch_size))
+              ' valid indices. Batch size is {}'.format(
+                  self._max_sample_attempts, i, batch_size
+              )
+          )
         index = indices[i]
         while not self.is_valid_transition(index) and allowed_attempts > 0:
           # If index i is not valid keep sampling others. Note that this
@@ -188,8 +195,9 @@ class OutOfGraphPrioritizedReplayBuffer(
       transition_batch: tuple of np.arrays with the shape and type as in
         get_transition_elements().
     """
-    transition = (super(OutOfGraphPrioritizedReplayBuffer, self).
-                  sample_transition_batch(batch_size, indices))
+    transition = super(
+        OutOfGraphPrioritizedReplayBuffer, self
+    ).sample_transition_batch(batch_size, indices)
     transition_elements = self.get_transition_elements(batch_size)
     transition_names = [e.name for e in transition_elements]
     probabilities_index = transition_names.index('sampling_probabilities')
@@ -204,12 +212,13 @@ class OutOfGraphPrioritizedReplayBuffer(
     """Sets the priority of the given elements according to Schaul et al.
 
     Args:
-      indices: np.array with dtype int32, of indices in range
-        [0, replay_capacity).
+      indices: np.array with dtype int32, of indices in range [0,
+        replay_capacity).
       priorities: float, the corresponding priorities.
     """
-    assert indices.dtype == np.int32, ('Indices must be integers, '
-                                       'given: {}'.format(indices.dtype))
+    assert (
+        indices.dtype == np.int32
+    ), 'Indices must be integers, given: {}'.format(indices.dtype)
     # Convert JAX arrays to NumPy arrays first, since it is faster to iterate
     # over the entirety of a NumPy array than a JAX array.
     priorities = np.asarray(priorities)
@@ -222,15 +231,16 @@ class OutOfGraphPrioritizedReplayBuffer(
     For any memory location not yet used, the corresponding priority is 0.
 
     Args:
-      indices: np.array with dtype int32, of indices in range
-        [0, replay_capacity).
+      indices: np.array with dtype int32, of indices in range [0,
+        replay_capacity).
 
     Returns:
       priorities: float, the corresponding priorities.
     """
     assert indices.shape, 'Indices must be an array.'
-    assert indices.dtype == np.int32, ('Indices must be int32s, '
-                                       'given: {}'.format(indices.dtype))
+    assert (
+        indices.dtype == np.int32
+    ), 'Indices must be int32s, given: {}'.format(indices.dtype)
     batch_size = len(indices)
     priority_batch = np.empty((batch_size), dtype=np.float32)
     for i, memory_index in enumerate(indices):
@@ -243,12 +253,13 @@ class OutOfGraphPrioritizedReplayBuffer(
     Args:
       batch_size: int, number of transitions returned. If None, the default
         batch_size will be used.
+
     Returns:
       signature: A namedtuple describing the method's return type signature.
     """
-    parent_transition_type = (
-        super(OutOfGraphPrioritizedReplayBuffer,
-              self).get_transition_elements(batch_size))
+    parent_transition_type = super(
+        OutOfGraphPrioritizedReplayBuffer, self
+    ).get_transition_elements(batch_size)
     probablilities_type = [
         ReplayElement('sampling_probabilities', (batch_size,), np.float32)
     ]
@@ -256,9 +267,11 @@ class OutOfGraphPrioritizedReplayBuffer(
 
 
 @gin.configurable(
-    denylist=['observation_shape', 'stack_size', 'update_horizon', 'gamma'])
+    denylist=['observation_shape', 'stack_size', 'update_horizon', 'gamma']
+)
 class WrappedPrioritizedReplayBuffer(
-    circular_replay_buffer.WrappedReplayBuffer):
+    circular_replay_buffer.WrappedReplayBuffer
+):
   """Wrapper of OutOfGraphPrioritizedReplayBuffer with in-graph sampling.
 
   Usage:
@@ -270,38 +283,40 @@ class WrappedPrioritizedReplayBuffer(
                           sample a new transition.
   """
 
-  def __init__(self,
-               observation_shape,
-               stack_size,
-               use_staging=False,
-               replay_capacity=1000000,
-               batch_size=32,
-               update_horizon=1,
-               gamma=0.99,
-               wrapped_memory=None,
-               max_sample_attempts=1000,
-               extra_storage_types=None,
-               observation_dtype=np.uint8,
-               terminal_dtype=np.uint8,
-               action_shape=(),
-               action_dtype=np.int32,
-               reward_shape=(),
-               reward_dtype=np.float32):
+  def __init__(
+      self,
+      observation_shape,
+      stack_size,
+      use_staging=False,
+      replay_capacity=1000000,
+      batch_size=32,
+      update_horizon=1,
+      gamma=0.99,
+      wrapped_memory=None,
+      max_sample_attempts=1000,
+      extra_storage_types=None,
+      observation_dtype=np.uint8,
+      terminal_dtype=np.uint8,
+      action_shape=(),
+      action_dtype=np.int32,
+      reward_shape=(),
+      reward_dtype=np.float32,
+  ):
     """Initializes WrappedPrioritizedReplayBuffer.
 
     Args:
       observation_shape: tuple of ints.
       stack_size: int, number of frames to use in state stack.
-      use_staging: bool, when True it would use a staging area to prefetch
-        the next sampling batch.
+      use_staging: bool, when True it would use a staging area to prefetch the
+        next sampling batch.
       replay_capacity: int, number of transitions to keep in memory.
       batch_size: int.
       update_horizon: int, length of update ('n' in n-step update).
       gamma: int, the discount factor.
       wrapped_memory: The 'inner' memory data structure. If None, use the
         default prioritized replay.
-      max_sample_attempts: int, the maximum number of attempts allowed to
-        get a sample.
+      max_sample_attempts: int, the maximum number of attempts allowed to get a
+        sample.
       extra_storage_types: list of ReplayElements defining the type of the extra
         contents that will be stored and returned by sample_transition_batch.
       observation_dtype: np.dtype, type of the observations. Defaults to
@@ -321,10 +336,16 @@ class WrappedPrioritizedReplayBuffer(
     """
     if wrapped_memory is None:
       wrapped_memory = OutOfGraphPrioritizedReplayBuffer(
-          observation_shape, stack_size, replay_capacity, batch_size,
-          update_horizon, gamma, max_sample_attempts,
+          observation_shape,
+          stack_size,
+          replay_capacity,
+          batch_size,
+          update_horizon,
+          gamma,
+          max_sample_attempts,
           extra_storage_types=extra_storage_types,
-          observation_dtype=observation_dtype)
+          observation_dtype=observation_dtype,
+      )
 
     super(WrappedPrioritizedReplayBuffer, self).__init__(
         observation_shape,
@@ -341,7 +362,8 @@ class WrappedPrioritizedReplayBuffer(
         action_shape=action_shape,
         action_dtype=action_dtype,
         reward_shape=reward_shape,
-        reward_dtype=reward_dtype)
+        reward_dtype=reward_dtype,
+    )
 
   def tf_set_priority(self, indices, priorities):
     """Sets the priorities for the given indices.
@@ -354,8 +376,11 @@ class WrappedPrioritizedReplayBuffer(
        A tf op setting the priorities for prioritized sampling.
     """
     return tf.numpy_function(
-        self.memory.set_priority, [indices, priorities], [],
-        name='prioritized_replay_set_priority_py_func')
+        self.memory.set_priority,
+        [indices, priorities],
+        [],
+        name='prioritized_replay_set_priority_py_func',
+    )
 
   def tf_get_priority(self, indices):
     """Gets the priorities for the given indices.
@@ -368,6 +393,8 @@ class WrappedPrioritizedReplayBuffer(
         the indices.
     """
     return tf.numpy_function(
-        self.memory.get_priority, [indices],
+        self.memory.get_priority,
+        [indices],
         tf.float32,
-        name='prioritized_replay_get_priority_py_func')
+        name='prioritized_replay_get_priority_py_func',
+    )

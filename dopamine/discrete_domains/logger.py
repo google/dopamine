@@ -22,7 +22,6 @@ import os
 import pickle
 
 from absl import logging
-
 import gin.tf
 import tensorflow as tf
 
@@ -56,7 +55,8 @@ class Logger(object):
     if not tf.io.gfile.exists(logging_dir):
       logging.warning(
           'Could not create directory %s, logging will be disabled.',
-          logging_dir)
+          logging_dir,
+      )
       self._logging_enabled = False
       return
     self._logging_dir = logging_dir
@@ -81,8 +81,7 @@ class Logger(object):
     """Save the pickled dictionary to a file.
 
     Args:
-      filename_prefix: str, name of the file to use (without iteration
-        number).
+      filename_prefix: str, name of the file to use (without iteration number).
       iteration_number: int, the iteration number, appended to the end of
         filename_prefix.
     """
@@ -96,8 +95,9 @@ class Logger(object):
     # that is logs_duration versions old.
     stale_iteration_number = iteration_number - self._logs_duration
     if stale_iteration_number >= 0:
-      stale_file = self._generate_filename(filename_prefix,
-                                           stale_iteration_number)
+      stale_file = self._generate_filename(
+          filename_prefix, stale_iteration_number
+      )
       try:
         tf.io.gfile.remove(stale_file)
       except tf.errors.NotFoundError:

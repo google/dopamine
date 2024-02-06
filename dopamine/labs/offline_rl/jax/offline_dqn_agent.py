@@ -27,12 +27,14 @@ import numpy as onp
 class OfflineJaxDQNAgent(dqn_agent.JaxDQNAgent):
   """A JAX implementation of the Offline DQN agent."""
 
-  def __init__(self,
-               num_actions,
-               replay_data_dir,
-               summary_writer=None,
-               replay_buffer_builder=None,
-               use_tfds=False):
+  def __init__(
+      self,
+      num_actions,
+      replay_data_dir,
+      summary_writer=None,
+      replay_buffer_builder=None,
+      use_tfds=False,
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -44,8 +46,10 @@ class OfflineJaxDQNAgent(dqn_agent.JaxDQNAgent):
         will use the default FixedReplayBuffer.
       use_tfds: Whether to use tfds replay buffer.
     """
-    logging.info('Creating %s agent with the following parameters:',
-                 self.__class__.__name__)
+    logging.info(
+        'Creating %s agent with the following parameters:',
+        self.__class__.__name__,
+    )
     logging.info('\t replay directory: %s', replay_data_dir)
     self.replay_data_dir = replay_data_dir
     self._use_tfds = use_tfds
@@ -55,7 +59,8 @@ class OfflineJaxDQNAgent(dqn_agent.JaxDQNAgent):
     # update_period=1 is a sane default for offline RL. However, this
     # can still be overridden with gin config.
     super().__init__(
-        num_actions, update_period=1, summary_writer=summary_writer)
+        num_actions, update_period=1, summary_writer=summary_writer
+    )
 
   def _build_replay_buffer(self):
     """Creates the fixed replay buffer used by the agent."""
@@ -67,18 +72,22 @@ class OfflineJaxDQNAgent(dqn_agent.JaxDQNAgent):
           stack_size=self.stack_size,
           update_horizon=self.update_horizon,
           gamma=self.gamma,
-          observation_dtype=self.observation_dtype)
+          observation_dtype=self.observation_dtype,
+      )
 
     dataset_name = tfds_replay.get_atari_ds_name_from_replay(
-        self.replay_data_dir)
+        self.replay_data_dir
+    )
     return tfds_replay.JaxFixedReplayBufferTFDS(
         replay_capacity=gin.query_parameter(
-            'JaxFixedReplayBuffer.replay_capacity'),
+            'JaxFixedReplayBuffer.replay_capacity'
+        ),
         batch_size=gin.query_parameter('JaxFixedReplayBuffer.batch_size'),
         dataset_name=dataset_name,
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
-        gamma=self.gamma)
+        gamma=self.gamma,
+    )
 
   def _sample_from_replay_buffer(self):
     if self._use_tfds:
@@ -102,10 +111,19 @@ class OfflineJaxDQNAgent(dqn_agent.JaxDQNAgent):
     """
     self._record_observation(observation)
     self._rng, self.action = dqn_agent.select_action(
-        self.network_def, self.online_params, self.state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn)
+        self.network_def,
+        self.online_params,
+        self.state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+    )
     self.action = onp.asarray(self.action)
     return self.action
 

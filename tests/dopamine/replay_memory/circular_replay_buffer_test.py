@@ -62,22 +62,27 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
   def testWithNontupleObservationShape(self):
     with self.assertRaises(AssertionError):
       _ = circular_replay_buffer.OutOfGraphReplayBuffer(
-          observation_shape=84, stack_size=STACK_SIZE, replay_capacity=5,
-          batch_size=BATCH_SIZE)
+          observation_shape=84,
+          stack_size=STACK_SIZE,
+          replay_capacity=5,
+          batch_size=BATCH_SIZE,
+      )
 
   def testConstructor(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertEqual(memory._observation_shape, OBSERVATION_SHAPE)
     # Test with non square observation shape
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=(4, 20),
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertEqual(memory._observation_shape, (4, 20))
     self.assertEqual(memory.add_count, 0)
     # Test with terminal datatype of np.int32
@@ -86,7 +91,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         terminal_dtype=np.int32,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertEqual(memory._terminal_dtype, np.int32)
 
   def testAdd(self):
@@ -94,7 +100,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertEqual(memory.cursor(), 0)
     zeros = np.zeros(OBSERVATION_SHAPE)
     memory.add(zeros, 0, 0, 0)
@@ -109,8 +116,9 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE,
         extra_storage_types=[
             circular_replay_buffer.ReplayElement('extra1', [], np.float32),
-            circular_replay_buffer.ReplayElement('extra2', [2], np.int8)
-        ])
+            circular_replay_buffer.ReplayElement('extra2', [2], np.int8),
+        ],
+    )
     self.assertEqual(memory.cursor(), 0)
     zeros = np.zeros(OBSERVATION_SHAPE)
     memory.add(zeros, 0, 0, 0, 0, [0, 0])
@@ -128,8 +136,9 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE,
         extra_storage_types=[
             circular_replay_buffer.ReplayElement('extra1', [], np.float32),
-            circular_replay_buffer.ReplayElement('extra2', [2], np.int8)
-        ])
+            circular_replay_buffer.ReplayElement('extra2', [2], np.int8),
+        ],
+    )
     zeros = np.zeros(OBSERVATION_SHAPE)
 
     memory._check_add_types(zeros, 0, 0, 0, 0, [0, 0])
@@ -145,7 +154,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
           replay_capacity=10,
           batch_size=BATCH_SIZE,
           update_horizon=1,
-          gamma=1.0)
+          gamma=1.0,
+      )
 
     with self.assertRaisesRegex(ValueError, 'There is not enough capacity'):
       circular_replay_buffer.OutOfGraphReplayBuffer(
@@ -154,7 +164,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
           replay_capacity=10,
           batch_size=BATCH_SIZE,
           update_horizon=10,
-          gamma=1.0)
+          gamma=1.0,
+      )
 
     # We should be able to create a buffer that contains just enough for a
     # transition.
@@ -164,7 +175,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=10,
         batch_size=BATCH_SIZE,
         update_horizon=5,
-        gamma=1.0)
+        gamma=1.0,
+    )
 
   def testGetRangeInvalidIndexOrder(self):
     replay_capacity = 10
@@ -174,9 +186,11 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=replay_capacity,
         batch_size=BATCH_SIZE,
         update_horizon=5,
-        gamma=1.0)
-    with self.assertRaisesRegex(AssertionError,
-                                'end_index must be larger than start_index'):
+        gamma=1.0,
+    )
+    with self.assertRaisesRegex(
+        AssertionError, 'end_index must be larger than start_index'
+    ):
       memory.get_range([], 2, 1)
     with self.assertRaises(AssertionError):
       # Negative end_index.
@@ -196,11 +210,10 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=10,
         batch_size=BATCH_SIZE,
         update_horizon=5,
-        gamma=1.0)
+        gamma=1.0,
+    )
     for _ in range(10):
-      memory.add(
-          np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE),
-          0, 2.0, 0)
+      memory.add(np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 2.0, 0)
     # The constructed `array` will be:
     # array([[ 1.,  1.,  1.,  1.,  1.],
     #        [ 2.,  2.,  2.,  2.,  2.],
@@ -225,11 +238,10 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=10,
         batch_size=BATCH_SIZE,
         update_horizon=5,
-        gamma=1.0)
+        gamma=1.0,
+    )
     for _ in range(10):
-      memory.add(
-          np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE),
-          0, 2.0, 0)
+      memory.add(np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 2.0, 0)
     # The constructed `array` will be:
     # array([[ 1.,  1.,  1.,  1.,  1.],
     #        [ 2.,  2.,  2.,  2.,  2.],
@@ -255,12 +267,11 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=10,
         batch_size=BATCH_SIZE,
         update_horizon=5,
-        gamma=1.0)
+        gamma=1.0,
+    )
 
     for i in range(50):
-      memory.add(
-          np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE),
-          0, 2.0, 0)
+      memory.add(np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE), 0, 2.0, 0)
 
     for i in range(100):
       batch = memory.sample_transition_batch()
@@ -274,17 +285,16 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=50,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     for i in range(11):
-      memory.add(
-          np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE),
-          0, 0, 0)
+      memory.add(np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE), 0, 0, 0)
 
     # ensure that the returned shapes are always correct
     for i in range(3, memory.cursor()):
       self.assertTrue(
-          memory.get_observation_stack(i).shape,
-          OBSERVATION_SHAPE + (4,))
+          memory.get_observation_stack(i).shape, OBSERVATION_SHAPE + (4,)
+      )
 
     # ensure that there is the necessary 0 padding
     stack = memory.get_observation_stack(3)
@@ -294,7 +304,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     stack = memory.get_observation_stack(6)
     for i in range(4):
       self.assertTrue(
-          np.array_equal(np.full(OBSERVATION_SHAPE, i), stack[:, :, i]))
+          np.array_equal(np.full(OBSERVATION_SHAPE, i), stack[:, :, i])
+      )
 
   def testSampleTransitionBatch(self):
     replay_capacity = 10
@@ -302,12 +313,13 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=1,
         replay_capacity=replay_capacity,
-        batch_size=2)
+        batch_size=2,
+    )
     num_adds = 50  # The number of transitions to add to the memory.
     for i in range(num_adds):
       memory.add(
-          np.full(OBSERVATION_SHAPE, i, OBS_DTYPE), 0,
-          0, i % 4)  # Every 4 transitions is terminal.
+          np.full(OBSERVATION_SHAPE, i, OBS_DTYPE), 0, 0, i % 4
+      )  # Every 4 transitions is terminal.
     # Test sampling with default batch size.
     for i in range(1000):
       batch = memory.sample_transition_batch()
@@ -323,10 +335,9 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
     # Verify we can specify what indices to sample.
     indices = [1, 2, 3, 5, 8]
-    expected_states = np.array([
-        np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE)
-        for i in indices
-    ])
+    expected_states = np.array(
+        [np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE) for i in indices]
+    )
     expected_next_states = (expected_states + 1) % replay_capacity
     # Because the replay buffer is circular, we can exactly compute what the
     # states will be at the specified indices by doing a little mod math:
@@ -335,11 +346,21 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     # This is replicating the formula that was used above to determine what
     # transitions are terminal when adding observation (i % 4).
     expected_terminal = np.array(
-        [min((x + num_adds - replay_capacity) % 4, 1) for x in indices])
-    batch = memory.sample_transition_batch(batch_size=len(indices),
-                                           indices=indices)
-    (states, action, reward, next_states, next_action, next_reward, terminal,
-     indices_batch) = batch
+        [min((x + num_adds - replay_capacity) % 4, 1) for x in indices]
+    )
+    batch = memory.sample_transition_batch(
+        batch_size=len(indices), indices=indices
+    )
+    (
+        states,
+        action,
+        reward,
+        next_states,
+        next_action,
+        next_reward,
+        terminal,
+        indices_batch,
+    ) = batch
     self.assertAllEqual(states, expected_states)
     self.assertAllEqual(action, np.zeros(len(indices)))
     self.assertAllEqual(reward, np.zeros(len(indices)))
@@ -358,13 +379,14 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=2,
         extra_storage_types=[
             circular_replay_buffer.ReplayElement('extra1', [], np.float32),
-            circular_replay_buffer.ReplayElement('extra2', [2], np.int8)
-        ])
+            circular_replay_buffer.ReplayElement('extra2', [2], np.int8),
+        ],
+    )
     num_adds = 50  # The number of transitions to add to the memory.
     for i in range(num_adds):
       memory.add(
-          np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE),
-          0, 0, i % 4, 0, [0, 0])  # Every 4 transitions is terminal.
+          np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE), 0, 0, i % 4, 0, [0, 0]
+      )  # Every 4 transitions is terminal.
     # Test sampling with default batch size.
     for i in range(1000):
       batch = memory.sample_transition_batch()
@@ -380,10 +402,9 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
     # Verify we can specify what indices to sample.
     indices = [1, 2, 3, 5, 8]
-    expected_states = np.array([
-        np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE)
-        for i in indices
-    ])
+    expected_states = np.array(
+        [np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE) for i in indices]
+    )
     expected_next_states = (expected_states + 1) % replay_capacity
     # Because the replay buffer is circular, we can exactly compute what the
     # states will be at the specified indices by doing a little mod math:
@@ -392,12 +413,24 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     # This is replicating the formula that was used above to determine what
     # transitions are terminal when adding observation (i % 4).
     expected_terminal = np.array(
-        [min((x + num_adds - replay_capacity) % 4, 1) for x in indices])
+        [min((x + num_adds - replay_capacity) % 4, 1) for x in indices]
+    )
     expected_extra2 = np.zeros([len(indices), 2])
     batch = memory.sample_transition_batch(
-        batch_size=len(indices), indices=indices)
-    (states, action, reward, next_states, next_action, next_reward, terminal,
-     indices_batch, extra1, extra2) = batch
+        batch_size=len(indices), indices=indices
+    )
+    (
+        states,
+        action,
+        reward,
+        next_states,
+        next_action,
+        next_reward,
+        terminal,
+        indices_batch,
+        extra1,
+        extra2,
+    ) = batch
     self.assertAllEqual(states, expected_states)
     self.assertAllEqual(action, np.zeros(len(indices)))
     self.assertAllEqual(reward, np.zeros(len(indices)))
@@ -418,21 +451,23 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=replay_capacity,
         batch_size=2,
         update_horizon=update_horizon,
-        gamma=1.0)
+        gamma=1.0,
+    )
     for i in range(replay_capacity):
       memory.add(
           np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE),
           i * 2,  # action
           i,  # reward
-          1 if i == 3 else 0)  # terminal
+          1 if i == 3 else 0,
+      )  # terminal
     indices = [2, 3, 4]
-    batch = memory.sample_transition_batch(batch_size=len(indices),
-                                           indices=indices)
+    batch = memory.sample_transition_batch(
+        batch_size=len(indices), indices=indices
+    )
     states, action, reward, _, _, _, terminal, indices_batch = batch
-    expected_states = np.array([
-        np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE)
-        for i in indices
-    ])
+    expected_states = np.array(
+        [np.full(OBSERVATION_SHAPE + (1,), i, dtype=OBS_DTYPE) for i in indices]
+    )
     # The reward in the replay buffer will be (an asterisk marks the terminal
     # state):
     #   [0 1 2 3* 4 5 6 7 8 9]
@@ -454,22 +489,26 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     # each episode.
 
     invalid_range = circular_replay_buffer.invalid_range(
-        cursor=6, replay_capacity=10, stack_size=4, update_horizon=1)
+        cursor=6, replay_capacity=10, stack_size=4, update_horizon=1
+    )
     correct_invalid_range = [5, 6, 7, 8, 9]
     self.assertAllClose(correct_invalid_range, invalid_range)
 
     invalid_range = circular_replay_buffer.invalid_range(
-        cursor=9, replay_capacity=10, stack_size=4, update_horizon=1)
+        cursor=9, replay_capacity=10, stack_size=4, update_horizon=1
+    )
     correct_invalid_range = [8, 9, 0, 1, 2]
     self.assertAllClose(correct_invalid_range, invalid_range)
 
     invalid_range = circular_replay_buffer.invalid_range(
-        cursor=0, replay_capacity=10, stack_size=4, update_horizon=1)
+        cursor=0, replay_capacity=10, stack_size=4, update_horizon=1
+    )
     correct_invalid_range = [9, 0, 1, 2, 3]
     self.assertAllClose(correct_invalid_range, invalid_range)
 
     invalid_range = circular_replay_buffer.invalid_range(
-        cursor=6, replay_capacity=10, stack_size=4, update_horizon=3)
+        cursor=6, replay_capacity=10, stack_size=4, update_horizon=3
+    )
     correct_invalid_range = [3, 4, 5, 6, 7, 8, 9]
     self.assertAllClose(correct_invalid_range, invalid_range)
 
@@ -478,29 +517,31 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=10,
-        batch_size=2)
+        batch_size=2,
+    )
 
-    memory.add(
-        np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 0)
-    memory.add(
-        np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 0)
-    memory.add(
-        np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 1)
+    memory.add(np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 0)
+    memory.add(np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 0)
+    memory.add(np.full(OBSERVATION_SHAPE, 0, dtype=OBS_DTYPE), 0, 0, 1)
 
     # These valids account for the automatically applied padding (3 blanks each
     # episode.
     correct_valids = [0, 0, 0, 1, 1, 0, 0, 0, 0, 0]
     # The cursor is:                    ^\
     for i in range(10):
-      self.assertEqual(correct_valids[i], memory.is_valid_transition(i),
-                       'Index %i should be %s' % (i, bool(correct_valids[i])))
+      self.assertEqual(
+          correct_valids[i],
+          memory.is_valid_transition(i),
+          'Index %i should be %s' % (i, bool(correct_valids[i])),
+      )
 
   def testSave(self):
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     memory.observation = self._test_observation
     memory.action = self._test_action
     memory.reward = self._test_reward
@@ -511,16 +552,18 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     for attr in memory.__dict__:
       if attr.startswith('_'):
         continue
-      stale_filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
-          attr, stale_iteration))
+      stale_filename = os.path.join(
+          self._test_subdir, '{}_ckpt.{}.gz'.format(attr, stale_iteration)
+      )
       self.assertTrue(tf.io.gfile.exists(stale_filename))
 
     memory.save(self._test_subdir, current_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):
         continue
-      filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
-          attr, current_iteration))
+      filename = os.path.join(
+          self._test_subdir, '{}_ckpt.{}.gz'.format(attr, current_iteration)
+      )
       self.assertTrue(tf.io.gfile.exists(filename))
       # The stale version file should have been deleted.
       self.assertFalse(tf.io.gfile.exists(stale_filename))
@@ -532,18 +575,22 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
-    memory.add(np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
-               0,
-               0.0,
-               False,
-               episode_end=True)
+        batch_size=BATCH_SIZE,
+    )
+    memory.add(
+        np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
+        0,
+        0.0,
+        False,
+        episode_end=True,
+    )
     current_iteration = 5
 
     memory.save(testdir.full_path, current_iteration)
 
-    filename = os.path.join(testdir.full_path,
-                            f'episode_end_indices_ckpt.{current_iteration}.gz')
+    filename = os.path.join(
+        testdir.full_path, f'episode_end_indices_ckpt.{current_iteration}.gz'
+    )
     self.assertTrue(tf.io.gfile.exists(filename))
 
   def testEpisodeEndIndicesAreCorrectlyLoaded(self):
@@ -553,26 +600,28 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
-    memory.add(np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
-               0,
-               0.0,
-               False,
-               episode_end=True)
+        batch_size=BATCH_SIZE,
+    )
+    memory.add(
+        np.zeros(OBSERVATION_SHAPE, dtype=np.float32),
+        0,
+        0.0,
+        False,
+        episode_end=True,
+    )
     new_memory = circular_replay_buffer.OutOfGraphReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     current_iteration = 5
 
     memory.save(testdir.full_path, current_iteration)
     new_memory.load(testdir.full_path, str(current_iteration))
 
     self.assertLen(new_memory.episode_end_indices, 1)
-    self.assertEqual(
-        memory.episode_end_indices,
-        new_memory.episode_end_indices)
+    self.assertEqual(memory.episode_end_indices, new_memory.episode_end_indices)
 
   def testSaveWithKeepEvery(self):
     checkpoint_duration, keep_every = 1, 2
@@ -582,22 +631,24 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         replay_capacity=5,
         batch_size=BATCH_SIZE,
         keep_every=keep_every,
-        checkpoint_duration=checkpoint_duration)
+        checkpoint_duration=checkpoint_duration,
+    )
     memory.observation = self._test_observation
     memory.action = self._test_action
     memory.reward = self._test_reward
     memory.terminal = self._test_terminal
     total_iterations = 6
-    for iteration in range(1, total_iterations+1):
+    for iteration in range(1, total_iterations + 1):
       memory.save(self._test_subdir, iteration)
     stale_iteration = total_iterations - memory._checkpoint_duration
 
-    for iteration in range(1, total_iterations+1):
+    for iteration in range(1, total_iterations + 1):
       for attr in memory.__dict__:
         if attr.startswith('_'):
           continue
-        filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
-            attr, iteration))
+        filename = os.path.join(
+            self._test_subdir, '{}_ckpt.{}.gz'.format(attr, iteration)
+        )
         # Stale file should have been deleted if not a multiple of `keep_every`.
         if (iteration <= stale_iteration) and (iteration % keep_every) != 0:
           self.assertFalse(tf.io.gfile.exists(filename))
@@ -610,7 +661,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
 
     # Add some non-numpy data: an int, a string, an object.
     memory.dummy_attribute_1 = 4753849
@@ -623,16 +675,18 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     for attr in memory.__dict__:
       if attr.startswith('_'):
         continue
-      stale_filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
-          attr, stale_iteration))
+      stale_filename = os.path.join(
+          self._test_subdir, '{}_ckpt.{}.gz'.format(attr, stale_iteration)
+      )
       self.assertTrue(tf.io.gfile.exists(stale_filename))
 
     memory.save(self._test_subdir, current_iteration)
     for attr in memory.__dict__:
       if attr.startswith('_'):
         continue
-      filename = os.path.join(self._test_subdir, '{}_ckpt.{}.gz'.format(
-          attr, current_iteration))
+      filename = os.path.join(
+          self._test_subdir, '{}_ckpt.{}.gz'.format(attr, current_iteration)
+      )
       self.assertTrue(tf.io.gfile.exists(filename))
       # The stale version file should have been deleted.
       self.assertFalse(tf.io.gfile.exists(stale_filename))
@@ -642,7 +696,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     # We are trying to load from a non-existent directory, so a NotFoundError
     # will be raised.
     with self.assertRaises(tf.errors.NotFoundError):
@@ -665,7 +720,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertFalse(
         np.array_equal(memory._store['observation'], self._test_observation)
     )
@@ -680,7 +736,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         'action': self._test_action,
         'terminal': self._test_terminal,
         'add_count': self._test_add_count,
-        'invalid_range': self._test_invalid_range
+        'invalid_range': self._test_invalid_range,
     }
     for attr in numpy_arrays:
       filename = os.path.join(self._test_subdir, '{}_ckpt.3.gz'.format(attr))
@@ -710,7 +766,8 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertFalse(
         np.array_equal(memory._store['observation'], self._test_observation)
     )
@@ -730,7 +787,7 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         store_prefix + 'reward': self._test_reward,
         store_prefix + 'terminal': self._test_terminal,
         'add_count': self._test_add_count,
-        'invalid_range': self._test_invalid_range
+        'invalid_range': self._test_invalid_range,
     }
     for attr in numpy_arrays:
       filename = os.path.join(self._test_subdir, '{}_ckpt.3.gz'.format(attr))
@@ -765,29 +822,35 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     with self.assertRaisesRegex(
         ValueError,
         r'Update horizon \(5\) should be significantly '
-        r'smaller than replay capacity \(5\)\.'):
+        r'smaller than replay capacity \(5\)\.',
+    ):
       circular_replay_buffer.WrappedReplayBuffer(
           observation_shape=OBSERVATION_SHAPE,
           stack_size=STACK_SIZE,
           replay_capacity=5,
-          update_horizon=5)
+          update_horizon=5,
+      )
 
   def testConstructorWithZeroUpdateHorizon(self):
-    with self.assertRaisesRegex(ValueError,
-                                r'Update horizon must be positive\.'):
+    with self.assertRaisesRegex(
+        ValueError, r'Update horizon must be positive\.'
+    ):
       circular_replay_buffer.WrappedReplayBuffer(
           observation_shape=OBSERVATION_SHAPE,
           stack_size=STACK_SIZE,
-          update_horizon=0)
+          update_horizon=0,
+      )
 
   def testConstructorWithOutOfBoundsDiscountFactor(self):
     exception_string = r'Discount factor \(gamma\) must be in \[0, 1\]\.'
     with self.assertRaisesRegex(ValueError, exception_string):
       circular_replay_buffer.WrappedReplayBuffer(
-          observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=-1)
+          observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=-1
+      )
     with self.assertRaisesRegex(ValueError, exception_string):
       circular_replay_buffer.WrappedReplayBuffer(
-          observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=1.1)
+          observation_shape=OBSERVATION_SHAPE, stack_size=STACK_SIZE, gamma=1.1
+      )
 
   def testConstructorWithExtraStorageTypes(self):
     circular_replay_buffer.WrappedReplayBuffer(
@@ -795,12 +858,21 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         extra_storage_types=[
             circular_replay_buffer.ReplayElement('extra1', [], np.float32),
-            circular_replay_buffer.ReplayElement('extra2', [2], np.int8)
-        ])
+            circular_replay_buffer.ReplayElement('extra2', [2], np.int8),
+        ],
+    )
 
   def _verify_sampled_trajectories(self, batch):
-    (states, action, reward, next_states, next_action, next_reward, terminal,
-     indices) = batch.values()
+    (
+        states,
+        action,
+        reward,
+        next_states,
+        next_action,
+        next_reward,
+        terminal,
+        indices,
+    ) = batch.values()
     # Because we've added BATCH_SIZE * 2 observation, using the enumerator to
     # fill the respective observation, all observation will be np.full arrays
     # where the values are in [0, BATCH_SIZE * 2). Because we're sampling we can
@@ -811,7 +883,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     midpoint_observation = np.full(
         (BATCH_SIZE,) + OBSERVATION_SHAPE + (STACK_SIZE,),
         BATCH_SIZE,
-        dtype=OBS_DTYPE)
+        dtype=OBS_DTYPE,
+    )
     self.assertAllClose(states, midpoint_observation, rtol=BATCH_SIZE)
     self.assertAllClose(next_states, midpoint_observation, rtol=BATCH_SIZE)
     self.assertAllClose(action, np.ones(BATCH_SIZE) * 2)
@@ -819,8 +892,9 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     self.assertAllClose(next_action, np.ones(BATCH_SIZE) * 2)
     self.assertAllClose(next_reward, np.ones(BATCH_SIZE))
     self.assertAllClose(terminal, np.zeros(BATCH_SIZE))
-    self.assertAllClose(indices, np.ones(BATCH_SIZE) * BATCH_SIZE,
-                        rtol=BATCH_SIZE)
+    self.assertAllClose(
+        indices, np.ones(BATCH_SIZE) * BATCH_SIZE, rtol=BATCH_SIZE
+    )
 
   def testConstructorWithNoStaging(self):
     replay = circular_replay_buffer.WrappedReplayBuffer(
@@ -828,7 +902,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         replay_capacity=100,
         batch_size=BATCH_SIZE,
-        use_staging=False)
+        use_staging=False,
+    )
     with self.test_session() as sess:
       for i in range(BATCH_SIZE * 2):
         observation = np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE)
@@ -841,7 +916,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         stack_size=STACK_SIZE,
         replay_capacity=100,
         batch_size=BATCH_SIZE,
-        use_staging=True)
+        use_staging=True,
+    )
     with self.test_session() as sess:
       for i in range(BATCH_SIZE * 2):
         observation = np.full(OBSERVATION_SHAPE, i, dtype=OBS_DTYPE)
@@ -853,7 +929,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     replay.memory.observation = self._test_observation
     replay.memory.action = self._test_action
     replay.memory.reward = self._test_reward
@@ -872,7 +949,8 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         observation_shape=OBSERVATION_SHAPE,
         stack_size=STACK_SIZE,
         replay_capacity=5,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+    )
     self.assertFalse(
         np.array_equal(
             replay.memory._store['observation'], self._test_observation
@@ -900,7 +978,7 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         store_prefix + 'reward': self._test_reward,
         store_prefix + 'terminal': self._test_terminal,
         'add_count': self._test_add_count,
-        'invalid_range': self._test_invalid_range
+        'invalid_range': self._test_invalid_range,
     }
     for attr in numpy_arrays:
       filename = os.path.join(self._test_subdir, '{}_ckpt.3.gz'.format(attr))
@@ -908,8 +986,9 @@ class WrappedReplayBufferTest(tf.test.TestCase):
         with gzip.GzipFile(fileobj=f) as outfile:
           np.save(outfile, numpy_arrays[attr], allow_pickle=False)
     replay.load(self._test_subdir, '3')
-    self.assertAllClose(replay.memory._store['observation'],
-                        self._test_observation)
+    self.assertAllClose(
+        replay.memory._store['observation'], self._test_observation
+    )
     self.assertAllClose(replay.memory._store['action'], self._test_action)
     self.assertAllClose(replay.memory._store['reward'], self._test_reward)
     self.assertAllClose(replay.memory._store['terminal'], self._test_terminal)
@@ -921,7 +1000,9 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     # integration with Atari 2600.
     replay = circular_replay_buffer.WrappedReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
-        stack_size=STACK_SIZE, replay_capacity=10)
+        stack_size=STACK_SIZE,
+        replay_capacity=10,
+    )
     self.assertEqual(replay.memory._store['observation'].dtype, np.uint8)
 
   def testCustomObsDataType(self):
@@ -929,7 +1010,10 @@ class WrappedReplayBufferTest(tf.test.TestCase):
     # when an observation_dtype argument is passed to the constructor.
     replay = circular_replay_buffer.WrappedReplayBuffer(
         observation_shape=OBSERVATION_SHAPE,
-        stack_size=STACK_SIZE, replay_capacity=10, observation_dtype=np.int32)
+        stack_size=STACK_SIZE,
+        replay_capacity=10,
+        observation_dtype=np.int32,
+    )
     self.assertEqual(replay.memory._store['observation'].dtype, np.int32)
 
 

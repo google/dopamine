@@ -30,8 +30,9 @@ class CollectorDispatcherTest(parameterized.TestCase):
 
   def test_with_no_collectors(self):
     # This test verifies that we can run successfully with no collectors.
-    metrics = collector_dispatcher.CollectorDispatcher(self._tmpdir,
-                                                       collectors=[])
+    metrics = collector_dispatcher.CollectorDispatcher(
+        self._tmpdir, collectors=[]
+    )
     for i in range(4):
       stats = []
       for j in range(10):
@@ -51,7 +52,8 @@ class CollectorDispatcherTest(parameterized.TestCase):
 
   @parameterized.named_parameters(
       dict(testcase_name='no_allowlist', allowlist=()),
-      dict(testcase_name='with_allowlist', allowlist=('simple')))
+      dict(testcase_name='with_allowlist', allowlist='simple'),
+  )
   def test_with_simple_collector(self, allowlist):
     # Create a simple collector that keeps track of received statistics.
     logged_stats = []
@@ -90,24 +92,22 @@ class CollectorDispatcherTest(parameterized.TestCase):
     collector_dispatcher.add_collector('count', CountCollector)
     # Run a collection loop.
     metrics = collector_dispatcher.CollectorDispatcher(
-        self._tmpdir, collectors=['simple', 'count'])
+        self._tmpdir, collectors=['simple', 'count']
+    )
     expected_stats = []
     num_iterations = 4
     num_steps = 10
     for i in range(num_iterations):
       stats = []
       for j in range(num_steps):
-        stats.append(statistics_instance.StatisticsInstance(
-            'val', j, i))
+        stats.append(statistics_instance.StatisticsInstance('val', j, i))
       metrics.write(stats, collector_allowlist=allowlist)
       expected_stats += stats
     metrics.flush()
     # If using allowlist, CountCollectors write counts should not have been
     # incremewnted.
     expected_writes = 0 if allowlist else num_iterations
-    self.assertEqual(
-        counts,
-        {'write': expected_writes, 'flush': 1})
+    self.assertEqual(counts, {'write': expected_writes, 'flush': 1})
     self.assertEqual(expected_stats, logged_stats)
 
 

@@ -38,21 +38,27 @@ class NetworksTest(parameterized.TestCase):
       dict(testcase_name='DQN', network=networks.NatureDQNNetwork),
       dict(
           testcase_name='ClassicControlDQN',
-          network=networks.ClassicControlDQNNetwork),
+          network=networks.ClassicControlDQNNetwork,
+      ),
       dict(
           testcase_name='ClassicControlRainbow',
-          network=networks.ClassicControlRainbowNetwork),
+          network=networks.ClassicControlRainbowNetwork,
+      ),
       dict(testcase_name='Quantile', network=networks.QuantileNetwork),
       dict(testcase_name='Rainbow', network=networks.RainbowNetwork),
-      dict(testcase_name='FullRainbow', network=networks.FullRainbowNetwork))
+      dict(testcase_name='FullRainbow', network=networks.FullRainbowNetwork),
+  )
   def testOutputShape(self, network: nn.Module):
     kwargs = {}
     if network in [
-        networks.FullRainbowNetwork, networks.RainbowNetwork,
-        networks.ClassicControlRainbowNetwork, networks.QuantileNetwork
+        networks.FullRainbowNetwork,
+        networks.RainbowNetwork,
+        networks.ClassicControlRainbowNetwork,
+        networks.QuantileNetwork,
     ]:
       q_network = network(
-          num_actions=self._num_actions, num_atoms=self._num_atoms)
+          num_actions=self._num_actions, num_atoms=self._num_atoms
+      )
       if network != networks.QuantileNetwork:
         kwargs = {'support': self._support}
     else:
@@ -67,8 +73,9 @@ class NetworksTest(parameterized.TestCase):
     get_q_values_batch = jax.vmap(get_q_values, in_axes=(0,))
     onp.testing.assert_equal(get_q_values(x).shape[0], self._num_actions)
     batch_q_values = get_q_values_batch(onp.ones(self._batch_input_shape))
-    onp.testing.assert_equal(batch_q_values.shape,
-                             (self._batch_size, self._num_actions))
+    onp.testing.assert_equal(
+        batch_q_values.shape, (self._batch_size, self._num_actions)
+    )
 
 
 if __name__ == '__main__':

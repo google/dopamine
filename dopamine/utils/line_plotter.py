@@ -23,6 +23,7 @@ from __future__ import division
 from __future__ import print_function
 
 
+
 from dopamine.utils import plotter
 import gin
 import matplotlib
@@ -51,9 +52,11 @@ class LinePlotter(plotter.Plotter):
       'colors': COLORS,
       'max_width': 500,
       'figsize': (12, 9),
-      'font': {'family': 'Bitstream Vera Sans',
-               'weight': 'regular',
-               'size': 26},
+      'font': {
+          'family': 'Bitstream Vera Sans',
+          'weight': 'regular',
+          'size': 26,
+      },
       'linewidth': 5,
   }
 
@@ -67,8 +70,8 @@ class LinePlotter(plotter.Plotter):
 
     Args:
       parameter_dict: None or dict of parameter specifications for
-        visualization. If an expected parameter is present, its value will
-        be used, otherwise it will use defaults.
+        visualization. If an expected parameter is present, its value will be
+        used, otherwise it will use defaults.
     """
     super(LinePlotter, self).__init__(parameter_dict)
     assert 'get_line_data_fn' in self.parameters
@@ -91,9 +94,11 @@ class LinePlotter(plotter.Plotter):
     max_xlim = 0
     line_data = self.parameters['get_line_data_fn']()
     for i in range(len(line_data)):
-      self.plot.plot(line_data[i],
-                     linewidth=self.parameters['linewidth'],
-                     color=self.parameters['colors'][i % num_colors])
+      self.plot.plot(
+          line_data[i],
+          linewidth=self.parameters['linewidth'],
+          color=self.parameters['colors'][i % num_colors],
+      )
       max_xlim = max(max_xlim, len(line_data[i]))
     min_xlim = max(0, max_xlim - self.parameters['max_width'])
     self.plot.set_xlim(min_xlim, max_xlim)
@@ -105,9 +110,8 @@ class LinePlotter(plotter.Plotter):
     if self.plot_surface is None:
       self.plot_surface = pygame.Surface((width, height))
     plot_buffer = np.frombuffer(self.fig.canvas.buffer_rgba(), np.uint32)
-    surf_buffer = np.frombuffer(self.plot_surface.get_buffer(),
-                                dtype=np.int32)
+    surf_buffer = np.frombuffer(self.plot_surface.get_buffer(), dtype=np.int32)
     np.copyto(surf_buffer, plot_buffer)
     return pygame.transform.smoothscale(
-        self.plot_surface,
-        (self.parameters['width'], self.parameters['height']))
+        self.plot_surface, (self.parameters['width'], self.parameters['height'])
+    )

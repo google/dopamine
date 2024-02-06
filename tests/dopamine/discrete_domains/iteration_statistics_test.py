@@ -50,9 +50,7 @@ class IterationStatisticsTest(tf.test.TestCase):
 
     # Add a number of items. Each item is added to the list corresponding to its
     # given key.
-    statistics.append({'rewards': 0,
-                       'nouns': 'reinforcement',
-                       'angles': my_pi})
+    statistics.append({'rewards': 0, 'nouns': 'reinforcement', 'angles': my_pi})
     # Add a second item to the 'nouns' list.
     statistics.append({'nouns': 'learning'})
 
@@ -66,6 +64,7 @@ class IterationStatisticsTest(tf.test.TestCase):
     self.assertEqual('reinforcement', statistics.data_lists['nouns'][0])
     self.assertEqual('learning', statistics.data_lists['nouns'][1])
     self.assertEqual(my_pi, statistics.data_lists['angles'][0])
+
 
 if __name__ == '__main__':
   tf.compat.v1.disable_v2_behavior()

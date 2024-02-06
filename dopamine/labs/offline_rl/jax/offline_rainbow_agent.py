@@ -41,12 +41,35 @@ def get_logits_and_q_values(model, states, rng):
 
 @functools.partial(
     jax.jit,
-    static_argnames=('network_def', 'optimizer', 'double_dqn', 'distributional',
-                     'cumulative_gamma', 'bc_coefficient', 'td_coefficient'))
+    static_argnames=(
+        'network_def',
+        'optimizer',
+        'double_dqn',
+        'distributional',
+        'cumulative_gamma',
+        'bc_coefficient',
+        'td_coefficient',
+    ),
+)
 def train(
-    network_def, online_params, target_params, optimizer, optimizer_state,
-    states, actions, next_states, rewards, terminals, support, cumulative_gamma,
-    double_dqn, distributional, rng, bc_coefficient=0.0, td_coefficient=1.0):
+    network_def,
+    online_params,
+    target_params,
+    optimizer,
+    optimizer_state,
+    states,
+    actions,
+    next_states,
+    rewards,
+    terminals,
+    support,
+    cumulative_gamma,
+    double_dqn,
+    distributional,
+    rng,
+    bc_coefficient=0.0,
+    td_coefficient=1.0,
+):
   """Run a training step."""
 
   # Split the current rng into 2 for updating the rng after this call
@@ -73,26 +96,37 @@ def train(
       replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
     else:
       q_values = jnp.squeeze(
-          full_rainbow_agent.get_q_values(q_func, states, rng))
+          full_rainbow_agent.get_q_values(q_func, states, rng)
+      )
       replay_chosen_q = jax.vmap(lambda x, y: x[y])(q_values, actions)
       mean_td_loss = jnp.mean(huber_loss_fn(target, replay_chosen_q))
 
     bc_loss = jnp.mean(
-        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q)
-    mean_loss = (td_coefficient * mean_td_loss + bc_coefficient * bc_loss)
+        jax.scipy.special.logsumexp(q_values, axis=-1) - replay_chosen_q
+    )
+    mean_loss = td_coefficient * mean_td_loss + bc_coefficient * bc_loss
     return mean_loss, (mean_td_loss, bc_loss)
 
-  target = full_rainbow_agent.target_output(q_online, q_target, next_states,
-                                            rewards, terminals, support,
-                                            cumulative_gamma, double_dqn,
-                                            distributional, rng1)
+  target = full_rainbow_agent.target_output(
+      q_online,
+      q_target,
+      next_states,
+      rewards,
+      terminals,
+      support,
+      cumulative_gamma,
+      double_dqn,
+      distributional,
+      rng1,
+  )
 
   grad_fn = jax.value_and_grad(loss_fn, has_aux=True)
   # Get the unweighted loss without taking its mean for updating priorities.
   # outputs[1] correspond to the per-example TD loss.
   (loss, outputs), grad = grad_fn(online_params, target)
   updates, optimizer_state = optimizer.update(
-      grad, optimizer_state, params=online_params)
+      grad, optimizer_state, params=online_params
+  )
   online_params = optax.apply_updates(online_params, updates)
   return optimizer_state, online_params, loss, outputs, rng2
 
@@ -101,14 +135,16 @@ def train(
 class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
   """Offline Rainbow agent with BC regularization (akin to CQL)."""
 
-  def __init__(self,
-               num_actions,
-               replay_data_dir,
-               td_coefficient=1.0,
-               bc_coefficient=0.0,
-               summary_writer=None,
-               add_return_to_go=False,
-               use_tfds=True):
+  def __init__(
+      self,
+      num_actions,
+      replay_data_dir,
+      td_coefficient=1.0,
+      bc_coefficient=0.0,
+      summary_writer=None,
+      add_return_to_go=False,
+      use_tfds=True,
+  ):
     """Initializes the agent and constructs the necessary components.
 
     Args:
@@ -137,7 +173,8 @@ class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
         num_actions,
         noisy=False,  # No need for noisy networks for offline RL.
         replay_scheme='uniform',  # Uniform replay is default for offline RL.
-        summary_writer=summary_writer)
+        summary_writer=summary_writer,
+    )
 
   def _training_step_update(self):
     """Runs a single training step."""
@@ -145,28 +182,44 @@ class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     states = self.preprocess_fn(self.replay_elements['state'])
     next_states = self.preprocess_fn(self.replay_elements['next_state'])
 
-    (self.optimizer_state,
-     self.online_params, mean_loss, aux_info, self._rng) = train(
-         self.network_def, self.online_params, self.target_network_params,
-         self.optimizer, self.optimizer_state, states,
-         self.replay_elements['action'], next_states,
-         self.replay_elements['reward'], self.replay_elements['terminal'],
-         self._support, self.cumulative_gamma, self._double_dqn,
-         self._distributional, self._rng,
-         bc_coefficient=self._bc_coefficient,
-         td_coefficient=self._td_coefficient)
+    (
+        self.optimizer_state,
+        self.online_params,
+        mean_loss,
+        aux_info,
+        self._rng,
+    ) = train(
+        self.network_def,
+        self.online_params,
+        self.target_network_params,
+        self.optimizer,
+        self.optimizer_state,
+        states,
+        self.replay_elements['action'],
+        next_states,
+        self.replay_elements['reward'],
+        self.replay_elements['terminal'],
+        self._support,
+        self.cumulative_gamma,
+        self._double_dqn,
+        self._distributional,
+        self._rng,
+        bc_coefficient=self._bc_coefficient,
+        td_coefficient=self._td_coefficient,
+    )
 
     td_loss, bc_loss = aux_info
-    if (self.training_steps > 0 and
-        self.training_steps % self.summary_writing_frequency == 0):
+    if (
+        self.training_steps > 0
+        and self.training_steps % self.summary_writing_frequency == 0
+    ):
       if self.summary_writer is not None:
         with self.summary_writer.as_default():
-          tf.summary.scalar('Losses/Aggregate', mean_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/TD', td_loss,
-                            step=self.training_steps)
-          tf.summary.scalar('Losses/BCLoss', bc_loss,
-                            step=self.training_steps)
+          tf.summary.scalar(
+              'Losses/Aggregate', mean_loss, step=self.training_steps
+          )
+          tf.summary.scalar('Losses/TD', td_loss, step=self.training_steps)
+          tf.summary.scalar('Losses/BCLoss', bc_loss, step=self.training_steps)
         self.summary_writer.flush()
     if self._use_tfds:
       self.log_gradient_steps_per_epoch()
@@ -185,19 +238,23 @@ class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
           stack_size=self.stack_size,
           update_horizon=self.update_horizon,
           gamma=self.gamma,
-          observation_dtype=self.observation_dtype)
+          observation_dtype=self.observation_dtype,
+      )
 
     dataset_name = tfds_replay.get_atari_ds_name_from_replay(
-        self.replay_data_dir)
+        self.replay_data_dir
+    )
     return tfds_replay.JaxFixedReplayBufferTFDS(
         replay_capacity=gin.query_parameter(
-            'JaxFixedReplayBuffer.replay_capacity'),
+            'JaxFixedReplayBuffer.replay_capacity'
+        ),
         batch_size=gin.query_parameter('JaxFixedReplayBuffer.batch_size'),
         dataset_name=dataset_name,
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        return_to_go=self._add_return_to_go)
+        return_to_go=self._add_return_to_go,
+    )
 
   def log_gradient_steps_per_epoch(self):
     num_steps_per_epoch = self._replay.gradient_steps_per_epoch
@@ -205,9 +262,8 @@ class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     if self.summary_writer is not None:
       with self.summary_writer.as_default():
         tf.summary.scalar(
-            'Info/EpochFractionSteps',
-            steps_per_epoch,
-            step=self.training_steps)
+            'Info/EpochFractionSteps', steps_per_epoch, step=self.training_steps
+        )
 
   def _sample_from_replay_buffer(self):
     if self._use_tfds:
@@ -234,9 +290,19 @@ class OfflineJaxRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     """
     self._record_observation(observation)
     self._rng, self.action = rainbow_agent.select_action(
-        self.network_def, self.online_params, self.state, self._rng,
-        self.num_actions, self.eval_mode, self.epsilon_eval, self.epsilon_train,
-        self.epsilon_decay_period, self.training_steps, self.min_replay_history,
-        self.epsilon_fn, self._support)
+        self.network_def,
+        self.online_params,
+        self.state,
+        self._rng,
+        self.num_actions,
+        self.eval_mode,
+        self.epsilon_eval,
+        self.epsilon_train,
+        self.epsilon_decay_period,
+        self.training_steps,
+        self.min_replay_history,
+        self.epsilon_fn,
+        self._support,
+    )
     self.action = onp.asarray(self.action)
     return self.action

@@ -12,8 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-r"""Train and Eval SAC.
-"""
+r"""Train and Eval SAC."""
 
 import functools
 import os
@@ -47,25 +46,34 @@ from tf_agents.train.utils import train_utils
 from tf_agents.utils import common
 from tf_agents.utils import object_identity
 
+
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('root_dir', os.getenv('TEST_UNDECLARED_OUTPUTS_DIR'),
-                    'Root directory for writing logs/summaries/checkpoints.')
+flags.DEFINE_string(
+    'root_dir',
+    os.getenv('TEST_UNDECLARED_OUTPUTS_DIR'),
+    'Root directory for writing logs/summaries/checkpoints.',
+)
 flags.DEFINE_integer(
-    'reverb_port', None,
-    'Port for reverb server, if None, use a randomly chosen unused port.')
+    'reverb_port',
+    None,
+    'Port for reverb server, if None, use a randomly chosen unused port.',
+)
 flags.DEFINE_multi_string('gin_file', None, 'Paths to the gin-config files.')
 flags.DEFINE_multi_string('gin_bindings', [], 'Gin binding parameters.')
 
 # Env params
 flags.DEFINE_bool('is_atari', False, 'Whether the env is an atari game.')
 flags.DEFINE_bool('is_mujoco', False, 'Whether the env is a mujoco game.')
-flags.DEFINE_bool('is_classic', False,
-                  'Whether the env is a classic control game.')
+flags.DEFINE_bool(
+    'is_classic', False, 'Whether the env is a classic control game.'
+)
 flags.DEFINE_float(
-    'average_last_fraction', 0.1,
+    'average_last_fraction',
+    0.1,
     'Tells what fraction latest evaluation scores are averaged. This is used'
-    ' to reduce variance.')
+    ' to reduce variance.',
+)
 
 original_call = tf.keras.layers.Dense.call
 
@@ -94,7 +102,8 @@ MyDenseLayer.call = custom_call
 dense = functools.partial(
     MyDenseLayer,
     activation=tf.keras.activations.relu,
-    kernel_initializer='glorot_uniform')
+    kernel_initializer='glorot_uniform',
+)
 
 
 def is_dense_layer(layer):
@@ -145,73 +154,90 @@ def create_sequential_critic_network(
     weight_decay: float = 0.0,
 ):
   """Create a sequential critic network."""
+
   # Split the inputs into observations and actions.
   def split_inputs(inputs):
     return {'observation': inputs[0], 'action': inputs[1]}
 
   # Create an observation network layers.
   obs_network_layers = (
-      create_fc_layers(obs_fc_layer_units, width=width,
-                       weight_decay=weight_decay)
-      if obs_fc_layer_units else None)
+      create_fc_layers(
+          obs_fc_layer_units, width=width, weight_decay=weight_decay
+      )
+      if obs_fc_layer_units
+      else None
+  )
 
   # Create an action network layers.
   action_network_layers = (
-      create_fc_layers(action_fc_layer_units, width=width,
-                       weight_decay=weight_decay)
-      if action_fc_layer_units else None)
+      create_fc_layers(
+          action_fc_layer_units, width=width, weight_decay=weight_decay
+      )
+      if action_fc_layer_units
+      else None
+  )
 
   # Create a joint network layers.
   joint_network_layers = (
-      create_fc_layers(joint_fc_layer_units, width=width,
-                       weight_decay=weight_decay)
-      if joint_fc_layer_units else None)
+      create_fc_layers(
+          joint_fc_layer_units, width=width, weight_decay=weight_decay
+      )
+      if joint_fc_layer_units
+      else None
+  )
 
   # Final layer.
   value_layer = MyDenseLayer(
       1,
       kernel_initializer='glorot_uniform',
-      kernel_regularizer=tf.keras.regularizers.L2(weight_decay))
+      kernel_regularizer=tf.keras.regularizers.L2(weight_decay),
+  )
 
-  layer_list = [obs_network_layers, action_network_layers,
-                joint_network_layers]
+  layer_list = [obs_network_layers, action_network_layers, joint_network_layers]
 
   # Convert layer_list to sequential or identity lambdas:
-  module_list = [create_identity_layer() if layers is None else
-                 sequential.Sequential(layers)
-                 for layers in layer_list]
+  module_list = [
+      create_identity_layer()
+      if layers is None
+      else sequential.Sequential(layers)
+      for layers in layer_list
+  ]
   obs_network, action_network, joint_network = module_list
 
-  return sequential.Sequential([
-      tf.keras.layers.Lambda(split_inputs),
-      nest_map.NestMap({
-          'observation': obs_network,
-          'action': action_network
-      }),
-      nest_map.NestFlatten(),
-      tf.keras.layers.Concatenate(),
-      joint_network,
-      value_layer,
-      inner_reshape.InnerReshape(current_shape=[1], new_shape=[])
-  ], name='sequential_critic')
+  return sequential.Sequential(
+      [
+          tf.keras.layers.Lambda(split_inputs),
+          nest_map.NestMap(
+              {'observation': obs_network, 'action': action_network}
+          ),
+          nest_map.NestFlatten(),
+          tf.keras.layers.Concatenate(),
+          joint_network,
+          value_layer,
+          inner_reshape.InnerReshape(current_shape=[1], new_shape=[]),
+      ],
+      name='sequential_critic',
+  )
 
 
 class _TanhNormalProjectionNetworkWrapper(
-    sparse_tanh_normal_projection_network.SparseTanhNormalProjectionNetwork):
+    sparse_tanh_normal_projection_network.SparseTanhNormalProjectionNetwork
+):
   """Wrapper to pass predefined `outer_rank` to underlying projection net."""
 
   def __init__(self, sample_spec, predefined_outer_rank=1, weight_decay=0.0):
     super(_TanhNormalProjectionNetworkWrapper, self).__init__(
-        sample_spec=sample_spec,
-        weight_decay=weight_decay)
+        sample_spec=sample_spec, weight_decay=weight_decay
+    )
     self.predefined_outer_rank = predefined_outer_rank
 
   def call(self, inputs, network_state=(), **kwargs):
     kwargs['outer_rank'] = self.predefined_outer_rank
     if 'step_type' in kwargs:
       del kwargs['step_type']
-    return super(_TanhNormalProjectionNetworkWrapper,
-                 self).call(inputs, **kwargs)
+    return super(_TanhNormalProjectionNetworkWrapper, self).call(
+        inputs, **kwargs
+    )
 
 
 def create_sequential_actor_network(
@@ -221,9 +247,11 @@ def create_sequential_actor_network(
     weight_decay: float = 0.0,
 ):
   """Create a sequential actor network."""
+
   def tile_as_nest(non_nested_output):
-    return tf.nest.map_structure(lambda _: non_nested_output,
-                                 action_tensor_spec)
+    return tf.nest.map_structure(
+        lambda _: non_nested_output, action_tensor_spec
+    )
 
   dense_layers = [
       dense(
@@ -233,15 +261,17 @@ def create_sequential_actor_network(
       for num_units in actor_fc_layers
   ]
   tanh_normal_projection_network_fn = functools.partial(
-      _TanhNormalProjectionNetworkWrapper,
-      weight_decay=weight_decay)
+      _TanhNormalProjectionNetworkWrapper, weight_decay=weight_decay
+  )
   last_layer = nest_map.NestMap(
-      tf.nest.map_structure(tanh_normal_projection_network_fn,
-                            action_tensor_spec))
+      tf.nest.map_structure(
+          tanh_normal_projection_network_fn, action_tensor_spec
+      )
+  )
 
   return sequential.Sequential(
-      dense_layers +
-      [tf.keras.layers.Lambda(tile_as_nest)] + [last_layer])
+      dense_layers + [tf.keras.layers.Lambda(tile_as_nest)] + [last_layer]
+  )
 
 
 @gin.configurable
@@ -271,10 +301,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
       reset_freq_scale=1,
       **kwargs,
   ):
-    super().__init__(time_step_spec,
-                     action_spec,
-                     *args,
-                     **kwargs)
+    super().__init__(time_step_spec, action_spec, *args, **kwargs)
     self.reset_mode = reset_mode
     self.reset_freq = int(reset_freq * reset_freq_scale)
     self.reset_frac = reset_frac
@@ -298,13 +325,17 @@ class RecycledSacAgent(sac_agent.SacAgent):
             self._critic_network_1,
             None,
             input_spec=critic_spec,
-            name='TargetCriticNetwork1'))
+            name='TargetCriticNetwork1',
+        )
+    )
     self._target_critic_network_1 = (
         common.maybe_copy_target_network_with_checks(
             self._critic_network_2,
             None,
             input_spec=critic_spec,
-            name='TargetCriticNetwork2'))
+            name='TargetCriticNetwork2',
+        )
+    )
 
   def _train(self, experience, weights):
     """Returns a train op to update the agent's networks.
@@ -330,13 +361,17 @@ class RecycledSacAgent(sac_agent.SacAgent):
 
     trainable_critic_variables = list(
         object_identity.ObjectIdentitySet(
-            self._critic_network_1.trainable_variables +
-            self._critic_network_2.trainable_variables))
+            self._critic_network_1.trainable_variables
+            + self._critic_network_2.trainable_variables
+        )
+    )
 
     with tf.GradientTape(
-        watch_accessed_variables=False, persistent=True) as tape:
-      assert trainable_critic_variables, ('No trainable critic variables to '
-                                          'optimize.')
+        watch_accessed_variables=False, persistent=True
+    ) as tape:
+      assert (
+          trainable_critic_variables
+      ), 'No trainable critic variables to optimize.'
       tape.watch(trainable_critic_variables)
       critic_loss = self._critic_loss_weight * self.critic_loss(
           time_steps,
@@ -346,40 +381,52 @@ class RecycledSacAgent(sac_agent.SacAgent):
           gamma=self._gamma,
           reward_scale_factor=self._reward_scale_factor,
           weights=weights,
-          training=True)
+          training=True,
+      )
 
       self.critic1_act = get_intermedieates(self._critic_network_1)
       self.critic2_act = get_intermedieates(self._critic_network_2)
       self.critic1_act_grads = (
           tape.gradient(critic_loss, self.critic1_act)
-          if self.neuron_score_algo == 'activation_grad' else None)
+          if self.neuron_score_algo == 'activation_grad'
+          else None
+      )
       self.critic2_act_grads = (
           tape.gradient(critic_loss, self.critic2_act)
-          if self.neuron_score_algo == 'activation_grad' else None)
+          if self.neuron_score_algo == 'activation_grad'
+          else None
+      )
 
     tf.debugging.check_numerics(critic_loss, 'Critic loss is inf or nan.')
     critic_grads = tape.gradient(critic_loss, trainable_critic_variables)
-    self._apply_gradients(critic_grads, trainable_critic_variables,
-                          self._critic_optimizer)
+    self._apply_gradients(
+        critic_grads, trainable_critic_variables, self._critic_optimizer
+    )
 
     trainable_actor_variables = self._actor_network.trainable_variables
     with tf.GradientTape(
-        watch_accessed_variables=False, persistent=True) as tape:
-      assert trainable_actor_variables, ('No trainable actor variables to '
-                                         'optimize.')
+        watch_accessed_variables=False, persistent=True
+    ) as tape:
+      assert (
+          trainable_actor_variables
+      ), 'No trainable actor variables to optimize.'
       tape.watch(trainable_actor_variables)
-      actor_loss = self._actor_loss_weight*self.actor_loss(
-          time_steps, weights=weights, training=True)
+      actor_loss = self._actor_loss_weight * self.actor_loss(
+          time_steps, weights=weights, training=True
+      )
 
       self.actor_act = get_intermedieates(self._actor_network)
       self.actor_act_grads = (
           tape.gradient(actor_loss, self.actor_act)
-          if self.neuron_score_algo == 'activation_grad' else None)
+          if self.neuron_score_algo == 'activation_grad'
+          else None
+      )
 
     tf.debugging.check_numerics(actor_loss, 'Actor loss is inf or nan.')
     actor_grads = tape.gradient(actor_loss, trainable_actor_variables)
-    self._apply_gradients(actor_grads, trainable_actor_variables,
-                          self._actor_optimizer)
+    self._apply_gradients(
+        actor_grads, trainable_actor_variables, self._actor_optimizer
+    )
 
     is_deadneurons_log_step = self.is_dead_neurons_log_iter()
     tf.cond(is_deadneurons_log_step, self.log_deadneurons_models, lambda: None)
@@ -389,14 +436,17 @@ class RecycledSacAgent(sac_agent.SacAgent):
       tf.cond(is_reset_step, self.reset_models, lambda: None)
 
     is_logging = self.train_step_counter % self.log_interval == 0
-    log_w_mean_c1 = functools.partial(self.log_weights_mean, 'critic_1',
-                                      self._critic_network_1)
+    log_w_mean_c1 = functools.partial(
+        self.log_weights_mean, 'critic_1', self._critic_network_1
+    )
     tf.cond(is_logging, log_w_mean_c1, lambda: None)
-    log_w_mean_c2 = functools.partial(self.log_weights_mean, 'critic_2',
-                                      self._critic_network_2)
+    log_w_mean_c2 = functools.partial(
+        self.log_weights_mean, 'critic_2', self._critic_network_2
+    )
     tf.cond(is_logging, log_w_mean_c2, lambda: None)
-    log_w_mean_actor = functools.partial(self.log_weights_mean, 'actor',
-                                         self._actor_network)
+    log_w_mean_actor = functools.partial(
+        self.log_weights_mean, 'actor', self._actor_network
+    )
     tf.cond(is_logging, log_w_mean_actor, lambda: None)
 
     alpha_variable = [self._log_alpha]
@@ -404,18 +454,22 @@ class RecycledSacAgent(sac_agent.SacAgent):
       assert alpha_variable, 'No alpha variable to optimize.'
       tape.watch(alpha_variable)
       alpha_loss = self._alpha_loss_weight * self.alpha_loss(
-          time_steps, weights=weights, training=True)
+          time_steps, weights=weights, training=True
+      )
     tf.debugging.check_numerics(alpha_loss, 'Alpha loss is inf or nan.')
     alpha_grads = tape.gradient(alpha_loss, alpha_variable)
     self._apply_gradients(alpha_grads, alpha_variable, self._alpha_optimizer)
 
     with tf.name_scope('Losses'):
       tf.compat.v2.summary.scalar(
-          name='critic_loss', data=critic_loss, step=self.train_step_counter)
+          name='critic_loss', data=critic_loss, step=self.train_step_counter
+      )
       tf.compat.v2.summary.scalar(
-          name='actor_loss', data=actor_loss, step=self.train_step_counter)
+          name='actor_loss', data=actor_loss, step=self.train_step_counter
+      )
       tf.compat.v2.summary.scalar(
-          name='alpha_loss', data=alpha_loss, step=self.train_step_counter)
+          name='alpha_loss', data=alpha_loss, step=self.train_step_counter
+      )
 
     self.train_step_counter.assign_add(1)
     self._update_target()
@@ -423,7 +477,8 @@ class RecycledSacAgent(sac_agent.SacAgent):
     total_loss = critic_loss + actor_loss + alpha_loss
 
     extra = sac_agent.SacLossInfo(
-        critic_loss=critic_loss, actor_loss=actor_loss, alpha_loss=alpha_loss)
+        critic_loss=critic_loss, actor_loss=actor_loss, alpha_loss=alpha_loss
+    )
 
     return tf_agent.LossInfo(loss=total_loss, extra=extra)
 
@@ -437,37 +492,54 @@ class RecycledSacAgent(sac_agent.SacAgent):
           tf.compat.v2.summary.scalar(layer.name, mean_w_mag)
 
   def is_dead_neurons_log_iter(self):
-    is_iter = tf.logical_and(self.train_step_counter > 0,
-                             self.train_step_counter % self.log_interval == 0)
+    is_iter = tf.logical_and(
+        self.train_step_counter > 0,
+        self.train_step_counter % self.log_interval == 0,
+    )
     return is_iter
 
   def log_deadneurons_models(self):
-    self.log_dead_neurons_count(self._critic_network_1, 'critic_1',
-                                self.critic1_act, self.critic1_act_grads)
-    self.log_dead_neurons_count(self._critic_network_2, 'critic_2',
-                                self.critic2_act, self.critic2_act_grads)
-    self.log_dead_neurons_count(self._actor_network, 'actor', self.actor_act,
-                                self.actor_act_grads)
+    self.log_dead_neurons_count(
+        self._critic_network_1,
+        'critic_1',
+        self.critic1_act,
+        self.critic1_act_grads,
+    )
+    self.log_dead_neurons_count(
+        self._critic_network_2,
+        'critic_2',
+        self.critic2_act,
+        self.critic2_act_grads,
+    )
+    self.log_dead_neurons_count(
+        self._actor_network, 'actor', self.actor_act, self.actor_act_grads
+    )
 
-  def calculate_neuron_score_all_layers(self, model, intermediate_act,
-                                        intermediate_act_grad):
+  def calculate_neuron_score_all_layers(
+      self, model, intermediate_act, intermediate_act_grad
+  ):
     all_layers_score = {}
     if self.neuron_score_algo == 'activation':
       for act_key, act_value in intermediate_act.items():
         self.log_batch_size = min(self.log_batch_size, act_value.shape[0])
         neurons_score = tf.reduce_mean(
-            tf.math.abs(act_value[:self.log_batch_size, :]), axis=0)
+            tf.math.abs(act_value[: self.log_batch_size, :]), axis=0
+        )
         neurons_score = neurons_score / (tf.reduce_mean(neurons_score) + 1e-9)
         all_layers_score[act_key] = neurons_score
     elif self.neuron_score_algo == 'activation_grad':
-      for act, act_grad in zip(intermediate_act.items(),
-                               intermediate_act_grad.items()):
+      for act, act_grad in zip(
+          intermediate_act.items(), intermediate_act_grad.items()
+      ):
         act_k, act_v = act
         _, act_grad_v = act_grad
         self.log_batch_size = min(self.log_batch_size, act_v.shape[0])
         act_multi_grad = tf.math.abs(
-            tf.multiply(act_v[:self.log_batch_size, :],
-                        act_grad_v[:self.log_batch_size, :]))
+            tf.multiply(
+                act_v[: self.log_batch_size, :],
+                act_grad_v[: self.log_batch_size, :],
+            )
+        )
         neurons_score = tf.reduce_mean(act_multi_grad, axis=0)
         neurons_score = neurons_score / (tf.reduce_mean(neurons_score) + 1e-9)
         all_layers_score[act_k] = neurons_score
@@ -483,12 +555,14 @@ class RecycledSacAgent(sac_agent.SacAgent):
         neurons_score = neurons_score / (tf.reduce_mean(neurons_score) + 1e-9)
         all_layers_score[layer.name] = neurons_score
     else:
-      raise ValueError('neuron_score_algo:%s  is not valid.' %
-                       self.neuron_score_algo)
+      raise ValueError(
+          'neuron_score_algo:%s  is not valid.' % self.neuron_score_algo
+      )
     return all_layers_score
 
-  def log_dead_neurons_count(self, model, network_name, intermediate_act,
-                             intermediate_act_grad):
+  def log_dead_neurons_count(
+      self, model, network_name, intermediate_act, intermediate_act_grad
+  ):
     """log the number of dead neurons per hidden layer in a network.
 
     Args:
@@ -500,21 +574,25 @@ class RecycledSacAgent(sac_agent.SacAgent):
     total_dead_neurons = 0
     total_hidden_count = 0
     all_layers_score = self.calculate_neuron_score_all_layers(
-        model, intermediate_act, intermediate_act_grad)
+        model, intermediate_act, intermediate_act_grad
+    )
 
-    for layer_count, (layer_name,
-                      layer_score) in enumerate(all_layers_score.items()):
+    for layer_count, (layer_name, layer_score) in enumerate(
+        all_layers_score.items()
+    ):
       _, num_dead_neurons = self.get_dead_neurons(layer_score)
       total_dead_neurons += num_dead_neurons
       total_hidden_count += layer_score.shape[0]
       with tf.name_scope('dead_neurons/' + network_name + '/'):
         tf.compat.v2.summary.scalar(
-            'layer_' + str(layer_count + 1) + '_' + layer_name,
-            num_dead_neurons)
+            'layer_' + str(layer_count + 1) + '_' + layer_name, num_dead_neurons
+        )
 
       log_act_hist = functools.partial(
-          self.log_histogram, layer_name + str(self.train_step_counter),
-          layer_score)
+          self.log_histogram,
+          layer_name + str(self.train_step_counter),
+          layer_score,
+      )
       tf.cond(self.train_step_counter % 100000 == 0, log_act_hist, lambda: None)
 
     with tf.name_scope('dead_neurons/' + network_name + '/'):
@@ -530,8 +608,10 @@ class RecycledSacAgent(sac_agent.SacAgent):
 
   def is_reset_iter(self):
     """Returns true if it is a valid reset step."""
-    return tf.logical_and(self.train_step_counter > 0,
-                          self.train_step_counter % self.reset_freq == 0)
+    return tf.logical_and(
+        self.train_step_counter > 0,
+        self.train_step_counter % self.reset_freq == 0,
+    )
 
   def reset_models(self):
     if self.reset_mode == 'weights':
@@ -549,10 +629,16 @@ class RecycledSacAgent(sac_agent.SacAgent):
       optim_var.assign(new_values)
 
   def reset_model_weights(self):
-    self.reset_weights(self._critic_optimizer, self._critic_network_1,
-                       self._target_critic_network_1)
-    self.reset_weights(self._critic_optimizer, self._critic_network_2,
-                       self._target_critic_network_2)
+    self.reset_weights(
+        self._critic_optimizer,
+        self._critic_network_1,
+        self._target_critic_network_1,
+    )
+    self.reset_weights(
+        self._critic_optimizer,
+        self._critic_network_2,
+        self._target_critic_network_2,
+    )
     self.reset_weights(self._actor_optimizer, self._actor_network)
 
   def reset_weights(self, optimizer, model, target_model=None):
@@ -561,24 +647,29 @@ class RecycledSacAgent(sac_agent.SacAgent):
     target_model_layers = (
         model_layers if target_model is None else get_all_layers(target_model)
     )
-    assert (len(model_layers) == len(target_model_layers))
+    assert len(model_layers) == len(target_model_layers)
     for layer, target_layer in zip(model_layers, target_model_layers):
-      assert (len(layer.weights) == len(target_layer.weights))
+      assert len(layer.weights) == len(target_layer.weights)
       for var, target_var in zip(layer.weights, target_layer.weights):
         abs_weights = tf.math.abs(var)
         k = tf.dtypes.cast(
             tf.math.maximum(
                 tf.math.round(
-                    tf.dtypes.cast(tf.size(abs_weights), tf.float32) *
-                    self.reset_frac), 1), tf.int32)
+                    tf.dtypes.cast(tf.size(abs_weights), tf.float32)
+                    * self.reset_frac
+                ),
+                1,
+            ),
+            tf.int32,
+        )
         w_initializer = layer.kernel_initializer
         logging.info('shape %s', var.shape)
         logging.info('w_initializer%s', w_initializer)
 
         b_initializer = layer.bias_initializer
-        new_weights, mask = self.create_new_weights(k, var, abs_weights,
-                                                    w_initializer,
-                                                    b_initializer)
+        new_weights, mask = self.create_new_weights(
+            k, var, abs_weights, w_initializer, b_initializer
+        )
         var.assign(new_weights)
         if target_model is not None:
           new_target_weights = tf.where(mask == 1, new_weights, target_var)
@@ -588,8 +679,9 @@ class RecycledSacAgent(sac_agent.SacAgent):
         if len(var.get_shape().as_list()) > 1:
           self.reset_momentum(optimizer, var, mask)
 
-  def create_new_weights(self, k, weights, abs_weights, w_initializer,
-                         b_initializer):
+  def create_new_weights(
+      self, k, weights, abs_weights, w_initializer, b_initializer
+  ):
     w_shape = weights.get_shape().as_list()
     if len(w_shape) == 2:
       random_weights = w_initializer(weights.shape)
@@ -606,7 +698,8 @@ class RecycledSacAgent(sac_agent.SacAgent):
       mask = tf.where(
           tf.math.greater_equal(score, threshold_value),
           tf.ones_like(score, dtype=tf.int32),
-          tf.zeros_like(score, dtype=tf.int32))
+          tf.zeros_like(score, dtype=tf.int32),
+      )
       new_weights = tf.where(mask == 1, random_weights, weights)
 
     # bias
@@ -624,16 +717,28 @@ class RecycledSacAgent(sac_agent.SacAgent):
   def reset_model_neurons(self):
     if self.reset_critic:
       tf.print('critic reset')
-      self.reset_dead_neurons(self._critic_optimizer, self.critic1_act,
-                              self.critic1_act_grads, self._critic_network_1,
-                              self._target_critic_network_1)
-      self.reset_dead_neurons(self._critic_optimizer, self.critic2_act,
-                              self.critic2_act_grads, self._critic_network_2,
-                              self._target_critic_network_2)
+      self.reset_dead_neurons(
+          self._critic_optimizer,
+          self.critic1_act,
+          self.critic1_act_grads,
+          self._critic_network_1,
+          self._target_critic_network_1,
+      )
+      self.reset_dead_neurons(
+          self._critic_optimizer,
+          self.critic2_act,
+          self.critic2_act_grads,
+          self._critic_network_2,
+          self._target_critic_network_2,
+      )
     if self.reset_actor:
       tf.print('actor reset')
-      self.reset_dead_neurons(self._actor_optimizer, self.actor_act,
-                              self.actor_act_grads, self._actor_network)
+      self.reset_dead_neurons(
+          self._actor_optimizer,
+          self.actor_act,
+          self.actor_act_grads,
+          self._actor_network,
+      )
 
   def get_dead_neurons(self, neuron_score):
     mask = tf.where(
@@ -647,11 +752,15 @@ class RecycledSacAgent(sac_agent.SacAgent):
   def get_mask_dead_neurons_weights(self, act, act_grad, model):
     model_layers = get_all_layers(model, filter_fn=is_dense_layer)
     all_layers_score = self.calculate_neuron_score_all_layers(
-        model, act, act_grad)
+        model, act, act_grad
+    )
     incoming_masks = {}
     outgoing_masks = {}
     dead_neuron_masks = {}
-    for layer, next_layer, in zip(model_layers[:-1], model_layers[1:]):
+    for (
+        layer,
+        next_layer,
+    ) in zip(model_layers[:-1], model_layers[1:]):
       incoming_var = layer.kernel
       outgoing_var = next_layer.kernel
       neurons_score = all_layers_score[layer.name]
@@ -662,18 +771,16 @@ class RecycledSacAgent(sac_agent.SacAgent):
         raise ValueError('reset_alg:%s  is not valid.' % self.reset_algo)
       mask, _ = self.get_dead_neurons(score)
       incoming_mask, outgoing_mask = self.create_mask_helper(
-          mask, incoming_var.shape[0], outgoing_var.shape[1])
+          mask, incoming_var.shape[0], outgoing_var.shape[1]
+      )
       incoming_masks[layer.name] = incoming_mask
       outgoing_masks[next_layer.name] = outgoing_mask
       dead_neuron_masks[layer.name] = mask
     return dead_neuron_masks, incoming_masks, outgoing_masks
 
-  def reset_dead_neurons(self,
-                         optimizer,
-                         act,
-                         act_grad,
-                         model,
-                         target_model=None):
+  def reset_dead_neurons(
+      self, optimizer, act, act_grad, model, target_model=None
+  ):
     """Recycle the dead neurons by reinitializing its weights.
 
     Args:
@@ -692,7 +799,8 @@ class RecycledSacAgent(sac_agent.SacAgent):
         else get_all_layers(target_model, filter_fn=is_dense_layer)
     )
     dead_neuron_masks, incoming_masks, outgoing_masks = (
-        self.get_mask_dead_neurons_weights(act, act_grad, model))
+        self.get_mask_dead_neurons_weights(act, act_grad, model)
+    )
     # update incoming weights
     for layer, target_layer in zip(model_layers[:-1], target_model_layers[:-1]):
       incoming_mask = incoming_masks[layer.name]
@@ -705,17 +813,23 @@ class RecycledSacAgent(sac_agent.SacAgent):
 
       if self.scale_recycled_weights:
         neuron_mask = dead_neuron_masks[layer.name]
-        new_in_weights = self._rescale_weights(neuron_mask, incoming_var,
-                                               new_in_weights, 0,
-                                               self.recycled_incoming_scaler)
+        new_in_weights = self._rescale_weights(
+            neuron_mask,
+            incoming_var,
+            new_in_weights,
+            0,
+            self.recycled_incoming_scaler,
+        )
 
-      new_in_weights = tf.where(incoming_mask == 1, new_in_weights,
-                                incoming_var)
+      new_in_weights = tf.where(
+          incoming_mask == 1, new_in_weights, incoming_var
+      )
 
       incoming_var.assign(new_in_weights)
       if self.reset_target_models and target_model is not None:
-        new_target_in_weights = tf.where(incoming_mask == 1, new_in_weights,
-                                         incoming_target_var)
+        new_target_in_weights = tf.where(
+            incoming_mask == 1, new_in_weights, incoming_target_var
+        )
         incoming_target_var.assign(new_target_in_weights)
       # reset momentum for the weights that are resetted
       self.reset_momentum(optimizer, incoming_var, incoming_mask)
@@ -723,7 +837,8 @@ class RecycledSacAgent(sac_agent.SacAgent):
       # reset bias of dead neurons
       new_bias = tf.zeros_like(layer.bias)
       new_bias = tf.where(
-          tf.math.equal(dead_neuron_masks[layer.name], 1), new_bias, layer.bias)
+          tf.math.equal(dead_neuron_masks[layer.name], 1), new_bias, layer.bias
+      )
       layer.bias.assign(new_bias)
 
     # update outgoing weights
@@ -736,9 +851,9 @@ class RecycledSacAgent(sac_agent.SacAgent):
     # of dense_1 (weights of dense_2).
     # model[1:] = [dense_2, output layer] to access weights
     # model[:-1] = [dense_1, dense_2] to access the corresponding dead neurons.
-    for layer, next_layer, target_next_layer in zip(model_layers[:-1],
-                                                    model_layers[1:],
-                                                    target_model_layers[1:]):
+    for layer, next_layer, target_next_layer in zip(
+        model_layers[:-1], model_layers[1:], target_model_layers[1:]
+    ):
       outgoing_mask = outgoing_masks[next_layer.name]
       outgoing_var = next_layer.kernel
       outgoing_target_var = target_next_layer.kernel
@@ -751,28 +866,35 @@ class RecycledSacAgent(sac_agent.SacAgent):
         # keep recycled_outgoing_scaler with the default 0.
         if self.scale_recycled_weights and self.recycled_outgoing_scaler > 0:
           neuron_mask = dead_neuron_masks[layer.name]
-          new_out_weights = self._rescale_weights(neuron_mask, outgoing_var,
-                                                  new_out_weights, 1,
-                                                  self.recycled_outgoing_scaler)
+          new_out_weights = self._rescale_weights(
+              neuron_mask,
+              outgoing_var,
+              new_out_weights,
+              1,
+              self.recycled_outgoing_scaler,
+          )
 
       elif self.init_method == 'zero':
         new_out_weights = tf.zeros_like(outgoing_var)
       else:
         raise ValueError('init_method:%s  is not valid.' % self.init_method)
 
-      new_out_weights = tf.where(outgoing_mask == 1, new_out_weights,
-                                 outgoing_var)
+      new_out_weights = tf.where(
+          outgoing_mask == 1, new_out_weights, outgoing_var
+      )
       outgoing_var.assign(new_out_weights)
       if self.reset_target_models and target_model is not None:
-        new_target_out_weights = tf.where(outgoing_mask == 1, new_out_weights,
-                                          outgoing_target_var)
+        new_target_out_weights = tf.where(
+            outgoing_mask == 1, new_out_weights, outgoing_target_var
+        )
         outgoing_target_var.assign(new_target_out_weights)
       self.reset_momentum(optimizer, outgoing_var, outgoing_mask)
 
   def _rescale_weights(self, neuron_mask, var, new_weights, axis, scaler):
     non_dead_count = neuron_mask.shape[0] - tf.reduce_sum(neuron_mask)
-    non_recycled_norm = tf.reduce_sum((tf.norm(var, axis=axis) * tf.cast(
-        1 - neuron_mask, tf.float32))) / tf.cast(non_dead_count, tf.float32)
+    non_recycled_norm = tf.reduce_sum(
+        (tf.norm(var, axis=axis) * tf.cast(1 - neuron_mask, tf.float32))
+    ) / tf.cast(non_dead_count, tf.float32)
 
     new_recycled_norm = non_recycled_norm * scaler
     weights_norm_per_neuron = tf.norm(new_weights, axis=axis, keepdims=True)
@@ -864,7 +986,8 @@ def train_eval(
   xm_client = xmanager_api.XManagerApi()
   work_unit = xm_client.get_current_work_unit()
   xm_objective_value_train_reward = work_unit.get_measurement_series(
-      label='train_reward')
+      label='train_reward'
+  )
   xm_objective_value_reward = work_unit.get_measurement_series(label='reward')
   # END_GOOGLE_INTERNAL
 
@@ -880,8 +1003,9 @@ def train_eval(
   logging.info('SAC params: train mode actor: %s', train_mode_actor)
   logging.info('SAC params: train mode value: %s', train_mode_value)
   logging.info('SAC params: width: %s', width)
-  logging.info('SAC params: actor_critic_widths_str: %s',
-               actor_critic_widths_str)
+  logging.info(
+      'SAC params: actor_critic_widths_str: %s', actor_critic_widths_str
+  )
   logging.info('SAC params: width_actor: %s', width_actor)
   logging.info('SAC params: width_value: %s', width_value)
   logging.info('SAC params: weight_decay: %s', weight_decay)
@@ -889,8 +1013,9 @@ def train_eval(
   collect_env = suite_mujoco.load(env_name)
   eval_env = suite_mujoco.load(env_name)
 
-  _, action_tensor_spec, time_step_tensor_spec = (
-      spec_utils.get_tensor_specs(collect_env))
+  _, action_tensor_spec, time_step_tensor_spec = spec_utils.get_tensor_specs(
+      collect_env
+  )
 
   actor_net = create_sequential_actor_network(
       actor_fc_layers=actor_fc_layers,
@@ -948,29 +1073,32 @@ def train_eval(
       max_size=replay_capacity,
       sampler=reverb.selectors.Uniform(),
       remover=reverb.selectors.Fifo(),
-      rate_limiter=reverb.rate_limiters.MinSize(1))
+      rate_limiter=reverb.rate_limiters.MinSize(1),
+  )
 
-  reverb_checkpoint_dir = os.path.join(root_dir, learner.TRAIN_DIR,
-                                       learner.REPLAY_BUFFER_CHECKPOINT_DIR)
+  reverb_checkpoint_dir = os.path.join(
+      root_dir, learner.TRAIN_DIR, learner.REPLAY_BUFFER_CHECKPOINT_DIR
+  )
   reverb_checkpointer = reverb.platform.checkpointers_lib.DefaultCheckpointer(
-      path=reverb_checkpoint_dir)
-  reverb_server = reverb.Server([table],
-                                port=reverb_port,
-                                checkpointer=reverb_checkpointer)
+      path=reverb_checkpoint_dir
+  )
+  reverb_server = reverb.Server(
+      [table], port=reverb_port, checkpointer=reverb_checkpointer
+  )
   reverb_replay = reverb_replay_buffer.ReverbReplayBuffer(
       agent.collect_data_spec,
       sequence_length=2,
       table_name=table_name,
-      local_server=reverb_server)
+      local_server=reverb_server,
+  )
   rb_observer = reverb_utils.ReverbAddTrajectoryObserver(
-      reverb_replay.py_client,
-      table_name,
-      sequence_length=2,
-      stride_length=1)
+      reverb_replay.py_client, table_name, sequence_length=2, stride_length=1
+  )
 
   def experience_dataset_fn():
     return reverb_replay.as_dataset(
-        sample_batch_size=batch_size, num_steps=2).prefetch(50)
+        sample_batch_size=batch_size, num_steps=2
+    ).prefetch(50)
 
   saved_model_dir = os.path.join(root_dir, learner.POLICY_SAVED_MODEL_DIR)
   env_step_metric = py_metrics.EnvironmentSteps()
@@ -980,11 +1108,13 @@ def train_eval(
           agent,
           train_step,
           interval=policy_save_interval,
-          metadata_metrics={triggers.ENV_STEP_METADATA_KEY: env_step_metric}),
+          metadata_metrics={triggers.ENV_STEP_METADATA_KEY: env_step_metric},
+      ),
       triggers.ReverbCheckpointTrigger(
           train_step,
           interval=replay_buffer_save_interval,
-          reverb_client=reverb_replay.py_client),
+          reverb_client=reverb_replay.py_client,
+      ),
       triggers.StepPerSecondLogTrigger(train_step, interval=1000),
   ]
 
@@ -994,22 +1124,26 @@ def train_eval(
       agent,
       experience_dataset_fn,
       triggers=learning_triggers,
-      strategy=strategy)
+      strategy=strategy,
+  )
 
   random_policy = random_py_policy.RandomPyPolicy(
-      collect_env.time_step_spec(), collect_env.action_spec())
+      collect_env.time_step_spec(), collect_env.action_spec()
+  )
   initial_collect_actor = actor.Actor(
       collect_env,
       random_policy,
       train_step,
       steps_per_run=initial_collect_steps,
-      observers=[rb_observer])
+      observers=[rb_observer],
+  )
   logging.info('Doing initial collect.')
   initial_collect_actor.run()
 
   tf_collect_policy = agent.collect_policy
   collect_policy = py_tf_eager_policy.PyTFEagerPolicy(
-      tf_collect_policy, use_tf_function=True)
+      tf_collect_policy, use_tf_function=True
+  )
 
   collect_actor = actor.Actor(
       collect_env,
@@ -1018,11 +1152,13 @@ def train_eval(
       steps_per_run=1,
       metrics=actor.collect_metrics(10),
       summary_dir=os.path.join(root_dir, learner.TRAIN_DIR),
-      observers=[rb_observer, env_step_metric])
+      observers=[rb_observer, env_step_metric],
+  )
 
   tf_greedy_policy = greedy_policy.GreedyPolicy(agent.policy)
   eval_greedy_policy = py_tf_eager_policy.PyTFEagerPolicy(
-      tf_greedy_policy, use_tf_function=True)
+      tf_greedy_policy, use_tf_function=True
+  )
 
   eval_actor = actor.Actor(
       eval_env,
@@ -1061,8 +1197,9 @@ def train_eval(
   # Log last section of evaluation scores for the final metric.
   idx = int(FLAGS.average_last_fraction * len(average_returns))
   avg_return = np.mean(average_returns[-idx:])
-  logging.info('Step %d, Average Return: %f', env_step_metric.result(),
-               avg_return)
+  logging.info(
+      'Step %d, Average Return: %f', env_step_metric.result(), avg_return
+  )
 
   rb_observer.close()
   reverb_server.stop()
@@ -1078,10 +1215,7 @@ def main(_):
   logging.info('Gin bindings: %s', FLAGS.gin_bindings)
   logging.info('# Gin-Config:\n %s', gin.config.operative_config_str())
 
-  train_eval(
-      FLAGS.root_dir,
-      strategy=strategy,
-      reverb_port=FLAGS.reverb_port)
+  train_eval(FLAGS.root_dir, strategy=strategy, reverb_port=FLAGS.reverb_port)
 
 
 if __name__ == '__main__':

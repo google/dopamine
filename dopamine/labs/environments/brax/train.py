@@ -21,14 +21,20 @@ from absl import logging
 from dopamine.continuous_domains import run_experiment
 from dopamine.labs.environments.brax import brax_lib
 
-flags.DEFINE_string('base_dir', None,
-                    'Base directory to host all required sub-directories.')
+flags.DEFINE_string(
+    'base_dir', None, 'Base directory to host all required sub-directories.'
+)
 flags.DEFINE_multi_string(
-    'gin_files', [], 'List of paths to gin configuration files (e.g.'
-    '"dopamine/labs/environments/brax/sac_brax.gin").')
+    'gin_files',
+    [],
+    'List of paths to gin configuration files (e.g.'
+    '"dopamine/labs/environments/brax/sac_brax.gin").',
+)
 flags.DEFINE_multi_string(
-    'gin_bindings', [],
-    'Gin bindings to override the values set in the config files.')
+    'gin_bindings',
+    [],
+    'Gin bindings to override the values set in the config files.',
+)
 
 FLAGS = flags.FLAGS
 
@@ -52,4 +58,3 @@ def main(unused_argv):
 if __name__ == '__main__':
   flags.mark_flag_as_required('base_dir')
   app.run(main)
-

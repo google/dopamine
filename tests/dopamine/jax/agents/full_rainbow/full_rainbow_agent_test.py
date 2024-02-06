@@ -33,12 +33,13 @@ class FullRainbowAgentTest(absltest.TestCase):
     super(FullRainbowAgentTest, self).setUp()
     self._num_actions = 4
     self._num_atoms = 5
-    self._vmax = 7.
+    self._vmax = 7.0
     self.observation_shape = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
     self.observation_dtype = dqn_agent.NATURE_DQN_DTYPE
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
-    self.zero_state = onp.zeros((1,) + self.observation_shape +
-                                (self.stack_size,))
+    self.zero_state = onp.zeros(
+        (1,) + self.observation_shape + (self.stack_size,)
+    )
     gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.replay_capacity', 100)
     gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.batch_size', 2)
     gin.bind_parameter('JaxDQNAgent.min_replay_history', 32)
@@ -60,6 +61,7 @@ class FullRainbowAgentTest(absltest.TestCase):
     # action being chosen.
     class MockFullRainbowNetwork(nn.Module):
       """Custom Jax network used in tests."""
+
       num_actions: int
       num_atoms: int
       noisy: bool
@@ -69,12 +71,12 @@ class FullRainbowAgentTest(absltest.TestCase):
 
       @nn.compact
       def __call__(self, x, support, eval_mode=False, key=None):
-
         def custom_init(key, shape, dtype=jnp.float32):
           del key
           to_pick_first_action = onp.ones(shape, dtype)
-          to_pick_first_action[:, :self.num_atoms] = onp.arange(
-              1, self.num_atoms + 1)
+          to_pick_first_action[:, : self.num_atoms] = onp.arange(
+              1, self.num_atoms + 1
+          )
           return to_pick_first_action
 
         x = x.astype(jnp.float32)
@@ -82,8 +84,8 @@ class FullRainbowAgentTest(absltest.TestCase):
         x = nn.Dense(
             features=self.num_actions * self.num_atoms,
             kernel_init=custom_init,
-            bias_init=nn.initializers.ones)(
-                x)
+            bias_init=nn.initializers.ones,
+        )(x)
         logits = x.reshape((self.num_actions, self.num_atoms))
         if not self.distributional:
           qs = jnp.sum(logits, axis=-1)  # Sum over all the num_atoms
@@ -119,10 +121,12 @@ class FullRainbowAgentTest(absltest.TestCase):
     self.assertEqual(jnp.min(agent._support), -self._vmax)
     self.assertEqual(jnp.max(agent._support), self._vmax)
     state = onp.ones((1, 28224))
-    net_output = agent.network_def.apply(agent.online_params, state,
-                                         agent._support)
-    self.assertEqual(net_output.logits.shape,
-                     (self._num_actions, self._num_atoms))
+    net_output = agent.network_def.apply(
+        agent.online_params, state, agent._support
+    )
+    self.assertEqual(
+        net_output.logits.shape, (self._num_actions, self._num_atoms)
+    )
     self.assertEqual(net_output.probabilities.shape, net_output.logits.shape)
     self.assertEqual(net_output.logits.shape[0], self._num_actions)
     self.assertEqual(net_output.logits.shape[1], self._num_atoms)
@@ -185,10 +189,13 @@ class FullRainbowAgentTest(absltest.TestCase):
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
         expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+            (1,) + self.observation_shape, step
+        )
     onp.array_equal(agent.state, expected_state)
-    onp.array_equal(agent._last_observation,
-                    onp.ones(self.observation_shape) * (num_steps - 1))
+    onp.array_equal(
+        agent._last_observation,
+        onp.ones(self.observation_shape) * (num_steps - 1),
+    )
     onp.array_equal(agent._observation, observation[:, :, 0])
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
@@ -217,10 +224,12 @@ class FullRainbowAgentTest(absltest.TestCase):
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
         expected_state[:, :, :, stack_pos] = onp.full(
-            (1,) + self.observation_shape, step)
+            (1,) + self.observation_shape, step
+        )
     onp.array_equal(agent.state, expected_state)
-    onp.array_equal(agent._last_observation,
-                    onp.full(self.observation_shape, num_steps - 1))
+    onp.array_equal(
+        agent._last_observation, onp.full(self.observation_shape, num_steps - 1)
+    )
     onp.array_equal(agent._observation, observation[:, :, 0])
     # We expect one more than num_steps because of the call to begin_episode.
     self.assertEqual(agent.training_steps, num_steps + 1)
@@ -230,28 +239,32 @@ class FullRainbowAgentTest(absltest.TestCase):
 
   def testStoreTransitionWithUniformSampling(self):
     agent = full_rainbow_agent.JaxFullRainbowAgent(
-        num_actions=4, replay_scheme='uniform')
+        num_actions=4, replay_scheme='uniform'
+    )
     dummy_frame = onp.zeros((84, 84))
     # Adding transitions with default, 10., default priorities.
     agent._store_transition(dummy_frame, 0, 0, False)
-    agent._store_transition(dummy_frame, 0, 0, False, priority=10.)
+    agent._store_transition(dummy_frame, 0, 0, False, priority=10.0)
     agent._store_transition(dummy_frame, 0, 0, False)
     returned_priorities = agent._replay.get_priority(
-        onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32))
-    expected_priorities = [1., 10., 1.]
+        onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32)
+    )
+    expected_priorities = [1.0, 10.0, 1.0]
     onp.array_equal(returned_priorities, expected_priorities)
 
   def testStoreTransitionWithPrioritizedSampling(self):
     agent = full_rainbow_agent.JaxFullRainbowAgent(
-        num_actions=4, replay_scheme='prioritized')
+        num_actions=4, replay_scheme='prioritized'
+    )
     dummy_frame = onp.zeros((84, 84))
     # Adding transitions with default, 10., default priorities.
     agent._store_transition(dummy_frame, 0, 0, False)
-    agent._store_transition(dummy_frame, 0, 0, False, priority=10.)
+    agent._store_transition(dummy_frame, 0, 0, False, priority=10.0)
     agent._store_transition(dummy_frame, 0, 0, False)
     returned_priorities = agent._replay.get_priority(
-        onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32))
-    expected_priorities = [1., 10., 10.]
+        onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32)
+    )
+    expected_priorities = [1.0, 10.0, 10.0]
     onp.array_equal(returned_priorities, expected_priorities)
 
 

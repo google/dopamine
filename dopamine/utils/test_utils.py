@@ -34,7 +34,8 @@ class MockReplayBuffer(object):
       self.sum_tree = mock.Mock()
     else:
       with tf.compat.v1.variable_scope(
-          'MockReplayBuffer', reuse=tf.compat.v1.AUTO_REUSE):
+          'MockReplayBuffer', reuse=tf.compat.v1.AUTO_REUSE
+      ):
         self.add = mock.Mock()
         self.memory = mock.Mock()
         self.memory.add_count = 0
