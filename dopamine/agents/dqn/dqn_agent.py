@@ -25,7 +25,7 @@ import random
 from absl import logging
 from dopamine.discrete_domains import atari_lib
 from dopamine.replay_memory import circular_replay_buffer
-import gin.tf
+import gin
 import numpy as np
 import tensorflow as tf
 

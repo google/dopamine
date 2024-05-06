@@ -26,7 +26,7 @@ from absl import flags
 from dopamine.agents.dqn import dqn_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.utils import test_utils
-import gin.tf
+import gin
 import mock
 import numpy as np
 import tensorflow as tf

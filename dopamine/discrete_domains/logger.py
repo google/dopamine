@@ -22,7 +22,7 @@ import os
 import pickle
 
 from absl import logging
-import gin.tf
+import gin
 import tensorflow as tf
 
 

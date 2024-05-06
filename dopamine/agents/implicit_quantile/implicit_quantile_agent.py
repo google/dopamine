@@ -26,7 +26,7 @@ from __future__ import print_function
 
 from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import atari_lib
-import gin.tf
+import gin
 import tensorflow as tf
 
 

@@ -21,7 +21,7 @@ import shutil
 from absl import flags
 from absl import logging
 from dopamine.discrete_domains import train
-import gin.tf
+import gin
 import tensorflow as tf
 
 

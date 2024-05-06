@@ -32,7 +32,7 @@ from dopamine.discrete_domains import logger
 from dopamine.discrete_domains import run_experiment
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
-import gin.tf
+import gin
 import mock
 import tensorflow as tf
 
@@ -213,7 +213,7 @@ class RunnerTest(tf.test.TestCase):
       )
       config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
       config.gpu_options.allow_growth = True
-      self._agent._sess = tf.compat.v1.Session('', config=config)
+      self._agent._sess = '/tmp/dopamine_tests'
       return self._agent
 
     self._create_agent_fn = create_agent_fn

@@ -40,7 +40,7 @@ from dopamine.labs.moes.agents import full_rainbow_moe_agent
 from dopamine.labs.moes.agents import rainbow_100k_moe_agent
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
-import gin.tf
+import gin
 import numpy as np
 import tensorflow as tf
 import tqdm.auto as tqdm
