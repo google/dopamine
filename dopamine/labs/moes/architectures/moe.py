@@ -102,8 +102,8 @@ class MoE(nn.Module):
         axis_size=self.num_experts,
         # TODO(jfarebro): Supply logical sharding axes
     )(self.module, mixture_inputs)
+
     expert_output_dims = experts.shape[-1]
-    experts_hidden = experts_hidden.reshape(-1, experts_hidden.shape[-1])
 
     # Step 4: Reverse permutation
     #

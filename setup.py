@@ -51,7 +51,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='4.0.6',
+    version='4.0.7',
     description=dopamine_description,
     long_description=long_description,
     long_description_content_type='text/markdown',

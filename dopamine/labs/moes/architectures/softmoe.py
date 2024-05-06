@@ -92,6 +92,7 @@ class SoftMoE(nn.Module):
         x_normalized,
         phi_weights,
     )
+
     dispatch_weights = jax.nn.softmax(logits, axis=0)
     combine_weights = jax.nn.softmax(logits, axis=(1, 2))
 
@@ -125,8 +126,6 @@ class SoftMoE(nn.Module):
     if self.expert_type == "BIG":
       experts = experts.reshape(self.num_experts, num_slots, token_length)
 
-    experts_hidden = experts_hidden.reshape(-1, experts_hidden.shape[-1])
-
     # The output tokens are weighted average of all slots.
     outputs = jnp.einsum("npd,mnp->md", experts, combine_weights)
 
@@ -140,5 +139,7 @@ class SoftMoE(nn.Module):
         ),
     )
     return types.MoEModuleReturn(
-        values=outputs, router_out=router_out, experts_hidden=experts_hidden
+        values=outputs,
+        router_out=router_out,
+        experts_hidden=experts_hidden,
     )

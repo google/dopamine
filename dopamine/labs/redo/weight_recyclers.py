@@ -719,7 +719,7 @@ class NeuronRecyclerScheduled(NeuronRecycler):
       pass
     elif self.score_type == 'random':
       new_key = random.fold_in(key, self._last_update_step)
-      score = random.shuffle(new_key, score)
+      score = random.permutation(new_key, score, independent=True)
     elif self.score_type == 'redo_inverted':
       score = -score
     # Metric used in Continual Backprop pape.

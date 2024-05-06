@@ -15,6 +15,7 @@
 """Compact implementation of the full Rainbow agent in JAX with MoE modules."""
 
 import functools
+
 from absl import logging
 from dopamine.jax import losses
 from dopamine.jax.agents.full_rainbow import full_rainbow_agent
@@ -109,7 +110,7 @@ def train(
     aux_losses = []
     if isinstance(net_outputs, arch_types.MoENetworkReturn):
       # We may be running a BASELINE agent, which would not contain any MoE
-      # statistics, so we condition this code on *not* being a BASELINE..
+      # statistics, so we condition this code on *not* being a BASELINE.
       aux_losses = moe_losses.aux_loss(
           types.MoELossParameters(
               moe_out=net_outputs.moe_out,
@@ -157,6 +158,7 @@ def train(
       grad, optimizer_state, params=online_params
   )
   online_params = optax.apply_updates(online_params, updates)
+
   train_returns = {
       'optimizer_state': optimizer_state,
       'online_params': online_params,
@@ -171,6 +173,7 @@ def train(
   ):
     moe_statistics = {}
     experts_prob = jnp.mean(jnp.mean(aux_vars['experts_prob'], axis=0), axis=0)
+
     # TODO(gsokar) revisit this if we explore multiple routers.
     if networks.MoEType[network_def.moe_type] == networks.MoEType.SOFTMOE:
       grads_router = [
