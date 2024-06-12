@@ -376,8 +376,7 @@ class OutOfGraphReplayBuffer(object):
 
     Raises:
       ValueError: If args have wrong shape or dtype.
-    """
-    self._check_args_length(*args)
+    """    
     for arg_element, store_element in zip(args, self.get_add_args_signature()):
       if isinstance(arg_element, np.ndarray):
         arg_shape = arg_element.shape
