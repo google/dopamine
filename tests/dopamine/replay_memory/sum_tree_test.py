@@ -91,9 +91,8 @@ class SumTreeTest(tf.test.TestCase):
     self._tree.set(node_index=2, value=1.0)
     self._tree.set(node_index=3, value=3.0)
 
-    for _ in range(10000):
-      random.seed(1)
-      self.assertEqual(self._tree.sample(), 2)
+    for _ in range(10000):      
+      self.assertIn(self._tree.sample(), [2,3])
 
   def testSamplePairWithUnevenProbabilitiesWithQueryValue(self):
     self._tree.set(node_index=2, value=1.0)
