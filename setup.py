@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# RL implementation is allowed.
 """Setup script for Dopamine.
 
 This script will install Dopamine as a Python module.
