@@ -3,16 +3,16 @@
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
+# You may obtain a copy of the License at:
 #      http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
+# This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+# OR CONDITIONS OF ANY KIND, either express or implied. See the 
+# License for the specific language governing permissions and
 # limitations under the License.
-"""Networks for continuous control agents."""
+"""
+Defines network models for continuous control agents using Soft Actor-Critic (SAC).
+"""
 
 import functools
 import operator
@@ -30,205 +30,191 @@ tfb = tfp.bijectors
 
 
 class SacActorOutput(NamedTuple):
-  """The output of a SAC actor."""
-
-  mean_action: jnp.ndarray
-  sampled_action: jnp.ndarray
-  log_probability: jnp.ndarray
+    """Represents the output of a Soft Actor-Critic (SAC) actor."""
+    mean_action: jnp.ndarray
+    sampled_action: jnp.ndarray
+    log_probability: jnp.ndarray
 
 
 class SacCriticOutput(NamedTuple):
-  """The output of a SAC critic."""
-
-  q_value1: jnp.ndarray
-  q_value2: jnp.ndarray
+    """Represents the output of a Soft Actor-Critic (SAC) critic."""
+    q_value1: jnp.ndarray
+    q_value2: jnp.ndarray
 
 
 class SacOutput(NamedTuple):
-  """The output of a SACNetwork, including the actor and critic outputs."""
-
-  actor: SacActorOutput
-  critic: SacCriticOutput
-
-
-class _Tanh(tfb.Tanh):
-
-  def _inverse(self, y):
-    # We perform clipping in the _inverse function, as is done in TF-Agents.
-    y = jnp.where(
-        jnp.less_equal(jnp.abs(y), 1.0), tf.clip(y, -0.99999997, 0.99999997), y
-    )
-    return jnp.arctanh(y)
+    """Represents the combined output of SAC actor and critic networks."""
+    actor: SacActorOutput
+    critic: SacCriticOutput
 
 
-def _transform_distribution(dist, mean, magnitude):
-  """Scales the input normal distribution to be within the action limits.
+class _TanhBijector(tfb.Tanh):
+    """Custom Tanh bijector with clipping to ensure numerical stability."""
 
-  Args:
-    dist: a TensorFlow distribution.
-    mean: desired action means.
-    magnitude: desired action magnitudes.
-
-  Returns:
-    A transformed distribution, scaled to within the action limits.
-  """
-  bijectors = tfb.Chain([
-      tfb.Shift(mean)(tfb.Scale(magnitude)),
-      _Tanh(),
-  ])
-  dist = tfd.TransformedDistribution(dist, bijectors)
-  return dist
+    def _inverse(self, y):
+        # Clip values within the range [-0.99999997, 0.99999997] to avoid numerical instability.
+        y = jnp.where(
+            jnp.abs(y) <= 1.0, 
+            tf.clip_by_value(y, -0.99999997, 0.99999997), 
+            y
+        )
+        return jnp.arctanh(y)
 
 
-def _shifted_uniform(minval=0.0, maxval=1.0, dtype=jnp.float32):
-  def init(key, shape, dtype=dtype):
-    return jax.random.uniform(
-        key, shape=shape, minval=minval, maxval=maxval, dtype=dtype
-    )
+def transform_distribution(dist, mean, magnitude):
+    """
+    Scales the input normal distribution to fit within the specified action limits.
 
-  return init
+    Args:
+        dist: A TensorFlow probability distribution.
+        mean: Desired action means.
+        magnitude: Desired action magnitudes.
+
+    Returns:
+        A transformed distribution scaled to within the action limits.
+    """
+    bijectors = tfb.Chain([
+        tfb.Shift(mean)(tfb.Scale(magnitude)),
+        _TanhBijector(),
+    ])
+    return tfd.TransformedDistribution(dist, bijectors)
+
+
+def shifted_uniform(minval=0.0, maxval=1.0, dtype=jnp.float32):
+    """
+    Initializes a uniform distribution with given minimum and maximum values.
+    """
+    def init(key, shape, dtype=dtype):
+        return jax.random.uniform(key, shape=shape, minval=minval, maxval=maxval, dtype=dtype)
+    return init
 
 
 class SACCriticNetwork(nn.Module):
-  """A simple critic network used in SAC."""
+    """Defines the critic network used in Soft Actor-Critic (SAC) models."""
 
-  num_layers: int = 2
-  hidden_units: int = 256
+    num_layers: int = 2
+    hidden_units: int = 256
 
-  @nn.compact
-  def __call__(self, state: jnp.ndarray, action: jnp.ndarray) -> jnp.ndarray:
-    kernel_initializer = jax.nn.initializers.glorot_uniform()
+    @nn.compact
+    def __call__(self, state: jnp.ndarray, action: jnp.ndarray) -> jnp.ndarray:
+        """
+        Forward pass of the critic network.
 
-    # Preprocess inputs
-    a = action.reshape(-1)  # flatten
-    x = state.astype(jnp.float32)
-    x = x.reshape(-1)  # flatten
-    x = jnp.concatenate((x, a))
+        Args:
+            state: Current state input.
+            action: Action input.
 
-    for _ in range(self.num_layers):
-      x = nn.Dense(features=self.hidden_units, kernel_init=kernel_initializer)(
-          x
-      )
-      x = nn.relu(x)
+        Returns:
+            The estimated Q-value.
+        """
+        kernel_init = jax.nn.initializers.glorot_uniform()
 
-    return nn.Dense(features=1, kernel_init=kernel_initializer)(x)
+        # Flatten the input state and action
+        action_flat = action.reshape(-1)
+        state_flat = state.astype(jnp.float32).reshape(-1)
+        x = jnp.concatenate([state_flat, action_flat])
+
+        # Apply fully connected layers
+        for _ in range(self.num_layers):
+            x = nn.Dense(features=self.hidden_units, kernel_init=kernel_init)(x)
+            x = nn.relu(x)
+
+        return nn.Dense(features=1, kernel_init=kernel_init)(x)
 
 
 @gin.configurable
 class SACNetwork(nn.Module):
-  """Non-convolutional value and policy networks for SAC."""
-
-  action_shape: Tuple[int, ...]
-  num_layers: int = 2
-  hidden_units: int = 256
-  action_limits: Optional[Tuple[Tuple[float, ...], Tuple[float, ...]]] = None
-
-  def setup(self):
-    action_dim = functools.reduce(operator.mul, self.action_shape, 1)
-
-    # The setting of these initializers were borrowed from the TF-Agents SAC
-    # implementation.
-    kernel_initializer = jax.nn.initializers.glorot_uniform()
-
-    self._critic1 = SACCriticNetwork(self.num_layers, self.hidden_units)
-    self._critic2 = SACCriticNetwork(self.num_layers, self.hidden_units)
-
-    self._actor_layers = [
-        nn.Dense(features=self.hidden_units, kernel_init=kernel_initializer)
-        for _ in range(self.num_layers)
-    ]
-    self._actor_final_layer = nn.Dense(
-        features=action_dim * 2, kernel_init=kernel_initializer
-    )
-
-  def __call__(
-      self, state: jnp.ndarray, key: jnp.ndarray, mean_action: bool = True
-  ) -> SacOutput:
-    """Calls the SAC actor/critic networks.
-
-    This has two important purposes:
-      1. It is used to initialize all parameters of both networks.
-      2. It is used to efficiently calculate the outputs of both the actor
-        and critic networks on a single input.
-
-    Args:
-      state: An input state.
-      key: A PRNGKey to use to sample an action from the actor's output
-        distribution.
-      mean_action: If True, it will use the actor's mean action to feed to the
-        value network. Otherwise, it will use the sampled action.
-
-    Returns:
-      A named tuple containing the outputs from both networks.
     """
-    actor_output = self.actor(state, key)
-
-    if mean_action:
-      critic_output = self.critic(state, actor_output.mean_action)
-    else:
-      critic_output = self.critic(state, actor_output.sampled_action)
-
-    return SacOutput(actor_output, critic_output)
-
-  def actor(self, state: jnp.ndarray, key: jnp.ndarray) -> SacActorOutput:
-    """Calls the SAC actor network.
-
-    This can be called using network_def.apply(..., method=network_def.actor).
-
-    Args:
-      state: An input state.
-      key: A PRNGKey to use to sample an action from the actor's output
-        distribution.
-
-    Returns:
-      A named tuple containing a sampled action, the mean action, and the
-        likelihood of the sampled action.
+    Defines a Soft Actor-Critic (SAC) network with separate actor and critic networks.
     """
-    # Preprocess inputs
-    x = state.astype(jnp.float32)
-    x = x.reshape(-1)  # flatten
+    action_shape: Tuple[int, ...]
+    num_layers: int = 2
+    hidden_units: int = 256
+    action_limits: Optional[Tuple[Tuple[float, ...], Tuple[float, ...]]] = None
 
-    for layer in self._actor_layers:
-      x = layer(x)
-      x = nn.relu(x)
+    def setup(self):
+        """Initializes the SAC network components."""
+        action_dim = functools.reduce(operator.mul, self.action_shape, 1)
+        kernel_init = jax.nn.initializers.glorot_uniform()
 
-    # Note we are only producing a diagonal covariance matrix, not a full
-    # covariance matrix as it is difficult to ensure that it would be PSD.
-    loc_and_scale_diag = self._actor_final_layer(x)
-    loc, scale_diag = jnp.split(loc_and_scale_diag, 2)
-    # Exponentiate to only get positive terms.
-    scale_diag = jnp.exp(scale_diag)
-    dist = tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
-    if self.action_limits is None:
-      mode = dist.mode()
-    else:
-      lower_action_limit = jnp.asarray(self.action_limits[0], dtype=jnp.float32)
-      upper_action_limit = jnp.asarray(self.action_limits[1], dtype=jnp.float32)
-      mean = (lower_action_limit + upper_action_limit) / 2.0
-      magnitude = (upper_action_limit - lower_action_limit) / 2.0
-      mode = magnitude * jnp.tanh(dist.mode()) + mean
-      dist = _transform_distribution(dist, mean, magnitude)
-    sampled_action = dist.sample(seed=key)
-    action_probability = dist.log_prob(sampled_action)
+        # Define the critic networks
+        self.critic1 = SACCriticNetwork(self.num_layers, self.hidden_units)
+        self.critic2 = SACCriticNetwork(self.num_layers, self.hidden_units)
 
-    mode = jnp.reshape(mode, self.action_shape)
-    sampled_action = jnp.reshape(sampled_action, self.action_shape)
+        # Define the actor network layers
+        self.actor_layers = [
+            nn.Dense(features=self.hidden_units, kernel_init=kernel_init) for _ in range(self.num_layers)
+        ]
+        self.actor_final_layer = nn.Dense(features=action_dim * 2, kernel_init=kernel_init)
 
-    return SacActorOutput(mode, sampled_action, action_probability)
+    def __call__(self, state: jnp.ndarray, key: jnp.ndarray, mean_action: bool = True) -> SacOutput:
+        """
+        Forward pass for both actor and critic networks.
 
-  def critic(self, state: jnp.ndarray, action: jnp.ndarray) -> SacCriticOutput:
-    """Calls the SAC critic network.
+        Args:
+            state: Input state.
+            key: PRNG key for action sampling.
+            mean_action: Whether to use mean action or sample from the distribution.
 
-    SAC uses two Q networks to reduce overestimation bias.
-    This can be called using network_def.apply(..., method=network_def.critic).
+        Returns:
+            The combined output from both actor and critic networks.
+        """
+        actor_output = self.actor(state, key)
+        critic_output = self.critic(state, actor_output.mean_action if mean_action else actor_output.sampled_action)
+        return SacOutput(actor=actor_output, critic=critic_output)
 
-    Args:
-      state: An input state.
-      action: An action to compute the value of.
+    def actor(self, state: jnp.ndarray, key: jnp.ndarray) -> SacActorOutput:
+        """
+        Forward pass for the actor network.
 
-    Returns:
-      A named tuple containing the Q values of each network.
-    """
-    return SacCriticOutput(
-        self._critic1(state, action), self._critic2(state, action)
-    )
+        Args:
+            state: Input state.
+            key: PRNG key for action sampling.
+
+        Returns:
+            The actor's action and log-probability output.
+        """
+        x = state.astype(jnp.float32).reshape(-1)
+
+        # Apply the actor's hidden layers
+        for layer in self.actor_layers:
+            x = layer(x)
+            x = nn.relu(x)
+
+        # Produce mean and scale for the action distribution
+        loc_and_scale_diag = self.actor_final_layer(x)
+        loc, scale_diag = jnp.split(loc_and_scale_diag, 2)
+        scale_diag = jnp.exp(scale_diag)
+        dist = tfd.MultivariateNormalDiag(loc=loc, scale_diag=scale_diag)
+
+        # Transform the action distribution if action limits are provided
+        if self.action_limits is not None:
+            mean = (jnp.array(self.action_limits[0]) + jnp.array(self.action_limits[1])) / 2.0
+            magnitude = (jnp.array(self.action_limits[1]) - jnp.array(self.action_limits[0])) / 2.0
+            mode = magnitude * jnp.tanh(dist.mode()) + mean
+            dist = transform_distribution(dist, mean, magnitude)
+        else:
+            mode = dist.mode()
+
+        sampled_action = dist.sample(seed=key)
+        action_probability = dist.log_prob(sampled_action)
+
+        return SacActorOutput(mean_action=mode.reshape(self.action_shape), 
+                              sampled_action=sampled_action.reshape(self.action_shape),
+                              log_probability=action_probability)
+
+    def critic(self, state: jnp.ndarray, action: jnp.ndarray) -> SacCriticOutput:
+        """
+        Forward pass for the critic network, producing Q-values for the given action.
+
+        Args:
+            state: Input state.
+            action: Action to evaluate.
+
+        Returns:
+            The Q-values from both critic networks.
+        """
+        return SacCriticOutput(
+            q_value1=self.critic1(state, action),
+            q_value2=self.critic2(state, action)
+        )
