@@ -3,7 +3,7 @@ import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.labs.moes.architectures.networks
-import dopamine.replay_memory.circular_replay_buffer
+import dopamine.tf.replay_memory.circular_replay_buffer
 
 JaxDQNAgent.observation_shape = %gym_lib.MOUNTAINCAR_OBSERVATION_SHAPE
 JaxDQNAgent.observation_dtype = %jax_networks.MOUNTAINCAR_OBSERVATION_DTYPE

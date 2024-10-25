@@ -14,10 +14,6 @@
 # limitations under the License.
 """Tests for dopamine.discrete_domains.atari_lib."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 
 
 
@@ -53,9 +49,9 @@ class AtariLibTest(tf.test.TestCase):
     # pylint: disable=unnecessary-lambda
     mock_atari_lib.side_effect = lambda x: 'atari({})'.format(x)
     # pylint: enable=unnecessary-lambda
-    game_name = 'Test'
+    game_name = 'Pong'
     env = atari_lib.create_atari_environment(game_name)
-    self.assertEqual('atari(gym(TestNoFrameskip-v0))', env)
+    self.assertEqual('atari(<PassiveEnvChecker<AtariEnv<ALE/Pong-v5>>>)', env)
 
 
 class MockALE(object):
@@ -96,8 +92,8 @@ class MockEnvironment(object):
     is_terminal = self.num_steps >= self.max_steps
 
     unused = 0
-    self.ale.screen_value -= 2
-    return (self.get_observation(), reward, is_terminal, unused)
+    self.ale.screen_value = max(0, self.ale.screen_value - 2)
+    return (self.get_observation(), reward, is_terminal, False, unused)
 
   def render(self, mode):
     pass

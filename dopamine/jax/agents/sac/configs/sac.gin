@@ -7,15 +7,14 @@ import dopamine.discrete_domains.gym_lib
 import dopamine.jax.agents.sac.sac_agent
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.jax.continuous_networks
-import dopamine.replay_memory.circular_replay_buffer
 
 SACAgent.reward_scale_factor = 0.1
-SACAgent.network = @continuous_networks.SACNetwork
+SACAgent.network = @continuous_networks.ActorCriticNetwork
 SACAgent.num_layers = 2
 SACAgent.hidden_units = 256
 SACAgent.gamma = 0.99
 SACAgent.update_horizon = 1
-SACAgent.min_replay_history = 10000  # agent steps
+SACAgent.min_replay_history = 10_000  # agent steps
 SACAgent.update_period = 1
 SACAgent.target_update_type = 'soft'
 SACAgent.target_smoothing_coefficient = 0.005
@@ -33,12 +32,12 @@ create_gym_environment.version = 'v2'
 create_continuous_runner.schedule = 'continuous_train_and_eval'
 create_continuous_agent.agent_name = 'sac'
 ContinuousTrainRunner.create_environment_fn = @gym_lib.create_gym_environment
-ContinuousRunner.num_iterations = 3200
-ContinuousRunner.training_steps = 1000
-ContinuousRunner.evaluation_steps = 10000  # agent steps
-ContinuousRunner.max_steps_per_episode = 1000
+ContinuousRunner.num_iterations = 3_200
+ContinuousRunner.training_steps = 1_000
+ContinuousRunner.evaluation_steps = 10_000  # agent steps
+ContinuousRunner.max_steps_per_episode = 1_000
 ContinuousRunner.clip_rewards = False
 
-circular_replay_buffer.OutOfGraphReplayBuffer.replay_capacity = 1000000
-circular_replay_buffer.OutOfGraphReplayBuffer.batch_size = 256
 
+ReplayBuffer.max_capacity = 1_000_000
+ReplayBuffer.batch_size = 256

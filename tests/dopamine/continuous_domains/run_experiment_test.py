@@ -39,12 +39,8 @@ class RunExperimentTest(parameterized.TestCase):
     self.env.action_space = spaces.Box(0.0, 1.0, (4,))
 
     # Required for creating a SAC agent in create_agent tests.
-    gin.bind_parameter(
-        'circular_replay_buffer.OutOfGraphReplayBuffer.replay_capacity', 10
-    )
-    gin.bind_parameter(
-        'circular_replay_buffer.OutOfGraphReplayBuffer.batch_size', 2
-    )
+    gin.bind_parameter('ReplayBuffer.max_capacity', 10)
+    gin.bind_parameter('ReplayBuffer.batch_size', 2)
 
     # Required for creating continuous runners.
     gin.bind_parameter(

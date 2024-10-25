@@ -40,8 +40,9 @@ class FullRainbowAgentTest(absltest.TestCase):
     self.zero_state = onp.zeros(
         (1,) + self.observation_shape + (self.stack_size,)
     )
-    gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.replay_capacity', 100)
-    gin.bind_parameter('OutOfGraphPrioritizedReplayBuffer.batch_size', 2)
+    gin.bind_parameter('ReplayBuffer.max_capacity', 100)
+    gin.bind_parameter('ReplayBuffer.batch_size', 2)
+    gin.bind_parameter('PrioritizedSamplingDistribution.max_capacity', 100)
     gin.bind_parameter('JaxDQNAgent.min_replay_history', 32)
     gin.bind_parameter('JaxDQNAgent.epsilon_eval', 0.0)
     gin.bind_parameter('JaxDQNAgent.epsilon_decay_period', 90)
@@ -246,7 +247,7 @@ class FullRainbowAgentTest(absltest.TestCase):
     agent._store_transition(dummy_frame, 0, 0, False)
     agent._store_transition(dummy_frame, 0, 0, False, priority=10.0)
     agent._store_transition(dummy_frame, 0, 0, False)
-    returned_priorities = agent._replay.get_priority(
+    returned_priorities = agent._replay._sampling_distribution._sum_tree.get(
         onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32)
     )
     expected_priorities = [1.0, 10.0, 1.0]
@@ -261,7 +262,7 @@ class FullRainbowAgentTest(absltest.TestCase):
     agent._store_transition(dummy_frame, 0, 0, False)
     agent._store_transition(dummy_frame, 0, 0, False, priority=10.0)
     agent._store_transition(dummy_frame, 0, 0, False)
-    returned_priorities = agent._replay.get_priority(
+    returned_priorities = agent._replay._sampling_distribution._sum_tree.get(
         onp.arange(self.stack_size - 1, self.stack_size + 2, dtype=onp.int32)
     )
     expected_priorities = [1.0, 10.0, 10.0]

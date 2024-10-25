@@ -21,19 +21,14 @@ Includes a wrapper class around Gym environments. This class makes general Gym
 environments conformant with the API Dopamine is expecting.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import itertools
 import math
 
-
-
 from dopamine.discrete_domains import atari_lib
 import gin
-import gym
+import gym as legacy_gym
 from gym.wrappers.time_limit import TimeLimit
+import gymnasium as gym
 import numpy as np
 import tensorflow as tf
 
@@ -62,12 +57,19 @@ MUJOCO_GAMES = ('Ant', 'HalfCheetah', 'Hopper', 'Humanoid', 'Walker2d')
 
 
 @gin.configurable
-def create_gym_environment(environment_name=None, version='v0'):
+def create_gym_environment(
+    environment_name=None,
+    version='v0',
+    use_legacy_gym=False,
+    use_ppo_preprocessing=False,
+):
   """Wraps a Gym environment with some basic preprocessing.
 
   Args:
     environment_name: str, the name of the environment to run.
     version: str, version of the environment to run.
+    use_legacy_gym: bool, whether to use the legacy Gym API.
+    use_ppo_preprocessing: bool, whether to use PPO-specific preprocessing.
 
   Returns:
     A Gym environment with some standard preprocessing.
@@ -76,13 +78,26 @@ def create_gym_environment(environment_name=None, version='v0'):
 
 
   full_game_name = '{}-{}'.format(environment_name, version)
-  env = gym.make(full_game_name)
+  if use_legacy_gym:
+    env = legacy_gym.make(full_game_name)
+    if use_ppo_preprocessing:
+      env = legacy_gym.wrappers.ClipAction(env)
+      env = legacy_gym.wrappers.NormalizeObservation(env)
+      env = legacy_gym.wrappers.TransformObservation(
+          env, lambda obs: np.clip(obs, -10, 10)
+      )
+      env = legacy_gym.wrappers.NormalizeReward(env)
+      env = legacy_gym.wrappers.TransformReward(
+          env, lambda reward: np.clip(reward, -10, 10)
+      )
+  else:
+    env = gym.make(full_game_name)
   # Strip out the TimeLimit wrapper from Gym, which caps us at 200 steps.
   if isinstance(env, TimeLimit):
     env = env.env
   # Wrap the returned environment in a class which conforms to the API expected
   # by Dopamine.
-  env = GymPreprocessing(env)
+  env = GymPreprocessing(env, use_legacy_gym=use_legacy_gym)
   return env
 
 
@@ -432,8 +447,9 @@ class MountainCarDQNNetwork(tf.keras.Model):
 class GymPreprocessing(object):
   """A Wrapper class around Gym environments."""
 
-  def __init__(self, environment):
+  def __init__(self, environment, use_legacy_gym=False):
     self.environment = environment
+    self._use_legacy_gym = use_legacy_gym
     self.game_over = False
 
   @property
@@ -453,11 +469,19 @@ class GymPreprocessing(object):
     return self.environment.metadata
 
   def reset(self):
-    return self.environment.reset()
+    if self._use_legacy_gym:
+      return self.environment.reset()
+
+    obs, _ = self.environment.reset()
+    return obs
 
   def step(self, action):
-    observation, reward, game_over, info = self.environment.step(action)
-    was_truncated = info.get('TimeLimit.truncated', False)
-    game_over = game_over and not was_truncated
-    self.game_over = game_over
-    return observation, reward, game_over, info
+    if self._use_legacy_gym:
+      observation, reward, game_over, info = self.environment.step(action)
+      truncated = info.get('TimeLimit.truncated', False)
+    else:
+      observation, reward, game_over, truncated, info = self.environment.step(
+          action
+      )
+    self.game_over = game_over and not truncated
+    return observation, reward, self.game_over, info

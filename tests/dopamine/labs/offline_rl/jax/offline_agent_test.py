@@ -103,7 +103,7 @@ class OfflineAgentTest(parameterized.TestCase):
     params_after = agent.online_params
 
     for i, (param1, param2) in enumerate(
-        zip(jax.tree_leaves(params_before), jax.tree_leaves(params_after))
+        zip(jax.tree.leaves(params_before), jax.tree.leaves(params_after))
     ):
       with self.subTest('param_set_{}'.format(i)):
         self.assertTrue((param1 != param2).any())

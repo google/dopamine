@@ -1,0 +1,735 @@
+toc:
+- title: dopamine
+  section:
+  - title: Overview
+    path: /dopamine
+- title: dopamine.colab
+  section:
+  - title: Overview
+    path: /dopamine/colab
+  - title: utils
+    section:
+    - title: Overview
+      path: /dopamine/colab/utils
+    - title: get_latest_file
+      path: /dopamine/colab/utils/get_latest_file
+    - title: get_latest_iteration
+      path: /dopamine/colab/utils/get_latest_iteration
+    - title: load_baselines
+      path: /dopamine/colab/utils/load_baselines
+    - title: load_statistics
+      path: /dopamine/colab/utils/load_statistics
+    - title: read_experiment
+      path: /dopamine/colab/utils/read_experiment
+    - title: summarize_data
+      path: /dopamine/colab/utils/summarize_data
+- title: dopamine.continuous_domains
+  section:
+  - title: Overview
+    path: /dopamine/continuous_domains
+  - title: run_experiment
+    section:
+    - title: Overview
+      path: /dopamine/continuous_domains/run_experiment
+    - title: ContinuousRunner
+      path: /dopamine/continuous_domains/run_experiment/ContinuousRunner
+    - title: ContinuousTrainRunner
+      path: /dopamine/continuous_domains/run_experiment/ContinuousTrainRunner
+    - title: create_continuous_agent
+      path: /dopamine/continuous_domains/run_experiment/create_continuous_agent
+    - title: create_continuous_runner
+      path: /dopamine/continuous_domains/run_experiment/create_continuous_runner
+- title: dopamine.discrete_domains
+  section:
+  - title: Overview
+    path: /dopamine/discrete_domains
+  - title: atari_lib
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/atari_lib
+    - title: AtariPreprocessing
+      path: /dopamine/discrete_domains/atari_lib/AtariPreprocessing
+    - title: GameOverWrapper
+      path: /dopamine/discrete_domains/atari_lib/GameOverWrapper
+    - title: ImplicitQuantileNetwork
+      path: /dopamine/discrete_domains/atari_lib/ImplicitQuantileNetwork
+    - title: NatureDQNNetwork
+      path: /dopamine/discrete_domains/atari_lib/NatureDQNNetwork
+    - title: RainbowNetwork
+      path: /dopamine/discrete_domains/atari_lib/RainbowNetwork
+    - title: create_atari_environment
+      path: /dopamine/discrete_domains/atari_lib/create_atari_environment
+  - title: checkpointer
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/checkpointer
+    - title: Checkpointer
+      path: /dopamine/discrete_domains/checkpointer/Checkpointer
+    - title: get_latest_checkpoint_number
+      path: /dopamine/discrete_domains/checkpointer/get_latest_checkpoint_number
+  - title: gym_lib
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/gym_lib
+    - title: AcrobotDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/AcrobotDQNNetwork
+    - title: AcrobotFourierDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/AcrobotFourierDQNNetwork
+    - title: AcrobotRainbowNetwork
+      path: /dopamine/discrete_domains/gym_lib/AcrobotRainbowNetwork
+    - title: BasicDiscreteDomainNetwork
+      path: /dopamine/discrete_domains/gym_lib/BasicDiscreteDomainNetwork
+    - title: CartpoleDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/CartpoleDQNNetwork
+    - title: CartpoleFourierDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/CartpoleFourierDQNNetwork
+    - title: CartpoleRainbowNetwork
+      path: /dopamine/discrete_domains/gym_lib/CartpoleRainbowNetwork
+    - title: FourierBasis
+      path: /dopamine/discrete_domains/gym_lib/FourierBasis
+    - title: FourierDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/FourierDQNNetwork
+    - title: GymPreprocessing
+      path: /dopamine/discrete_domains/gym_lib/GymPreprocessing
+    - title: LunarLanderDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/LunarLanderDQNNetwork
+    - title: MountainCarDQNNetwork
+      path: /dopamine/discrete_domains/gym_lib/MountainCarDQNNetwork
+    - title: create_gym_environment
+      path: /dopamine/discrete_domains/gym_lib/create_gym_environment
+  - title: iteration_statistics
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/iteration_statistics
+    - title: IterationStatistics
+      path: /dopamine/discrete_domains/iteration_statistics/IterationStatistics
+  - title: legacy_networks
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/legacy_networks
+    - title: acrobot_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/acrobot_dqn_network
+    - title: acrobot_fourier_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/acrobot_fourier_dqn_network
+    - title: acrobot_rainbow_network
+      path: /dopamine/discrete_domains/legacy_networks/acrobot_rainbow_network
+    - title: cartpole_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/cartpole_dqn_network
+    - title: cartpole_fourier_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/cartpole_fourier_dqn_network
+    - title: cartpole_rainbow_network
+      path: /dopamine/discrete_domains/legacy_networks/cartpole_rainbow_network
+    - title: fourier_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/fourier_dqn_network
+    - title: implicit_quantile_network
+      path: /dopamine/discrete_domains/legacy_networks/implicit_quantile_network
+    - title: nature_dqn_network
+      path: /dopamine/discrete_domains/legacy_networks/nature_dqn_network
+    - title: rainbow_network
+      path: /dopamine/discrete_domains/legacy_networks/rainbow_network
+  - title: logger
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/logger
+    - title: Logger
+      path: /dopamine/discrete_domains/logger/Logger
+  - title: run_experiment
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/run_experiment
+    - title: Runner
+      path: /dopamine/discrete_domains/run_experiment/Runner
+    - title: TrainRunner
+      path: /dopamine/discrete_domains/run_experiment/TrainRunner
+    - title: create_agent
+      path: /dopamine/discrete_domains/run_experiment/create_agent
+    - title: create_runner
+      path: /dopamine/discrete_domains/run_experiment/create_runner
+    - title: load_gin_configs
+      path: /dopamine/discrete_domains/run_experiment/load_gin_configs
+  - title: train
+    section:
+    - title: Overview
+      path: /dopamine/discrete_domains/train
+- title: dopamine.google
+  section:
+  - title: Overview
+    path: /dopamine/google
+  - title: experiments
+    section:
+    - title: Overview
+      path: /dopamine/google/experiments
+    - title: agent_registry
+      section:
+      - title: Overview
+        path: /dopamine/google/experiments/agent_registry
+    - title: example_experiment
+      section:
+      - title: Overview
+        path: /dopamine/google/experiments/example_experiment
+      - title: agents
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/example_experiment/agents
+      - title: example_dqn_agent
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/example_experiment/example_dqn_agent
+    - title: moes_reset
+      section:
+      - title: Overview
+        path: /dopamine/google/experiments/moes_reset
+      - title: agents
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/moes_reset/agents
+        - title: dqn_moe_agent
+          section:
+          - title: Overview
+            path: /dopamine/google/experiments/moes_reset/agents/dqn_moe_agent
+        - title: full_rainbow_moe_agent
+          section:
+          - title: Overview
+            path: /dopamine/google/experiments/moes_reset/agents/full_rainbow_moe_agent
+      - title: architectures
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/moes_reset/architectures
+        - title: expert_reset
+          section:
+          - title: Overview
+            path: /dopamine/google/experiments/moes_reset/architectures/expert_reset
+        - title: types
+          section:
+          - title: Overview
+            path: /dopamine/google/experiments/moes_reset/architectures/types
+    - title: two_hot
+      section:
+      - title: Overview
+        path: /dopamine/google/experiments/two_hot
+      - title: dqn_multihead_agent
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/two_hot/dqn_multihead_agent
+      - title: dqn_two_hot_agent
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/two_hot/dqn_two_hot_agent
+      - title: losses
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/two_hot/losses
+      - title: transforms
+        section:
+        - title: Overview
+          path: /dopamine/google/experiments/two_hot/transforms
+  - title: metrics
+    section:
+    - title: Overview
+      path: /dopamine/google/metrics
+    - title: datatable_collector
+      section:
+      - title: Overview
+        path: /dopamine/google/metrics/datatable_collector
+    - title: hlog_collector
+      section:
+      - title: Overview
+        path: /dopamine/google/metrics/hlog_collector
+    - title: multiscope_collector
+      section:
+      - title: Overview
+        path: /dopamine/google/metrics/multiscope_collector
+  - title: xm_utils
+    section:
+    - title: Overview
+      path: /dopamine/google/xm_utils
+- title: dopamine.jax
+  section:
+  - title: Overview
+    path: /dopamine/jax
+  - title: agents
+    section:
+    - title: Overview
+      path: /dopamine/jax/agents
+    - title: dqn
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/dqn
+      - title: dqn_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/dqn/dqn_agent
+        - title: JaxDQNAgent
+          path: /dopamine/jax/agents/dqn/dqn_agent/JaxDQNAgent
+    - title: full_rainbow
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/full_rainbow
+      - title: full_rainbow_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/full_rainbow/full_rainbow_agent
+        - title: JaxFullRainbowAgent
+          path: /dopamine/jax/agents/full_rainbow/full_rainbow_agent/JaxFullRainbowAgent
+    - title: implicit_quantile
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/implicit_quantile
+      - title: implicit_quantile_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/implicit_quantile/implicit_quantile_agent
+        - title: JaxImplicitQuantileAgent
+          path: /dopamine/jax/agents/implicit_quantile/implicit_quantile_agent/JaxImplicitQuantileAgent
+    - title: ppo
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/ppo
+      - title: ppo_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/ppo/ppo_agent
+        - title: PPOAgent
+          path: /dopamine/jax/agents/ppo/ppo_agent/PPOAgent
+    - title: quantile
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/quantile
+      - title: quantile_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/quantile/quantile_agent
+        - title: JaxQuantileAgent
+          path: /dopamine/jax/agents/quantile/quantile_agent/JaxQuantileAgent
+    - title: rainbow
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/rainbow
+      - title: rainbow_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/rainbow/rainbow_agent
+        - title: JaxRainbowAgent
+          path: /dopamine/jax/agents/rainbow/rainbow_agent/JaxRainbowAgent
+        - title: project_distribution
+          path: /dopamine/jax/agents/rainbow/rainbow_agent/project_distribution
+    - title: sac
+      section:
+      - title: Overview
+        path: /dopamine/jax/agents/sac
+      - title: sac_agent
+        section:
+        - title: Overview
+          path: /dopamine/jax/agents/sac/sac_agent
+        - title: SACAgent
+          path: /dopamine/jax/agents/sac/sac_agent/SACAgent
+  - title: checkpointers
+    section:
+    - title: Overview
+      path: /dopamine/jax/checkpointers
+    - title: CheckpointHandler
+      path: /dopamine/jax/checkpointers/CheckpointHandler
+    - title: Checkpointable
+      path: /dopamine/jax/checkpointers/Checkpointable
+    - title: Checkpointer
+      path: /dopamine/jax/checkpointers/Checkpointer
+  - title: continuous_networks
+    section:
+    - title: Overview
+      path: /dopamine/jax/continuous_networks
+    - title: ActorCriticNetwork
+      path: /dopamine/jax/continuous_networks/ActorCriticNetwork
+    - title: ActorCriticOutput
+      path: /dopamine/jax/continuous_networks/ActorCriticOutput
+    - title: ActorNetwork
+      path: /dopamine/jax/continuous_networks/ActorNetwork
+    - title: ActorOutput
+      path: /dopamine/jax/continuous_networks/ActorOutput
+    - title: CriticNetwork
+      path: /dopamine/jax/continuous_networks/CriticNetwork
+    - title: CriticOutput
+      path: /dopamine/jax/continuous_networks/CriticOutput
+    - title: PPOActorCriticNetwork
+      path: /dopamine/jax/continuous_networks/PPOActorCriticNetwork
+    - title: PPOActorCriticOutput
+      path: /dopamine/jax/continuous_networks/PPOActorCriticOutput
+    - title: PPOActorNetwork
+      path: /dopamine/jax/continuous_networks/PPOActorNetwork
+    - title: PPOActorOutput
+      path: /dopamine/jax/continuous_networks/PPOActorOutput
+    - title: PPOCriticNetwork
+      path: /dopamine/jax/continuous_networks/PPOCriticNetwork
+    - title: PPOCriticOutput
+      path: /dopamine/jax/continuous_networks/PPOCriticOutput
+  - title: losses
+    section:
+    - title: Overview
+      path: /dopamine/jax/losses
+    - title: huber_loss
+      path: /dopamine/jax/losses/huber_loss
+    - title: mse_loss
+      path: /dopamine/jax/losses/mse_loss
+    - title: softmax_cross_entropy_loss_with_logits
+      path: /dopamine/jax/losses/softmax_cross_entropy_loss_with_logits
+  - title: networks
+    section:
+    - title: Overview
+      path: /dopamine/jax/networks
+    - title: ClassicControlDQNNetwork
+      path: /dopamine/jax/networks/ClassicControlDQNNetwork
+    - title: ClassicControlRainbowNetwork
+      path: /dopamine/jax/networks/ClassicControlRainbowNetwork
+    - title: FourierBasis
+      path: /dopamine/jax/networks/FourierBasis
+    - title: FullRainbowNetwork
+      path: /dopamine/jax/networks/FullRainbowNetwork
+    - title: ImpalaDQNNetwork
+      path: /dopamine/jax/networks/ImpalaDQNNetwork
+    - title: ImpalaEncoder
+      path: /dopamine/jax/networks/ImpalaEncoder
+    - title: ImplicitQuantileNetwork
+      path: /dopamine/jax/networks/ImplicitQuantileNetwork
+    - title: JaxFourierDQNNetwork
+      path: /dopamine/jax/networks/JaxFourierDQNNetwork
+    - title: NatureDQNNetwork
+      path: /dopamine/jax/networks/NatureDQNNetwork
+    - title: NoisyNetwork
+      path: /dopamine/jax/networks/NoisyNetwork
+    - title: PPOActorNetwork
+      path: /dopamine/jax/networks/PPOActorNetwork
+    - title: PPOCriticNetwork
+      path: /dopamine/jax/networks/PPOCriticNetwork
+    - title: PPODiscreteActorCriticNetwork
+      path: /dopamine/jax/networks/PPODiscreteActorCriticNetwork
+    - title: PPOSharedNetwork
+      path: /dopamine/jax/networks/PPOSharedNetwork
+    - title: QuantileNetwork
+      path: /dopamine/jax/networks/QuantileNetwork
+    - title: RainbowNetwork
+      path: /dopamine/jax/networks/RainbowNetwork
+    - title: Stack
+      path: /dopamine/jax/networks/Stack
+    - title: feature_layer
+      path: /dopamine/jax/networks/feature_layer
+    - title: preprocess_atari_inputs
+      path: /dopamine/jax/networks/preprocess_atari_inputs
+  - title: replay_memory
+    section:
+    - title: Overview
+      path: /dopamine/jax/replay_memory
+    - title: accumulator
+      section:
+      - title: Overview
+        path: /dopamine/jax/replay_memory/accumulator
+      - title: Accumulator
+        path: /dopamine/jax/replay_memory/accumulator/Accumulator
+      - title: TransitionAccumulator
+        path: /dopamine/jax/replay_memory/accumulator/TransitionAccumulator
+    - title: elements
+      section:
+      - title: Overview
+        path: /dopamine/jax/replay_memory/elements
+      - title: ReplayElement
+        path: /dopamine/jax/replay_memory/elements/ReplayElement
+      - title: ReplayElementProtocol
+        path: /dopamine/jax/replay_memory/elements/ReplayElementProtocol
+      - title: TransitionElement
+        path: /dopamine/jax/replay_memory/elements/TransitionElement
+      - title: compress
+        path: /dopamine/jax/replay_memory/elements/compress
+      - title: uncompress
+        path: /dopamine/jax/replay_memory/elements/uncompress
+    - title: replay_buffer
+      section:
+      - title: Overview
+        path: /dopamine/jax/replay_memory/replay_buffer
+      - title: ReplayBuffer
+        path: /dopamine/jax/replay_memory/replay_buffer/ReplayBuffer
+    - title: samplers
+      section:
+      - title: Overview
+        path: /dopamine/jax/replay_memory/samplers
+      - title: PrioritizedSampleMetadata
+        path: /dopamine/jax/replay_memory/samplers/PrioritizedSampleMetadata
+      - title: PrioritizedSamplingDistribution
+        path: /dopamine/jax/replay_memory/samplers/PrioritizedSamplingDistribution
+      - title: SampleMetadata
+        path: /dopamine/jax/replay_memory/samplers/SampleMetadata
+      - title: SamplingDistribution
+        path: /dopamine/jax/replay_memory/samplers/SamplingDistribution
+      - title: SequentialSamplingDistribution
+        path: /dopamine/jax/replay_memory/samplers/SequentialSamplingDistribution
+      - title: UniformSamplingDistribution
+        path: /dopamine/jax/replay_memory/samplers/UniformSamplingDistribution
+    - title: sum_tree
+      section:
+      - title: Overview
+        path: /dopamine/jax/replay_memory/sum_tree
+      - title: SumTree
+        path: /dopamine/jax/replay_memory/sum_tree/SumTree
+  - title: serialization
+    section:
+    - title: Overview
+      path: /dopamine/jax/serialization
+    - title: LongIntegerEncoding
+      path: /dopamine/jax/serialization/LongIntegerEncoding
+    - title: NumpyEncoding
+      path: /dopamine/jax/serialization/NumpyEncoding
+    - title: decode
+      path: /dopamine/jax/serialization/decode
+    - title: encode
+      path: /dopamine/jax/serialization/encode
+- title: dopamine.labs
+  section:
+  - title: Overview
+    path: /dopamine/labs
+  - title: atari_100k
+    section:
+    - title: Overview
+      path: /dopamine/labs/atari_100k
+    - title: atari_100k_rainbow_agent
+      section:
+      - title: Overview
+        path: /dopamine/labs/atari_100k/atari_100k_rainbow_agent
+  - title: cale
+    section:
+    - title: Overview
+      path: /dopamine/labs/cale
+    - title: ppo_cale
+      section:
+      - title: Overview
+        path: /dopamine/labs/cale/ppo_cale
+    - title: sac_cale
+      section:
+      - title: Overview
+        path: /dopamine/labs/cale/sac_cale
+    - title: utils
+      section:
+      - title: Overview
+        path: /dopamine/labs/cale/utils
+  - title: moes
+    section:
+    - title: Overview
+      path: /dopamine/labs/moes
+    - title: agents
+      section:
+      - title: Overview
+        path: /dopamine/labs/moes/agents
+      - title: dqn_moe_agent
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/agents/dqn_moe_agent
+      - title: full_rainbow_moe_agent
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/agents/full_rainbow_moe_agent
+      - title: losses
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/agents/losses
+      - title: rainbow_100k_moe_agent
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/agents/rainbow_100k_moe_agent
+      - title: types
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/agents/types
+    - title: architectures
+      section:
+      - title: Overview
+        path: /dopamine/labs/moes/architectures
+      - title: moe
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/architectures/moe
+      - title: networks
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/architectures/networks
+      - title: routers
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/architectures/routers
+      - title: softmoe
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/architectures/softmoe
+      - title: types
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/architectures/types
+    - title: google
+      section:
+      - title: Overview
+        path: /dopamine/labs/moes/google
+      - title: dmoe
+        section:
+        - title: Overview
+          path: /dopamine/labs/moes/google/dmoe
+  - title: sac_from_pixels
+    section:
+    - title: Overview
+      path: /dopamine/labs/sac_from_pixels
+    - title: continuous_networks
+      section:
+      - title: Overview
+        path: /dopamine/labs/sac_from_pixels/continuous_networks
+    - title: deepmind_control_lib
+      section:
+      - title: Overview
+        path: /dopamine/labs/sac_from_pixels/deepmind_control_lib
+- title: dopamine.metrics
+  section:
+  - title: Overview
+    path: /dopamine/metrics
+  - title: collector
+    section:
+    - title: Overview
+      path: /dopamine/metrics/collector
+    - title: Collector
+      path: /dopamine/metrics/collector/Collector
+  - title: collector_dispatcher
+    section:
+    - title: Overview
+      path: /dopamine/metrics/collector_dispatcher
+    - title: CollectorDispatcher
+      path: /dopamine/metrics/collector_dispatcher/CollectorDispatcher
+    - title: add_collector
+      path: /dopamine/metrics/collector_dispatcher/add_collector
+  - title: console_collector
+    section:
+    - title: Overview
+      path: /dopamine/metrics/console_collector
+    - title: ConsoleCollector
+      path: /dopamine/metrics/console_collector/ConsoleCollector
+  - title: pickle_collector
+    section:
+    - title: Overview
+      path: /dopamine/metrics/pickle_collector
+    - title: PickleCollector
+      path: /dopamine/metrics/pickle_collector/PickleCollector
+  - title: statistics_instance
+    section:
+    - title: Overview
+      path: /dopamine/metrics/statistics_instance
+    - title: StatisticsInstance
+      path: /dopamine/metrics/statistics_instance/StatisticsInstance
+  - title: tensorboard_collector
+    section:
+    - title: Overview
+      path: /dopamine/metrics/tensorboard_collector
+    - title: TensorboardCollector
+      path: /dopamine/metrics/tensorboard_collector/TensorboardCollector
+- title: dopamine.tf
+  section:
+  - title: Overview
+    path: /dopamine/tf
+  - title: agents
+    section:
+    - title: Overview
+      path: /dopamine/tf/agents
+    - title: dqn
+      section:
+      - title: Overview
+        path: /dopamine/tf/agents/dqn
+      - title: dqn_agent
+        section:
+        - title: Overview
+          path: /dopamine/tf/agents/dqn/dqn_agent
+        - title: DQNAgent
+          path: /dopamine/tf/agents/dqn/dqn_agent/DQNAgent
+    - title: implicit_quantile
+      section:
+      - title: Overview
+        path: /dopamine/tf/agents/implicit_quantile
+      - title: implicit_quantile_agent
+        section:
+        - title: Overview
+          path: /dopamine/tf/agents/implicit_quantile/implicit_quantile_agent
+        - title: ImplicitQuantileAgent
+          path: /dopamine/tf/agents/implicit_quantile/implicit_quantile_agent/ImplicitQuantileAgent
+    - title: rainbow
+      section:
+      - title: Overview
+        path: /dopamine/tf/agents/rainbow
+      - title: rainbow_agent
+        section:
+        - title: Overview
+          path: /dopamine/tf/agents/rainbow/rainbow_agent
+        - title: RainbowAgent
+          path: /dopamine/tf/agents/rainbow/rainbow_agent/RainbowAgent
+        - title: project_distribution
+          path: /dopamine/tf/agents/rainbow/rainbow_agent/project_distribution
+  - title: replay_memory
+    section:
+    - title: Overview
+      path: /dopamine/tf/replay_memory
+    - title: circular_replay_buffer
+      section:
+      - title: Overview
+        path: /dopamine/tf/replay_memory/circular_replay_buffer
+      - title: OutOfGraphReplayBuffer
+        path: /dopamine/tf/replay_memory/circular_replay_buffer/OutOfGraphReplayBuffer
+      - title: ReplayElement
+        path: /dopamine/tf/replay_memory/circular_replay_buffer/ReplayElement
+      - title: WrappedReplayBuffer
+        path: /dopamine/tf/replay_memory/circular_replay_buffer/WrappedReplayBuffer
+    - title: prioritized_replay_buffer
+      section:
+      - title: Overview
+        path: /dopamine/tf/replay_memory/prioritized_replay_buffer
+      - title: OutOfGraphPrioritizedReplayBuffer
+        path: /dopamine/tf/replay_memory/prioritized_replay_buffer/OutOfGraphPrioritizedReplayBuffer
+      - title: WrappedPrioritizedReplayBuffer
+        path: /dopamine/tf/replay_memory/prioritized_replay_buffer/WrappedPrioritizedReplayBuffer
+    - title: sum_tree
+      section:
+      - title: Overview
+        path: /dopamine/tf/replay_memory/sum_tree
+      - title: SumTree
+        path: /dopamine/tf/replay_memory/sum_tree/SumTree
+- title: dopamine.utils
+  section:
+  - title: Overview
+    path: /dopamine/utils
+  - title: agent_visualizer
+    section:
+    - title: Overview
+      path: /dopamine/utils/agent_visualizer
+    - title: AgentVisualizer
+      path: /dopamine/utils/agent_visualizer/AgentVisualizer
+  - title: atari_plotter
+    section:
+    - title: Overview
+      path: /dopamine/utils/atari_plotter
+    - title: AtariPlotter
+      path: /dopamine/utils/atari_plotter/AtariPlotter
+  - title: bar_plotter
+    section:
+    - title: Overview
+      path: /dopamine/utils/bar_plotter
+    - title: BarPlotter
+      path: /dopamine/utils/bar_plotter/BarPlotter
+  - title: example_viz
+    section:
+    - title: Overview
+      path: /dopamine/utils/example_viz
+  - title: example_viz_lib
+    section:
+    - title: Overview
+      path: /dopamine/utils/example_viz_lib
+    - title: create_runner
+      path: /dopamine/utils/example_viz_lib/create_runner
+  - title: line_plotter
+    section:
+    - title: Overview
+      path: /dopamine/utils/line_plotter
+    - title: LinePlotter
+      path: /dopamine/utils/line_plotter/LinePlotter
+  - title: plotter
+    section:
+    - title: Overview
+      path: /dopamine/utils/plotter
+    - title: Plotter
+      path: /dopamine/utils/plotter/Plotter

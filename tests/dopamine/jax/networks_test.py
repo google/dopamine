@@ -77,6 +77,38 @@ class NetworksTest(parameterized.TestCase):
         batch_q_values.shape, (self._batch_size, self._num_actions)
     )
 
+  def testPPOOutputShape(self):
+    network = networks.PPODiscreteActorCriticNetwork(
+        action_shape=(self._num_actions,)
+    )
+    x = onp.ones(self._input_shape)
+    params = network.init(self._rng, x, self._rng)
+
+    def get_output(states):
+      return network.apply(params, states, self._rng)
+
+    output = get_output(x)
+    onp.testing.assert_equal(output.actor.sampled_action.shape, ())
+    onp.testing.assert_equal(output.actor.log_probability.shape, ())
+    onp.testing.assert_equal(output.actor.entropy.shape, ())
+    onp.testing.assert_equal(output.critic.q_value.shape, (1,))
+
+    batch_output = jax.vmap(get_output, in_axes=(0,))(
+        onp.ones(self._batch_input_shape)
+    )
+    onp.testing.assert_equal(
+        batch_output.actor.sampled_action.shape, (self._batch_size,)
+    )
+    onp.testing.assert_equal(
+        batch_output.actor.log_probability.shape, (self._batch_size,)
+    )
+    onp.testing.assert_equal(
+        batch_output.actor.entropy.shape, (self._batch_size,)
+    )
+    onp.testing.assert_equal(
+        batch_output.critic.q_value.shape, (self._batch_size, 1)
+    )
+
 
 if __name__ == '__main__':
   absltest.main()

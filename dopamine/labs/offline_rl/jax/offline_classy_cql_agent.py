@@ -41,6 +41,7 @@ mse_loss_fn = jax.vmap(losses.mse_loss)
 class ClassyLoss(enum.StrEnum):
   HL_GAUSS = 'hl_gauss'
   TWO_HOT = 'two_hot'
+  BINARY_CROSSENTROPY = 'binary_crossentropy'
   SCALAR = 'scalar'  # Uses softmax to compute scalar q-values
 
 
@@ -287,6 +288,12 @@ class OfflineClassyCQLAgent(full_rainbow_agent.JaxFullRainbowAgent):
       case ClassyLoss.TWO_HOT:
         self._transform = classy_transforms.TwoHotHistogramLoss(
             num_bins=num_atoms,
+            min_value=vmin,
+            max_value=vmax,
+            apply_symlog=False,
+        )
+      case ClassyLoss.BINARY_CROSSENTROPY:
+        self._transform = classy_transforms.BinaryCrossEntropyLoss(
             min_value=vmin,
             max_value=vmax,
             apply_symlog=False,

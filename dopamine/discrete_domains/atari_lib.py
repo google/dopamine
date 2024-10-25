@@ -36,19 +36,18 @@ Network types are namedtuples that define the output signature of the networks
 used. Please use the appropriate signature as needed when defining new networks.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import collections
 import math
 
 from absl import logging
 
+from ale_py import registration
+from baselines.common import atari_wrappers
 import cv2
 import gin
-import gym
-from gym.spaces.box import Box
+import gym as legacy_gym
+import gymnasium as gym
+from gymnasium.spaces.box import Box
 import numpy as np
 import tensorflow as tf
 
@@ -69,7 +68,13 @@ ImplicitQuantileNetworkType = collections.namedtuple(
 
 
 @gin.configurable
-def create_atari_environment(game_name=None, sticky_actions=True):
+def create_atari_environment(
+    game_name=None,
+    sticky_actions=True,
+    use_legacy_gym=False,
+    use_ppo_preprocessing=False,
+    continuous_action_threshold=None,
+):
   """Wraps an Atari 2600 Gym environment with some basic preprocessing.
 
   This preprocessing matches the guidelines proposed in Machado et al. (2017),
@@ -88,20 +93,59 @@ def create_atari_environment(game_name=None, sticky_actions=True):
   Args:
     game_name: str, the name of the Atari 2600 domain.
     sticky_actions: bool, whether to use sticky_actions as per Machado et al.
+    use_legacy_gym: bool, whether to use use the legacy Gym API.
+    use_ppo_preprocessing: bool, whether to use preprocessing for PPO.
+    continuous_action_threshold: Optional[float], if not None, will use CALE
+      (the continuous version of the ALE) with this action threshold.
 
   Returns:
     An Atari 2600 environment with some standard preprocessing.
   """
   assert game_name is not None
-  game_version = 'v0' if sticky_actions else 'v4'
-  full_game_name = '{}NoFrameskip-{}'.format(game_name, game_version)
-  env = gym.make(full_game_name)
-  # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
-  # handle this time limit internally instead, which lets us cap at 108k frames
-  # (30 minutes). The TimeLimit wrapper also plays poorly with saving and
-  # restoring states.
-  env = env.env
-  env = AtariPreprocessing(env)
+  if use_legacy_gym:
+    copy_roms(roms_dir)
+    game_version = 'v0' if sticky_actions else 'v4'
+    full_game_name = f'{game_name}NoFrameskip-{game_version}'
+    env = legacy_gym.make(full_game_name)
+  else:
+    registration.register_v5_envs()
+    registration.register_v5_envs()
+    full_game_name = f'ALE/{game_name}-v5'
+    repeat_action_probability = 0.25 if sticky_actions else 0.0
+    continuous = continuous_action_threshold is not None
+    continuous_action_threshold = (
+        0.0
+        if continuous_action_threshold is None
+        else continuous_action_threshold
+    )
+    env = gym.make(
+        full_game_name,
+        repeat_action_probability=repeat_action_probability,
+        frameskip=1,
+        max_num_frames_per_episode=100_000,
+        continuous=continuous,
+        continuous_action_threshold=continuous_action_threshold,
+    )
+
+  if use_ppo_preprocessing:
+    env = atari_wrappers.NoopResetEnv(env, noop_max=30)
+    env = atari_wrappers.MaxAndSkipEnv(env, skip=4)
+    env = atari_wrappers.EpisodicLifeEnv(env)
+    if 'FIRE' in env.unwrapped.get_action_meanings():
+      env = atari_wrappers.FireResetEnv(env)
+    env = atari_wrappers.ClipRewardEnv(env)
+    env = gym.wrappers.ResizeObservation(env, (84, 84))
+    env = gym.wrappers.GrayScaleObservation(env)
+    env = gym.wrappers.FrameStack(env, 4)
+    env = env.env  # Strip the TimeLimit wrapper
+    env = GameOverWrapper(env)
+  else:
+    # Strip out the TimeLimit wrapper from Gym, which caps us at 100k frames. We
+    # handle this time limit internally instead, which lets us cap at 108k
+    # frames (30 minutes). The TimeLimit wrapper also plays poorly with saving
+    # and restoring states.
+    env = env.env
+    env = AtariPreprocessing(env)
   return env
 
 
@@ -435,6 +479,7 @@ class AtariPreprocessing(object):
       frame_skip=4,
       terminal_on_life_loss=False,
       screen_size=84,
+      use_legacy_gym=False,
   ):
     """Constructor for an Atari 2600 preprocessor.
 
@@ -444,25 +489,25 @@ class AtariPreprocessing(object):
       terminal_on_life_loss: bool, If True, the step() method returns
         is_terminal=True whenever a life is lost. See Mnih et al. 2015.
       screen_size: int, size of a resized Atari 2600 frame.
+      use_legacy_gym: bool, whether to use legacy Gym or new Gymnasium API.
 
     Raises:
       ValueError: if frame_skip or screen_size are not strictly positive.
     """
     if frame_skip <= 0:
       raise ValueError(
-          'Frame skip should be strictly positive, got {}'.format(frame_skip)
+          f'Frame skip should be strictly positive, got {frame_skip}'
       )
     if screen_size <= 0:
       raise ValueError(
-          'Target screen size should be strictly positive, got {}'.format(
-              screen_size
-          )
+          f'Target screen size should be strictly positive, got {screen_size}'
       )
 
     self.environment = environment
     self.terminal_on_life_loss = terminal_on_life_loss
     self.frame_skip = frame_skip
     self.screen_size = screen_size
+    self._use_legacy_gym = use_legacy_gym
 
     obs_dims = self.environment.observation_space
     # Stores temporary observations used for pooling over two successive
@@ -556,7 +601,11 @@ class AtariPreprocessing(object):
     for time_step in range(self.frame_skip):
       # We bypass the Gym observation altogether and directly fetch the
       # grayscale image from the ALE. This is a little faster.
-      _, reward, game_over, info = self.environment.step(action)
+      if self._use_legacy_gym:
+        _, reward, game_over, info = self.environment.step(action)
+      else:
+        _, reward, terminated, truncated, info = self.environment.step(action)
+        game_over = terminated or truncated
       accumulated_reward += reward
 
       if self.terminal_on_life_loss:
@@ -617,3 +666,29 @@ class AtariPreprocessing(object):
     )
     int_image = np.asarray(transformed_image, dtype=np.uint8)
     return np.expand_dims(int_image, axis=2)
+
+
+@gin.configurable
+class GameOverWrapper(object):
+  """A Wrapper class around Gym environments adding game over signal."""
+
+  def __init__(self, environment):
+    self.environment = environment
+    self.game_over = False
+
+  @property
+  def observation_space(self):
+    return self.environment.observation_space
+
+  @property
+  def action_space(self):
+    return self.environment.action_space
+
+  def reset(self):
+    return self.environment.reset()
+
+  def step(self, action):
+    observation, reward, game_over, info = self.environment.step(action)
+    truncated = info.get('TimeLimit.truncated', False)
+    self.game_over = game_over and not truncated
+    return observation, reward, self.game_over, info

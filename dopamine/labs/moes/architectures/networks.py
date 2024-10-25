@@ -140,6 +140,7 @@ class MoEType(enum.Enum):
   BASELINE = 'BASELINE'  # Won't use MoE modules.
   MOE = 'MOE'
   SOFTMOE = 'SOFTMOE'
+  EXPERTCHOICE = 'EXPERTCHOICE'
   SIMPLICIAL_EMBEDDING_V1 = 'SIMPLICIAL_EMBEDDING_V1'  # Won't use MoE modules.
   SIMPLICIAL_EMBEDDING_V2 = 'SIMPLICIAL_EMBEDDING_V2'  # Won't use MoE modules.
 
@@ -441,9 +442,9 @@ class NatureDQNMoE(nn.Module):
         x = jnp.reshape(x, [x.shape[0] * x.shape[1], x.shape[2]])
       moe_out = moe_net(x, key=key)
       x = moe_out.values
+      x_hidden = moe_out.experts_hidden
 
     x = x.reshape((-1))  # flatten
-    x_hidden = x
     if self.use_extra_linear_layer:
       x = nn.Dense(features=512, kernel_init=initializer)(x)
       x = nn.relu(x)
@@ -624,8 +625,10 @@ class FullRainbowMoENetwork(nn.Module):
         raise ValueError(f'Invalid routing type: {self.routing_type}')
       moe_out = moe_net(x, key=key_3)
       x = moe_out.values
+      x_hidden = moe_out.experts_hidden
+
       x = x.reshape((-1))  # flatten
-    x_hidden = x
+
     if self.use_extra_linear_layer:
       x = nn.Dense(features=512, kernel_init=initializer)(x)
       x = nn.relu(x)

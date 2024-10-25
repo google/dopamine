@@ -14,44 +14,46 @@
 # limitations under the License.
 """Tests for dopamine.discrete_domains.gym_lib."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-
-
+from absl.testing import absltest
+from absl.testing import parameterized
 from dopamine.discrete_domains import gym_lib
-import tensorflow as tf
 
 
 class MockGymEnvironment(object):
-  """Mock environment for testing."""
+  """Mock environment for testing with Gym/Gymnasium."""
 
-  def __init__(self):
+  def __init__(self, legacy_gym_api):
+    self._legacy_gym_api = legacy_gym_api
     self.observation_space = 'observation_space'
     self.action_space = 'action_space'
     self.reward_range = 'reward_range'
     self.metadata = 'metadata'
 
   def reset(self):
-    return 'reset'
+    if self._legacy_gym_api:
+      return 'reset'
+    return 'reset', 'info'
 
   def step(self, unused_action):
-    return 'obs', 'rew', False, {}
+    if self._legacy_gym_api:
+      return 'obs', 'rew', False, {}
+    return 'obs', 'rew', False, False, {}
 
 
-class GymPreprocessingTest(tf.test.TestCase):
+class GymPreprocessingTest(parameterized.TestCase):
 
-  def testAll(self):
-    env = gym_lib.GymPreprocessing(MockGymEnvironment())
+  @parameterized.parameters(True, False)
+  def testAll(self, use_legacy_gym):
+    env = gym_lib.GymPreprocessing(
+        MockGymEnvironment(use_legacy_gym), use_legacy_gym=use_legacy_gym
+    )
     self.assertEqual('observation_space', env.observation_space)
     self.assertEqual('action_space', env.action_space)
     self.assertEqual('reward_range', env.reward_range)
     self.assertEqual('metadata', env.metadata)
     self.assertEqual('reset', env.reset())
-    self.assertAllEqual(['obs', 'rew', False, {}], env.step(0))
+    self.assertCountEqual(['obs', 'rew', False, {}], env.step(0))
 
 
 if __name__ == '__main__':
-  tf.compat.v1.disable_v2_behavior()
-  tf.test.main()
+  absltest.main()

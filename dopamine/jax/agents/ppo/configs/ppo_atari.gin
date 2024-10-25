@@ -1,0 +1,44 @@
+# Atari Hyperparameters based on those specified in Table 5 of Appendix A in:
+#   "Proximal Policy Optimization Algorithms"
+#   by John Schulman et al.
+#   https://arxiv.org/abs/1707.06347
+# Note: This is a single actor implementation, thus we multiply the batch size
+# and update period by 8 to be closer to the original implementation that used 8
+# actors. This gives use the same number of samples per training iteration using
+# one actor.
+import dopamine.discrete_domains.atari_lib
+import dopamine.discrete_domains.run_experiment
+import dopamine.jax.agents.ppo.ppo_agent
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.networks
+import dopamine.jax.replay_memory.replay_buffer
+
+PPOAgent.network = @networks.PPODiscreteActorCriticNetwork
+PPOAgent.update_period = 1024  # 8 * 128
+PPOAgent.optimizer = 'adam'
+PPOAgent.max_gradient_norm = 0.5
+create_optimizer.learning_rate = 2.5e-4
+create_optimizer.eps = 1e-5
+create_optimizer.anneal_learning_rate = True
+create_optimizer.anneal_steps = 117_600  # 980 iterations * 3 epochs * 10240 timesteps / 256 batches
+PPOAgent.num_epochs = 3
+PPOAgent.batch_size = 256  # 8 * 32
+PPOAgent.gamma = 0.99
+PPOAgent.lambda_ = 0.95
+PPOAgent.epsilon = 0.1
+PPOAgent.vf_coefficient = 0.5
+PPOAgent.entropy_coefficient = 0.01
+PPOAgent.clip_critic_loss = True
+PPOAgent.seed = None  # Seed with the current time
+
+atari_lib.create_atari_environment.game_name = 'Pong'
+atari_lib.create_atari_environment.use_ppo_preprocessing = True
+create_runner.schedule = 'continuous_train'
+create_agent.agent_name = 'ppo'
+create_agent.debug_mode = True
+Runner.num_iterations = 980
+Runner.training_steps = 10240
+Runner.max_steps_per_episode = None
+
+ReplayBuffer.max_capacity = 1024
+ReplayBuffer.batch_size = 1024

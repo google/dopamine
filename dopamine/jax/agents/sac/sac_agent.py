@@ -30,6 +30,9 @@ from absl import logging
 from dopamine.jax import continuous_networks
 from dopamine.jax import losses
 from dopamine.jax.agents.dqn import dqn_agent
+from dopamine.jax.replay_memory import accumulator
+from dopamine.jax.replay_memory import replay_buffer
+from dopamine.jax.replay_memory import samplers
 # pylint: disable=unused-import
 # This enables (experimental) networks for SAC from pixels.
 # Note, that the full name import is required to avoid a naming
@@ -37,7 +40,6 @@ from dopamine.jax.agents.dqn import dqn_agent
 import dopamine.labs.sac_from_pixels.continuous_networks
 # pylint: enable=unused-import
 from dopamine.metrics import statistics_instance
-from dopamine.replay_memory import circular_replay_buffer
 import flax
 from flax import linen as nn
 import gin
@@ -222,8 +224,8 @@ def train(
 
   # This calculates the mean gradient/aux_vars using the individual
   # gradients/aux_vars from each item in the batch.
-  gradients = jax.tree_map(functools.partial(jnp.mean, axis=0), gradients)
-  aux_vars = jax.tree_map(functools.partial(jnp.mean, axis=0), aux_vars)
+  gradients = jax.tree.map(functools.partial(jnp.mean, axis=0), gradients)
+  aux_vars = jax.tree.map(functools.partial(jnp.mean, axis=0), aux_vars)
   network_gradient, alpha_gradient = gradients
 
   # Apply gradients to all the optimizers.
@@ -249,7 +251,7 @@ def train(
       'Values/CriticValues2': jnp.mean(aux_vars['critic_value_2']),
       'Values/TargetValues1': jnp.mean(aux_vars['target_value_1']),
       'Values/TargetValues2': jnp.mean(aux_vars['target_value_2']),
-      'Values/Alpha': jnp.exp(log_alpha),
+      'Values/Alpha': jnp.squeeze(jnp.exp(log_alpha)),
   }
   for i, a in enumerate(aux_vars['mean_action']):
     returns.update({f'Values/MeanActions{i}': a})
@@ -294,7 +296,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
       observation_dtype=jnp.float32,
       reward_scale_factor=1.0,
       stack_size=1,
-      network=continuous_networks.SACNetwork,
+      network=continuous_networks.ActorCriticNetwork,
       num_layers=2,
       hidden_units=256,
       gamma=0.99,
@@ -367,7 +369,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     if target_entropy is None:
       action_dim = functools.reduce(operator.mul, action_shape, 1.0)
       target_entropy = -0.5 * action_dim
-    seed = int(time.time() * 1e6) if seed is None else seed
+    self._seed = int(time.time() * 1e6) if seed is None else seed
     logging.info(
         'Creating %s agent with the following parameters:',
         self.__class__.__name__,
@@ -391,7 +393,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     )
     logging.info('\t target_entropy: %f', target_entropy)
     logging.info('\t optimizer: %s', optimizer)
-    logging.info('\t seed: %d', seed)
+    logging.info('\t seed: %d', self._seed)
 
     self.action_shape = action_shape
     self.action_dtype = action_dtype
@@ -420,9 +422,10 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     self.allow_partial_reload = allow_partial_reload
     self._collector_allowlist = collector_allowlist
 
-    self._rng = jax.random.PRNGKey(seed)
+    self._rng = jax.random.PRNGKey(self._seed)
     state_shape = self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
+    self._replay_scheme = 'uniform'
     self._replay = self._build_replay_buffer()
     self._optimizer_name = optimizer
     self._build_networks_and_optimizer()
@@ -451,14 +454,17 @@ class SACAgent(dqn_agent.JaxDQNAgent):
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
-    return circular_replay_buffer.OutOfGraphReplayBuffer(
-        observation_shape=self.observation_shape,
+    transition_accumulator = accumulator.TransitionAccumulator(
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype,
-        action_shape=self.action_shape,
-        action_dtype=self.action_dtype,
+    )
+    sampling_distribution = samplers.UniformSamplingDistribution(
+        seed=self._seed
+    )
+    return replay_buffer.ReplayBuffer(
+        transition_accumulator=transition_accumulator,
+        sampling_distribution=sampling_distribution,
     )
 
   def _maybe_sync_weights(self):
@@ -475,7 +481,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
           + (1 - self.target_smoothing_coefficient) * target_p
       )
 
-    self.target_params = jax.tree_map(
+    self.target_params = jax.tree.map(
         _sync_weights, self.target_params, self.network_params
     )
 

@@ -1,0 +1,5 @@
+redirects:
+- from: /dopamine/utils/example_viz/example_viz_lib
+  to: /dopamine/utils/example_viz_lib
+- from: /dopamine/utils/example_viz/example_viz_lib/create_runner
+  to: /dopamine/utils/example_viz_lib/create_runner

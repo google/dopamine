@@ -9,7 +9,7 @@ import dopamine.labs.sac_from_pixels.deepmind_control_lib
 import dopamine.labs.sac_from_pixels.continuous_networks
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.jax.agents.sac.sac_agent
-import dopamine.replay_memory.circular_replay_buffer
+import dopamine.tf.replay_memory.circular_replay_buffer
 
 SACAgent.reward_scale_factor = 0.1
 SACAgent.network = @continuous_networks.SACConvNetwork

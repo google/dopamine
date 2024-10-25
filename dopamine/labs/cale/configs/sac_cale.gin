@@ -1,0 +1,45 @@
+import dopamine.discrete_domains.atari_lib
+import dopamine.continuous_domains.run_experiment
+import dopamine.discrete_domains.gym_lib
+import dopamine.labs.cale.networks
+import dopamine.jax.agents.sac.sac_agent
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.labs.sac_from_pixels.continuous_networks
+
+SACAgent.reward_scale_factor = 0.1
+SACAgent.network = @networks.SACCALEConvNetwork
+SACAgent.num_layers = 1
+SACAgent.hidden_units = 512
+SACAgent.gamma = 0.99
+SACAgent.update_horizon = 1
+SACAgent.min_replay_history = 20_000  # agent steps
+SACAgent.update_period = 4
+SACAgent.target_update_type = 'soft'
+SACAgent.target_smoothing_coefficient = 0.005
+SACAgent.target_entropy = None  # Defaults to -num_action_dims/2
+SACAgent.optimizer = 'adam'
+SACAgent.seed = None  # Seed with the current time
+SACAgent.observation_dtype = %sac_agent.IMAGE_DTYPE
+SACAgent.stack_size = 4
+create_optimizer.learning_rate = 6.25e-5
+create_optimizer.eps = 1.5e-4
+
+SACCALEAgent.epsilon_train = 0.01
+SACCALEAgent.epsilon_eval = 0.001
+SACCALEAgent.epsilon_decay_period = 250_000
+SACCALEAgent.exploration_strategy = 'standard'
+
+SACCALEConvNetwork.encoder_name = 'SAC'
+
+ContinuousRunner.create_environment_fn = @atari_lib.create_atari_environment
+ContinuousTrainRunner.create_environment_fn = @atari_lib.create_atari_environment
+create_atari_environment.game_name = 'Asterix'
+create_atari_environment.continuous_action_threshold = 0.5
+create_continuous_runner.schedule = 'continuous_train'
+create_continuous_agent.agent_name = 'sac_cale'
+ContinuousRunner.num_iterations = 200
+ContinuousRunner.training_steps = 250_000
+ContinuousRunner.max_steps_per_episode = 27_000
+
+ReplayBuffer.max_capacity = 1_000_000
+ReplayBuffer.batch_size = 32

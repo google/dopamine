@@ -23,9 +23,6 @@ import sys
 import time
 
 from absl import logging
-from dopamine.agents.dqn import dqn_agent
-from dopamine.agents.implicit_quantile import implicit_quantile_agent
-from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import checkpointer
 from dopamine.discrete_domains import iteration_statistics
@@ -33,6 +30,7 @@ from dopamine.discrete_domains import logger
 from dopamine.jax.agents.dqn import dqn_agent as jax_dqn_agent
 from dopamine.jax.agents.full_rainbow import full_rainbow_agent
 from dopamine.jax.agents.implicit_quantile import implicit_quantile_agent as jax_implicit_quantile_agent
+from dopamine.jax.agents.ppo import ppo_agent
 from dopamine.jax.agents.quantile import quantile_agent as jax_quantile_agent
 from dopamine.jax.agents.rainbow import rainbow_agent as jax_rainbow_agent
 from dopamine.labs.moes.agents import dqn_moe_agent
@@ -40,6 +38,9 @@ from dopamine.labs.moes.agents import full_rainbow_moe_agent
 from dopamine.labs.moes.agents import rainbow_100k_moe_agent
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
+from dopamine.tf.agents.dqn import dqn_agent
+from dopamine.tf.agents.implicit_quantile import implicit_quantile_agent
+from dopamine.tf.agents.rainbow import rainbow_agent
 import gin
 import numpy as np
 import tensorflow as tf
@@ -135,6 +136,13 @@ def create_agent(
     return rainbow_100k_moe_agent.Atari100kRainbowMoEAgent(
         num_actions=environment.action_space.n, summary_writer=summary_writer
     )
+  elif agent_name == 'ppo':
+    return ppo_agent.PPOAgent(
+        action_shape=environment.action_space.n,
+        observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
+        stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
+        summary_writer=summary_writer,
+    )
   else:
     raise ValueError('Unknown agent: {}'.format(agent_name))
 
@@ -162,6 +170,7 @@ def create_runner(base_dir, schedule='continuous_train_and_eval'):
     return TrainRunner(base_dir, create_agent)
   else:
     raise ValueError('Unknown schedule: {}'.format(schedule))
+  logging.info('schedule: %s', schedule)
 
 
 @gin.configurable
@@ -216,7 +225,7 @@ class Runner(object):
       training_steps: int, the number of training steps to perform.
       evaluation_steps: int, the number of evaluation steps to perform.
       max_steps_per_episode: int, maximum number of steps after which an episode
-        terminates.
+        terminates. Set to None to continue episodes between iterations.
       clip_rewards: bool, whether to clip rewards in [-1, 1].
       use_legacy_logger: bool, whether to use the legacy Logger. This will be
         deprecated soon, replaced with the new CollectorDispatcher setup.
@@ -244,6 +253,17 @@ class Runner(object):
     self._base_dir = base_dir
     self._clip_rewards = clip_rewards
     self._create_directories()
+
+    logging.info('log_every_n: %d', self._log_every_n)
+    logging.info('num_iterations: %d', self._num_iterations)
+    logging.info('training_steps: %d', self._training_steps)
+    logging.info('evaluation_steps: %d', self._evaluation_steps)
+    if self._max_steps_per_episode is not None:
+      logging.info('max_steps_per_episode: %d', self._max_steps_per_episode)
+    else:
+      logging.info('max_steps_per_episode: None')
+    logging.info('base_dir: %s', self._base_dir)
+    logging.info('clip_rewards: %s', self._clip_rewards)
 
     self._environment = create_environment_fn()
     # The agent is now in charge of setting up the session.
@@ -392,7 +412,6 @@ class Runner(object):
     total_reward = 0.0
 
     action = self._initialize_episode()
-    is_terminal = False
 
     # Keep interacting until we reach a terminal state.
     while True:
@@ -423,6 +442,46 @@ class Runner(object):
 
     return step_number, total_reward
 
+  def _run_continued_episode(self, start_step_count, max_step_count):
+    """Executes a full trajectory of the agent interacting with the environment.
+
+    Args:
+      start_step_count: int, the number of steps taken so far in current phase.
+      max_step_count: int, the maximum number of steps to take in this phase.
+
+    Returns:
+      The number of steps taken and the total reward.
+    """
+    step_number = 0
+    total_reward = 0.0
+    if not hasattr(self, 'episode_ended') or self.episode_ended:
+      self.action = self._initialize_episode()
+      self.episode_ended = False
+
+    while start_step_count + step_number <= max_step_count:
+      observation, reward, is_terminal = self._run_one_step(self.action)
+
+      total_reward += reward
+      step_number += 1
+
+      if self._clip_rewards:
+        # Perform reward clipping.
+        reward = np.clip(reward, -1, 1)
+
+      if self._environment.game_over:
+        self._end_episode(reward, is_terminal)
+        self.episode_ended = True
+        break
+      elif is_terminal:
+        # If we lose a life but the episode is not over, signal an artificial
+        # end of episode to the agent.
+        self._end_episode(reward, is_terminal)
+        self.action = self._agent.begin_episode(observation)
+      else:
+        self.action = self._agent.step(reward, observation)
+
+    return step_number, total_reward
+
   def _run_one_phase(self, min_steps, statistics, run_mode_str):
     """Runs the agent/environment loop until a desired number of steps.
 
@@ -444,7 +503,12 @@ class Runner(object):
     sum_returns = 0.0
 
     while step_count < min_steps:
-      episode_length, episode_return = self._run_one_episode()
+      if self._max_steps_per_episode is None:
+        episode_length, episode_return = self._run_continued_episode(
+            step_count, min_steps
+        )
+      else:
+        episode_length, episode_return = self._run_one_episode()
       statistics.append({
           '{}_episode_lengths'.format(run_mode_str): episode_length,
           '{}_episode_returns'.format(run_mode_str): episode_return,
@@ -794,3 +858,5 @@ class TrainRunner(Runner):
           ]
       )
       self._summary_writer.add_summary(summary, iteration)
+
+

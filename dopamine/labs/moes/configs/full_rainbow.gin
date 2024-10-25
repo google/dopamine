@@ -4,7 +4,7 @@ import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.jax.agents.full_rainbow.full_rainbow_agent
 import dopamine.labs.moes.architectures.networks
-import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.tf.replay_memory.prioritized_replay_buffer
 
 JaxDQNAgent.gamma = 0.99
 JaxDQNAgent.update_horizon = 3

@@ -218,7 +218,7 @@ class BaseRecycler:
     Returns:
       log_dict: dict contains the percentage of intersection
     """
-    score_tree = jax.tree_map(self.estimate_neuron_score, intermediates)
+    score_tree = jax.tree.map(self.estimate_neuron_score, intermediates)
     neuron_score_dict = flax.traverse_util.flatten_dict(score_tree, sep='/')
 
     if self.prev_neuron_score is None:
@@ -295,7 +295,7 @@ class BaseRecycler:
       ) * 100.0
       return log_dict
 
-    neuron_score = jax.tree_map(self.estimate_neuron_score, intermediates)
+    neuron_score = jax.tree.map(self.estimate_neuron_score, intermediates)
     log_dict_neurons = log_dict(neuron_score, 'feature')
 
     return log_dict_neurons
@@ -373,12 +373,12 @@ class LayerReset(BaseRecycler):
     )
     # reset weights
     weight_random_reset_fn = jax.jit(
-        functools.partial(jax.tree_map, weight_reinit_random)
+        functools.partial(jax.tree.map, weight_reinit_random)
     )
     params = weight_random_reset_fn(params, masks, random_keys)
 
     # reset mu, nu of adam optimizer for recycled weights.
-    reset_momentum_fn = jax.jit(functools.partial(jax.tree_map, reset_momentum))
+    reset_momentum_fn = jax.jit(functools.partial(jax.tree.map, reset_momentum))
     new_mu = reset_momentum_fn(opt_state[0][1], masks)
     new_nu = reset_momentum_fn(opt_state[0][2], masks)
     opt_state_list = list(opt_state)
@@ -524,7 +524,7 @@ class NeuronRecycler(BaseRecycler):
         scale=self.incoming_scale,
         weights_type='incoming',
     )
-    weight_random_reset_fn = jax.jit(functools.partial(jax.tree_map, reinit_fn))
+    weight_random_reset_fn = jax.jit(functools.partial(jax.tree.map, reinit_fn))
     params = weight_random_reset_fn(params, incoming_mask, incoming_random_keys)
 
     # reset outgoing weights
@@ -539,20 +539,20 @@ class NeuronRecycler(BaseRecycler):
           weights_type='outgoing',
       )
       weight_random_reset_fn = jax.jit(
-          functools.partial(jax.tree_map, reinit_fn)
+          functools.partial(jax.tree.map, reinit_fn)
       )
       params = weight_random_reset_fn(
           params, outgoing_mask, outgoing_random_keys
       )
     elif self.init_method_outgoing == 'zero':
       weight_zero_reset_fn = jax.jit(
-          functools.partial(jax.tree_map, weight_reinit_zero)
+          functools.partial(jax.tree.map, weight_reinit_zero)
       )
       params = weight_zero_reset_fn(params, outgoing_mask)
     else:
       raise ValueError(f'Invalid init method: {self.init_method_outgoing}')
     # reset mu, nu of adam optimizer for recycled weights.
-    reset_momentum_fn = jax.jit(functools.partial(jax.tree_map, reset_momentum))
+    reset_momentum_fn = jax.jit(functools.partial(jax.tree.map, reset_momentum))
     new_mu = reset_momentum_fn(opt_state[0][1], incoming_mask)
     new_mu = reset_momentum_fn(new_mu, outgoing_mask)
     new_nu = reset_momentum_fn(opt_state[0][2], incoming_mask)

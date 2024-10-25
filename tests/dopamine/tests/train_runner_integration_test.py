@@ -40,7 +40,7 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     self._checkpoint_dir = os.path.join(FLAGS.base_dir, 'checkpoints')
     self._logging_dir = os.path.join(FLAGS.base_dir, 'logs')
 
-  def quickDqnFlags(self):
+  def quick_dqn_flags(self):
     """Assign flags for a quick run of DQN agent."""
     FLAGS.gin_files = ['dopamine/jax/agents/dqn/configs/dqn.gin']
     FLAGS.gin_bindings = [
@@ -54,7 +54,7 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     ]
     FLAGS.alsologtostderr = True
 
-  def verifyFilesCreated(self, base_dir):
+  def verify_files_created(self):
     """Verify that files have been created."""
     # Check checkpoint files
     self.assertTrue(
@@ -72,9 +72,9 @@ class TrainRunnerIntegrationTest(tf.test.TestCase):
     """Test the DQN agent."""
     logging.info('####### Training the DQN agent #####')
     logging.info('####### DQN base_dir: %s', FLAGS.base_dir)
-    self.quickDqnFlags()
+    self.quick_dqn_flags()
     train.main([])
-    self.verifyFilesCreated(FLAGS.base_dir)
+    self.verify_files_created()
     shutil.rmtree(FLAGS.base_dir)
 
 

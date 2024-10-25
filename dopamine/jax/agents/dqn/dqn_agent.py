@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Compact implementation of a DQN agent in JAx."""
+"""Compact implementation of a DQN agent in Jax."""
 
 import collections
 import functools
@@ -21,12 +21,14 @@ import math
 import time
 
 from absl import logging
-from dopamine.agents.dqn import dqn_agent
+from dopamine.discrete_domains import atari_lib
 from dopamine.jax import losses
 from dopamine.jax import networks
+from dopamine.jax.replay_memory import accumulator
+from dopamine.jax.replay_memory import elements
+from dopamine.jax.replay_memory import replay_buffer
+from dopamine.jax.replay_memory import samplers
 from dopamine.metrics import statistics_instance
-from dopamine.replay_memory import circular_replay_buffer
-from dopamine.replay_memory import prioritized_replay_buffer
 import gin
 import jax
 import jax.numpy as jnp
@@ -35,10 +37,16 @@ import optax
 import tensorflow as tf
 
 
-NATURE_DQN_OBSERVATION_SHAPE = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
+NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = jnp.uint8
-NATURE_DQN_STACK_SIZE = dqn_agent.NATURE_DQN_STACK_SIZE
-identity_epsilon = dqn_agent.identity_epsilon
+NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE
+
+
+@gin.configurable
+def identity_epsilon(
+    unused_decay_period, unused_step, unused_warmup_steps, epsilon
+):
+  return epsilon
 
 
 @gin.configurable
@@ -49,6 +57,8 @@ def create_optimizer(
     beta2=0.999,
     eps=1.5e-4,
     centered=False,
+    anneal_learning_rate=False,
+    anneal_steps=1_000_000,
 ):
   """Create an optimizer for training.
 
@@ -61,15 +71,20 @@ def create_optimizer(
     beta2: float, beta2 parameter for the optimizer.
     eps: float, epsilon parameter for the optimizer.
     centered: bool, centered parameter for RMSProp.
+    anneal_learning_rate: bool, whether to anneal the learning rate.
+    anneal_steps: int, number of steps to anneal the learning rate over.
 
   Returns:
     An optax optimizer.
   """
+  learning_rate_value = learning_rate
+  if anneal_learning_rate:
+    learning_rate = optax.linear_schedule(learning_rate, 0.0, anneal_steps)
   if name == 'adam':
     logging.info(
         'Creating Adam optimizer with settings lr=%f, beta1=%f, '
         'beta2=%f, eps=%f',
-        learning_rate,
+        learning_rate_value,
         beta1,
         beta2,
         eps,
@@ -78,13 +93,15 @@ def create_optimizer(
   elif name == 'rmsprop':
     logging.info(
         'Creating RMSProp optimizer with settings lr=%f, beta2=%f, eps=%f',
-        learning_rate,
+        learning_rate_value,
         beta2,
         eps,
     )
     return optax.rmsprop(learning_rate, decay=beta2, eps=eps, centered=centered)
   elif name == 'sgd':
-    logging.info('Creating SGD optimizer with settings lr=%f', learning_rate)
+    logging.info(
+        'Creating SGD optimizer with settings lr=%f', learning_rate_value
+    )
     return optax.sgd(learning_rate)
   else:
     raise ValueError('Unsupported optimizer {}'.format(name))
@@ -310,7 +327,7 @@ class JaxDQNAgent(object):
         be used to specify which Collectors to log to.
     """
     assert isinstance(observation_shape, tuple)
-    seed = int(time.time() * 1e6) if seed is None else seed
+    self._seed = int(time.time() * 1e6) if seed is None else seed
     logging.info(
         'Creating %s agent with the following parameters:',
         self.__class__.__name__,
@@ -324,7 +341,7 @@ class JaxDQNAgent(object):
     logging.info('\t epsilon_eval: %f', epsilon_eval)
     logging.info('\t epsilon_decay_period: %d', epsilon_decay_period)
     logging.info('\t optimizer: %s', optimizer)
-    logging.info('\t seed: %d', seed)
+    logging.info('\t seed: %d', self._seed)
     logging.info('\t loss_type: %s', loss_type)
     logging.info('\t preprocess_fn: %s', preprocess_fn)
     logging.info('\t summary_writing_frequency: %d', summary_writing_frequency)
@@ -366,8 +383,9 @@ class JaxDQNAgent(object):
     self.allow_partial_reload = allow_partial_reload
     self._loss_type = loss_type
     self._collector_allowlist = collector_allowlist
+    self._replay_scheme = 'uniform'
 
-    self._rng = jax.random.PRNGKey(seed)
+    self._rng = jax.random.PRNGKey(self._seed)
     state_shape = self.observation_shape + (stack_size,)
     self.state = onp.zeros(state_shape)
     self._replay = self._build_replay_buffer()
@@ -389,20 +407,31 @@ class JaxDQNAgent(object):
 
   def _build_replay_buffer(self):
     """Creates the replay buffer used by the agent."""
-    return circular_replay_buffer.OutOfGraphReplayBuffer(
-        observation_shape=self.observation_shape,
+    transition_accumulator = accumulator.TransitionAccumulator(
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype,
+    )
+    sampling_distribution = samplers.UniformSamplingDistribution(
+        seed=self._seed
+    )
+    return replay_buffer.ReplayBuffer(
+        transition_accumulator=transition_accumulator,
+        sampling_distribution=sampling_distribution,
     )
 
   def _sample_from_replay_buffer(self):
-    samples = self._replay.sample_transition_batch()
-    types = self._replay.get_transition_elements()
+    """Sample elements from the replay buffer."""
     self.replay_elements = collections.OrderedDict()
-    for element, element_type in zip(samples, types):
-      self.replay_elements[element_type.name] = element
+    elems, metadata = self._replay.sample(with_sample_metadata=True)
+    self.replay_elements['state'] = elems.state
+    self.replay_elements['next_state'] = elems.next_state
+    self.replay_elements['action'] = elems.action
+    self.replay_elements['reward'] = elems.reward
+    self.replay_elements['terminal'] = elems.is_terminal
+    if self._replay_scheme == 'prioritized':
+      self.replay_elements['indices'] = metadata.keys
+      self.replay_elements['sampling_probabilities'] = metadata.probabilities
 
   def _sync_weights(self):
     """Syncs the target_network_params with online_params."""
@@ -602,25 +631,31 @@ class JaxDQNAgent(object):
         This can be different than terminal when ending the episode because of a
         timeout, for example.
     """
+    # pylint: disable=protected-access
     is_prioritized = isinstance(
-        self._replay,
-        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer,
+        self._replay._sampling_distribution,
+        samplers.PrioritizedSamplingDistribution,
     )
     if is_prioritized and priority is None:
       if self._replay_scheme == 'uniform':
         priority = 1.0
       else:
-        priority = self._replay.sum_tree.max_recorded_priority
+        priority = (
+            self._replay._sampling_distribution._sum_tree.max_recorded_priority
+        )
+    # pylint: enable=protected-access
 
     if not self.eval_mode:
       self._replay.add(
-          last_observation,
-          action,
-          reward,
-          is_terminal,
-          *args,
+          elements.TransitionElement(
+              last_observation,
+              action,
+              reward,
+              is_terminal,
+              episode_end,
+          ),
           priority=priority,
-          episode_end=episode_end
+          *args,
       )
 
   def bundle_and_checkpoint(self, checkpoint_dir, iteration_number):
@@ -674,7 +709,7 @@ class JaxDQNAgent(object):
       # self._replay.load() will throw a NotFoundError if it does not find all
       # the necessary files.
       self._replay.load(checkpoint_dir, iteration_number)
-    except tf.errors.NotFoundError:
+    except (tf.errors.NotFoundError, FileNotFoundError):
       if not self.allow_partial_reload:
         # If we don't allow partial reloads, we will return False.
         return False

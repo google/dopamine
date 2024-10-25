@@ -101,7 +101,7 @@ class SACConvNetwork(nn.Module):
 
   def setup(self):
     self._encoder = SACEncoderNetwork()
-    self._sac_network = continuous_networks.SACNetwork(
+    self._sac_network = continuous_networks.ActorCriticNetwork(
         self.action_shape,
         self.num_layers,
         self.hidden_units,
@@ -110,7 +110,7 @@ class SACConvNetwork(nn.Module):
 
   def __call__(
       self, state: jnp.ndarray, key: jnp.ndarray, mean_action: bool = True
-  ) -> continuous_networks.SacOutput:
+  ) -> continuous_networks.ActorCriticOutput:
     """Calls the SAC actor/critic networks.
 
     This has two important purposes:
@@ -136,11 +136,11 @@ class SACConvNetwork(nn.Module):
     )
     critic_output = self._sac_network.critic(encoding.critic_z, action)
 
-    return continuous_networks.SacOutput(actor_output, critic_output)
+    return continuous_networks.ActorCriticOutput(actor_output, critic_output)
 
   def actor(
       self, state: jnp.ndarray, key: jnp.ndarray
-  ) -> continuous_networks.SacActorOutput:
+  ) -> continuous_networks.ActorOutput:
     """Calls the SAC actor network.
 
     This can be called using network_def.apply(..., method=network_def.actor).
@@ -159,7 +159,7 @@ class SACConvNetwork(nn.Module):
 
   def critic(
       self, state: jnp.ndarray, action: jnp.ndarray
-  ) -> continuous_networks.SacCriticOutput:
+  ) -> continuous_networks.CriticOutput:
     """Calls the SAC critic network.
 
     SAC uses two Q networks to reduce overestimation bias.

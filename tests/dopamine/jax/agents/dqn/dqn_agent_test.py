@@ -29,7 +29,7 @@ from flax import linen as nn
 import gin
 import jax.numpy as jnp
 import mock
-import numpy as onp
+import numpy as np
 
 FLAGS = flags.FLAGS
 
@@ -50,9 +50,9 @@ class DQNAgentTest(absltest.TestCase):
     self.observation_shape = dqn_agent.NATURE_DQN_OBSERVATION_SHAPE
     self.observation_dtype = jnp.uint8
     self.stack_size = dqn_agent.NATURE_DQN_STACK_SIZE
-    self.zero_state = onp.zeros(self.observation_shape + (self.stack_size,))
-    gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)
-    gin.bind_parameter('OutOfGraphReplayBuffer.batch_size', 2)
+    self.zero_state = np.zeros(self.observation_shape + (self.stack_size,))
+    gin.bind_parameter('ReplayBuffer.max_capacity', 100)
+    gin.bind_parameter('ReplayBuffer.batch_size', 2)
 
   def _create_test_agent(self, allow_partial_reload=False):
 
@@ -70,7 +70,7 @@ class DQNAgentTest(absltest.TestCase):
         # that it gets picked by the argmax.
         def custom_init(key, shape, dtype=jnp.float32):
           del key
-          to_pick_first_action = onp.zeros(shape, dtype)
+          to_pick_first_action = np.zeros(shape, dtype)
           to_pick_first_action[:, 0] = 1
           return to_pick_first_action
 
@@ -104,7 +104,7 @@ class DQNAgentTest(absltest.TestCase):
   def testCreateAgentWithDefaults(self):
     # Verifies that we can create and train an agent with the default values.
     agent = dqn_agent.JaxDQNAgent(num_actions=4)
-    observation = onp.ones([84, 84, 1])
+    observation = np.ones([84, 84, 1])
     agent.begin_episode(observation)
     agent.step(reward=1, observation=observation)
     agent.end_episode(reward=1)
@@ -149,15 +149,15 @@ class DQNAgentTest(absltest.TestCase):
     # We fill up the state with 9s. On calling agent.begin_episode the state
     # should be reset to all 0s.
     agent.state.fill(9)
-    first_observation = onp.ones(self.observation_shape + (1,))
+    first_observation = np.ones(self.observation_shape + (1,))
     self.assertEqual(agent.begin_episode(first_observation), 0)
     # When the all-1s observation is received, it will be placed at the end of
     # the state.
     expected_state = self.zero_state
-    expected_state[..., -1] = onp.ones(self.observation_shape)
-    self.assertTrue(onp.array_equal(agent.state, expected_state))
+    expected_state[..., -1] = np.ones(self.observation_shape)
+    self.assertTrue(np.array_equal(agent.state, expected_state))
     self.assertTrue(
-        onp.array_equal(agent._observation, first_observation[:, :, 0])
+        np.array_equal(agent._observation, first_observation[:, :, 0])
     )
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
@@ -167,14 +167,14 @@ class DQNAgentTest(absltest.TestCase):
     # Having a low replay memory add_count will prevent any of the
     # train/prefetch/sync ops from being called.
     agent._replay.add_count = 0
-    second_observation = onp.ones(self.observation_shape + (1,)) * 2
+    second_observation = np.ones(self.observation_shape + (1,)) * 2
     agent.begin_episode(second_observation)
     # The agent's state will be reset, so we will only be left with the all-2s
     # observation.
-    expected_state[:, :, -1] = onp.full(self.observation_shape, 2)
-    self.assertTrue(onp.array_equal(agent.state, expected_state))
+    expected_state[:, :, -1] = np.full(self.observation_shape, 2)
+    self.assertTrue(np.array_equal(agent.state, expected_state))
     self.assertTrue(
-        onp.array_equal(agent._observation, second_observation[:, :, 0])
+        np.array_equal(agent._observation, second_observation[:, :, 0])
     )
     # training_steps is incremented since we set eval_mode to False.
     self.assertEqual(agent.training_steps, 1)
@@ -185,7 +185,7 @@ class DQNAgentTest(absltest.TestCase):
     Specifically, the action returned, and confirm no training is happening.
     """
     agent = self._create_test_agent()
-    base_observation = onp.ones(self.observation_shape + (1,))
+    base_observation = np.ones(self.observation_shape + (1,))
     # This will reset state and choose a first action.
     agent.begin_episode(base_observation)
     # We mock the replay buffer to verify how the agent interacts with it.
@@ -200,15 +200,15 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[:, :, stack_pos] = onp.full(self.observation_shape, step)
-    self.assertTrue(onp.array_equal(agent.state, expected_state))
+        expected_state[:, :, stack_pos] = np.full(self.observation_shape, step)
+    self.assertTrue(np.array_equal(agent.state, expected_state))
     self.assertTrue(
-        onp.array_equal(
+        np.array_equal(
             agent._last_observation,
-            onp.ones(self.observation_shape) * (num_steps - 1),
+            np.ones(self.observation_shape) * (num_steps - 1),
         )
     )
-    self.assertTrue(onp.array_equal(agent._observation, observation[:, :, 0]))
+    self.assertTrue(np.array_equal(agent._observation, observation[:, :, 0]))
     # No training happens in eval mode.
     self.assertEqual(agent.training_steps, 0)
     # No transitions are added in eval mode.
@@ -221,7 +221,7 @@ class DQNAgentTest(absltest.TestCase):
     """
     agent = self._create_test_agent()
     agent.eval_mode = False
-    base_observation = onp.ones(self.observation_shape + (1,))
+    base_observation = np.ones(self.observation_shape + (1,))
     # We mock the replay buffer to verify how the agent interacts with it.
     agent._replay = test_utils.MockReplayBuffer(is_jax=True)
     # This will reset state and choose a first action.
@@ -238,21 +238,23 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[:, :, stack_pos] = onp.full(self.observation_shape, step)
+        expected_state[:, :, stack_pos] = np.full(self.observation_shape, step)
       self.assertEqual(agent._replay.add.call_count, step)
       mock_args, _ = agent._replay.add.call_args
-      self.assertTrue(onp.array_equal(last_observation[:, :, 0], mock_args[0]))
-      self.assertEqual(0, mock_args[1])  # Action selected.
-      self.assertEqual(1, mock_args[2])  # Reward received.
-      self.assertFalse(mock_args[3])  # is_terminal
-    self.assertTrue(onp.array_equal(agent.state, expected_state))
+      self.assertTrue(
+          np.array_equal(last_observation[:, :, 0], mock_args[0].observation)
+      )
+      self.assertEqual(0, mock_args[0].action)  # Action selected.
+      self.assertEqual(1, mock_args[0].reward)  # Reward received.
+      self.assertFalse(mock_args[0].is_terminal)  # is_terminal
+    self.assertTrue(np.array_equal(agent.state, expected_state))
     self.assertTrue(
-        onp.array_equal(
+        np.array_equal(
             agent._last_observation,
-            onp.full(self.observation_shape, num_steps - 1),
+            np.full(self.observation_shape, num_steps - 1),
         )
     )
-    self.assertTrue(onp.array_equal(agent._observation, observation[:, :, 0]))
+    self.assertTrue(np.array_equal(agent._observation, observation[:, :, 0]))
     # We expect one more than num_steps because of the call to begin_episode.
     self.assertEqual(agent.training_steps, num_steps + 1)
     self.assertEqual(agent._replay.add.call_count, num_steps)
@@ -260,10 +262,12 @@ class DQNAgentTest(absltest.TestCase):
     agent.end_episode(reward=1)
     self.assertEqual(agent._replay.add.call_count, num_steps + 1)
     mock_args, _ = agent._replay.add.call_args
-    self.assertTrue(onp.array_equal(observation[:, :, 0], mock_args[0]))
-    self.assertEqual(0, mock_args[1])  # Action selected.
-    self.assertEqual(1, mock_args[2])  # Reward received.
-    self.assertTrue(mock_args[3])  # is_terminal
+    self.assertTrue(
+        np.array_equal(observation[:, :, 0], mock_args[0].observation)
+    )
+    self.assertEqual(0, mock_args[0].action)  # Action selected.
+    self.assertEqual(1, mock_args[0].reward)  # Reward received.
+    self.assertTrue(mock_args[0].is_terminal)  # is_terminal
 
   def testNonTupleObservationShape(self):
     with self.assertRaises(AssertionError):
@@ -274,10 +278,10 @@ class DQNAgentTest(absltest.TestCase):
     self.observation_shape = shape
     self.observation_dtype = dtype
     self.stack_size = stack_size
-    self.zero_state = onp.zeros(shape + (stack_size,))
+    self.zero_state = np.zeros(shape + (stack_size,))
     agent = self._create_test_agent()
     agent.eval_mode = False
-    base_observation = onp.ones(self.observation_shape + (1,))
+    base_observation = np.ones(self.observation_shape + (1,))
     # We mock the replay buffer to verify how the agent interacts with it.
     agent._replay = test_utils.MockReplayBuffer(is_jax=True)
     # This will reset state and choose a first action.
@@ -294,21 +298,23 @@ class DQNAgentTest(absltest.TestCase):
       self.assertEqual(agent.step(reward=1, observation=observation), 0)
       stack_pos = step - num_steps - 1
       if stack_pos >= -self.stack_size:
-        expected_state[..., stack_pos] = onp.full(self.observation_shape, step)
+        expected_state[..., stack_pos] = np.full(self.observation_shape, step)
       self.assertEqual(agent._replay.add.call_count, step)
       mock_args, _ = agent._replay.add.call_args
-      self.assertTrue(onp.array_equal(last_observation[..., 0], mock_args[0]))
-      self.assertEqual(0, mock_args[1])  # Action selected.
-      self.assertEqual(1, mock_args[2])  # Reward received.
-      self.assertFalse(mock_args[3])  # is_terminal
-    self.assertTrue(onp.array_equal(agent.state, expected_state))
+      self.assertTrue(
+          np.array_equal(last_observation[..., 0], mock_args[0].observation)
+      )
+      self.assertEqual(0, mock_args[0].action)  # Action selected.
+      self.assertEqual(1, mock_args[0].reward)  # Reward received.
+      self.assertFalse(mock_args[0].is_terminal)  # is_terminal
+    self.assertTrue(np.array_equal(agent.state, expected_state))
     self.assertTrue(
-        onp.array_equal(
+        np.array_equal(
             agent._last_observation,
-            onp.full(self.observation_shape, num_steps - 1),
+            np.full(self.observation_shape, num_steps - 1),
         )
     )
-    self.assertTrue(onp.array_equal(agent._observation, observation[..., 0]))
+    self.assertTrue(np.array_equal(agent._observation, observation[..., 0]))
     # We expect one more than num_steps because of the call to begin_episode.
     self.assertEqual(agent.training_steps, num_steps + 1)
     self.assertEqual(agent._replay.add.call_count, num_steps)
@@ -316,10 +322,12 @@ class DQNAgentTest(absltest.TestCase):
     agent.end_episode(reward=1)
     self.assertEqual(agent._replay.add.call_count, num_steps + 1)
     mock_args, _ = agent._replay.add.call_args
-    self.assertTrue(onp.array_equal(observation[..., 0], mock_args[0]))
-    self.assertEqual(0, mock_args[1])  # Action selected.
-    self.assertEqual(1, mock_args[2])  # Reward received.
-    self.assertTrue(mock_args[3])  # is_terminal
+    self.assertTrue(
+        np.array_equal(observation[..., 0], mock_args[0].observation)
+    )
+    self.assertEqual(0, mock_args[0].action)  # Action selected.
+    self.assertEqual(1, mock_args[0].reward)  # Reward received.
+    self.assertTrue(mock_args[0].is_terminal)  # is_terminal
 
   def testStepTrainCustomObservationShapes(self):
     custom_shapes = [(1,), (4, 4), (6, 1), (1, 6), (1, 1, 6), (6, 6, 6, 6)]
@@ -396,7 +404,7 @@ class DQNAgentTest(absltest.TestCase):
         (decay_period + warmup_steps + 1, epsilon),
     ]  # step > decay+warmup
     for step, expected_epsilon in steps_schedule:
-      onp.testing.assert_almost_equal(
+      np.testing.assert_almost_equal(
           dqn_agent.linearly_decaying_epsilon(
               decay_period, step, warmup_steps, epsilon
           ),

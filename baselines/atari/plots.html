@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 The Dopamine Authors.
+Copyright 2024 The Dopamine Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,9 +34,11 @@ limitations under the License.
 
 <body>
   <h1>Baseline plots</h1>
-  <p>This page provides a quick visualization of the training runs for all our default agents.</p>
+  <p>This page provides a quick visualization of the training runs for all our Jax agents and networks.</p>
 
   <p>See the <a href="https://google.github.io/dopamine/baselines/atari/">atari baselines main page</a> for details on the hyperparameters used.</p>
+
+  <p>If you'd like to see the legacy baseline plots, <a href="./legacy_plots.html">click here</a>.</p>
   <hr>
   <select id="game" name="game_select" onchange="showGame(this)">
   </select>
@@ -107,11 +109,21 @@ limitations under the License.
      "zaxxon",
     ];
     function showGame(elem) {
-      var selectedGame = elem.value;
-      var dataSource = "data/" + selectedGame + ".vg.json";
-      vegaEmbed("#" + selectedGame + "_vg", dataSource);
-      $(".outer_div").attr("style","display:none");
+      showCNNGame(elem.value);
+      showImpalaGame(elem.value);
       document.getElementById(elem.value).style.display = "block";
+    }
+    function showCNNGame(selectedGame) {
+      var cnnDataSource = "data/" + selectedGame + "_CNN.vg.json";
+      vegaEmbed("#" + selectedGame + "_cnn_vg", cnnDataSource);
+      vegaEmbed("#" + selectedGame + "_cnn_vg", cnnDataSource);
+      $(".outer_div_cnn").attr("style","display:none");
+    }
+    function showImpalaGame(selectedGame) {
+      var impalaDataSource = "data/" + selectedGame + "_Impala.vg.json";
+      vegaEmbed("#" + selectedGame + "_impala_vg", impalaDataSource);
+      vegaEmbed("#" + selectedGame + "_impala_vg", impalaDataSource);
+      $(".outer_div_impala").attr("style","display:none");
     }
     $(document).ready(function() {
       console.log("Document loaded.")
@@ -125,9 +137,11 @@ limitations under the License.
       // Lazily create the vega divs
       var vegaDiv = $("#vega_div")
       $.each(games, function(idx, game) {
-        var outerDiv = $("<div></div>").attr("id", game).attr("style", "display: none;").addClass("outer_div").appendTo(vegaDiv);
-        outerDiv.append($("<h1></h1>").text(game));
-        outerDiv.append($("<div></div>").attr("id", game + "_vg"));
+        var outerDiv = $("<div></div>").attr("id", game).attr("style", "display: none").addClass("outer_div_impala").appendTo(vegaDiv);
+        outerDiv.append($("<h1></h1>").text(game + " (CNN network)"));
+        outerDiv.append($("<div></div>").attr("id", game + "_cnn_vg"));
+        outerDiv.append($("<h1></h1>").text(game + " (Impala network)"));
+        outerDiv.append($("<div></div>").attr("id", game + "_impala_vg"));
       });
       showGame(document.querySelector("option[value=airraid]"));
     });

@@ -18,10 +18,6 @@ The agent follows the description given in "Implicit Quantile Networks for
 Distributional RL" (Dabney et. al, 2018).
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import functools
 
 from dopamine.jax import networks

@@ -14,16 +14,21 @@
 # limitations under the License.
 """Various networks for Jax Dopamine agents."""
 
+import functools
 import itertools
+import operator
 import time
 from typing import Optional, Sequence, Tuple, Union
+
 from absl import logging
 from dopamine.discrete_domains import atari_lib
+from dopamine.jax import continuous_networks
 from flax import linen as nn
 import gin
 import jax
 import jax.numpy as jnp
 import numpy as onp
+from tensorflow_probability.substrates import jax as tfp
 
 
 gin.constant('jax_networks.CARTPOLE_OBSERVATION_DTYPE', jnp.float64)
@@ -599,3 +604,107 @@ class FullRainbowNetwork(nn.Module):
       return atari_lib.RainbowNetworkType(q_values, logits, probabilities)
     q_values = jnp.sum(logits, axis=1)  # Sum over all the num_atoms
     return atari_lib.DQNNetworkType(q_values)
+
+
+@gin.configurable
+class PPOSharedNetwork(nn.Module):
+  """Shared network for PPO actor and critic."""
+
+  inputs_preprocessed: bool = False
+
+  @nn.compact
+  def __call__(self, x) -> jnp.ndarray:
+    initializer = nn.initializers.orthogonal(jnp.sqrt(2))
+    if not self.inputs_preprocessed:
+      x = preprocess_atari_inputs(x)
+    x = nn.Conv(
+        features=32,
+        kernel_size=(8, 8),
+        strides=4,
+        padding='VALID',
+        kernel_init=initializer,
+    )(x)
+    x = nn.relu(x)
+    x = nn.Conv(
+        features=64,
+        kernel_size=(4, 4),
+        strides=2,
+        padding='VALID',
+        kernel_init=initializer,
+    )(x)
+    x = nn.relu(x)
+    x = nn.Conv(
+        features=64,
+        kernel_size=(3, 3),
+        strides=1,
+        padding='VALID',
+        kernel_init=initializer,
+    )(x)
+    x = nn.relu(x)
+    x = x.reshape((-1))  # flatten
+    x = nn.Dense(features=512, kernel_init=initializer)(x)
+    x = nn.relu(x)
+    return x
+
+
+@gin.configurable
+class PPOActorNetwork(nn.Module):
+  """Actor backbone for PPO."""
+
+  num_actions: int
+
+  @nn.compact
+  def __call__(self, x) -> jnp.ndarray:
+    initializer = nn.initializers.orthogonal(0.01)
+    return nn.Dense(features=self.num_actions, kernel_init=initializer)(x)
+
+
+class PPOCriticNetwork(nn.Module):
+  """Critic backbone for PPO."""
+
+  @nn.compact
+  def __call__(self, x) -> jnp.ndarray:
+    initializer = nn.initializers.orthogonal(1.0)
+    return nn.Dense(features=1, kernel_init=initializer)(x)
+
+
+@gin.configurable
+class PPODiscreteActorCriticNetwork(nn.Module):
+  """Convolutional actor critic value and policy networks."""
+
+  action_shape: Tuple[int, ...]
+  inputs_preprocessed: bool = False
+
+  def setup(self):
+    action_dim = functools.reduce(operator.mul, self.action_shape, 1)
+    self._shared_network = PPOSharedNetwork(self.inputs_preprocessed)
+    self._actor = PPOActorNetwork(action_dim)
+    self._critic = PPOCriticNetwork()
+
+  def __call__(
+      self, state: jnp.ndarray, key: jnp.ndarray
+  ) -> continuous_networks.ActorCriticOutput:
+    actor_output = self.actor(state, key)
+    critic_output = self.critic(state)
+    return continuous_networks.PPOActorCriticOutput(actor_output, critic_output)
+
+  def actor(
+      self,
+      state: jnp.ndarray,
+      key: Optional[jnp.ndarray] = None,
+      action: Optional[jnp.ndarray] = None,
+  ) -> continuous_networks.PPOActorOutput:
+    logits = self._actor(self._shared_network(state))
+    dist = tfp.distributions.Categorical(logits=logits)
+    if action is None:
+      if key is None:
+        raise ValueError('Key must be provided if action is None.')
+      action = dist.sample(seed=key)
+    log_probability = dist.log_prob(action)
+    entropy = dist.entropy()
+    return continuous_networks.PPOActorOutput(action, log_probability, entropy)
+
+  def critic(self, state: jnp.ndarray) -> continuous_networks.PPOCriticOutput:
+    return continuous_networks.PPOCriticOutput(
+        self._critic(self._shared_network(state))
+    )

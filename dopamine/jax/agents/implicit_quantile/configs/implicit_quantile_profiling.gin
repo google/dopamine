@@ -5,7 +5,6 @@ import dopamine.jax.agents.implicit_quantile.implicit_quantile_agent
 import dopamine.discrete_domains.atari_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.dqn.dqn_agent
-import dopamine.replay_memory.circular_replay_buffer
 
 JaxImplicitQuantileAgent.kappa = 1.0
 JaxImplicitQuantileAgent.num_tau_samples = 64
@@ -15,7 +14,7 @@ JaxImplicitQuantileAgent.gamma = 0.99
 JaxImplicitQuantileAgent.update_horizon = 3
 JaxImplicitQuantileAgent.min_replay_history = 100 # agent steps
 JaxImplicitQuantileAgent.update_period = 4
-JaxImplicitQuantileAgent.target_update_period = 8000 # agent steps
+JaxImplicitQuantileAgent.target_update_period = 8_000 # agent steps
 JaxImplicitQuantileAgent.epsilon_fn = @dqn_agent.identity_epsilon
 JaxImplicitQuantileAgent.epsilon_train = 0.0
 JaxImplicitQuantileAgent.epsilon_eval = 0.0
@@ -30,9 +29,9 @@ create_runner.schedule = 'continuous_train'
 create_agent.agent_name = 'jax_implicit_quantile'
 create_agent.debug_mode = True
 Runner.num_iterations = 200
-Runner.training_steps = 250000
-Runner.evaluation_steps = 125000
-Runner.max_steps_per_episode = 27000
+Runner.training_steps = 250_000
+Runner.evaluation_steps = 125_000
+Runner.max_steps_per_episode = 27_000
 
-OutOfGraphReplayBuffer.replay_capacity = 1000000
-OutOfGraphReplayBuffer.batch_size = 32
+ReplayBuffer.max_capacity = 1_000_000
+ReplayBuffer.batch_size = 32

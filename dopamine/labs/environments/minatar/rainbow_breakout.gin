@@ -5,7 +5,7 @@ import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.rainbow.rainbow_agent
 import dopamine.jax.networks
 import dopamine.labs.environments.minatar.minatar_env
-import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.tf.replay_memory.prioritized_replay_buffer
 
 JaxRainbowAgent.observation_shape = %minatar_env.BREAKOUT_SHAPE
 JaxRainbowAgent.observation_dtype = %minatar_env.DTYPE

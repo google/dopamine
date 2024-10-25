@@ -35,3 +35,8 @@ Runner.max_steps_per_episode = 27000  # agent steps
 
 OutOfGraphPrioritizedReplayBuffer.replay_capacity = 1000000
 OutOfGraphPrioritizedReplayBuffer.batch_size = 32
+
+JaxRainbowAgent.use_new_replay_buffer = True  # Set to False to use old buffer.
+ReplayBuffer.max_capacity = 1_000_000
+ReplayBuffer.batch_size = 32
+PrioritizedSamplingDistribution.max_capacity = 1_000_000

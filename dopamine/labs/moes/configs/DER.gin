@@ -6,7 +6,7 @@ import dopamine.jax.agents.full_rainbow.full_rainbow_agent
 import dopamine.jax.networks
 import dopamine.labs.moes.architectures.networks
 import dopamine.labs.atari_100k.atari_100k_rainbow_agent
-import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.tf.replay_memory.prioritized_replay_buffer
 
 JaxDQNAgent.gamma = 0.99
 # Use 10 instead of 20 as done by SPR paper

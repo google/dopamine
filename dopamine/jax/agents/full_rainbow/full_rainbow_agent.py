@@ -34,8 +34,11 @@ from dopamine.jax import losses
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
 from dopamine.jax.agents.rainbow import rainbow_agent
+from dopamine.jax.replay_memory import accumulator
+from dopamine.jax.replay_memory import elements
+from dopamine.jax.replay_memory import replay_buffer
+from dopamine.jax.replay_memory import samplers
 from dopamine.metrics import statistics_instance
-from dopamine.replay_memory import prioritized_replay_buffer
 import gin
 import jax
 import jax.numpy as jnp
@@ -348,12 +351,18 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     """Creates the replay buffer used by the agent."""
     if self._replay_scheme not in ['uniform', 'prioritized']:
       raise ValueError('Invalid replay scheme: {}'.format(self._replay_scheme))
-    return prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer(
-        observation_shape=self.observation_shape,
+
+    transition_accumulator = accumulator.TransitionAccumulator(
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype,
+    )
+    sampling_distribution = samplers.PrioritizedSamplingDistribution(
+        seed=self._seed
+    )
+    return replay_buffer.ReplayBuffer(
+        transition_accumulator=transition_accumulator,
+        sampling_distribution=sampling_distribution,
     )
 
   def _training_step_update(self):
@@ -406,8 +415,9 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       # small nonzero value to the loss to avoid 0 priority items. While
       # technically this may be okay, setting all items to 0 priority will
       # cause troubles, and also result in 1.0 / 0.0 = NaN correction terms.
-      self._replay.set_priority(
-          self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+      self._replay.update(
+          self.replay_elements['indices'],
+          priorities=jnp.sqrt(loss + 1e-10),
       )
 
     if (
@@ -441,25 +451,31 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
       episode_end=False
   ):
     """Stores a transition when in training mode."""
+    # pylint: disable=protected-access
     is_prioritized = isinstance(
-        self._replay,
-        prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer,
+        self._replay._sampling_distribution,
+        samplers.PrioritizedSamplingDistribution,
     )
     if is_prioritized and priority is None:
       if self._replay_scheme == 'uniform':
         priority = 1.0
       else:
-        priority = self._replay.sum_tree.max_recorded_priority
+        priority = (
+            self._replay._sampling_distribution._sum_tree.max_recorded_priority
+        )
+    # pylint: enable=protected-access
 
     if not self.eval_mode:
       self._replay.add(
-          last_observation,
-          action,
-          reward,
-          is_terminal,
-          *args,
+          elements.TransitionElement(
+              last_observation,
+              action,
+              reward,
+              is_terminal,
+              episode_end,
+          ),
           priority=priority,
-          episode_end=episode_end
+          *args,
       )
 
   def _train_step(self):

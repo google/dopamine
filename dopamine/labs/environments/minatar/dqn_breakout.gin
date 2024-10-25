@@ -5,7 +5,7 @@ import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.jax.networks
 import dopamine.labs.environments.minatar.minatar_env
-import dopamine.replay_memory.circular_replay_buffer
+import dopamine.tf.replay_memory.circular_replay_buffer
 import flax
 
 JaxDQNAgent.observation_shape = %minatar_env.BREAKOUT_SHAPE

@@ -13,11 +13,11 @@ import dopamine.jax.networks
 import dopamine.discrete_domains.checkpointer
 import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
-import dopamine.replay_memory.prioritized_replay_buffer
 import dopamine.labs.atari_100k.replay_memory.subsequence_replay_buffer
 import dopamine.labs.atari_100k.spr_networks
 import dopamine.labs.atari_100k.spr_agent
 import dopamine.labs.atari_100k.atari_100k_rainbow_agent
+import dopamine.tf.replay_memory.prioritized_replay_buffer
 
 # Parameters specific to DrQ are higlighted by comments
 JaxDQNAgent.gamma = 0.99

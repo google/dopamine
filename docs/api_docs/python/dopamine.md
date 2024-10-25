@@ -16,14 +16,29 @@
 </td>
 </table>
 
-## Modules
 
-[`agents`](./dopamine/agents.md) module
+
+
+
+
+
+## Modules
 
 [`colab`](./dopamine/colab.md) module
 
+[`continuous_domains`](./dopamine/continuous_domains.md) module
+
 [`discrete_domains`](./dopamine/discrete_domains.md) module
+
+[`google`](./dopamine/google.md) module
 
 [`jax`](./dopamine/jax.md) module
 
-[`replay_memory`](./dopamine/replay_memory.md) module
+[`labs`](./dopamine/labs.md) module
+
+[`metrics`](./dopamine/metrics.md) module
+
+[`tf`](./dopamine/tf.md) module
+
+[`utils`](./dopamine/utils.md) module
+

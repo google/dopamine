@@ -20,6 +20,8 @@ import functools
 from absl import logging
 from dopamine.jax import networks
 from dopamine.jax.agents.full_rainbow import full_rainbow_agent
+from dopamine.jax.replay_memory import elements
+from dopamine.jax.replay_memory import samplers
 import gin
 import jax
 import jax.numpy as jnp
@@ -214,8 +216,9 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
     )
 
     if self._replay_scheme == 'prioritized':
-      self._replay.set_priority(
-          self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+      self._replay.update(
+          self.replay_elements['indices'],
+          priorities=jnp.sqrt(loss + 1e-10),
       )
 
     if self.summary_writer is not None:
@@ -350,21 +353,26 @@ class Atari100kRainbowAgent(full_rainbow_agent.JaxFullRainbowAgent):
   ):
     """Stores a transition when in training mode."""
     is_prioritized = hasattr(self._replay, 'sum_tree')
+    # pylint: disable=protected-access
+    is_prioritized = isinstance(
+        self._replay._sampling_distribution,
+        samplers.PrioritizedSamplingDistribution,
+    )
     if is_prioritized and priority is None:
       priority = onp.ones_like(reward)
       if self._replay_scheme == 'prioritized':
-        priority *= self._replay.sum_tree.max_recorded_priority
+        priority *= (
+            self._replay._sampling_distribution._sum_tree.max_recorded_priority
+        )
 
-    to_store = (last_observation, action, reward, is_terminal, *args)
-    to_store = (onp.asarray(x) for x in to_store)
-    if not hasattr(self._replay, '_n_envs'):
-      to_store = (onp.squeeze(x) for x in to_store)
-      priority = onp.squeeze(priority)
-    elif hasattr(self._replay, '_n_envs') and not reward.shape:
-      to_store = (
-          onp.expand_dims(x, 0) if not (x.shape and x.shape[0] == 1) else x
-          for x in to_store
-      )
-      priority = onp.expand_dims(priority, 0)
-    if not self.eval_mode:
-      self._replay.add(*to_store, priority=priority, episode_end=episode_end)
+    self._replay.add(
+        elements.TransitionElement(
+            last_observation,
+            action,
+            reward,
+            is_terminal,
+            episode_end,
+        ),
+        priority=priority,
+        *args,
+    )

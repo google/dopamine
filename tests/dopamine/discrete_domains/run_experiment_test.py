@@ -24,14 +24,14 @@ import shutil
 
 
 from absl import flags
-from dopamine.agents.dqn import dqn_agent
-from dopamine.agents.implicit_quantile import implicit_quantile_agent
-from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import checkpointer
 from dopamine.discrete_domains import logger
 from dopamine.discrete_domains import run_experiment
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
+from dopamine.tf.agents.dqn import dqn_agent
+from dopamine.tf.agents.implicit_quantile import implicit_quantile_agent
+from dopamine.tf.agents.rainbow import rainbow_agent
 import gin
 import mock
 import tensorflow as tf
@@ -313,6 +313,41 @@ class RunnerTest(tf.test.TestCase):
     self.assertEqual(self._agent.step.call_count, max_steps_per_episode - 1)
     self.assertEqual(self._agent.end_episode.call_count, 1)
     self.assertEqual(max_steps_per_episode, step_number)
+    self.assertEqual(-1, total_reward)
+
+  def testRunOneContinuedEpisode(self):
+    environment = MockEnvironment()
+    runner = run_experiment.Runner(
+        self._test_subdir,
+        self._create_agent_fn,
+        lambda: environment,
+        max_steps_per_episode=None,
+    )
+    step_number, total_reward = runner._run_continued_episode(
+        start_step_count=0, max_step_count=10
+    )
+    self.assertEqual(self._agent.step.call_count, 9)
+    self.assertEqual(self._agent.end_episode.call_count, 1)
+    self.assertEqual(runner.episode_ended, True)
+    self.assertEqual(step_number, 10)
+    # Expected reward will be \sum_{i=0}^{9} (-1)**i * i = -5
+    self.assertEqual(-5, total_reward)
+
+  def testRunOneContinuedEpisodeWithLowMaxSteps(self):
+    environment = MockEnvironment()
+    runner = run_experiment.Runner(
+        self._test_subdir,
+        self._create_agent_fn,
+        lambda: environment,
+        max_steps_per_episode=None,
+    )
+    step_number, total_reward = runner._run_continued_episode(
+        start_step_count=0, max_step_count=1
+    )
+    self.assertEqual(self._agent.step.call_count, 2)
+    self.assertEqual(self._agent.end_episode.call_count, 0)
+    self.assertEqual(runner.episode_ended, False)
+    self.assertEqual(step_number, 2)
     self.assertEqual(-1, total_reward)
 
   def testRunOnePhase(self):

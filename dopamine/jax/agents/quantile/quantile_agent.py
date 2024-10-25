@@ -18,16 +18,14 @@ This loss is computed as in "Distributional Reinforcement Learning with Quantile
 Regression" - Dabney et. al, 2017"
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import functools
 
 from dopamine.jax import networks
 from dopamine.jax.agents.dqn import dqn_agent
+from dopamine.jax.replay_memory import accumulator
+from dopamine.jax.replay_memory import replay_buffer
+from dopamine.jax.replay_memory import samplers
 from dopamine.metrics import statistics_instance
-from dopamine.replay_memory import prioritized_replay_buffer
 import gin
 import jax
 import jax.numpy as jnp
@@ -235,14 +233,18 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
     """Creates the replay buffer used by the agent."""
     if self._replay_scheme not in ['uniform', 'prioritized']:
       raise ValueError('Invalid replay scheme: {}'.format(self._replay_scheme))
-    # Both replay schemes use the same data structure, but the 'uniform' scheme
-    # sets all priorities to the same value (which yields uniform sampling).
-    return prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer(
-        observation_shape=self.observation_shape,
+
+    transition_accumulator = accumulator.TransitionAccumulator(
         stack_size=self.stack_size,
         update_horizon=self.update_horizon,
         gamma=self.gamma,
-        observation_dtype=self.observation_dtype,
+    )
+    sampling_distribution = samplers.PrioritizedSamplingDistribution(
+        seed=self._seed
+    )
+    return replay_buffer.ReplayBuffer(
+        transition_accumulator=transition_accumulator,
+        sampling_distribution=sampling_distribution,
     )
 
   def _train_step(self):
@@ -289,8 +291,9 @@ class JaxQuantileAgent(dqn_agent.JaxDQNAgent):
           # small nonzero value to the loss to avoid 0 priority items. While
           # technically this may be okay, setting all items to 0 priority will
           # cause troubles, and also result in 1.0 / 0.0 = NaN correction terms.
-          self._replay.set_priority(
-              self.replay_elements['indices'], jnp.sqrt(loss + 1e-10)
+          self._replay.update(
+              self.replay_elements['indices'],
+              priorities=jnp.sqrt(loss + 1e-10),
           )
 
           # Weight the loss by the inverse priorities.

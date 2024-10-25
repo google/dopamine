@@ -33,11 +33,11 @@ import os
 
 from absl import logging
 
-from dopamine.agents.dqn import dqn_agent
-from dopamine.agents.rainbow import rainbow_agent
 from dopamine.discrete_domains import atari_lib
 from dopamine.discrete_domains import iteration_statistics
 from dopamine.discrete_domains import run_experiment
+from dopamine.tf.agents.dqn import dqn_agent
+from dopamine.tf.agents.rainbow import rainbow_agent
 from dopamine.utils import agent_visualizer
 from dopamine.utils import atari_plotter
 from dopamine.utils import bar_plotter

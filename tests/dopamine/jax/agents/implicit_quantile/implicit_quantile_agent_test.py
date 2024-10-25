@@ -42,8 +42,9 @@ class ImplicitQuantileAgentTest(absltest.TestCase):
     self.ones_state = onp.ones(
         (1,) + self.observation_shape + (self.stack_size,)
     )
-    gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)
-    gin.bind_parameter('OutOfGraphReplayBuffer.batch_size', 2)
+    gin.bind_parameter('ReplayBuffer.max_capacity', 100)
+    gin.bind_parameter('ReplayBuffer.batch_size', 2)
+    gin.bind_parameter('PrioritizedSamplingDistribution.max_capacity', 100)
 
   def _create_test_agent(self):
     # This dummy network allows us to deterministically anticipate that the

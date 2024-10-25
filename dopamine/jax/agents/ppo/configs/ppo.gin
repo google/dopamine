@@ -1,0 +1,45 @@
+# Mujoco Hyperparameters following those specified in Table 3 of Appendix A in:
+#   "Proximal Policy Optimization Algorithms"
+#   by John Schulman et al.
+#   https://arxiv.org/abs/1707.06347
+import dopamine.continuous_domains.run_experiment
+import dopamine.discrete_domains.gym_lib
+import dopamine.jax.agents.ppo.ppo_agent
+import dopamine.jax.agents.dqn.dqn_agent
+import dopamine.jax.continuous_networks
+import dopamine.jax.replay_memory.replay_buffer
+
+PPOAgent.network = @continuous_networks.PPOActorCriticNetwork
+PPOAgent.num_layers = 2
+PPOAgent.hidden_units = 64
+PPOAgent.activation = 'tanh'
+PPOAgent.update_period = 2048
+PPOAgent.optimizer = 'adam'
+PPOAgent.max_gradient_norm = 0.5
+create_optimizer.learning_rate = 3e-4
+create_optimizer.eps = 1e-5
+create_optimizer.anneal_learning_rate = True
+create_optimizer.anneal_steps = 160_000  # 500 iterations * 10 epochs * 2048 timesteps / 64 batches
+PPOAgent.num_epochs = 10
+PPOAgent.batch_size = 64
+PPOAgent.gamma = 0.99
+PPOAgent.lambda_ = 0.95
+PPOAgent.epsilon = 0.2
+PPOAgent.vf_coefficient = 0.5
+PPOAgent.entropy_coefficient = 0.0
+PPOAgent.clip_critic_loss = True
+PPOAgent.seed = None  # Seed with the current time
+
+create_gym_environment.environment_name = 'HalfCheetah'
+create_gym_environment.version = 'v2'
+create_gym_environment.use_legacy_gym = True
+create_gym_environment.use_ppo_preprocessing = True
+create_continuous_runner.schedule = 'continuous_train'
+create_continuous_agent.agent_name = 'ppo'
+ContinuousTrainRunner.create_environment_fn = @gym_lib.create_gym_environment
+ContinuousRunner.num_iterations = 500
+ContinuousRunner.training_steps = 2048
+ContinuousRunner.max_steps_per_episode = None
+
+ReplayBuffer.max_capacity = 2048
+ReplayBuffer.batch_size = 2048

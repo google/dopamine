@@ -11,7 +11,7 @@ We also provide a set of colabs to help illustrate how you can use Dopamine.
 In this
 [colab](https://colab.research.google.com/github/google/dopamine/blob/master/dopamine/colab/agents.ipynb)
 we illustrate how to create a new agent by either subclassing
-[`DQN`](https://github.com/google/dopamine/blob/master/dopamine/agents/dqn/dqn_agent.py)
+[`DQN`](https://github.com/google/dopamine/blob/master/dopamine/jax/agents/dqn/dqn_agent.py)
 or by creating a new agent from scratch.
 
 ## Loading statistics

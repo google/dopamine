@@ -5,7 +5,7 @@ import dopamine.discrete_domains.atari_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.quantile.quantile_agent
 import dopamine.labs.environments.minatar.minatar_env
-import dopamine.replay_memory.prioritized_replay_buffer
+import dopamine.tf.replay_memory.prioritized_replay_buffer
 
 JaxQuantileAgent.observation_shape = %minatar_env.SPACE_INVADERS_SHAPE
 JaxQuantileAgent.observation_dtype = %minatar_env.DTYPE

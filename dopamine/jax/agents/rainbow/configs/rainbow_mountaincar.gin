@@ -33,10 +33,15 @@ create_agent.agent_name = 'jax_rainbow'
 create_agent.debug_mode = True
 TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
 Runner.num_iterations = 500
-Runner.training_steps = 1000
+Runner.training_steps = 1_000
 Runner.max_steps_per_episode = 600  # Default max episode length.
 
-OutOfGraphPrioritizedReplayBuffer.replay_capacity = 50000
+OutOfGraphPrioritizedReplayBuffer.replay_capacity = 50_000
 OutOfGraphPrioritizedReplayBuffer.batch_size = 128
-OutOfGraphReplayBuffer.replay_capacity = 50000
+OutOfGraphReplayBuffer.replay_capacity = 50_000
 OutOfGraphReplayBuffer.batch_size = 128
+
+JaxRainbowAgent.use_new_replay_buffer = True  # Set to False to use old buffer.
+ReplayBuffer.max_capacity = 50_000
+ReplayBuffer.batch_size = 128
+PrioritizedSamplingDistribution.max_capacity = 50_000

@@ -24,6 +24,8 @@ from unittest import mock
 from absl.testing import absltest
 from absl.testing import parameterized
 from dopamine.jax.agents.sac import sac_agent
+from dopamine.jax.replay_memory import elements
+from dopamine.jax.replay_memory import samplers
 import flax
 import gin
 import jax
@@ -49,19 +51,26 @@ def get_mock_batch(
   mock_action = mock_action / np.max(mock_action)  # Squish to action limits
   mock_reward = np.asarray(1.0)
   mock_terminal = np.asarray(0.0)
+  mock_episode_end = np.asarray(0.0)
   mock_indices = np.asarray(0)
   mock_sampling_prob = np.asarray(1.0)
 
-  return (
-      np.stack([mock_observation for _ in range(batch_size)], axis=0),
-      np.stack([mock_action for _ in range(batch_size)], axis=0),
-      np.stack([mock_reward for _ in range(batch_size)], axis=0),
-      np.stack([mock_observation for _ in range(batch_size)], axis=0),
-      np.stack([mock_action for _ in range(batch_size)], axis=0),
-      np.stack([mock_reward for _ in range(batch_size)], axis=0),
-      np.stack([mock_terminal for _ in range(batch_size)], axis=0),
-      np.stack([mock_indices for _ in range(batch_size)], axis=0),
-      np.stack([mock_sampling_prob for _ in range(batch_size)], axis=0),
+  return elements.ReplayElement(
+      state=np.stack([mock_observation for _ in range(batch_size)], axis=0),
+      action=np.stack([mock_action for _ in range(batch_size)], axis=0),
+      reward=np.stack([mock_reward for _ in range(batch_size)], axis=0),
+      next_state=np.stack(
+          [mock_observation for _ in range(batch_size)], axis=0
+      ),
+      is_terminal=np.stack([mock_terminal for _ in range(batch_size)], axis=0),
+      episode_end=np.stack(
+          [mock_episode_end for _ in range(batch_size)], axis=0
+      ),
+  ), samplers.PrioritizedSampleMetadata(
+      keys=np.stack([mock_indices for _ in range(batch_size)], axis=0),
+      probabilities=np.stack(
+          [mock_sampling_prob for _ in range(batch_size)], axis=0
+      ),
   )
 
 
@@ -102,8 +111,8 @@ class SacAgentTest(parameterized.TestCase):
     agent1_params = get_agent_params(agent1)
     agent2_params = get_agent_params(agent2)
 
-    agent1_params, agent1_structure = jax.tree_flatten(agent1_params)
-    agent2_params, agent2_structure = jax.tree_flatten(agent2_params)
+    agent1_params, agent1_structure = jax.tree.flatten(agent1_params)
+    agent2_params, agent2_structure = jax.tree.flatten(agent2_params)
 
     self.assertEqual(
         agent1_structure, agent2_structure, 'Parameter structures do not match.'
@@ -119,8 +128,8 @@ class SacAgentTest(parameterized.TestCase):
     agent1_params = get_agent_params(agent1)
     agent2_params = get_agent_params(agent2)
 
-    agent1_params, agent1_structure = jax.tree_flatten(agent1_params)
-    agent2_params, agent2_structure = jax.tree_flatten(agent2_params)
+    agent1_params, agent1_structure = jax.tree.flatten(agent1_params)
+    agent2_params, agent2_structure = jax.tree.flatten(agent2_params)
 
     if agent1_structure != agent2_structure:
       self.fail('Parameter structures are not comparable.')
@@ -134,8 +143,8 @@ class SacAgentTest(parameterized.TestCase):
 
   def setUp(self):
     super(SacAgentTest, self).setUp()
-    gin.bind_parameter('OutOfGraphReplayBuffer.replay_capacity', 100)
-    gin.bind_parameter('OutOfGraphReplayBuffer.batch_size', 2)
+    gin.bind_parameter('ReplayBuffer.max_capacity', 100)
+    gin.bind_parameter('ReplayBuffer.batch_size', 2)
     random.seed(0)  # random is used for sampling experiences from buffer.
 
   @parameterized.named_parameters(
@@ -188,7 +197,7 @@ class SacAgentTest(parameterized.TestCase):
     )
     observation = np.full(OBSERVATION_SHAPE, 1.0, dtype=np.float32)
 
-    agent._replay.sample_transition_batch = mock.MagicMock(
+    agent._replay.sample = mock.MagicMock(
         return_value=get_mock_batch(action_shape)
     )
     agent._replay.add_count = 10
@@ -213,7 +222,7 @@ class SacAgentTest(parameterized.TestCase):
     )
     observation = np.full(OBSERVATION_SHAPE, 1.0, dtype=np.float32)
 
-    agent._replay.sample_transition_batch = mock.MagicMock(
+    agent._replay.sample = mock.MagicMock(
         return_value=get_mock_batch(action_shape)
     )
     agent._replay.add_count = 10
@@ -262,7 +271,7 @@ class SacAgentTest(parameterized.TestCase):
     )
     observation = np.full(IMG_OBSERVATION_SHAPE, 1.0, dtype=np.float32)
 
-    agent._replay.sample_transition_batch = mock.MagicMock(
+    agent._replay.sample = mock.MagicMock(
         return_value=get_mock_batch(
             action_shape=action_shape,
             observation_shape=IMG_OBSERVATION_SHAPE,

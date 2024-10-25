@@ -8,10 +8,10 @@ import dopamine.jax.agents.sac.sac_agent
 import dopamine.jax.agents.dqn.dqn_agent
 import dopamine.jax.continuous_networks
 import dopamine.labs.environments.brax.brax_lib
-import dopamine.replay_memory.circular_replay_buffer
+import dopamine.tf.replay_memory.circular_replay_buffer
 
 SACAgent.reward_scale_factor = 0.1
-SACAgent.network = @continuous_networks.SACNetwork
+SACAgent.network = @continuous_networks.ActorCriticNetwork
 SACAgent.num_layers = 2
 SACAgent.hidden_units = 256
 SACAgent.gamma = 0.99

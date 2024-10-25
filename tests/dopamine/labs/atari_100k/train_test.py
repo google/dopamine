@@ -35,7 +35,8 @@ def QuickAgentFlags():
       'Runner.num_iterations=1',
       'Runner.max_steps_per_episode=100',
       'JaxDQNAgent.min_replay_history=100',
-      'OutOfGraphPrioritizedReplayBuffer.replay_capacity=10000',
+      'ReplayBuffer.max_capacity=10000',
+      'PrioritizedSamplingDistribution.max_capacity=10000',
   ]
   FLAGS.alsologtostderr = True
 

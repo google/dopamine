@@ -6,6 +6,33 @@ Note: This changelist attempts to summarize major changes to the Dopamine
 library. For a more fine-grained changelist, consider looking through the
 [commit history](https://github.com/google/dopamine/commits/master).
 
+*  **25/10/2024:** A few major changes:
+   * Making Jax agents the default.
+   * Add support for Impala network architectures.
+   * Deprecating TensorFlow agents (now stored in
+     [tf](https://github.com/google/dopamine/tree/master/dopamine/tf)
+     directory).
+   * Adding new replay buffer (twice as fast!).
+   * Added an implementation of PPO.
+   * Switching from (deprecated)
+     [`atari_py`](https://github.com/openai/atari-py) to
+     [`ale_py`](https://github.com/Farama-Foundation/Arcade-Learning-Environment).
+   * Switching from (deprecated)
+     [OpenAI-Gym](https://github.com/openai/gym) to
+     [Gymnasium](https://github.com/Farama-Foundation/Gymnasium).
+   * Update documentation page (much needed).
+   * Update baselines plots to use all Jax agents, as well as those trained with
+     the Impala architecture.
+   * Add code for many of our published papers 😊.
+
+*  **22/09/2022:** Finish adding new setup for statistics collection (inside
+   [metrics](https://github.com/google/dopamine/tree/master/dopamine/metrics)
+   directory).
+
+*  **20/05/2022:** Make MSE the default loss type for Jax DQN.
+
+*  **18/10/2021:** Added support for DM-Control.
+
 *   **21/09/2021:** Added Dockerfiles and instructions for using Dopamine with
     docker.
 

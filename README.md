@@ -30,6 +30,7 @@ Dopamine supports the following agents, implemented with jax:
 * Rainbow ([Hessel et al., 2018][rainbow])
 * IQN ([Dabney et al., 2018][iqn])
 * SAC ([Haarnoja et al., 2018][sac])
+* PPO ([Schulman et al., 2017][ppo])
 
 For more information on the available agents, see the [docs](https://google.github.io/dopamine/docs).
 
@@ -140,6 +141,8 @@ Conference on Learning Representations, 2016.][prioritized_replay]
 [Haarnoja et al., *Soft Actor-Critic Algorithms and Applications*,
 arXiv preprint arXiv:1812.05905, 2018.][sac]
 
+[Schulman et al., *Proximal Policy Optimization Algorithms*.][ppo]
+
 ## Giving credit
 
 If you use Dopamine in your work, we ask that you cite our
@@ -160,7 +163,6 @@ If you use Dopamine in your work, we ask that you cite our
 ```
 
 
-
 [docs]: https://google.github.io/dopamine/docs/
 [baselines]: https://google.github.io/dopamine/baselines
 [machado]: https://jair.org/index.php/jair/article/view/11182
@@ -172,5 +174,6 @@ If you use Dopamine in your work, we ask that you cite our
 [rainbow]: https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/download/17204/16680
 [iqn]: https://arxiv.org/abs/1806.06923
 [sac]: https://arxiv.org/abs/1812.05905
+[ppo]: https://arxiv.org/abs/1707.06347
 [dopamine_paper]: https://arxiv.org/abs/1812.06110
 [vitualenv]: https://docs.python.org/3/library/venv.html#creating-virtual-environments

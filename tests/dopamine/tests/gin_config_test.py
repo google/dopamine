@@ -52,7 +52,7 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/jax/agents/dqn/configs/dqn.gin']
     gin_bindings = [
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
@@ -74,7 +74,7 @@ class GinConfigTest(tf.test.TestCase):
     gin_bindings = [
         'TrainRunner.base_dir = "{}"'.format(self._base_dir),
         'Runner.log_every_n = 1729',
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
@@ -92,7 +92,7 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/jax/agents/dqn/configs/dqn.gin']
     gin_bindings = [
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_dqn'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
@@ -112,7 +112,7 @@ class GinConfigTest(tf.test.TestCase):
     logging.info('####### DQN base_dir: %s', self._base_dir)
     gin_files = ['dopamine/jax/agents/dqn/configs/dqn.gin']
     gin_bindings = [
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_dqn'",
     ]
 
@@ -135,7 +135,7 @@ class GinConfigTest(tf.test.TestCase):
         'dopamine/jax/agents/rainbow/configs/rainbow.gin'
     ]
     gin_bindings = [
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_rainbow'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
@@ -157,7 +157,7 @@ class GinConfigTest(tf.test.TestCase):
         'dopamine/jax/agents/rainbow/configs/rainbow.gin',
     ]
     gin_bindings = [
-        'OutOfGraphReplayBuffer.replay_capacity = 100',  # To prevent OOM.
+        'ReplayBuffer.max_capacity = 100',  # To prevent OOM.
         "create_agent.agent_name = 'jax_rainbow'",
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
@@ -187,7 +187,7 @@ class GinConfigTest(tf.test.TestCase):
     self.assertEqual(agent.epsilon_train, 0.01)
     self.assertEqual(agent.epsilon_eval, 0.001)
     self.assertEqual(agent.epsilon_decay_period, 250000)
-    self.assertEqual(agent._replay._replay_capacity, 1000000)
+    self.assertEqual(agent._replay._max_capacity, 1000000)
     self.assertEqual(agent._replay._batch_size, 32)
 
   def testDefaultC51Config(self):
@@ -211,7 +211,7 @@ class GinConfigTest(tf.test.TestCase):
     self.assertEqual(agent.epsilon_train, 0.01)
     self.assertEqual(agent.epsilon_eval, 0.001)
     self.assertEqual(agent.epsilon_decay_period, 250000)
-    self.assertEqual(agent._replay._replay_capacity, 1000000)
+    self.assertEqual(agent._replay._max_capacity, 1000000)
     self.assertEqual(agent._replay._batch_size, 32)
 
   def testDefaultRainbowConfig(self):
@@ -235,7 +235,7 @@ class GinConfigTest(tf.test.TestCase):
     self.assertEqual(agent.epsilon_train, 0.01)
     self.assertEqual(agent.epsilon_eval, 0.001)
     self.assertEqual(agent.epsilon_decay_period, 250000)
-    self.assertEqual(agent._replay._replay_capacity, 1000000)
+    self.assertEqual(agent._replay._max_capacity, 1000000)
     self.assertEqual(agent._replay._batch_size, 32)
 
   def testDefaultGinImplicitQuantile(self):
@@ -259,7 +259,7 @@ class GinConfigTest(tf.test.TestCase):
         run_experiment.create_agent,
         atari_lib.create_atari_environment,
     )
-    self.assertEqual(1000000, runner._agent._replay._replay_capacity)
+    self.assertEqual(1000000, runner._agent._replay._max_capacity)
     shutil.rmtree(self._base_dir)
 
   def testOverrideGinImplicitQuantile(self):
@@ -276,7 +276,7 @@ class GinConfigTest(tf.test.TestCase):
     ]
     gin_bindings = [
         'Runner.num_iterations=0',
-        'OutOfGraphReplayBuffer.replay_capacity = 1000',
+        'ReplayBuffer.max_capacity = 1000',
     ]
     run_experiment.load_gin_configs(gin_files, gin_bindings)
     runner = run_experiment.Runner(
@@ -284,7 +284,7 @@ class GinConfigTest(tf.test.TestCase):
         run_experiment.create_agent,
         atari_lib.create_atari_environment,
     )
-    self.assertEqual(1000, runner._agent._replay._replay_capacity)
+    self.assertEqual(1000, runner._agent._replay._max_capacity)
     shutil.rmtree(self._base_dir)
 
 

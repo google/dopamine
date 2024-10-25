@@ -4,7 +4,6 @@ import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.rainbow.rainbow_agent
 import dopamine.jax.networks
-import dopamine.replay_memory.circular_replay_buffer
 import flax
 
 JaxRainbowAgent.observation_shape = %gym_lib.LUNAR_OBSERVATION_SHAPE
@@ -30,11 +29,10 @@ create_agent.agent_name = 'jax_rainbow'
 create_agent.debug_mode = True
 TrainRunner.create_environment_fn = @gym_lib.create_gym_environment
 Runner.num_iterations = 125
-Runner.training_steps = 4000
-Runner.evaluation_steps = 1000
-Runner.max_steps_per_episode = 1000
+Runner.training_steps = 4_000
+Runner.evaluation_steps = 1_000
+Runner.max_steps_per_episode = 1_000
 
-OutOfGraphPrioritizedReplayBuffer.replay_capacity = 50000
-OutOfGraphPrioritizedReplayBuffer.batch_size = 128
-OutOfGraphReplayBuffer.replay_capacity = 50000
-OutOfGraphReplayBuffer.batch_size = 128
+ReplayBuffer.max_capacity = 50_000
+ReplayBuffer.batch_size = 128
+PrioritizedSamplingDistribution.max_capacity = 50_000

@@ -21,7 +21,10 @@ from dopamine.discrete_domains import gym_lib
 from dopamine.discrete_domains import iteration_statistics
 from dopamine.discrete_domains import run_experiment as base_run_experiment
 from dopamine.jax.agents.dqn import dqn_agent
+from dopamine.jax.agents.ppo import ppo_agent
 from dopamine.jax.agents.sac import sac_agent
+from dopamine.labs.cale import ppo_cale
+from dopamine.labs.cale import sac_cale
 # pylint: disable=unused-import
 from dopamine.labs.sac_from_pixels import deepmind_control_lib
 # pylint: enable=unused-import
@@ -58,8 +61,8 @@ def create_continuous_agent(
   """
   assert agent_name is not None
   if agent_name == 'sac':
-    assert isinstance(environment.action_space, spaces.Box)
-    assert isinstance(environment.observation_space, spaces.Box)
+    assert isinstance(environment.action_space, spaces.box.Box)
+    assert isinstance(environment.observation_space, spaces.box.Box)
     return sac_agent.SACAgent(
         action_shape=environment.action_space.shape,
         action_limits=(
@@ -69,6 +72,36 @@ def create_continuous_agent(
         observation_shape=environment.observation_space.shape,
         action_dtype=environment.action_space.dtype,
         observation_dtype=environment.observation_space.dtype,
+        summary_writer=summary_writer,
+    )
+  elif agent_name == 'ppo':
+    assert isinstance(environment.action_space, spaces.Box)
+    assert isinstance(environment.observation_space, spaces.Box)
+    return ppo_agent.PPOAgent(
+        action_shape=environment.action_space.shape,
+        observation_shape=environment.observation_space.shape,
+        summary_writer=summary_writer,
+    )
+  elif agent_name.startswith('sac_cale'):
+    return sac_cale.SACCALEAgent(
+        action_shape=environment.action_space.shape,
+        action_limits=(
+            environment.action_space.low,
+            environment.action_space.high,
+        ),
+        observation_shape=environment.observation_space.shape,
+        action_dtype=environment.action_space.dtype,
+        observation_dtype=environment.observation_space.dtype,
+        summary_writer=summary_writer,
+    )
+  elif agent_name.startswith('ppo_cale'):
+    return ppo_cale.PPOCALEAgent(
+        action_shape=environment.action_space.shape,
+        action_limits=(
+            environment.action_space.low,
+            environment.action_space.high,
+        ),
+        observation_shape=environment.observation_space.shape,
         summary_writer=summary_writer,
     )
   else:
@@ -306,3 +339,5 @@ class ContinuousTrainRunner(ContinuousRunner):
     for name, value in metrics:
       self._summary_writer.scalar(name, value, iteration)
     self._summary_writer.flush()
+
+
