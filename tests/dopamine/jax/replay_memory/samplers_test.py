@@ -30,13 +30,13 @@ class UniformSamplingTest(parameterized.TestCase):
     with self.assertLogs(level="INFO") as logs:
       self.sampler.update(0, None, [], arg_x=1, arg_y=2)
     self.assertLen(logs.output, 1)
-    self.assertContainsSubsequence(logs.output[0], "is a no-op")
+    self.assertIn("is a no-op", logs.output[0])
 
   def test_additional_kwargs_to_add_logs(self):
     with self.assertLogs(level="INFO") as logs:
       self.sampler.add(1, dummy_kwargs="dummy")
     self.assertLen(logs.output, 1)
-    self.assertContainsSubsequence(logs.output[0], "dummy_kwargs")
+    self.assertIn("dummy_kwargs", logs.output[0])
 
   def test_sample_when_empty(self):
     with self.assertRaises(ValueError):

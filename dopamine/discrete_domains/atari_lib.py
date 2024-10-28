@@ -41,7 +41,7 @@ import math
 
 from absl import logging
 
-from ale_py import registration
+import ale_py
 from baselines.common import atari_wrappers
 import cv2
 import gin
@@ -108,8 +108,8 @@ def create_atari_environment(
     full_game_name = f'{game_name}NoFrameskip-{game_version}'
     env = legacy_gym.make(full_game_name)
   else:
-    registration.register_v5_envs()
-    registration.register_v5_envs()
+    gym.register_envs(ale_py)
+    gym.register_envs(ale_py)
     full_game_name = f'ALE/{game_name}-v5'
     repeat_action_probability = 0.25 if sticky_actions else 0.0
     continuous = continuous_action_threshold is not None
