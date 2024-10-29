@@ -33,9 +33,6 @@ from dopamine.jax.agents.implicit_quantile import implicit_quantile_agent as jax
 from dopamine.jax.agents.ppo import ppo_agent
 from dopamine.jax.agents.quantile import quantile_agent as jax_quantile_agent
 from dopamine.jax.agents.rainbow import rainbow_agent as jax_rainbow_agent
-from dopamine.labs.moes.agents import dqn_moe_agent
-from dopamine.labs.moes.agents import full_rainbow_moe_agent
-from dopamine.labs.moes.agents import rainbow_100k_moe_agent
 from dopamine.metrics import collector_dispatcher
 from dopamine.metrics import statistics_instance
 from dopamine.tf.agents.dqn import dqn_agent
@@ -122,18 +119,6 @@ def create_agent(
     )
   elif agent_name == 'jax_implicit_quantile':
     return jax_implicit_quantile_agent.JaxImplicitQuantileAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer
-    )
-  elif agent_name == 'moe_dqn':
-    return dqn_moe_agent.DQNMoEAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer
-    )
-  elif agent_name == 'moe_full_rainbow':
-    return full_rainbow_moe_agent.JaxFullRainbowMoEAgent(
-        num_actions=environment.action_space.n, summary_writer=summary_writer
-    )
-  elif agent_name == 'moe_der':
-    return rainbow_100k_moe_agent.Atari100kRainbowMoEAgent(
         num_actions=environment.action_space.n, summary_writer=summary_writer
     )
   elif agent_name == 'ppo':

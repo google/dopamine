@@ -98,11 +98,11 @@ class ReplayElement(ReplayElementProtocol, struct.PyTreeNode):
   """A single replay transition element supporting compression."""
 
   state: npt.NDArray[np.float64]
-  action: npt.NDArray[np.int_] | npt.NDArray[np.float64] | int
-  reward: npt.NDArray[np.float64] | float
+  action: 'npt.NDArray[np.int_] | npt.NDArray[np.float64] | int'
+  reward: 'npt.NDArray[np.float64] | float'
   next_state: npt.NDArray[np.float64]
-  is_terminal: npt.NDArray[np.bool_] | bool
-  episode_end: npt.NDArray[np.bool_] | bool
+  is_terminal: 'npt.NDArray[np.bool_] | bool'
+  episode_end: 'npt.NDArray[np.bool_] | bool'
 
   def pack(self) -> 'ReplayElement':
     # NOTE: pytype has a problem subclassing generics.

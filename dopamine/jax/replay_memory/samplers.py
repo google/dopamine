@@ -29,7 +29,7 @@ import numpy.typing as npt
 ReplayItemID = elements.ReplayItemID
 
 
-@dataclasses.dataclass(frozen=True, kw_only=True)
+@dataclasses.dataclass(frozen=True)
 class SampleMetadata:
   keys: npt.NDArray[ReplayItemID]
 
@@ -50,7 +50,7 @@ class SamplingDistribution(checkpointers.Checkpointable, Protocol):
     ...
 
   def update(
-      self, keys: npt.NDArray[ReplayItemID] | ReplayItemID, **kwargs: Any
+      self, keys: 'npt.NDArray[ReplayItemID] | ReplayItemID', **kwargs: Any
   ) -> None:
     ...
 
@@ -68,7 +68,7 @@ class UniformSamplingDistribution(SamplingDistribution):
   """A uniform sampling distribution."""
 
   def __init__(
-      self, seed: np.random.Generator | np.random.SeedSequence | int | None
+      self, seed: 'np.random.Generator | np.random.SeedSequence | int | None'
   ) -> None:
     # RNG generator
     self._rng = np.random.default_rng(seed)
@@ -123,7 +123,7 @@ class UniformSamplingDistribution(SamplingDistribution):
 
   def update(
       self,
-      keys: npt.NDArray[ReplayItemID] | ReplayItemID,
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
       *args: Any,
       **kwargs: Any,
   ) -> None:
@@ -180,7 +180,7 @@ class UniformSamplingDistribution(SamplingDistribution):
     self._rng.bit_generator.state = state_dict['rng_state']
 
 
-@dataclasses.dataclass(frozen=True, kw_only=True)
+@dataclasses.dataclass(frozen=True)
 class PrioritizedSampleMetadata(SampleMetadata):
   probabilities: npt.NDArray[np.float64]
 
@@ -191,7 +191,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
 
   def __init__(
       self,
-      seed: np.random.SeedSequence | int | None,
+      seed: 'np.random.SeedSequence | int | None',
       *,
       priority_exponent: float = 1.0,
       max_capacity: int,
@@ -227,9 +227,9 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
 
   def update(
       self,
-      keys: npt.NDArray[ReplayItemID] | ReplayItemID,
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
       *,
-      priorities: npt.NDArray[np.float64] | float,
+      priorities: 'npt.NDArray[np.float64] | float',
   ) -> None:
     if not isinstance(keys, np.ndarray):
       keys = np.asarray([keys], dtype=np.int32)
@@ -297,7 +297,7 @@ class SequentialSamplingDistribution(UniformSamplingDistribution):
 
   def __init__(
       self,
-      seed: np.random.Generator | np.random.SeedSequence | int,
+      seed: 'np.random.Generator | np.random.SeedSequence | int',
       sort_samples: bool = True,
   ):
     super().__init__(seed)

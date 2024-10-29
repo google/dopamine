@@ -108,7 +108,7 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
   @typing.overload
   def sample(
       self,
-      size: int | None = None,
+      size: 'int | None' = None,
       *,
       with_sample_metadata: Literal[False] = False,
   ) -> ReplayElementT:
@@ -125,10 +125,10 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
 
   def sample(
       self,
-      size: int | None = None,
+      size: 'int | None' = None,
       *,
       with_sample_metadata: bool = False,
-  ) -> ReplayElementT | tuple[ReplayElementT, samplers.SampleMetadata]:
+  ) -> 'ReplayElementT | tuple[ReplayElementT, samplers.SampleMetadata]':
     """Sample a batch of elements from the replay buffer."""
     if self.add_count < 1:
       raise ValueError('No samples in replay buffer!')
@@ -161,7 +161,7 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
 
   def update(
       self,
-      keys: npt.NDArray[ReplayItemID] | ReplayItemID,
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
       **kwargs: Any,
   ) -> None:
     self._sampling_distribution.update(keys, **kwargs)

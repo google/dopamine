@@ -155,7 +155,7 @@ def _maybe_create_moe_module(
     rng_key: jax.Array,
     expert_type: str = 'SMALL',
     encoder_type: str = 'IMPALA',
-) -> nn.Module | None:
+) -> 'nn.Module | None':
   """Try to create an MoE module, or return None."""
   del routing_type
   moe_type = MoEType[moe_type]

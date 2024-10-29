@@ -46,8 +46,8 @@ class SumTree(checkpointers.Checkpointable):
 
   def set(
       self,
-      indices: npt.NDArray[np.int_] | int,
-      values: npt.NDArray[np.float64] | float,
+      indices: 'npt.NDArray[np.int_] | int',
+      values: 'npt.NDArray[np.float64] | float',
   ) -> None:
     """Set the value at a given leaf node index."""
     if isinstance(indices, (int, np.integer)):
@@ -86,8 +86,8 @@ class SumTree(checkpointers.Checkpointable):
     ...
 
   def get(
-      self, index: npt.NDArray[np.int_] | int
-  ) -> npt.NDArray[np.float64] | float:
+      self, index: 'npt.NDArray[np.int_] | int'
+  ) -> 'npt.NDArray[np.float64] | float':
     """Get the value at a  given leaf node index."""
     return self._nodes[self._first_leaf_offset + index]
 
@@ -105,8 +105,8 @@ class SumTree(checkpointers.Checkpointable):
     ...
 
   def query(
-      self, targets: npt.NDArray[np.float64] | float
-  ) -> npt.NDArray[np.int_] | int:
+      self, targets: 'npt.NDArray[np.float64] | float'
+  ) -> 'npt.NDArray[np.int_] | int':
     """Find the smallest index where target < cumulative value up to index.
 
     This functions like the CDF for a multi-nomial distribution allowing us

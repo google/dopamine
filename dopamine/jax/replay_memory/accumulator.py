@@ -67,7 +67,7 @@ class TransitionAccumulator(Accumulator[elements.ReplayElement]):
         maxlen=self._update_horizon + self._stack_size
     )
 
-  def _make_replay_element(self) -> elements.ReplayElement | None:
+  def _make_replay_element(self) -> 'elements.ReplayElement | None':
     trajectory_len = len(self._trajectory)
 
     last_transition = self._trajectory[-1]

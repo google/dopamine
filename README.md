@@ -55,11 +55,10 @@ environments you intend to use before you install Dopamine:
 
 **Atari**
 
-1. Install the atari roms following the instructions from
-[atari-py](https://github.com/openai/atari-py#roms).
-2. `pip install ale-py` (we recommend using a [virtual environment](virtualenv)):
-3. `unzip $ROM_DIR/ROMS.zip -d $ROM_DIR && ale-import-roms $ROM_DIR/ROMS`
-(replace $ROM_DIR with the directory you extracted the ROMs to).
+1. These should now come packaged with
+   [ale_py](https://github.com/Farama-Foundation/Arcade-Learning-Environment).
+1. You may need to manually run some steps to properly install `baselines`, see
+   [instructions](https://github.com/openai/baselines).
 
 **Mujoco**
 

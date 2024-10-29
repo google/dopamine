@@ -109,7 +109,6 @@ def create_atari_environment(
     env = legacy_gym.make(full_game_name)
   else:
     gym.register_envs(ale_py)
-    gym.register_envs(ale_py)
     full_game_name = f'ALE/{game_name}-v5'
     repeat_action_probability = 0.25 if sticky_actions else 0.0
     continuous = continuous_action_threshold is not None

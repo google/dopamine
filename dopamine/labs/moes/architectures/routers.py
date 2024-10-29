@@ -26,26 +26,26 @@ import jax
 class RandomRouter(nn.Module):
   """Route tokens randomly."""
 
-  num_experts: int | None = None
+  num_experts: 'int | None' = None
   k: int = 1
 
   def setup(self):
-    logging.info("Creating a %s", self.__class__.__name__)
+    logging.info('Creating a %s', self.__class__.__name__)
 
   @nn.compact
   def __call__(
       self,
       x: jax.Array,
       *,
-      num_experts: int | None = None,
-      k: int | None = None,
-      route_tokens: int | None = None,
-      key: jax.Array | None = None
+      num_experts: 'int | None' = None,
+      k: 'int | None' = None,
+      route_tokens: 'int | None' = None,
+      key: 'jax.Array | None' = None
   ) -> types.RouterReturn:
     chex.assert_rank(x, 2)
 
-    num_experts = nn.merge_param("num_experts", num_experts, self.num_experts)
-    k = nn.merge_param("k", k, self.k)
+    num_experts = nn.merge_param('num_experts', num_experts, self.num_experts)
+    k = nn.merge_param('k', k, self.k)
     sequence_length = x.shape[0]
 
     # probs are set randomly.
@@ -65,27 +65,27 @@ class TopKRouter(nn.Module):
   """A simple router that linearly projects assignments."""
 
   k: int
-  num_experts: int | None = None
+  num_experts: 'int | None' = None
   noisy_routing: bool = False
   noise_std: float = 1.0
 
   def setup(self):
-    logging.info("Creating a %s", self.__class__.__name__)
+    logging.info('Creating a %s', self.__class__.__name__)
 
   @nn.compact
   def __call__(
       self,
       x: jax.Array,
       *,
-      num_experts: int | None = None,
-      k: int | None = None,
-      key: jax.Array | None = None,
+      num_experts: 'int | None' = None,
+      k: 'int | None' = None,
+      key: 'jax.Array | None' = None,
       **kwargs
   ) -> types.RouterReturn:
     chex.assert_rank(x, 2)
 
-    num_experts = nn.merge_param("num_experts", num_experts, self.num_experts)
-    k = nn.merge_param("k", k, self.k)
+    num_experts = nn.merge_param('num_experts', num_experts, self.num_experts)
+    k = nn.merge_param('k', k, self.k)
     sequence_length = x.shape[0]
 
     x = nn.Dense(num_experts, use_bias=False)(x)

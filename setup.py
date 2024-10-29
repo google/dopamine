@@ -31,8 +31,10 @@ install_requires = [
     'tensorflow >= 2.2.0',
     'gin-config >= 0.3.0',
     'absl-py >= 0.9.0',
+    'ale_py >= 0.10.1',
     'opencv-python >= 3.4.8.29',
     'gym <= 0.25.2',
+    'gymnasium >= 1.0.0',
     'flax >= 0.2.0',
     'jax >= 0.1.72',
     'jaxlib >= 0.1.51',
@@ -40,8 +42,10 @@ install_requires = [
     'numpy >= 1.16.4',
     'pygame >= 1.9.2',
     'pandas >= 0.24.2',
+    'python-snappy >= 0.7.3',
     'tf_slim >= 1.0',
     'tensorflow-probability >= 0.13.0',
+    'tf-keras >= 2.18.0',
     'tqdm >= 4.64.1',
 ]
 
@@ -51,7 +55,7 @@ dopamine_description = (
 
 setup(
     name='dopamine_rl',
-    version='4.1.0',
+    version='4.1.1',
     description=dopamine_description,
     long_description=long_description,
     long_description_content_type='text/markdown',

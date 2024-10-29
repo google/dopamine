@@ -48,7 +48,7 @@ jax.tree_util.register_pytree_node(
 class MoEModuleReturn:
   values: jax.Array
   router_out: RouterReturn
-  experts_hidden: jax.Array | None = None
+  experts_hidden: 'jax.Array | None' = None
 
 
 def module_flatten(v):
@@ -73,9 +73,9 @@ jax.tree_util.register_pytree_node(
 class MoENetworkReturn:
   q_values: jax.Array
   moe_out: MoEModuleReturn
-  logits: jax.Array | None = None
-  probabilities: jax.Array | None = None
-  hidden_act: jax.Array | None = None
+  logits: 'jax.Array | None' = None
+  probabilities: 'jax.Array | None' = None
+  hidden_act: 'jax.Array | None' = None
 
 
 def network_flatten(v):
@@ -100,8 +100,8 @@ jax.tree_util.register_pytree_node(
 class BaselineNetworkReturn:
   q_values: jax.Array
   hidden_act: jax.Array
-  logits: jax.Array | None = None
-  probabilities: jax.Array | None = None
+  logits: 'jax.Array | None' = None
+  probabilities: 'jax.Array | None' = None
 
 
 def baseline_network_flatten(v):
@@ -122,4 +122,6 @@ jax.tree_util.register_pytree_node(
 )
 
 
-NetworkReturn = MoENetworkReturn | BaselineNetworkReturn
+# pylint: disable=invalid-name
+NetworkReturn = 'MoENetworkReturn | BaselineNetworkReturn'
+# pylint: enable=invalid-name
