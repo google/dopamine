@@ -67,24 +67,31 @@ class MockALE(object):
     screen.fill(self.screen_value)
 
 
+class MockEnvALEWrapper(object):
+  """Mock ALE env wrapper."""
+
+  def __init__(self):
+    self.ale = MockALE()
+
+
 class MockEnvironment(object):
   """Mock environment for testing."""
 
   def __init__(self, screen_size=10, max_steps=10):
     self.max_steps = max_steps
     self.screen_size = screen_size
-    self.ale = MockALE()
+    self.env = MockEnvALEWrapper()
     self.observation_space = np.empty((screen_size, screen_size))
     self.game_over = False
 
   def reset(self):
-    self.ale.screen_value = 10
+    self.env.ale.screen_value = 10
     self.num_steps = 0
     return self.get_observation()
 
   def get_observation(self):
     observation = np.empty((self.screen_size, self.screen_size))
-    return self.ale.getScreenGrayscale(observation)
+    return self.env.ale.getScreenGrayscale(observation)
 
   def step(self, action):
     reward = -1.0 if action > 0 else 1.0
@@ -92,7 +99,7 @@ class MockEnvironment(object):
     is_terminal = self.num_steps >= self.max_steps
 
     unused = 0
-    self.ale.screen_value = max(0, self.ale.screen_value - 2)
+    self.env.ale.screen_value = max(0, self.env.ale.screen_value - 2)
     return (self.get_observation(), reward, is_terminal, False, unused)
 
   def render(self, mode):
