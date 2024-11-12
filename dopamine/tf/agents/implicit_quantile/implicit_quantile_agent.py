@@ -17,14 +17,7 @@
 The agent follows the description given in "Implicit Quantile Networks for
 Distributional RL" (Dabney et. al, 2018).
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-
-
-from dopamine.discrete_domains import atari_lib
+from dopamine.discrete_domains import legacy_networks
 from dopamine.tf.agents.rainbow import rainbow_agent
 import gin
 import tensorflow as tf
@@ -38,7 +31,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
       self,
       sess,
       num_actions,
-      network=atari_lib.ImplicitQuantileNetwork,
+      network=legacy_networks.ImplicitQuantileNetwork,
       kappa=1.0,
       num_tau_samples=32,
       num_tau_prime_samples=32,
@@ -60,7 +53,7 @@ class ImplicitQuantileAgent(rainbow_agent.RainbowAgent):
         quantile_embedding_dim, network_type). This class is used to generate
         network instances that are used by the agent. Each instantiation would
         have different set of variables. See
-        dopamine.discrete_domains.atari_lib.NatureDQNNetwork as an example.
+        dopamine.discrete_domains.legacy_networks.NatureDQNNetwork as an example
       kappa: float, Huber loss cutoff.
       num_tau_samples: int, number of online quantile samples for loss
         estimation.

@@ -55,6 +55,7 @@ import gin
 import tensorflow as tf
 
 
+
 @gin.configurable
 def get_latest_checkpoint_number(
     base_directory, override_number=None, sentinel_file_identifier='checkpoint'

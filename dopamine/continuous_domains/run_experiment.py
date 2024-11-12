@@ -339,5 +339,3 @@ class ContinuousTrainRunner(ContinuousRunner):
     for name, value in metrics:
       self._summary_writer.scalar(name, value, iteration)
     self._summary_writer.flush()
-
-

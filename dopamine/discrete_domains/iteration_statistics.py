@@ -14,9 +14,6 @@
 # limitations under the License.
 """A class for storing iteration-specific metrics."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 
 class IterationStatistics(object):

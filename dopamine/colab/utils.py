@@ -16,17 +16,15 @@
 
 See: dopamine/common/logger.py .
 """
-
 import itertools
 import os
 import pickle
 import sys
 
-
-
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+
 
 FILE_PREFIX = 'log'
 ITERATION_PREFIX = 'iteration_'

@@ -32,14 +32,7 @@ choices. Specifically, we
 Details in "Rainbow: Combining Improvements in Deep Reinforcement Learning" by
 Hessel et al. (2018).
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-
-
-from dopamine.discrete_domains import atari_lib
+from dopamine.discrete_domains import legacy_networks
 from dopamine.tf.agents.dqn import dqn_agent
 from dopamine.tf.replay_memory import prioritized_replay_buffer
 import gin
@@ -57,7 +50,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
       observation_shape=dqn_agent.NATURE_DQN_OBSERVATION_SHAPE,
       observation_dtype=dqn_agent.NATURE_DQN_DTYPE,
       stack_size=dqn_agent.NATURE_DQN_STACK_SIZE,
-      network=atari_lib.RainbowNetwork,
+      network=legacy_networks.RainbowNetwork,
       num_atoms=51,
       vmin=None,
       vmax=10.0,
@@ -93,7 +86,7 @@ class RainbowAgent(dqn_agent.DQNAgent):
         support, network_type).  This class is used to generate network
         instances that are used by the agent. Each instantiation would have
         different set of variables. See
-        dopamine.discrete_domains.atari_lib.RainbowNetwork as an example.
+        dopamine.discrete_domains.legacy_networks.RainbowNetwork as an example.
       num_atoms: int, the number of buckets of the value function distribution.
       vmin: float, the value distribution support is [vmin, vmax]. If None, we
         set it to be -vmax.

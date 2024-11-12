@@ -14,16 +14,12 @@
 # limitations under the License.
 """Compact implementation of a DQN agent."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import math
 import os
 import random
 
 from absl import logging
-from dopamine.discrete_domains import atari_lib
+from dopamine.discrete_domains import legacy_networks
 from dopamine.tf.replay_memory import circular_replay_buffer
 import gin
 import numpy as np
@@ -31,10 +27,10 @@ import tensorflow as tf
 
 
 # These are aliases which are used by other classes.
-NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
-NATURE_DQN_DTYPE = atari_lib.NATURE_DQN_DTYPE
-NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE
-nature_dqn_network = atari_lib.NatureDQNNetwork
+NATURE_DQN_OBSERVATION_SHAPE = legacy_networks.NATURE_DQN_OBSERVATION_SHAPE
+NATURE_DQN_DTYPE = legacy_networks.NATURE_DQN_DTYPE
+NATURE_DQN_STACK_SIZE = legacy_networks.NATURE_DQN_STACK_SIZE
+nature_dqn_network = legacy_networks.NatureDQNNetwork
 
 
 @gin.configurable
@@ -77,10 +73,10 @@ class DQNAgent(object):
       self,
       sess,
       num_actions,
-      observation_shape=atari_lib.NATURE_DQN_OBSERVATION_SHAPE,
-      observation_dtype=atari_lib.NATURE_DQN_DTYPE,
-      stack_size=atari_lib.NATURE_DQN_STACK_SIZE,
-      network=atari_lib.NatureDQNNetwork,
+      observation_shape=legacy_networks.NATURE_DQN_OBSERVATION_SHAPE,
+      observation_dtype=legacy_networks.NATURE_DQN_DTYPE,
+      stack_size=legacy_networks.NATURE_DQN_STACK_SIZE,
+      network=legacy_networks.NatureDQNNetwork,
       gamma=0.99,
       update_horizon=1,
       min_replay_history=20000,
@@ -118,7 +114,7 @@ class DQNAgent(object):
         network_type. A call to this object will return an instantiation of the
         network provided. The network returned can be run with different inputs
         to create different outputs. See
-        dopamine.discrete_domains.atari_lib.NatureDQNNetwork as an example.
+        dopamine.discrete_domains.legacy_networks.NatureDQNNetwork as an example
       gamma: float, discount factor with the usual RL meaning.
       update_horizon: int, horizon at which updates are performed, the 'n' in
         n-step update.
@@ -224,7 +220,7 @@ class DQNAgent(object):
       # All tf.summaries should have been defined prior to running this.
       self._merged_summaries = tf.compat.v1.summary.merge_all()
 
-    var_map = atari_lib.maybe_transform_variable_names(
+    var_map = legacy_networks.maybe_transform_variable_names(
         tf.compat.v1.global_variables()
     )
     self._saver = tf.compat.v1.train.Saver(

@@ -3,6 +3,7 @@
 import dopamine.tf.agents.dqn.dqn_agent
 import dopamine.tf.agents.rainbow.rainbow_agent
 import dopamine.discrete_domains.gym_lib
+import dopamine.discrete_domains.legacy_networks
 import dopamine.discrete_domains.run_experiment
 import dopamine.tf.replay_memory.prioritized_replay_buffer
 import gin.tf.external_configurables
@@ -10,7 +11,7 @@ import gin.tf.external_configurables
 RainbowAgent.observation_shape = %gym_lib.CARTPOLE_OBSERVATION_SHAPE
 RainbowAgent.observation_dtype = %gym_lib.CARTPOLE_OBSERVATION_DTYPE
 RainbowAgent.stack_size = %gym_lib.CARTPOLE_STACK_SIZE
-RainbowAgent.network = @gym_lib.CartpoleRainbowNetwork
+RainbowAgent.network = @legacy_networks.CartpoleRainbowNetwork
 RainbowAgent.num_atoms = 201
 RainbowAgent.vmax = 100.
 RainbowAgent.gamma = 0.99

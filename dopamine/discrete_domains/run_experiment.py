@@ -843,5 +843,3 @@ class TrainRunner(Runner):
           ]
       )
       self._summary_writer.add_summary(summary, iteration)
-
-
