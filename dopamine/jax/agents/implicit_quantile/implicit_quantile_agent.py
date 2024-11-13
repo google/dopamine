@@ -31,6 +31,7 @@ import optax
 import tensorflow as tf
 
 
+
 @functools.partial(
     jax.vmap,
     in_axes=(None, None, None, 0, 0, 0, None, None, None, None, 0),

@@ -37,6 +37,7 @@ import optax
 import tensorflow as tf
 
 
+
 NATURE_DQN_OBSERVATION_SHAPE = atari_lib.NATURE_DQN_OBSERVATION_SHAPE
 NATURE_DQN_DTYPE = jnp.uint8
 NATURE_DQN_STACK_SIZE = atari_lib.NATURE_DQN_STACK_SIZE

@@ -25,6 +25,7 @@ import jax
 from jax import numpy as jnp
 from tensorflow_probability.substrates import jax as tfp
 
+
 tfd = tfp.distributions
 tfb = tfp.bijectors
 

@@ -50,6 +50,7 @@ import optax
 import tensorflow as tf
 
 
+
 @functools.partial(jax.jit, static_argnums=(0, 3, 12))
 def train(
     network_def,

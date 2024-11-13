@@ -67,6 +67,7 @@ import msgpack
 from orbax import checkpoint
 
 
+
 @typing.runtime_checkable
 class Checkpointable(Protocol):
   """Checkpointable protocol. Must implement to_state_dict, from_state_dict."""
