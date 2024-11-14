@@ -26,8 +26,6 @@ from __future__ import print_function
 import os
 import subprocess
 
-
-
 import gin
 import numpy as np
 from PIL import Image

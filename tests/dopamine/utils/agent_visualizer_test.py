@@ -20,8 +20,6 @@ from __future__ import print_function
 import os
 import shutil
 
-
-
 from absl import flags
 from dopamine.utils.agent_visualizer import AgentVisualizer
 from dopamine.utils.line_plotter import LinePlotter
