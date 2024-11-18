@@ -18,8 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-
 from dopamine.discrete_domains import iteration_statistics
 import tensorflow as tf
 

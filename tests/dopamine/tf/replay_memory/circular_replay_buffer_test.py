@@ -21,8 +21,6 @@ import gzip
 import os
 import shutil
 
-
-
 from absl import flags
 from dopamine.tf.replay_memory import circular_replay_buffer
 import numpy as np

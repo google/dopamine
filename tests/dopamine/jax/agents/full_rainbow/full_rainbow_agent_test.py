@@ -14,8 +14,6 @@
 # limitations under the License.
 """Tests for dopamine.jax.agents.full_rainbow.full_rainbow_agent."""
 
-
-
 from absl.testing import absltest
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent

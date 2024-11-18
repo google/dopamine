@@ -17,8 +17,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-
 from dopamine.tf.replay_memory import circular_replay_buffer
 from dopamine.tf.replay_memory import prioritized_replay_buffer
 import numpy as np

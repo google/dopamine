@@ -19,8 +19,6 @@ from __future__ import print_function
 
 import random
 
-
-
 from dopamine.tf.replay_memory import sum_tree
 import tensorflow as tf
 

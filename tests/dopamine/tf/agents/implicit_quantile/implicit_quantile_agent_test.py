@@ -18,8 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-
 from dopamine.discrete_domains import atari_lib
 from dopamine.tf.agents.dqn import dqn_agent
 from dopamine.tf.agents.implicit_quantile import implicit_quantile_agent

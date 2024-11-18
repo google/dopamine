@@ -15,8 +15,6 @@
 """Tests for dopamine.discrete_domains.atari_lib."""
 
 
-
-
 from absl import flags
 from dopamine.discrete_domains import atari_lib
 import gym

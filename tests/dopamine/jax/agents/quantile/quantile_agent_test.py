@@ -18,8 +18,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-
 from absl.testing import absltest
 from dopamine.discrete_domains import atari_lib
 from dopamine.jax.agents.dqn import dqn_agent

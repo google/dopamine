@@ -20,8 +20,6 @@ from __future__ import print_function
 import os
 import shutil
 
-
-
 from absl import flags
 from dopamine.discrete_domains import atari_lib
 from dopamine.tf.agents.dqn import dqn_agent

@@ -21,8 +21,6 @@ from __future__ import print_function
 import os
 import shutil
 
-
-
 from absl import flags
 from dopamine.discrete_domains import checkpointer
 from dopamine.discrete_domains import logger
