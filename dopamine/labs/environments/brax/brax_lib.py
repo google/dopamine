@@ -40,7 +40,10 @@ class BraxEnv(object):
 
   @property
   def observation_space(self) -> onp.ndarray:
-    return self._state.obs.shape  # pytype: disable=bad-return-type  # jax-ndarray
+    obs = self._state.obs
+    if not isinstance(obs, jax.Array):
+      raise NotImplementedError('BraxEnv only supports ndarray observations.')
+    return obs.shape  # pytype: disable=bad-return-type  # jax-ndarray
 
   @property
   def action_space(self) -> int:
