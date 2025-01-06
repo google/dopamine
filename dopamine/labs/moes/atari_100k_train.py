@@ -28,7 +28,6 @@ from dopamine.labs.moes.agents import rainbow_100k_moe_agent
 import numpy as np
 import tensorflow as tf
 
-.learning.deepmind.xmanager2.client.google as xm  # pylint: disable=unused-import
 
 
 FLAGS = flags.FLAGS
@@ -89,25 +88,6 @@ def main(unused_argv):
 
   base_dir = FLAGS.base_dir
   gin_files, gin_bindings = FLAGS.gin_files, FLAGS.gin_bindings
-  xm_xid = None if 'xm_xid' not in FLAGS else FLAGS.xm_xid
-  xm_wid = None if 'xm_wid' not in FLAGS else FLAGS.xm_wid
-  xm_parameters = None if 'xm_parameters' not in FLAGS else FLAGS.xm_parameters
-  if xm_parameters:
-    xm_params = json.loads(xm_parameters)
-    if 'run_number' in xm_params:
-      FLAGS.run_number = xm_params['run_number']
-      logging.info('Run number set to: %d', xm_params['run_number'])
-  # Add code for setting random seed using the run_number
-  set_random_seed(FLAGS.run_number)
-  base_dir, gin_files, gin_bindings = base_train.run_xm_preprocessing(
-      xm_xid,
-      xm_wid,
-      xm_parameters,
-      FLAGS.base_dir,
-      FLAGS.custom_base_dir_from_hparams,
-      FLAGS.gin_files,
-      FLAGS.gin_bindings,
-  )
   run_experiment.load_gin_configs(gin_files, gin_bindings)
   # Set the Jax agent seed using the run number
   create_agent_fn = functools.partial(
