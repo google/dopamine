@@ -134,6 +134,7 @@ class RoutingType(enum.Enum):
   PER_FEATUREMAP = 'PER_FEATUREMAP'
   PER_SAMPLE = 'PER_SAMPLE'
   PER_PATCH = 'PER_PATCH'
+  AVG_POOL = 'AVG_POOL'
 
 
 class MoEType(enum.Enum):
