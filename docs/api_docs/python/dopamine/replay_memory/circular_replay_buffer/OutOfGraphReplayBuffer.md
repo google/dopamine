@@ -1,11 +1,11 @@
 description: A simple out-of-graph Replay Buffer.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# dopamine.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer
+# dopamine.tf.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer
 
 <!-- Insert buttons and diff -->
 

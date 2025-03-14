@@ -2,11 +2,11 @@ description: Wrapper of OutOfGraphReplayBuffer with an in graph sampling
 mechanism.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.circular_replay_buffer.WrappedReplayBuffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.circular_replay_buffer.WrappedReplayBuffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# dopamine.replay_memory.circular_replay_buffer.WrappedReplayBuffer
+# dopamine.tf.replay_memory.circular_replay_buffer.WrappedReplayBuffer
 
 <!-- Insert buttons and diff -->
 

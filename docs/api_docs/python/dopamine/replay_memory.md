@@ -1,9 +1,9 @@
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory" />
+<meta itemprop="name" content="dopamine.tf.replay_memory" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# Module: dopamine.replay_memory
+# Module: dopamine.tf.replay_memory
 
 <!-- Insert buttons and diff -->
 

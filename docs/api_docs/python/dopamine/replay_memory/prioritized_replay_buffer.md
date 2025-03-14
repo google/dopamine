@@ -1,11 +1,11 @@
 description: An implementation of Prioritized Experience Replay (PER).
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.prioritized_replay_buffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.prioritized_replay_buffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# Module: dopamine.replay_memory.prioritized_replay_buffer
+# Module: dopamine.tf.replay_memory.prioritized_replay_buffer
 
 <!-- Insert buttons and diff -->
 

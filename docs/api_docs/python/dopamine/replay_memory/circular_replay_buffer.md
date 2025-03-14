@@ -1,11 +1,11 @@
 description: The standard DQN replay memory.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.circular_replay_buffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.circular_replay_buffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# Module: dopamine.replay_memory.circular_replay_buffer
+# Module: dopamine.tf.replay_memory.circular_replay_buffer
 
 <!-- Insert buttons and diff -->
 

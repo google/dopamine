@@ -1,11 +1,11 @@
 description: A sum tree data structure.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.sum_tree" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.sum_tree" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# Module: dopamine.replay_memory.sum_tree
+# Module: dopamine.tf.replay_memory.sum_tree
 
 <!-- Insert buttons and diff -->
 

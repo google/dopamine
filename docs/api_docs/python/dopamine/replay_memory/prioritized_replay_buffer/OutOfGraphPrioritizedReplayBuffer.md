@@ -1,11 +1,11 @@
 description: An out-of-graph Replay Buffer for Prioritized Experience Replay.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# dopamine.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer
+# dopamine.tf.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer
 
 <!-- Insert buttons and diff -->
 

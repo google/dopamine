@@ -52,14 +52,14 @@
     "dopamine.jax.agents.rainbow.rainbow_agent": false,
     "dopamine.jax.agents.rainbow.rainbow_agent.project_distribution": false,
     "dopamine.jax.networks": false,
-    "dopamine.replay_memory": false,
-    "dopamine.replay_memory.circular_replay_buffer": false,
-    "dopamine.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer": false,
-    "dopamine.replay_memory.circular_replay_buffer.WrappedReplayBuffer": false,
-    "dopamine.replay_memory.prioritized_replay_buffer": false,
-    "dopamine.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer": false,
-    "dopamine.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer": false,
-    "dopamine.replay_memory.sum_tree": false
+    "dopamine.tf.replay_memory": false,
+    "dopamine.tf.replay_memory.circular_replay_buffer": false,
+    "dopamine.tf.replay_memory.circular_replay_buffer.OutOfGraphReplayBuffer": false,
+    "dopamine.tf.replay_memory.circular_replay_buffer.WrappedReplayBuffer": false,
+    "dopamine.tf.replay_memory.prioritized_replay_buffer": false,
+    "dopamine.tf.replay_memory.prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer": false,
+    "dopamine.tf.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer": false,
+    "dopamine.tf.replay_memory.sum_tree": false
   },
   "py_module_names": [
     "dopamine"

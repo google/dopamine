@@ -2,11 +2,11 @@ description: Wrapper of OutOfGraphPrioritizedReplayBuffer with in-graph
 sampling.
 
 <div itemscope itemtype="http://developers.google.com/ReferenceObject">
-<meta itemprop="name" content="dopamine.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer" />
+<meta itemprop="name" content="dopamine.tf.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer" />
 <meta itemprop="path" content="Stable" />
 </div>
 
-# dopamine.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer
+# dopamine.tf.replay_memory.prioritized_replay_buffer.WrappedPrioritizedReplayBuffer
 
 <!-- Insert buttons and diff -->
 

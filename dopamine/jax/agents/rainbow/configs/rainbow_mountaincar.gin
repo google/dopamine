@@ -4,7 +4,7 @@ import dopamine.discrete_domains.gym_lib
 import dopamine.discrete_domains.run_experiment
 import dopamine.jax.agents.rainbow.rainbow_agent
 import dopamine.jax.networks
-import dopamine.replay_memory.circular_replay_buffer
+import dopamine.tf.replay_memory.circular_replay_buffer
 import flax
 
 JaxRainbowAgent.observation_shape = %gym_lib.MOUNTAINCAR_OBSERVATION_SHAPE

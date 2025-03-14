@@ -159,7 +159,7 @@ toc:
     section:
     - title: Overview
       path: /dopamine/jax/networks
-- title: dopamine.replay_memory
+- title: dopamine.tf.replay_memory
   section:
   - title: Overview
     path: /dopamine/replay_memory
