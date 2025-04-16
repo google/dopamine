@@ -710,7 +710,7 @@ class JaxDQNAgent(object):
       # self._replay.load() will throw a NotFoundError if it does not find all
       # the necessary files.
       self._replay.load(checkpoint_dir, iteration_number)
-    except (tf.errors.NotFoundError, FileNotFoundError):
+    except (tf.errors.NotFoundError, FileNotFoundError, ModuleNotFoundError):
       if not self.allow_partial_reload:
         # If we don't allow partial reloads, we will return False.
         return False
