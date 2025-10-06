@@ -31,7 +31,7 @@ flags.DEFINE_multi_string(
     'gin_files',
     [],
     'List of paths to gin configuration files (e.g.'
-    '"dopamine/agents/dqn/dqn.gin").',
+    '"dopamine/tf/agents/dqn/dqn.gin").',
 )
 flags.DEFINE_multi_string(
     'gin_bindings',
