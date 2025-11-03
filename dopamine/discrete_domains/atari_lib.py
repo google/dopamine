@@ -126,14 +126,17 @@ def create_atari_environment(
         if continuous_action_threshold is None
         else continuous_action_threshold
     )
-    env = gym.make(
-        full_game_name,
-        repeat_action_probability=repeat_action_probability,
-        frameskip=1,
-        max_num_frames_per_episode=100_000,
-        continuous=continuous,
-        continuous_action_threshold=continuous_action_threshold,
-    )
+    try:
+      env = gym.make(
+          full_game_name,
+          repeat_action_probability=repeat_action_probability,
+          frameskip=1,
+          max_num_frames_per_episode=100_000,
+          continuous=continuous,
+          continuous_action_threshold=continuous_action_threshold,
+      )
+    except Exception:  # pylint: disable=broad-exception-caught
+      logging.fatal('Unable to open ROMs.')
 
   if use_ppo_preprocessing:
     env = atari_wrappers.NoopResetEnv(env, noop_max=30)
