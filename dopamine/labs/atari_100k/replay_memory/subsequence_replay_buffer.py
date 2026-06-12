@@ -21,12 +21,13 @@ import collections
 import gzip
 import math
 import os
-import pickle
+import re
 
 from absl import logging
 from dopamine.labs.atari_100k.replay_memory import deterministic_sum_tree as sum_tree
 import gin
 import jax
+import msgpack
 from jax import numpy as jnp
 import numpy as np
 import tensorflow as tf
@@ -44,6 +45,69 @@ STORE_FILENAME_PREFIX = '$store$_'
 
 # This constant determines how many iterations a checkpoint is kept for.
 CHECKPOINT_DURATION = 4
+
+_BLOCKED_REMOTE_RE = re.compile(
+    r'^(?:[a-zA-Z][a-zA-Z0-9+\-.]*://|\\\\[^\\])', re.IGNORECASE
+)
+_TYPE_KEY = '__dopamine_type__'
+_TUPLE_TYPE = 'tuple'
+_SET_TYPE = 'set'
+
+
+def _validate_local_path(path, label='path'):
+  if _BLOCKED_REMOTE_RE.match(path):
+    raise ValueError(
+        'Security error: refusing to read from remote path for {}: {!r}. '
+        'Only local filesystem paths are permitted.'.format(label, path)
+    )
+
+
+def _to_serializable(obj):
+  if isinstance(obj, dict):
+    return {key: _to_serializable(value) for key, value in obj.items()}
+  if isinstance(obj, tuple):
+    return {
+        _TYPE_KEY: _TUPLE_TYPE,
+        'items': [_to_serializable(value) for value in obj],
+    }
+  if isinstance(obj, set):
+    return {
+        _TYPE_KEY: _SET_TYPE,
+        'items': [_to_serializable(value) for value in obj],
+    }
+  if isinstance(obj, list):
+    return [_to_serializable(value) for value in obj]
+  if isinstance(obj, (np.integer, np.floating)):
+    return obj.item()
+  if isinstance(obj, np.bool_):
+    return bool(obj)
+  return obj
+
+
+def _from_serializable(obj):
+  if isinstance(obj, dict):
+    converted = {
+        key: _from_serializable(value) for key, value in obj.items()
+    }
+    object_type = converted.get(_TYPE_KEY)
+    if object_type == _TUPLE_TYPE:
+      return tuple(converted['items'])
+    if object_type == _SET_TYPE:
+      return set(converted['items'])
+    return converted
+  if isinstance(obj, list):
+    return [_from_serializable(value) for value in obj]
+  return obj
+
+
+def _pack(data):
+  return msgpack.packb(_to_serializable(data), use_bin_type=True)
+
+
+def _unpack(raw_bytes):
+  return _from_serializable(
+      msgpack.unpackb(raw_bytes, raw=False, strict_map_key=False)
+  )
 
 
 def modulo_range(start, length, modulo):
@@ -856,7 +920,7 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
           elif isinstance(self.__dict__[attr], np.ndarray):
             np.save(outfile, self.__dict__[attr], allow_pickle=False)
           else:
-            pickle.dump(self.__dict__[attr], outfile)
+            outfile.write(_pack(self.__dict__[attr]))
 
       # After writing a checkpoint file, we garbage collect the checkpoint file
       # that is four versions old.
@@ -881,6 +945,7 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
     Raises:
       NotFoundError: If not all expected files are found in directory.
     """
+    _validate_local_path(checkpoint_dir, 'checkpoint_dir')
     save_elements = self._return_checkpointable_elements()
     # We will first make sure we have all the necessary files available to avoid
     # loading a partially-specified (i.e. corrupted) replay buffer.
@@ -902,7 +967,7 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
           elif isinstance(self.__dict__[attr], np.ndarray):
             self.__dict__[attr] = np.load(infile, allow_pickle=False)
           else:
-            self.__dict__[attr] = pickle.load(infile)
+            self.__dict__[attr] = _unpack(infile.read())
 
   def reset_priorities(self):
     pass

@@ -20,6 +20,7 @@ from __future__ import print_function
 import gzip
 import os
 import shutil
+from unittest import mock
 
 from absl import flags
 from dopamine.tf.replay_memory import circular_replay_buffer
@@ -621,6 +622,19 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
     self.assertLen(new_memory.episode_end_indices, 1)
     self.assertEqual(memory.episode_end_indices, new_memory.episode_end_indices)
 
+  def testLoadRejectsRemoteCheckpointPaths(self):
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE,
+    )
+    with mock.patch.object(
+        tf.io.gfile, 'exists', side_effect=AssertionError('should not read')
+    ):
+      with self.assertRaisesRegex(ValueError, 'refusing to read from remote'):
+        memory.load('gs://malicious-bucket/replay', '3')
+
   def testSaveWithKeepEvery(self):
     checkpoint_duration, keep_every = 1, 2
     memory = circular_replay_buffer.OutOfGraphReplayBuffer(
@@ -662,10 +676,10 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
         batch_size=BATCH_SIZE,
     )
 
-    # Add some non-numpy data: an int, a string, an object.
+    # Add some non-numpy data: an int, a string, and a tuple.
     memory.dummy_attribute_1 = 4753849
     memory.dummy_attribute_2 = 'String data'
-    memory.dummy_attribute_3 = CheckpointableClass()
+    memory.dummy_attribute_3 = (CheckpointableClass().attribute, 'tuple')
 
     current_iteration = 5
     stale_iteration = current_iteration - memory._checkpoint_duration

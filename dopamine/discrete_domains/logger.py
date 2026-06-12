@@ -12,15 +12,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""A lightweight logging mechanism for dopamine agents."""
+"""A lightweight logging mechanism for dopamine agents.
+
+SECURITY FIX: Replaced pickle serialization with msgpack to eliminate
+Remote Code Execution (RCE) vulnerability when log files are read back
+from untrusted or attacker-controlled paths.
+"""
 
 import os
-import pickle
 
 from absl import logging
 import gin
+import msgpack
+import msgpack_numpy
 import tensorflow as tf
 
+
+def _pack(data):
+  """Serialize data to msgpack bytes with numpy support."""
+  return msgpack.packb(data, default=msgpack_numpy.encode, use_bin_type=True)
 
 
 @gin.configurable
@@ -32,9 +42,8 @@ class Logger(object):
 
     Args:
       logging_dir: str, Directory to which logs are written.
-      logs_duration: int, how many logs to keep
+      logs_duration: int, how many logs to keep.
     """
-    # Dict used by logger to store data.
     self.data = {}
     self._logging_enabled = True
     self._logs_duration = logs_duration
@@ -43,12 +52,12 @@ class Logger(object):
       logging.info('Logging directory not specified, will not log.')
       self._logging_enabled = False
       return
-    # Try to create logging directory.
+
     try:
       tf.io.gfile.makedirs(logging_dir)
     except tf.errors.PermissionDeniedError:
-      # If it already exists, ignore exception.
       pass
+
     if not tf.io.gfile.exists(logging_dir):
       logging.warning(
           'Could not create directory %s, logging will be disabled.',
@@ -56,16 +65,15 @@ class Logger(object):
       )
       self._logging_enabled = False
       return
+
     self._logging_dir = logging_dir
 
   def __setitem__(self, key, value):
-    """This method will set an entry at key with value in the dictionary.
-
-    It will effectively overwrite any previous data at the same key.
+    """Sets an entry at key with value in the data dictionary.
 
     Args:
-      key: str, indicating key where to write the entry.
-      value: A python object to store.
+      key: str, key where to write the entry.
+      value: A Python object to store.
     """
     if self._logging_enabled:
       self.data[key] = value
@@ -75,21 +83,20 @@ class Logger(object):
     return os.path.join(self._logging_dir, filename)
 
   def log_to_file(self, filename_prefix, iteration_number):
-    """Save the pickled dictionary to a file.
+    """Saves the data dictionary to a file using msgpack (not pickle).
 
     Args:
       filename_prefix: str, name of the file to use (without iteration number).
-      iteration_number: int, the iteration number, appended to the end of
-        filename_prefix.
+      iteration_number: int, the iteration number appended to filename_prefix.
     """
     if not self._logging_enabled:
       logging.warning('Logging is disabled.')
       return
+
     log_file = self._generate_filename(filename_prefix, iteration_number)
-    with tf.io.gfile.GFile(log_file, 'w') as fout:
-      pickle.dump(self.data, fout, protocol=pickle.HIGHEST_PROTOCOL)
-    # After writing a checkpoint file, we garbage collect the log file
-    # that is logs_duration versions old.
+    with tf.io.gfile.GFile(log_file, 'wb') as fout:
+      fout.write(_pack(self.data))
+
     stale_iteration_number = iteration_number - self._logs_duration
     if stale_iteration_number >= 0:
       stale_file = self._generate_filename(
@@ -98,7 +105,6 @@ class Logger(object):
       try:
         tf.io.gfile.remove(stale_file)
       except tf.errors.NotFoundError:
-        # Ignore if file not found.
         pass
 
   def is_logging_enabled(self):

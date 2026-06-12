@@ -14,13 +14,19 @@
 # limitations under the License.
 """This provides utilities for dealing with Dopamine data.
 
+SECURITY FIX: Replaced all pickle.load() calls with msgpack deserialization
+to eliminate Remote Code Execution (RCE) when load_statistics() or
+load_baselines() is pointed at an attacker-controlled remote path.
+
 See: dopamine/common/logger.py .
 """
+
 import itertools
 import os
-import pickle
-import sys
+import re
 
+import msgpack
+import msgpack_numpy
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -94,53 +100,109 @@ ALL_GAMES = [
 MUJOCO_GAMES = ['Ant', 'HalfCheetah', 'Hopper', 'Humanoid', 'Walker2d']
 
 
+# ---------------------------------------------------------------------------
+# URI / path security helpers
+# ---------------------------------------------------------------------------
+
+_BLOCKED_REMOTE_RE = re.compile(
+    r'^(?:'
+    r'[a-zA-Z][a-zA-Z0-9+\-.]*://'
+    r'|\\\\[^\\]'
+    r')',
+    re.IGNORECASE,
+)
+
+
+def _validate_local_path(path, label='path'):
+  """Raises ValueError if path is a remote URI or UNC path.
+
+  Args:
+    path: str, the filesystem path or URI to validate.
+    label: str, human-readable name used in the error message.
+
+  Raises:
+    ValueError: if the path matches a remote URI scheme or UNC path.
+  """
+  if _BLOCKED_REMOTE_RE.match(path):
+    raise ValueError(
+        'Security error: refusing to read from remote path for {}: {!r}. '
+        'Only local filesystem paths are permitted. Remote paths can be '
+        'used to deliver untrusted payloads resulting in Remote Code '
+        'Execution.'.format(label, path)
+    )
+
+
+# ---------------------------------------------------------------------------
+# msgpack helpers
+# ---------------------------------------------------------------------------
+
+def _unpack(raw_bytes):
+  """Deserialize msgpack bytes to a Python object with numpy support."""
+  return msgpack.unpackb(
+      raw_bytes,
+      object_hook=msgpack_numpy.decode,
+      raw=False,
+      strict_map_key=False,
+  )
+
+
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
 def load_baselines(base_dir, verbose=False):
   """Reads in the baseline experimental data from a specified base directory.
 
   Args:
     base_dir: string, base directory where to read data from.
+      Must be a local filesystem path; remote URIs are rejected.
     verbose: bool, whether to print warning messages.
 
   Returns:
     A dict containing pandas DataFrames for all available agents and games.
   """
+  _validate_local_path(base_dir, 'base_dir')
+
   experimental_data = {}
   for game in ALL_GAMES:
     for agent in ['dqn', 'c51', 'rainbow', 'iqn']:
-      game_data_file = os.path.join(base_dir, agent, '{}.pkl'.format(game))
+      game_data_file = os.path.join(
+          base_dir, agent, '{}.msgpack'.format(game)
+      )
+
+      if not tf.io.gfile.exists(game_data_file):
+        game_data_file = os.path.join(
+            base_dir, agent, '{}.pkl'.format(game)
+        )
+
       if not tf.io.gfile.exists(game_data_file):
         if verbose:
-          # pylint: disable=superfluous-parens
           print(
               'Unable to load data for agent {} on game {}'.format(agent, game)
           )
-          # pylint: enable=superfluous-parens
         continue
+
       with tf.io.gfile.GFile(game_data_file, 'rb') as f:
-        if sys.version_info.major >= 3:
-          # pylint: disable=unexpected-keyword-arg
-          single_agent_data = pickle.load(f, encoding='latin1')
-          # pylint: enable=unexpected-keyword-arg
-        else:
-          single_agent_data = pickle.load(f)
-        single_agent_data['agent'] = agent
-        # The dataframe rows are all read as 'objects', which causes a
-        # ValueError when merging below. We cast the numerics to float64s to
-        # avoid this.
-        for field_name in single_agent_data.keys():
-          try:
-            single_agent_data[field_name] = single_agent_data[
-                field_name
-            ].astype(np.float64)
-          except ValueError:
-            # This will catch any non-numerics that cannot be cast to float64.
-            continue
-        if game in experimental_data:
-          experimental_data[game] = experimental_data[game].merge(
-              single_agent_data, how='outer'
-          )
-        else:
-          experimental_data[game] = single_agent_data
+        raw = f.read()
+
+      single_agent_data = _unpack(raw)
+      single_agent_data['agent'] = agent
+
+      for field_name in single_agent_data.keys():
+        try:
+          single_agent_data[field_name] = single_agent_data[
+              field_name
+          ].astype(np.float64)
+        except (ValueError, AttributeError):
+          continue
+
+      if game in experimental_data:
+        experimental_data[game] = experimental_data[game].merge(
+            single_agent_data, how='outer'
+        )
+      else:
+        experimental_data[game] = single_agent_data
+
   return experimental_data
 
 
@@ -148,9 +210,11 @@ def load_statistics(log_path, iteration_number=None, verbose=True):
   """Reads in a statistics object from log_path.
 
   Args:
-    log_path: string, provides the full path to the training/eval statistics.
-    iteration_number: The iteration number of the statistics object we want to
-      read. If set to None, load the latest version.
+    log_path: string, full path to the training/eval statistics.
+      Must be a local filesystem path; remote URIs are rejected to prevent
+      loading of attacker-controlled payloads.
+    iteration_number: The iteration number of the statistics object we want
+      to read. If set to None, load the latest version.
     verbose: Whether to output information about the load procedure.
 
   Returns:
@@ -158,21 +222,23 @@ def load_statistics(log_path, iteration_number=None, verbose=True):
     iteration: The corresponding iteration number.
 
   Raises:
+    ValueError: if log_path is a remote URI.
     Exception: if data is not present.
   """
-  # If no iteration is specified, we'll look for the most recent.
+  _validate_local_path(log_path, 'log_path')
+
   if iteration_number is None:
     iteration_number = get_latest_iteration(log_path)
 
   log_file = '%s/%s_%d' % (log_path, FILE_PREFIX, iteration_number)
 
   if verbose:
-    # pylint: disable=superfluous-parens
     print('Reading statistics from: {}'.format(log_file))
-    # pylint: enable=superfluous-parens
 
   with tf.io.gfile.GFile(log_file, 'rb') as f:
-    return pickle.load(f), iteration_number
+    data = _unpack(f.read())
+
+  return data, iteration_number
 
 
 def get_latest_file(path):
@@ -201,7 +267,7 @@ def get_latest_iteration(path):
     The latest iteration number.
 
   Raises:
-    ValueError: if there is not available log data at the given path.
+    ValueError: if there is no available log data at the given path.
   """
   glob = os.path.join(path, '{}_[0-9]*'.format(FILE_PREFIX))
   log_files = tf.io.gfile.glob(glob)
@@ -210,7 +276,7 @@ def get_latest_iteration(path):
     raise ValueError('No log data found at {}'.format(path))
 
   def extract_iteration(x):
-    return int(x[x.rfind('_') + 1 :])
+    return int(x[x.rfind('_') + 1:])
 
   latest_iteration = max(extract_iteration(x) for x in log_files)
   return latest_iteration
@@ -227,8 +293,7 @@ def summarize_data(data, summary_keys):
 
   Example:
     data = load_statistics(...)
-    summarize_data(data, ['train_episode_returns',
-        'eval_episode_returns'])
+    summarize_data(data, ['train_episode_returns', 'eval_episode_returns'])
 
   Returns:
     A dictionary mapping each key in returns_keys to a per-iteration summary.
@@ -239,11 +304,8 @@ def summarize_data(data, summary_keys):
 
   for key in summary_keys:
     summary[key] = []
-    # Compute per-iteration average of the given key.
     for i in range(latest_iteration_number):
       iter_key = '{}{}'.format(ITERATION_PREFIX, i)
-      # We allow reporting the same value multiple times when data is missing.
-      # If there is no data for this iteration, use the previous'.
       if iter_key in data:
         current_value = np.mean(data[iter_key][key])
       summary[key].append(current_value)
@@ -261,34 +323,11 @@ def read_experiment(
 ):
   """Reads in a set of experimental results from log_path.
 
-  The provided parameter_set is an ordered_dict which
-    1) defines the parameters of this experiment,
-    2) defines the order in which they occur in the job descriptor.
-
-  The method reads all experiments of the form
-
-  ${log_path}/${job_descriptor}.format(params)/logs,
-
-  where params is constructed from the cross product of the elements in
-  the parameter_set.
-
-  For example:
-    parameter_set = collections.OrderedDict([
-        ('game', ['Asterix', 'Pong']),
-        ('epsilon', ['0', '0.1'])
-    ])
-    read_experiment('/tmp/logs', parameter_set, job_descriptor='{}_{}')
-    Will try to read logs from:
-    - /tmp/logs/Asterix_0/logs
-    - /tmp/logs/Asterix_0.1/logs
-    - /tmp/logs/Pong_0/logs
-    - /tmp/logs/Pong_0.1/logs
-
   Args:
     log_path: string, base path specifying where results live.
     parameter_set: An ordered_dict mapping parameter names to allowable values.
-    job_descriptor: A job descriptor string which is used to construct the full
-      path for each trial within an experiment.
+    job_descriptor: A job descriptor string used to construct the full path
+      for each trial within an experiment.
     iteration_number: Int, if not None determines the iteration number at which
       we read in results.
     summary_keys: Iterable of strings, iteration statistics to summarize.
@@ -298,7 +337,6 @@ def read_experiment(
     A Pandas dataframe containing experimental results.
   """
   keys = [] if parameter_set is None else list(parameter_set.keys())
-  # Extract parameter value lists, one per parameter.
   ordered_values = [parameter_set[key] for key in keys]
 
   column_names = keys + ['iteration'] + list(summary_keys)
@@ -306,20 +344,15 @@ def read_experiment(
   expected_num_iterations = 200
   expected_num_rows = num_parameter_settings * expected_num_iterations
 
-  # Create DataFrame with predicted number of rows.
   data_frame = pd.DataFrame(
       index=np.arange(0, expected_num_rows), columns=column_names
   )
   row_index = 0
 
-  # Now take their cross product. This generates tuples of the form
-  # (p1, p2, p3, ...) where p1, p2, p3 are parameter values for the first,
-  # second, etc. parameters as ordered in value_set.
   for parameter_tuple in itertools.product(*ordered_values):
     if job_descriptor is not None:
       name = job_descriptor.format(*parameter_tuple)
     else:
-      # Construct name for values.
       name = '-'.join(
           [keys[i] + '_' + str(parameter_tuple[i]) for i in range(len(keys))]
       )
@@ -332,26 +365,18 @@ def read_experiment(
 
     summary = summarize_data(raw_data, summary_keys)
     for iteration in range(last_iteration + 1):
-      # The row contains all the parameters, the iteration, and finally the
-      # requested values.
       row_data = (
           list(parameter_tuple)
           + [iteration]
           + [summary[key][iteration] for key in summary_keys]
       )
       data_frame.loc[row_index] = row_data
-
       row_index += 1
 
-  # The dataframe rows are all read as 'objects', which causes a
-  # ValueError when merging below. We cast the numerics to float64s to
-  # avoid this.
   for field_name in data_frame.keys():
     try:
       data_frame[field_name] = data_frame[field_name].astype(np.float64)
     except ValueError:
-      # This will catch any non-numerics that cannot be cast to float64.
       continue
 
-  # Shed any unused rows.
   return data_frame.drop(np.arange(row_index, expected_num_rows))
