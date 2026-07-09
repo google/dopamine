@@ -113,7 +113,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     if callable(set_collector_dispatcher_fn):
       set_collector_dispatcher_fn(self._collector_dispatcher)
 
-  def _run_one_phase(
+  def _run_one_phase(  # pyrefly: ignore[bad-override]
       self,
       envs,
       steps,
@@ -189,7 +189,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
           )
     return step_count, sum_returns, num_episodes, state, envs
 
-  def _initialize_episode(self, envs):
+  def _initialize_episode(self, envs):  # pyrefly: ignore[bad-override]
     """Initialization for a new episode.
 
     Args:
@@ -527,7 +527,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
               step=iteration,
           )
 
-  def _save_tensorboard_summaries(
+  def _save_tensorboard_summaries(  # pyrefly: ignore[bad-override]
       self,
       iteration,
       num_episodes_train,

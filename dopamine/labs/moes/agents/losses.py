@@ -22,7 +22,6 @@ import gin
 import jax
 import jax.numpy as jnp
 
-
 EPS = 1e-6  # To avoid numerical issues with log(0).
 
 
@@ -60,21 +59,21 @@ def naive_entropy(
   # We know entropy_term is bounded by 1.0.
   entropy_loss = loss_parameters.entropy_weight * (1.0 - entropy_term)
   statistics = [
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['EntropyTerm'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=entropy_term,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['EntropyTerm'],  # jnp-type
+          value=entropy_term,  # pyrefly: ignore[bad-argument-type]
       ),
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['EntropyLoss'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=entropy_loss,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['EntropyLoss'],  # jnp-type
+          value=entropy_loss,  # pyrefly: ignore[bad-argument-type]
       ),
       types.MoELossStatistic(
           name_id=types.NAME_TO_ID['EntropyWeight'],
           value=loss_parameters.entropy_weight,
       ),
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['ExpertBins'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=flattened_bin_counts,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['ExpertBins'],  # jnp-type
+          value=flattened_bin_counts,  # pyrefly: ignore[bad-argument-type]
           type_id=2,
       ),
   ]
@@ -113,13 +112,13 @@ def importance_loss(
   weighted_importance_loss = loss_parameters.importance_weight * importance_term
 
   statistics = [
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['ImportanceTerm'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=importance_term,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['ImportanceTerm'],  # jnp-type
+          value=importance_term,  # pyrefly: ignore[bad-argument-type]
       ),
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['ImportanceLoss'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=weighted_importance_loss,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['ImportanceLoss'],  # jnp-type
+          value=weighted_importance_loss,  # pyrefly: ignore[bad-argument-type]
       ),
       types.MoELossStatistic(
           name_id=types.NAME_TO_ID['ImportanceWeight'],
@@ -194,13 +193,13 @@ def load_loss(loss_parameters: types.MoELossParameters) -> types.MoELossReturn:
   weighted_load_loss = loss_parameters.load_weight * load_term
 
   statistics = [
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['LoadTerm'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=load_term,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['LoadTerm'],  # jnp-type
+          value=load_term,  # pyrefly: ignore[bad-argument-type]
       ),
-      types.MoELossStatistic(
-          name_id=types.NAME_TO_ID['LoadLoss'],  # pytype: disable=wrong-arg-types  # jnp-type
-          value=weighted_load_loss,
+      types.MoELossStatistic(  # pytype: disable=wrong-arg-types
+          name_id=types.NAME_TO_ID['LoadLoss'],  # jnp-type
+          value=weighted_load_loss,  # pyrefly: ignore[bad-argument-type]
       ),
       types.MoELossStatistic(
           name_id=types.NAME_TO_ID['LoadWeight'],

@@ -141,15 +141,15 @@ def train(
     if networks.MoEType[network_def.moe_type] == networks.MoEType.SOFTMOE:
       grads_router = [
           grad['params']['SoftMoE_0']['phi_weights'],
-          online_params['params']['SoftMoE_0']['phi_weights'],
+          online_params['params']['SoftMoE_0']['phi_weights'],  # pyrefly: ignore[bad-index]
       ]
     else:
       grads_router = [
           grad['params']['MoE_0']['router']['Dense_0']['kernel'],
-          online_params['params']['MoE_0']['router']['Dense_0']['kernel'],
+          online_params['params']['MoE_0']['router']['Dense_0']['kernel'],  # pyrefly: ignore[bad-index]
       ]
-    mean_abs_grad_router = jnp.mean(jnp.abs(grads_router[0]))
-    mean_abs_weights_router = jnp.mean(jnp.abs(grads_router[1]))
+    mean_abs_grad_router = jnp.mean(jnp.abs(grads_router[0]))  # pyrefly: ignore[bad-argument-type]
+    mean_abs_weights_router = jnp.mean(jnp.abs(grads_router[1]))  # pyrefly: ignore[bad-argument-type]
 
     moe_statistics['Stats/mean_abs_grad_router'] = mean_abs_grad_router
     moe_statistics['Stats/mean_abs_weights_router'] = mean_abs_weights_router

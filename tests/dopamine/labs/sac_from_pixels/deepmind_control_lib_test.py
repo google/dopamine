@@ -42,7 +42,7 @@ LAST_TIMESTEP = dm_env.TimeStep(
 
 
 def get_mock_render(  # pytype: disable=annotation-type-mismatch  # numpy-scalars
-    img_dtype: np.dtype = np.float32, img_fill_value: float = 0.0
+    img_dtype: np.dtype = np.float32, img_fill_value: float = 0.0  # pyrefly: ignore[bad-function-definition]
 ) -> Callable[[int, int, int], np.ndarray]:
   def mock_render(height: int, width: int, camera_id: int = 0):
     del camera_id  # Unused
@@ -56,7 +56,7 @@ class MockDeepmindControlSuiteEnvironment(control.Environment):
 
   def __init__(
       self,  # pytype: disable=annotation-type-mismatch  # numpy-scalars
-      img_dtype: np.dtype = np.float32,
+      img_dtype: np.dtype = np.float32,  # pyrefly: ignore[bad-function-definition]
       img_fill_value: float = 0.0,
       steps_to_terminal: int = 1,
   ):

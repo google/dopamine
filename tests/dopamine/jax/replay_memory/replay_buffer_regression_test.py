@@ -94,11 +94,11 @@ class ReplayBufferRegressionTest(parameterized.TestCase):
       )
 
     # ensure that there is the necessary 0 padding
-    state = memory._memory[0].state
+    state = memory._memory[0].state  # pyrefly: ignore[bad-index]
     np.testing.assert_array_equal(zero_state, state[:, :, :3])
 
     # ensure that after the padding the contents are properly stored
-    state = memory._memory[3].state
+    state = memory._memory[3].state  # pyrefly: ignore[bad-index]
     for i in range(4):
       np.testing.assert_array_equal(
           np.full(OBSERVATION_SHAPE, i), state[:, :, i]

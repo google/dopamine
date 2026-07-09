@@ -51,7 +51,7 @@ class PickleCollector(collector.Collector):
       self._statistics[f'iteration_{s.step}'][s.name].append(s.value)
 
   def flush(self):
-    pickle_file = osp.join(self._base_dir, f'pickle_{self._file_number}.pkl')
+    pickle_file = osp.join(self._base_dir, f'pickle_{self._file_number}.pkl')  # pyrefly: ignore[no-matching-overload]
     with tf.io.gfile.GFile(pickle_file, 'w') as f:
       pickle.dump(self._statistics, f, protocol=pickle.HIGHEST_PROTOCOL)
     self._file_number += 1

@@ -120,7 +120,7 @@ class SACCALEConvNetwork(nn.Module):
   hidden_units: int = 256
   action_limits: Optional[Tuple[Tuple[float, ...], Tuple[float, ...]]] = None
   encoder_name: str = 'NatureDQN'
-  sac_cls: nn.Module = continuous_networks.ActorCriticNetwork
+  sac_cls: nn.Module = continuous_networks.ActorCriticNetwork  # pyrefly: ignore[bad-assignment]
 
   def setup(self):
     logging.info(
@@ -229,7 +229,7 @@ class PPOCALEConvNetwork(nn.Module):
   activation: Callable[[jax.Array], jax.Array] = nn.tanh
   action_limits: Optional[Tuple[Tuple[float, ...], Tuple[float, ...]]] = None
   encoder_name: str = 'NatureDQN'
-  ppo_cls: nn.Module = continuous_networks.PPOActorCriticNetwork
+  ppo_cls: nn.Module = continuous_networks.PPOActorCriticNetwork  # pyrefly: ignore[bad-assignment]
 
   def setup(self):
     logging.info(

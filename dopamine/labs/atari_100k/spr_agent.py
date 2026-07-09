@@ -349,7 +349,7 @@ class SPRAgent(atari_100k_rainbow_agent.Atari100kRainbowAgent):
     if self._replay_scheme not in ['uniform', 'prioritized']:
       raise ValueError('Invalid replay scheme: {}'.format(self._replay_scheme))
     if self._replay_scheme == 'prioritized':
-      return replay_buffers.PrioritizedJaxSubsequenceParallelEnvReplayBuffer(
+      return replay_buffers.PrioritizedJaxSubsequenceParallelEnvReplayBuffer(  # pyrefly: ignore[missing-argument]
           observation_shape=self.observation_shape,
           stack_size=self.stack_size,
           update_horizon=self.update_horizon,
@@ -358,7 +358,7 @@ class SPRAgent(atari_100k_rainbow_agent.Atari100kRainbowAgent):
           observation_dtype=self.observation_dtype,
       )
     else:
-      return replay_buffers.JaxSubsequenceParallelEnvReplayBuffer(
+      return replay_buffers.JaxSubsequenceParallelEnvReplayBuffer(  # pyrefly: ignore[missing-argument]
           observation_shape=self.observation_shape,
           stack_size=self.stack_size,
           update_horizon=self.update_horizon,

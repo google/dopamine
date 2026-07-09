@@ -91,7 +91,7 @@ def train(
     loss_stats: Training statistics.
   """
   q_values = jax.vmap(
-      lambda state: network_def.apply(
+      lambda state: network_def.apply(  # pyrefly: ignore[missing-attribute]
           network_params, state, method=network_def.critic
       ).q_value
   )(states)
@@ -102,7 +102,7 @@ def train(
   # to estimate future rewards beyond the current trajectory.
   # Need to apply whole network as next action has not be sampled yet.
   rng, key = jax.random.split(key)
-  next_q_value = network_def.apply(
+  next_q_value = network_def.apply(  # pyrefly: ignore[missing-attribute]
       network_params, next_states[-1], rng
   ).critic.q_value
   next_q_value = jax.lax.stop_gradient(next_q_value)
@@ -118,7 +118,7 @@ def train(
   )
 
   log_probability = jax.vmap(
-      lambda state, action: network_def.apply(
+      lambda state, action: network_def.apply(  # pyrefly: ignore[missing-attribute]
           network_params, state, action=action, method=network_def.actor
       ).log_probability
   )(states, actions)
@@ -126,7 +126,7 @@ def train(
 
   batch_keys = jnp.stack(jax.random.split(key, num=states.shape[0]))
   sampled_actions = jax.vmap(
-      lambda state, key: network_def.apply(
+      lambda state, key: network_def.apply(  # pyrefly: ignore[missing-attribute]
           network_params, state, key=key, method=network_def.actor
       ).sampled_action
   )(states, batch_keys)
@@ -323,7 +323,7 @@ def train_minibatch(
     )
 
     q_values = jax.vmap(
-        lambda state: network_def.apply(
+        lambda state: network_def.apply(  # pyrefly: ignore[missing-attribute]
             network_params, state, method=network_def.critic
         ).q_value
     )(states)
@@ -380,10 +380,10 @@ def train_minibatch(
       q_values,
   )
 
-  updates, optimizer_state = optim.update(
+  updates, optimizer_state = optim.update(  # pyrefly: ignore[bad-assignment]
       grad, optimizer_state, params=network_params
   )
-  network_params = optax.apply_updates(network_params, updates)
+  network_params = optax.apply_updates(network_params, updates)  # pyrefly: ignore[bad-assignment]
 
   return network_params, optimizer_state, aux_vars
 
@@ -517,7 +517,7 @@ class PPOAgent(dqn_agent.JaxDQNAgent):
     if network.__name__ == 'PPOActorCriticNetwork':
       self.network_def = network(
           action_shape=action_shape,
-          action_limits=action_limits,
+          action_limits=action_limits,  # pyrefly: ignore[bad-argument-type]
           num_layers=num_layers,
           hidden_units=hidden_units,
           activation=continuous_networks.create_activation(activation),
@@ -525,7 +525,7 @@ class PPOAgent(dqn_agent.JaxDQNAgent):
     else:
       self.network_def = network(
           action_shape=action_shape,
-          action_limits=action_limits,
+          action_limits=action_limits,  # pyrefly: ignore[bad-argument-type]
       )
     self.stack_size = stack_size
     self.update_horizon = update_horizon
@@ -590,7 +590,7 @@ class PPOAgent(dqn_agent.JaxDQNAgent):
         seed=self._seed,
         sort_samples=False,
     )
-    return replay_buffer.ReplayBuffer(
+    return replay_buffer.ReplayBuffer(  # pyrefly: ignore[missing-argument]
         transition_accumulator=transition_accumulator,
         sampling_distribution=sampling_distribution,
     )
@@ -656,7 +656,7 @@ class PPOAgent(dqn_agent.JaxDQNAgent):
 
       self.network_params, self.optimizer_state, loss_stats = train(
           self.network_def,
-          self.network_params,
+          self.network_params,  # pyrefly: ignore[bad-argument-type]
           self.network_optimizer,
           self.optimizer_state,
           key,

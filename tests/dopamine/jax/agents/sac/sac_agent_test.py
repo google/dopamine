@@ -56,10 +56,10 @@ def get_mock_batch(
   mock_sampling_prob = np.asarray(1.0)
 
   return elements.ReplayElement(
-      state=np.stack([mock_observation for _ in range(batch_size)], axis=0),
-      action=np.stack([mock_action for _ in range(batch_size)], axis=0),
+      state=np.stack([mock_observation for _ in range(batch_size)], axis=0),  # pyrefly: ignore[bad-argument-type]
+      action=np.stack([mock_action for _ in range(batch_size)], axis=0),  # pyrefly: ignore[bad-argument-type]
       reward=np.stack([mock_reward for _ in range(batch_size)], axis=0),
-      next_state=np.stack(
+      next_state=np.stack(  # pyrefly: ignore[bad-argument-type]
           [mock_observation for _ in range(batch_size)], axis=0
       ),
       is_terminal=np.stack([mock_terminal for _ in range(batch_size)], axis=0),
@@ -81,7 +81,7 @@ def create_agent(
     update_period: int = 4,
     seed: int = 0,
     observation_shape: Tuple[int, ...] = OBSERVATION_SHAPE,
-    observation_dtype: np.dtype = np.float32,
+    observation_dtype: np.dtype = np.float32,  # pyrefly: ignore[bad-function-definition]
     stack_size: int = 1,
 ) -> sac_agent.SACAgent:
   return sac_agent.SACAgent(
@@ -100,7 +100,7 @@ def create_agent(
 def get_agent_params(
     agent: sac_agent.SACAgent,
 ) -> Tuple[flax.core.FrozenDict, ...]:
-  return agent.network_params, agent.log_alpha
+  return agent.network_params, agent.log_alpha  # pyrefly: ignore[bad-return]
 
 
 class SacAgentTest(parameterized.TestCase):
@@ -263,7 +263,7 @@ class SacAgentTest(parameterized.TestCase):
     agent = create_agent(  # pytype: disable=wrong-arg-types  # numpy-scalars
         action_shape=action_shape,
         observation_shape=IMG_OBSERVATION_SHAPE,
-        observation_dtype=np.uint8,
+        observation_dtype=np.uint8,  # pyrefly: ignore[bad-argument-type]
         stack_size=stack_size,
         eval_mode=False,
         min_replay_history=0,

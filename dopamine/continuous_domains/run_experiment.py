@@ -77,7 +77,7 @@ def create_continuous_agent(
   elif agent_name == 'ppo':
     assert isinstance(environment.action_space, spaces.Box)
     assert isinstance(environment.observation_space, spaces.Box)
-    return ppo_agent.PPOAgent(
+    return ppo_agent.PPOAgent(  # pyrefly: ignore[missing-argument]
         action_shape=environment.action_space.shape,
         observation_shape=environment.observation_space.shape,
         summary_writer=summary_writer,
@@ -327,7 +327,7 @@ class ContinuousTrainRunner(ContinuousRunner):
     )
     return statistics.data_lists
 
-  def _save_tensorboard_summaries(
+  def _save_tensorboard_summaries(  # pyrefly: ignore[bad-override]
       self, iteration, num_episodes, average_reward, average_steps_per_second
   ):
     """Save statistics as tensorboard summaries."""

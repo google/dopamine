@@ -49,7 +49,7 @@ class RandomRouter(nn.Module):
     sequence_length = x.shape[0]
 
     # probs are set randomly.
-    probs = jax.random.normal(key, (sequence_length, num_experts))
+    probs = jax.random.normal(key, (sequence_length, num_experts))  # pyrefly: ignore[bad-argument-type]
     top_expert_weights, top_experts = jax.lax.top_k(probs, k=k)
 
     return types.RouterReturn(
@@ -98,7 +98,7 @@ class TopKRouter(nn.Module):
       # "Scaling Vision with Sparse Mixture of Experts", Riquelme et al., 2021.
       # (https://arxiv.org/abs/2106.05974)
       noise_std = (1.0 / num_experts) * self.noise_std
-      noise = noise_std * jax.random.normal(key=key, shape=x.shape)
+      noise = noise_std * jax.random.normal(key=key, shape=x.shape)  # pyrefly: ignore[bad-argument-type]
       x_noisy = x + noise
       probs = jax.nn.softmax(x_noisy, axis=-1)
 

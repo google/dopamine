@@ -60,7 +60,7 @@ class SACEncoderNetworkTest(absltest.TestCase):
 
     def loss_fn(params):
       output = network_def.apply(params, self.example_input)
-      return jnp.mean(output.actor_z)
+      return jnp.mean(output.actor_z)  # pyrefly: ignore[missing-attribute]
 
     grad = jax.grad(loss_fn)(params)
 
@@ -80,7 +80,7 @@ class SACEncoderNetworkTest(absltest.TestCase):
 
     def loss_fn(params):
       output = network_def.apply(params, self.example_input)
-      return jnp.mean(output.critic_z)
+      return jnp.mean(output.critic_z)  # pyrefly: ignore[missing-attribute]
 
     grad = jax.grad(loss_fn)(params)
 

@@ -59,7 +59,7 @@ CollectorConstructorType = Callable[[str], collector.Collector]
 
 
 def add_collector(name: str, constructor: CollectorConstructorType) -> None:
-  AVAILABLE_COLLECTORS.update({name: constructor})
+  AVAILABLE_COLLECTORS.update({name: constructor})  # pyrefly: ignore[no-matching-overload]
 
 
 @gin.configurable
@@ -77,7 +77,7 @@ class CollectorDispatcher(object):
       if c not in AVAILABLE_COLLECTORS:
         logging.warning('Collector %s not recognized, ignoring.', c)
         continue
-      self._collectors.append(AVAILABLE_COLLECTORS[c](base_dir))
+      self._collectors.append(AVAILABLE_COLLECTORS[c](base_dir))  # pyrefly: ignore[bad-argument-type, missing-argument]
       logging.info('Added collector %s.', c)
 
   def write(

@@ -32,7 +32,7 @@ ReplayItemID = elements.ReplayItemID
 
 @dataclasses.dataclass(frozen=True)
 class SampleMetadata:
-  keys: npt.NDArray[ReplayItemID]
+  keys: npt.NDArray[ReplayItemID]  # pyrefly: ignore[bad-specialization]
 
 
 @typing.runtime_checkable
@@ -43,15 +43,15 @@ class SamplingDistribution(checkpointers.Checkpointable, Protocol):
     ...
 
   @typing.overload
-  def update(self, keys: npt.NDArray[ReplayItemID], **kwargs: Any) -> None:
+  def update(self, keys: npt.NDArray[ReplayItemID], **kwargs: Any) -> None:  # pyrefly: ignore[bad-specialization]
     ...
 
   @typing.overload
-  def update(self, key: ReplayItemID, **kwargs: Any) -> None:
+  def update(self, key: ReplayItemID, **kwargs: Any) -> None:  # pyrefly: ignore[inconsistent-overload]
     ...
 
   def update(
-      self, keys: 'npt.NDArray[ReplayItemID] | ReplayItemID', **kwargs: Any
+      self, keys: 'npt.NDArray[ReplayItemID] | ReplayItemID', **kwargs: Any  # pyrefly: ignore[bad-specialization]
   ) -> None:
     ...
 
@@ -114,7 +114,7 @@ class UniformSamplingDistribution(SamplingDistribution):
 
   @typing.overload
   def update(
-      self, keys: npt.NDArray[ReplayItemID], *args: Any, **kwargs: Any
+      self, keys: npt.NDArray[ReplayItemID], *args: Any, **kwargs: Any  # pyrefly: ignore[bad-specialization]
   ) -> None:
     ...
 
@@ -124,7 +124,7 @@ class UniformSamplingDistribution(SamplingDistribution):
 
   def update(
       self,
-      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',  # pyrefly: ignore[bad-specialization]
       *args: Any,
       **kwargs: Any,
   ) -> None:
@@ -155,7 +155,7 @@ class UniformSamplingDistribution(SamplingDistribution):
       raise ValueError('Sample size must be positive.')
     indices = self._rng.integers(len(self._key_by_index), size=size)
     return SampleMetadata(
-        keys=np.fromiter(
+        keys=np.fromiter(  # pyrefly: ignore[bad-argument-type]
             (self._key_by_index[index] for index in indices),
             dtype=np.int32,
             count=size,
@@ -204,7 +204,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
 
     super().__init__(self._rng)
 
-  def add(self, key: ReplayItemID, *, priority: float) -> None:
+  def add(self, key: ReplayItemID, *, priority: float) -> None:  # pyrefly: ignore[bad-override]
     super().add(key)
     if priority is None:
       priority = 0.0
@@ -216,7 +216,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
   @typing.overload
   def update(
       self,
-      keys: npt.NDArray[ReplayItemID],
+      keys: npt.NDArray[ReplayItemID],  # pyrefly: ignore[bad-specialization]
       *,
       priorities: npt.NDArray[np.float64],
   ) -> None:
@@ -228,18 +228,18 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
 
   def update(
       self,
-      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',  # pyrefly: ignore[bad-specialization]
       *,
       priorities: 'npt.NDArray[np.float64] | float',
   ) -> None:
     if not isinstance(keys, np.ndarray):
-      keys = np.asarray([keys], dtype=np.int32)
+      keys = np.asarray([keys], dtype=np.int32)  # pyrefly: ignore[bad-assignment]
 
     priorities = np.where(
         priorities == 0.0, 0.0, priorities**self._priority_exponent
     )
-    self._sum_tree.set(
-        np.fromiter((self._index_by_key[key] for key in keys), dtype=np.int32),
+    self._sum_tree.set(  # pyrefly: ignore[no-matching-overload]
+        np.fromiter((self._index_by_key[key] for key in keys), dtype=np.int32),  # pyrefly: ignore[not-iterable]
         priorities,
     )
 
@@ -253,7 +253,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
       # Otherwise, swap priorities with current index and last index
       # as that's how we pop the key from our datastructure.
       # This will run in O(logn) where n is the # of elements in the tree
-      self._sum_tree.set(
+      self._sum_tree.set(  # pyrefly: ignore[no-matching-overload]
           np.asarray([index, last_index], dtype=np.int32),
           np.asarray([self._sum_tree.get(last_index), 0.0]),
       )
@@ -270,7 +270,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
     targets = self._rng.uniform(0.0, self._sum_tree.root, size=size)
     indices = self._sum_tree.query(targets)
     return PrioritizedSampleMetadata(
-        keys=np.fromiter(
+        keys=np.fromiter(  # pyrefly: ignore[bad-argument-type]
             (self._key_by_index[index] for index in indices),
             count=size,
             dtype=np.int32,
@@ -312,7 +312,7 @@ class SequentialSamplingDistribution(UniformSamplingDistribution):
     if self._sort_samples:
       self._key_by_index.sort()
     return SampleMetadata(
-        keys=np.fromiter(
+        keys=np.fromiter(  # pyrefly: ignore[bad-argument-type]
             self._key_by_index,
             dtype=np.int32,
             count=size,

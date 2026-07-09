@@ -96,7 +96,7 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
 
       # Add replay element to memory
       key = ReplayItemID(self.add_count)
-      self._memory[key] = replay_element
+      self._memory[key] = replay_element  # pyrefly: ignore[unsupported-operation]
       self._sampling_distribution.add(key, **kwargs)
       self.add_count += 1
       # If we're beyond our capacity...
@@ -153,7 +153,7 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
     return (batch, samples) if with_sample_metadata else batch
 
   @typing.overload
-  def update(self, keys: npt.NDArray[ReplayItemID], **kwargs: Any) -> None:
+  def update(self, keys: npt.NDArray[ReplayItemID], **kwargs: Any) -> None:  # pyrefly: ignore[bad-specialization]
     ...
 
   @typing.overload
@@ -162,7 +162,7 @@ class ReplayBuffer(checkpointers.Checkpointable, Generic[ReplayElementT]):
 
   def update(
       self,
-      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',
+      keys: 'npt.NDArray[ReplayItemID] | ReplayItemID',  # pyrefly: ignore[bad-specialization]
       **kwargs: Any,
   ) -> None:
     self._sampling_distribution.update(keys, **kwargs)

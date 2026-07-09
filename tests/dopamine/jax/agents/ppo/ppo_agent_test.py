@@ -52,7 +52,7 @@ def create_agent(
 def get_agent_params(
     agent: ppo_agent.PPOAgent,
 ) -> flax.core.FrozenDict:
-  return agent.network_params
+  return agent.network_params  # pyrefly: ignore[bad-return]
 
 
 class PPOAgentTest(parameterized.TestCase):

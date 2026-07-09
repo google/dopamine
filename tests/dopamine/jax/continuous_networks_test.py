@@ -35,7 +35,7 @@ class ActorNetworkTest(parameterized.TestCase):
     network_def = continuous_networks.ActorNetwork(self.action_shape)
     params = network_def.init(self.key, self.example_state, self.key)
 
-    mode, sampled_action, action_probability = network_def.apply(
+    mode, sampled_action, action_probability = network_def.apply(  # pyrefly: ignore[bad-unpacking]
         params, self.example_state, self.key
     )
 
@@ -91,7 +91,7 @@ class CriticNetworkTest(parameterized.TestCase):
 
     output = network_def.apply(params, self.example_state, self.example_action)
 
-    self.assertEqual(output.shape, (1,))
+    self.assertEqual(output.shape, (1,))  # pyrefly: ignore[missing-attribute]
 
   def test_network_has_specified_number_of_layers(self):
     num_layers = 5
@@ -217,7 +217,7 @@ class PPOActorNetworkTest(parameterized.TestCase):
     network_def = continuous_networks.PPOActorNetwork(self.action_shape)
     params = network_def.init(self.key, self.example_state, self.key)
 
-    sampled_action, action_probability, entropy = network_def.apply(
+    sampled_action, action_probability, entropy = network_def.apply(  # pyrefly: ignore[bad-unpacking]
         params, self.example_state, self.key
     )
 
@@ -274,7 +274,7 @@ class PPOCriticNetworkTest(parameterized.TestCase):
 
     output = network_def.apply(params, self.example_state)
 
-    self.assertEqual(output.shape, (1,))
+    self.assertEqual(output.shape, (1,))  # pyrefly: ignore[missing-attribute]
 
   def test_ppo_network_has_specified_number_of_layers(self):
     num_layers = 5

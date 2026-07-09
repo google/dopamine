@@ -173,7 +173,7 @@ def train(
         jnp.abs(grad['params']['MoE_0']['router']['Dense_0']['kernel'])
     )
     mean_abs_weights_router = jnp.mean(
-        jnp.abs(online_params['params']['MoE_0']['router']['Dense_0']['kernel'])
+        jnp.abs(online_params['params']['MoE_0']['router']['Dense_0']['kernel'])  # pyrefly: ignore[bad-argument-type, bad-index]
     )
     moe_statistics['MoE_Stats/mean_abs_grad_router'] = mean_abs_grad_router
     moe_statistics['MoE_Stats/mean_abs_weights_router'] = (

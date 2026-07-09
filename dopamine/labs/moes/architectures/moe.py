@@ -37,7 +37,7 @@ class MoE(nn.Module):
   num_experts: int
   num_selected_experts: int
   capacity_factor: float = 1.0
-  router_cls: nn.Module = routers.TopKRouter
+  router_cls: nn.Module = routers.TopKRouter  # pyrefly: ignore[bad-assignment]
 
   def setup(self):
     self.router = self.router_cls(k=self.num_selected_experts)

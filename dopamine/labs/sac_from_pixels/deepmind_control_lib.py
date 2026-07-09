@@ -34,9 +34,9 @@ import numpy as np
 
 @gin.configurable
 def create_deepmind_control_environment(
-    domain_name: str = gin.REQUIRED,
-    task_name: str = gin.REQUIRED,
-    use_image_observations: bool = gin.REQUIRED,
+    domain_name: str = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
+    task_name: str = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
+    use_image_observations: bool = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
 ) -> gym.Env:
   """Wraps a Deepmind Control Suite environment with some basic preprocessing.
 
@@ -88,7 +88,7 @@ class DeepmindControlPreprocessing(gym.Env):
     self.game_over = False
 
   @property
-  def observation_space(self) -> spaces.Box:
+  def observation_space(self) -> spaces.Box:  # pyrefly: ignore[bad-override]
     """The observation space of the processed environment."""
     obs_spec = self.environment.observation_spec()
     assert isinstance(obs_spec, collections.OrderedDict)
@@ -108,7 +108,7 @@ class DeepmindControlPreprocessing(gym.Env):
     return spaces.Box(low=low, high=high, dtype=np.float32)
 
   @property
-  def action_space(self) -> spaces.Box:
+  def action_space(self) -> spaces.Box:  # pyrefly: ignore[bad-override]
     """The action space for the processed environment."""
     action_spec = self.environment.action_spec()
     return spaces.Box(
@@ -116,12 +116,12 @@ class DeepmindControlPreprocessing(gym.Env):
     )
 
   @property
-  def reward_range(self) -> Tuple[float, float]:
+  def reward_range(self) -> Tuple[float, float]:  # pyrefly: ignore[bad-override]
     """The reward range for the processed environment."""
     return (-float('inf'), float('inf'))
 
   @property
-  def metadata(self) -> Mapping[Any, Any]:
+  def metadata(self) -> Mapping[Any, Any]:  # pyrefly: ignore[bad-override]
     """The metadata for the processed environment."""
     return {}
 

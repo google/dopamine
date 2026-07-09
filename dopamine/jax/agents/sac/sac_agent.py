@@ -154,16 +154,16 @@ def train(
         params, state, action, method=network_def.critic
     )
     q_value_1 = jnp.squeeze(q_value_1)
-    q_value_2 = jnp.squeeze(q_value_2)
+    q_value_2 = jnp.squeeze(q_value_2)  # pyrefly: ignore[bad-argument-type]
 
     target_outputs = network_def.apply(target_params, next_state, rng1, True)
-    target_q_value_1, target_q_value_2 = target_outputs.critic
+    target_q_value_1, target_q_value_2 = target_outputs.critic  # pyrefly: ignore[missing-attribute]
     target_q_value = jnp.squeeze(
         jnp.minimum(target_q_value_1, target_q_value_2)
     )
 
     alpha_value = jnp.exp(log_alpha)  # pytype: disable=wrong-arg-types  # numpy-scalars
-    log_prob = target_outputs.actor.log_probability
+    log_prob = target_outputs.actor.log_probability  # pyrefly: ignore[missing-attribute]
     target = reward_scale_factor * reward + cumulative_gamma * (
         target_q_value - alpha_value * log_prob
     ) * (1.0 - terminal)
@@ -173,7 +173,7 @@ def train(
     critic_loss = jnp.mean(critic_loss_1 + critic_loss_2)
 
     # J_{\pi}(\phi) from equation (9) in paper.
-    mean_action, sampled_action, action_log_prob = network_def.apply(
+    mean_action, sampled_action, action_log_prob = network_def.apply(  # pyrefly: ignore[bad-unpacking]
         params, state, rng2, method=network_def.actor
     )
 
@@ -183,7 +183,7 @@ def train(
         frozen_params, state, sampled_action, method=network_def.critic
     )
     no_grad_q_value = jnp.squeeze(
-        jnp.minimum(q_value_no_grad_1, q_value_no_grad_2)
+        jnp.minimum(q_value_no_grad_1, q_value_no_grad_2)  # pyrefly: ignore[bad-argument-type]
     )
     alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))  # pytype: disable=wrong-arg-types  # numpy-scalars
     policy_loss = jnp.mean(alpha_value * action_log_prob - no_grad_q_value)
@@ -229,14 +229,14 @@ def train(
   network_gradient, alpha_gradient = gradients
 
   # Apply gradients to all the optimizers.
-  updates, optimizer_state = optim.update(
+  updates, optimizer_state = optim.update(  # pyrefly: ignore[bad-assignment]
       network_gradient, optimizer_state, params=network_params
   )
-  network_params = optax.apply_updates(network_params, updates)
-  alpha_updates, alpha_optimizer_state = alpha_optim.update(
+  network_params = optax.apply_updates(network_params, updates)  # pyrefly: ignore[bad-assignment]
+  alpha_updates, alpha_optimizer_state = alpha_optim.update(  # pyrefly: ignore[bad-assignment]
       alpha_gradient, alpha_optimizer_state, params=log_alpha
   )
-  log_alpha = optax.apply_updates(log_alpha, alpha_updates)
+  log_alpha = optax.apply_updates(log_alpha, alpha_updates)  # pyrefly: ignore[bad-assignment]
 
   # Compile everything in a dict.
   returns = {
@@ -404,7 +404,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     self.action_limits = action_limits
     action_limits = tuple(tuple(x.reshape(-1)) for x in action_limits)
     self.network_def = network(
-        action_shape, num_layers, hidden_units, action_limits
+        action_shape, num_layers, hidden_units, action_limits  # pyrefly: ignore[bad-argument-type]
     )
     self.gamma = gamma
     self.update_horizon = update_horizon
@@ -462,7 +462,7 @@ class SACAgent(dqn_agent.JaxDQNAgent):
     sampling_distribution = samplers.UniformSamplingDistribution(
         seed=self._seed
     )
-    return replay_buffer.ReplayBuffer(
+    return replay_buffer.ReplayBuffer(  # pyrefly: ignore[missing-argument]
         transition_accumulator=transition_accumulator,
         sampling_distribution=sampling_distribution,
     )

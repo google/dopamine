@@ -36,11 +36,11 @@ class SumTree(checkpointers.Checkpointable):
     self.max_recorded_priority = 1.0
 
   @typing.overload
-  def set(self, index: int, value: float) -> None:
+  def set(self, index: int, value: float) -> None:  # pyrefly: ignore[inconsistent-overload]
     ...
 
   @typing.overload
-  def set(
+  def set(  # pyrefly: ignore[inconsistent-overload]
       self, index: npt.NDArray[np.int_], value: npt.NDArray[np.float64]
   ) -> None:
     ...
@@ -52,11 +52,11 @@ class SumTree(checkpointers.Checkpointable):
   ) -> None:
     """Set the value at a given leaf node index."""
     if isinstance(indices, (int, np.integer)):
-      indices = np.asarray([indices], np.int32)
+      indices = np.asarray([indices], np.int32)  # pyrefly: ignore[bad-assignment]
     if isinstance(values, (int, float, np.floating)):
       values = np.asarray([values], np.float64)
     assert (
-        indices.shape == values.shape
+        indices.shape == values.shape  # pyrefly: ignore[missing-attribute]
     ), 'Indices and values must have the same shape.'
     assert (values >= 0.0).all(), 'Values must be positive.'
     self.max_recorded_priority = max(self.max_recorded_priority, max(values))
@@ -98,11 +98,11 @@ class SumTree(checkpointers.Checkpointable):
     return self._nodes[0]
 
   @typing.overload
-  def query(self, target: float) -> int:
+  def query(self, target: float) -> int:  # pyrefly: ignore[inconsistent-overload]
     ...
 
   @typing.overload
-  def query(self, target: npt.NDArray[np.float64]) -> npt.NDArray[np.int_]:
+  def query(self, target: npt.NDArray[np.float64]) -> npt.NDArray[np.int_]:  # pyrefly: ignore[inconsistent-overload]
     ...
 
   def query(

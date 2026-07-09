@@ -231,7 +231,7 @@ class _TanhNormalProjectionNetworkWrapper(
     )
     self.predefined_outer_rank = predefined_outer_rank
 
-  def call(self, inputs, network_state=(), **kwargs):
+  def call(self, inputs, network_state=(), **kwargs):  # pyrefly: ignore[bad-override]
     kwargs['outer_rank'] = self.predefined_outer_rank
     if 'step_type' in kwargs:
       del kwargs['step_type']
@@ -373,7 +373,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
           trainable_critic_variables
       ), 'No trainable critic variables to optimize.'
       tape.watch(trainable_critic_variables)
-      critic_loss = self._critic_loss_weight * self.critic_loss(
+      critic_loss = self._critic_loss_weight * self.critic_loss(  # pyrefly: ignore[unsupported-operation]
           time_steps,
           actions,
           next_time_steps,
@@ -411,7 +411,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
           trainable_actor_variables
       ), 'No trainable actor variables to optimize.'
       tape.watch(trainable_actor_variables)
-      actor_loss = self._actor_loss_weight * self.actor_loss(
+      actor_loss = self._actor_loss_weight * self.actor_loss(  # pyrefly: ignore[unsupported-operation]
           time_steps, weights=weights, training=True
       )
 
@@ -435,7 +435,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
       is_reset_step = self.is_reset_iter()
       tf.cond(is_reset_step, self.reset_models, lambda: None)
 
-    is_logging = self.train_step_counter % self.log_interval == 0
+    is_logging = self.train_step_counter % self.log_interval == 0  # pyrefly: ignore[unsupported-operation]
     log_w_mean_c1 = functools.partial(
         self.log_weights_mean, 'critic_1', self._critic_network_1
     )
@@ -453,14 +453,14 @@ class RecycledSacAgent(sac_agent.SacAgent):
     with tf.GradientTape(watch_accessed_variables=False) as tape:
       assert alpha_variable, 'No alpha variable to optimize.'
       tape.watch(alpha_variable)
-      alpha_loss = self._alpha_loss_weight * self.alpha_loss(
+      alpha_loss = self._alpha_loss_weight * self.alpha_loss(  # pyrefly: ignore[unsupported-operation]
           time_steps, weights=weights, training=True
       )
     tf.debugging.check_numerics(alpha_loss, 'Alpha loss is inf or nan.')
     alpha_grads = tape.gradient(alpha_loss, alpha_variable)
     self._apply_gradients(alpha_grads, alpha_variable, self._alpha_optimizer)
 
-    with tf.name_scope('Losses'):
+    with tf.name_scope('Losses'):  # pyrefly: ignore[bad-instantiation]
       tf.compat.v2.summary.scalar(
           name='critic_loss', data=critic_loss, step=self.train_step_counter
       )
@@ -488,13 +488,13 @@ class RecycledSacAgent(sac_agent.SacAgent):
     for layer in model_layers:
       for var in layer.weights:
         mean_w_mag = tf.reduce_mean(tf.math.abs(var))
-        with tf.name_scope('w_mean/' + model_name + '/'):
+        with tf.name_scope('w_mean/' + model_name + '/'):  # pyrefly: ignore[bad-instantiation]
           tf.compat.v2.summary.scalar(layer.name, mean_w_mag)
 
   def is_dead_neurons_log_iter(self):
     is_iter = tf.logical_and(
-        self.train_step_counter > 0,
-        self.train_step_counter % self.log_interval == 0,
+        self.train_step_counter > 0,  # pyrefly: ignore[unsupported-operation]
+        self.train_step_counter % self.log_interval == 0,  # pyrefly: ignore[unsupported-operation]
     )
     return is_iter
 
@@ -583,7 +583,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
       _, num_dead_neurons = self.get_dead_neurons(layer_score)
       total_dead_neurons += num_dead_neurons
       total_hidden_count += layer_score.shape[0]
-      with tf.name_scope('dead_neurons/' + network_name + '/'):
+      with tf.name_scope('dead_neurons/' + network_name + '/'):  # pyrefly: ignore[bad-instantiation]
         tf.compat.v2.summary.scalar(
             'layer_' + str(layer_count + 1) + '_' + layer_name, num_dead_neurons
         )
@@ -593,11 +593,11 @@ class RecycledSacAgent(sac_agent.SacAgent):
           layer_name + str(self.train_step_counter),
           layer_score,
       )
-      tf.cond(self.train_step_counter % 100000 == 0, log_act_hist, lambda: None)
+      tf.cond(self.train_step_counter % 100000 == 0, log_act_hist, lambda: None)  # pyrefly: ignore[unsupported-operation]
 
-    with tf.name_scope('dead_neurons/' + network_name + '/'):
+    with tf.name_scope('dead_neurons/' + network_name + '/'):  # pyrefly: ignore[bad-instantiation]
       tf.compat.v2.summary.scalar('total_dead_neurons', total_dead_neurons)
-    with tf.name_scope('dead_neurons/' + network_name + '/'):
+    with tf.name_scope('dead_neurons/' + network_name + '/'):  # pyrefly: ignore[bad-instantiation]
       tf.compat.v2.summary.scalar(
           'dead_neurons_percentage',
           (total_dead_neurons / total_hidden_count) * 100,
@@ -609,8 +609,8 @@ class RecycledSacAgent(sac_agent.SacAgent):
   def is_reset_iter(self):
     """Returns true if it is a valid reset step."""
     return tf.logical_and(
-        self.train_step_counter > 0,
-        self.train_step_counter % self.reset_freq == 0,
+        self.train_step_counter > 0,  # pyrefly: ignore[unsupported-operation]
+        self.train_step_counter % self.reset_freq == 0,  # pyrefly: ignore[unsupported-operation]
     )
 
   def reset_models(self):
@@ -712,7 +712,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
         random_weights = weights
         mask = tf.zeros_like(weights)
       new_weights = random_weights
-    return new_weights, mask
+    return new_weights, mask  # pyrefly: ignore[unbound-name]
 
   def reset_model_neurons(self):
     if self.reset_critic:
