@@ -40,7 +40,7 @@ class ActorNetworkTest(parameterized.TestCase):
     )
 
     self.assertEqual(mode.shape, self.action_shape)
-    self.assertEqual(sampled_action.shape, self.action_shape)
+    self.assertEqual(sampled_action.shape, self.action_shape)  # pyrefly: ignore[missing-attribute]
     self.assertEqual(action_probability.shape, ())
 
   def test_network_has_specified_number_of_layers(self):
@@ -222,7 +222,7 @@ class PPOActorNetworkTest(parameterized.TestCase):
     )
 
     self.assertEqual(sampled_action.shape, self.action_shape)
-    self.assertEqual(action_probability.shape, ())
+    self.assertEqual(action_probability.shape, ())  # pyrefly: ignore[missing-attribute]
     self.assertEqual(entropy.shape, ())
 
   def test_ppo_network_has_specified_number_of_layers(self):
