@@ -67,8 +67,8 @@ class BraxEnv(object):
       self, action
   ) -> Tuple[onp.ndarray, onp.ndarray, bool, Mapping[Any, Any]]:
     self._state = jax.jit(self.env.step)(self._state, action)
-    self.game_over = self._state.done
-    return (
+    self.game_over = self._state.done  # pyrefly: ignore[bad-assignment]
+    return (  # pyrefly: ignore[bad-return]
         onp.array(self._state.obs),
         onp.array(self._state.reward),
         self._state.done,
