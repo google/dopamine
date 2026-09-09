@@ -313,7 +313,7 @@ def train_minibatch(
             method=network_def.actor,
         )
     )(states, actions)
-    log_probability = actor_output.log_probability
+    log_probability = actor_output.log_probability  # pyrefly: ignore[missing-attribute]
     ratio = jnp.exp(log_probability - old_log_probability)
     actor_loss = jnp.mean(
         -jnp.minimum(
@@ -347,8 +347,8 @@ def train_minibatch(
     else:
       critic_loss = 0.5 * jnp.mean(losses.mse_loss(q_values, returns))
 
-    entropy = actor_output.entropy if actor_output.entropy is not None else 0.0
-    entropy_loss = jnp.mean(entropy)
+    entropy = actor_output.entropy if actor_output.entropy is not None else 0.0  # pyrefly: ignore[missing-attribute]
+    entropy_loss = jnp.mean(entropy)  # pyrefly: ignore[bad-argument-type]
 
     loss = (
         actor_loss
