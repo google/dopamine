@@ -34,9 +34,9 @@ import numpy as np
 
 @gin.configurable
 def create_deepmind_control_environment(
-    domain_name: str = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
-    task_name: str = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
-    use_image_observations: bool = gin.REQUIRED,  # pyrefly: ignore[bad-function-definition]
+    domain_name: str = gin.REQUIRED,
+    task_name: str = gin.REQUIRED,
+    use_image_observations: bool = gin.REQUIRED,
 ) -> gym.Env:
   """Wraps a Deepmind Control Suite environment with some basic preprocessing.
 
