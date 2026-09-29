@@ -474,7 +474,7 @@ class RecycledSacAgent(sac_agent.SacAgent):
     self.train_step_counter.assign_add(1)
     self._update_target()
 
-    total_loss = critic_loss + actor_loss + alpha_loss
+    total_loss = critic_loss + actor_loss + alpha_loss  # pyrefly: ignore[unsupported-operation]
 
     extra = sac_agent.SacLossInfo(
         critic_loss=critic_loss, actor_loss=actor_loss, alpha_loss=alpha_loss
