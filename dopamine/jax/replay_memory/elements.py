@@ -107,28 +107,23 @@ class ReplayElement(ReplayElementProtocol, struct.PyTreeNode):
   def pack(self) -> 'ReplayElement':
     # NOTE: pytype has a problem subclassing generics.
     # This should be solved in Py311 with `typing.Self`
-    # pytype: disable=attribute-error
     return self.replace(
         state=compress(self.state),
         next_state=compress(self.next_state),
     )
-    # pytype: enable=attribute-error
 
   def unpack(self) -> 'ReplayElement':
     # NOTE: pytype has a problem subclassing generics.
     # This should be solved in Py311 with `typing.Self`
-    # pytype: disable=attribute-error
     return self.replace(
         state=uncompress(self.state),
         next_state=uncompress(self.next_state),
     )
-    # pytype: enable=attribute-error
 
   @property
   def is_compressed(self) -> bool:
     # NOTE: pytype has a problem subclassing generics.
     # This should be solved in Py311 with `typing.Self`
-    # pytype: disable=attribute-error
     # As per the numpy documentation the recommended way to check for a
     # structured array is to check if `dtype.names is not None`.
     # See: https://numpy.org/doc/stable/user/basics.rec.html
@@ -136,4 +131,3 @@ class ReplayElement(ReplayElementProtocol, struct.PyTreeNode):
         self.state.dtype.names is not None
         and self.next_state.dtype.names is not None
     )
-    # pytype: enable=attribute-error

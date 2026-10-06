@@ -27,7 +27,7 @@ import typing
 from typing import Any, Callable, Optional, Tuple, Union
 
 import numpy as np
-from typing_extensions import Literal, NotRequired, TypedDict  # pytype: disable=not-supported-yet # pylint: disable=g-multiple-import
+from typing_extensions import Literal, NotRequired, TypedDict  # pylint: disable=g-multiple-import
 
 Shape = Tuple[int, ...]
 
@@ -38,7 +38,7 @@ class NumpyEncoding(TypedDict, total=False):
   dtype: str
   shape: Shape
   data: bytes
-  order: NotRequired[Literal['C', 'F']]  # pytype: disable=not-indexable
+  order: NotRequired[Literal['C', 'F']]
 
 
 class LongIntegerEncoding(TypedDict):
@@ -73,11 +73,11 @@ def _(
 
   # Store the order if we have one
   if array.flags['C_CONTIGUOUS'] and not array.flags['F_CONTIGUOUS']:
-    encoded['order'] = 'C'  # pytype: disable=annotation-type-mismatch
+    encoded['order'] = 'C'
   elif not array.flags['C_CONTIGUOUS'] and array.flags['F_CONTIGUOUS']:
-    encoded['order'] = 'F'  # pytype: disable=annotation-type-mismatch
+    encoded['order'] = 'F'
 
-  return encoded  # pytype: disable=bad-return-type
+  return encoded
 
 
 @encode.register
@@ -123,4 +123,4 @@ def decode(obj: Any, chain: Optional[Callable[[Any], Any]] = None) -> Any:
   elif isinstance(obj, dict) and 'integer' in obj:
     return int(obj.get('integer'))
   else:
-    return obj if chain is None else chain(obj)  # pytype: disable=bad-return-type
+    return obj if chain is None else chain(obj)

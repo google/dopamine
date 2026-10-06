@@ -253,7 +253,7 @@ class PrioritizedSamplingDistribution(UniformSamplingDistribution):
       # Otherwise, swap priorities with current index and last index
       # as that's how we pop the key from our datastructure.
       # This will run in O(logn) where n is the # of elements in the tree
-      self._sum_tree.set(  # pyrefly: ignore[no-matching-overload]
+      self._sum_tree.set(
           np.asarray([index, last_index], dtype=np.int32),
           np.asarray([self._sum_tree.get(last_index), 0.0]),
       )

@@ -222,7 +222,7 @@ def feature_layer(noisy, features):
 
   def apply(x, key, eval_mode):
     if noisy:
-      return net(x, key, True, None, eval_mode)  # pytype: disable=wrong-arg-count
+      return net(x, key, True, None, eval_mode)  # pyrefly: ignore[bad-argument-count]
     else:
       return net(x)  # pyrefly: ignore[missing-argument]
 

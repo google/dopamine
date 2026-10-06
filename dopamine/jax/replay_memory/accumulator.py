@@ -88,10 +88,8 @@ class TransitionAccumulator(Accumulator[elements.ReplayElement]):
     if last_transition.is_terminal and trajectory_len <= self._update_horizon:
       effective_horizon = trajectory_len - 1
 
-    # pytype: disable=attribute-error
-    observation_shape = last_transition.observation.shape + (self._stack_size,)
-    observation_dtype = last_transition.observation.dtype
-    # pytype: enable=attribute-error
+    observation_shape = last_transition.observation.shape + (self._stack_size,)  # pyrefly: ignore[missing-attribute]
+    observation_dtype = last_transition.observation.dtype  # pyrefly: ignore[missing-attribute]
 
     o_tm1 = np.zeros(observation_shape, observation_dtype)
     # Initialize the slice for which this observation is valid.

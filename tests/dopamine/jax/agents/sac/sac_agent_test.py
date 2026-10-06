@@ -75,7 +75,7 @@ def get_mock_batch(
 
 
 def create_agent(
-    action_shape: Union[Tuple[int, ...], int] = 4,  # pytype: disable=annotation-type-mismatch  # numpy-scalars
+    action_shape: Union[Tuple[int, ...], int] = 4,
     eval_mode: bool = False,
     min_replay_history: int = 10_000,
     update_period: int = 4,
@@ -260,7 +260,7 @@ class SacAgentTest(parameterized.TestCase):
   def testAgentTrainsWithImageObservations(self):
     action_shape = (4,)
     stack_size = 4
-    agent = create_agent(  # pytype: disable=wrong-arg-types  # numpy-scalars
+    agent = create_agent(
         action_shape=action_shape,
         observation_shape=IMG_OBSERVATION_SHAPE,
         observation_dtype=np.uint8,  # pyrefly: ignore[bad-argument-type]

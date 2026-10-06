@@ -31,7 +31,7 @@ OBSERVATION_SHAPE = (8,)
 
 
 def create_agent(
-    action_shape: Union[Tuple[int, ...], int] = 4,  # pytype: disable=annotation-type-mismatch  # numpy-scalars
+    action_shape: Union[Tuple[int, ...], int] = 4,
     eval_mode: bool = False,
     update_period: int = 100,
     seed: int = 0,

@@ -162,7 +162,7 @@ def train(
         jnp.minimum(target_q_value_1, target_q_value_2)
     )
 
-    alpha_value = jnp.exp(log_alpha)  # pytype: disable=wrong-arg-types  # numpy-scalars
+    alpha_value = jnp.exp(log_alpha)  # pyrefly: ignore[bad-argument-type]
     log_prob = target_outputs.actor.log_probability  # pyrefly: ignore[missing-attribute]
     target = reward_scale_factor * reward + cumulative_gamma * (
         target_q_value - alpha_value * log_prob
@@ -185,7 +185,7 @@ def train(
     no_grad_q_value = jnp.squeeze(
         jnp.minimum(q_value_no_grad_1, q_value_no_grad_2)  # pyrefly: ignore[bad-argument-type]
     )
-    alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))  # pytype: disable=wrong-arg-types  # numpy-scalars
+    alpha_value = jnp.exp(jax.lax.stop_gradient(log_alpha))  # pyrefly: ignore[bad-argument-type]
     policy_loss = jnp.mean(alpha_value * action_log_prob - no_grad_q_value)
 
     # J(\alpha) from equation (18) in paper.

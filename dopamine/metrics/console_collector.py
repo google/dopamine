@@ -55,4 +55,4 @@ class ConsoleCollector(collector.Collector):
 
   def close(self) -> None:
     if self._log_file is not None:
-      self._log_file_writer.close()  # pytype: disable=attribute-error  # trace-all-classes
+      self._log_file_writer.close()

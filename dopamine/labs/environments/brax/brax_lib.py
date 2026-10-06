@@ -43,7 +43,7 @@ class BraxEnv(object):
     obs = self._state.obs
     if not isinstance(obs, jax.Array):
       raise NotImplementedError('BraxEnv only supports ndarray observations.')
-    return obs.shape  # pytype: disable=bad-return-type  # jax-ndarray
+    return obs.shape  # pyrefly: ignore[bad-return]
 
   @property
   def action_space(self) -> int:
@@ -61,14 +61,14 @@ class BraxEnv(object):
     self.game_over = False
     self._rng, rng = jax.random.split(self._rng)
     self._state = self.env.reset(rng=rng)
-    return self._state.obs  # pytype: disable=bad-return-type  # jax-ndarray
+    return self._state.obs  # pyrefly: ignore[bad-return]
 
   def step(
       self, action
   ) -> Tuple[onp.ndarray, onp.ndarray, bool, Mapping[Any, Any]]:
     self._state = jax.jit(self.env.step)(self._state, action)
-    self.game_over = self._state.done  # pyrefly: ignore[bad-assignment]
-    return (  # pyrefly: ignore[bad-return]
+    self.game_over = self._state.done
+    return (
         onp.array(self._state.obs),
         onp.array(self._state.reward),
         self._state.done,
