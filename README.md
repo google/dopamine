@@ -8,6 +8,10 @@
   <img src="https://google.github.io/dopamine/images/dopamine_logo.png"><br><br>
 </div>
 
+**Note: Dopamine is currently in (best effort) maintenance mode.** We will do
+our best to address issues that come up, but due to lack of bandwidth we can't
+guarantee issues will be resolved promptly. We apologize for this!
+
 Dopamine is a research framework for fast prototyping of reinforcement learning
 algorithms. It aims to fill the need for a small, easily grokked codebase in
 which users can freely experiment with wild ideas (speculative research).
