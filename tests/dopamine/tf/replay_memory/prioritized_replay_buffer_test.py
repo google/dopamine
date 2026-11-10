@@ -13,15 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for (deprecated) prioritzed replay memory."""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
 from dopamine.tf.replay_memory import circular_replay_buffer
 from dopamine.tf.replay_memory import prioritized_replay_buffer
+from dopamine.tf.replay_memory import sum_tree
 import numpy as np
 import tensorflow as tf
-
 
 # Default parameters used when creating the replay memory.
 SCREEN_SIZE = (84, 84)
@@ -160,6 +161,26 @@ class OutOfGraphPrioritizedReplayBufferTest(tf.test.TestCase):
         ),
     ):
       memory.sample_index_batch(2)
+
+  def testSaveAndLoadRestoresSumTree(self):
+    memory = self.create_default_memory()
+    self.add_blank(memory, priority=0.5)
+    self.add_blank(memory, priority=2.0)
+    checkpoint_dir = self.get_temp_dir()
+    memory.save(checkpoint_dir, 3)
+
+    new_memory = self.create_default_memory()
+    new_memory.load(checkpoint_dir, '3')
+
+    self.assertIsInstance(new_memory.sum_tree, sum_tree.SumTree)
+    self.assertEqual(
+        memory.sum_tree.max_recorded_priority,
+        new_memory.sum_tree.max_recorded_priority,
+    )
+    for expected, actual in zip(
+        memory.sum_tree.nodes, new_memory.sum_tree.nodes
+    ):
+      np.testing.assert_array_equal(expected, actual)
 
   def testSampleIndexBatch(self):
     memory = prioritized_replay_buffer.OutOfGraphPrioritizedReplayBuffer(

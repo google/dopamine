@@ -18,6 +18,7 @@ This implementation is based on the paper "Prioritized Experience Replay"
 by Tom Schaul et al. (2015). Many thanks to Tom Schaul, John Quan, and Matteo
 Hessel for providing useful pointers on the algorithm and its implementation.
 """
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -98,6 +99,12 @@ class OutOfGraphPrioritizedReplayBuffer(
     )
 
     self.sum_tree = sum_tree.SumTree(replay_capacity)
+
+  def _allowed_pickle_globals(self):
+    """Also allows unpickling the checkpointed `SumTree`."""
+    return super()._allowed_pickle_globals() | {
+        (sum_tree.SumTree.__module__, sum_tree.SumTree.__qualname__),
+    }
 
   def get_add_args_signature(self):
     """The signature of the add function.

@@ -13,19 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Tests for (deprecated) Circular replay buffer."""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
 import gzip
+import io
 import os
+import pickle
 import shutil
 
 from absl import flags
 from dopamine.tf.replay_memory import circular_replay_buffer
 import numpy as np
 import tensorflow as tf
-
 
 FLAGS = flags.FLAGS
 
@@ -40,6 +42,19 @@ class CheckpointableClass(object):
 
   def __init__(self):
     self.attribute = 0
+
+
+_MALICIOUS_CALLS = []
+
+
+def _record_malicious_call(*args):
+  _MALICIOUS_CALLS.append(args)
+
+
+class _MaliciousPayload(object):
+
+  def __reduce__(self):
+    return (_record_malicious_call, ('pwned',))
 
 
 class OutOfGraphReplayBufferTest(tf.test.TestCase):
@@ -620,6 +635,58 @@ class OutOfGraphReplayBufferTest(tf.test.TestCase):
 
     self.assertLen(new_memory.episode_end_indices, 1)
     self.assertEqual(memory.episode_end_indices, new_memory.episode_end_indices)
+
+  def testLoadRejectsMaliciousPickledAttribute(self):
+    memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE,
+    )
+    current_iteration = 5
+    memory.save(self._test_subdir, current_iteration)
+    # Overwrite the pickled `episode_end_indices` with a payload that would
+    # invoke an arbitrary callable when unpickled.
+    filename = os.path.join(
+        self._test_subdir,
+        'episode_end_indices_ckpt.{}.gz'.format(current_iteration),
+    )
+    with tf.io.gfile.GFile(filename, 'wb') as f:
+      with gzip.GzipFile(fileobj=f, mode='wb') as outfile:
+        pickle.dump(_MaliciousPayload(), outfile)
+
+    _MALICIOUS_CALLS.clear()
+    new_memory = circular_replay_buffer.OutOfGraphReplayBuffer(
+        observation_shape=OBSERVATION_SHAPE,
+        stack_size=STACK_SIZE,
+        replay_capacity=5,
+        batch_size=BATCH_SIZE,
+    )
+    with self.assertRaisesRegex(pickle.UnpicklingError, 'disallowed global'):
+      new_memory.load(self._test_subdir, str(current_iteration))
+    self.assertEmpty(_MALICIOUS_CALLS)
+
+  def testRestrictedPickleLoadRoundTrip(self):
+    values = [
+        {1, 2, 3},
+        frozenset({4}),
+        [1, 2.5, 'a', b'b', None, True],
+        (1, 2),
+        {'a': 1},
+        np.int64(3),
+        np.float32(1.5),
+        np.arange(6, dtype=np.float64).reshape(2, 3),
+    ]
+    for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+      for value in values:
+        loaded = circular_replay_buffer.restricted_pickle_load(
+            io.BytesIO(pickle.dumps(value, protocol=protocol))
+        )
+        self.assertIs(type(loaded), type(value))
+        if isinstance(value, np.ndarray):
+          np.testing.assert_array_equal(loaded, value)
+        else:
+          self.assertEqual(loaded, value)
 
   def testSaveWithKeepEvery(self):
     checkpoint_duration, keep_every = 1, 2

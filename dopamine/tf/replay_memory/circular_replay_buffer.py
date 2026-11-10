@@ -20,6 +20,7 @@ i.e. where rewards are accumulated for n steps and the intermediate trajectory
 is not exposed to the agent. This does not allow, for example, performing
 off-policy corrections.
 """
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -35,7 +36,6 @@ import gin
 import numpy as np
 import tensorflow as tf
 
-
 # Defines a type describing part of the tuple returned by the replay
 # memory. Each element of the tuple is a tensor of shape [batch, ...] where
 # ... is defined the 'shape' field of ReplayElement. The tensor type is
@@ -45,6 +45,75 @@ ReplayElement = collections.namedtuple('shape_type', ['name', 'shape', 'type'])
 
 # A prefix that can not collide with variable names for checkpoint files.
 STORE_FILENAME_PREFIX = '$store$_'
+
+# Globals that may be resolved when unpickling the non-ndarray checkpointable
+# attributes of a replay buffer (e.g. `episode_end_indices`, a `set` of ints).
+# Replay checkpoints may come from third parties (e.g. offline RL datasets), so
+# any global outside this allowlist is rejected to prevent arbitrary code
+# execution via crafted pickle files.
+SAFE_PICKLE_GLOBALS = frozenset({
+    ('builtins', 'set'),
+    ('builtins', 'frozenset'),
+    ('builtins', 'list'),
+    ('builtins', 'tuple'),
+    ('builtins', 'dict'),
+    ('builtins', 'int'),
+    ('builtins', 'float'),
+    ('builtins', 'complex'),
+    ('builtins', 'bool'),
+    ('builtins', 'str'),
+    ('builtins', 'bytes'),
+    ('builtins', 'bytearray'),
+    # Used by pickle protocols < 3 to serialize `bytes` (e.g. array buffers).
+    ('_codecs', 'encode'),
+    # NumPy arrays, scalars and dtypes (NumPy 1.x and 2.x module paths).
+    ('numpy', 'ndarray'),
+    ('numpy', 'dtype'),
+    ('numpy.core.multiarray', '_reconstruct'),
+    ('numpy.core.multiarray', 'scalar'),
+    ('numpy.core.numeric', '_frombuffer'),
+    ('numpy._core.multiarray', '_reconstruct'),
+    ('numpy._core.multiarray', 'scalar'),
+    ('numpy._core.numeric', '_frombuffer'),
+})
+
+
+class _RestrictedUnpickler(pickle.Unpickler):
+  """Unpickler that only resolves globals from an explicit allowlist."""
+
+  def __init__(self, file, allowed_globals):
+    super().__init__(file)
+    self._allowed_globals = allowed_globals
+
+  def find_class(self, module, name):
+    # Pickle protocols < 3 refer to builtins via the Python 2 `__builtin__`
+    # module name; `super().find_class` maps it back to `builtins`.
+    lookup_module = 'builtins' if module == '__builtin__' else module
+    if (lookup_module, name) in self._allowed_globals:
+      return super().find_class(module, name)
+    raise pickle.UnpicklingError(
+        'Refusing to unpickle disallowed global {}.{} from replay buffer '
+        'checkpoint.'.format(module, name)
+    )
+
+
+def restricted_pickle_load(fileobj, allowed_globals=SAFE_PICKLE_GLOBALS):
+  """Unpickles `fileobj`, only allowing globals listed in `allowed_globals`.
+
+  Args:
+    fileobj: A binary file-like object to read the pickle from.
+    allowed_globals: A collection of (module, name) tuples that the unpickler is
+      allowed to resolve.
+
+  Returns:
+    The unpickled object.
+
+  Raises:
+    pickle.UnpicklingError: If the pickle references a disallowed global.
+  """
+  # Safe: `_RestrictedUnpickler.find_class` rejects all non-allowlisted globals.
+  unpickler = _RestrictedUnpickler(fileobj, frozenset(allowed_globals))
+  return unpickler.load()  # pylint: disable=g-unsafe-pickle-load
 
 
 def modulo_range(start, length, modulo):
@@ -768,6 +837,14 @@ class OutOfGraphReplayBuffer(object):
         except tf.errors.NotFoundError:
           pass
 
+  def _allowed_pickle_globals(self):
+    """Returns the (module, name) globals allowed when unpickling checkpoints.
+
+    Subclasses that checkpoint additional non-ndarray attributes holding
+    custom classes should extend this set with the minimal required globals.
+    """
+    return SAFE_PICKLE_GLOBALS
+
   def load(self, checkpoint_dir, suffix):
     """Restores the object from bundle_dictionary and numpy checkpoints.
 
@@ -813,7 +890,9 @@ class OutOfGraphReplayBuffer(object):
           elif isinstance(self.__dict__[attr], np.ndarray):
             self.__dict__[attr] = np.load(infile, allow_pickle=False)
           else:
-            self.__dict__[attr] = pickle.load(infile)
+            self.__dict__[attr] = restricted_pickle_load(
+                infile, self._allowed_pickle_globals()
+            )
 
 
 @gin.configurable(
