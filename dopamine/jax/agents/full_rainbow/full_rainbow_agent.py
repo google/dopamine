@@ -315,7 +315,6 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
     self._num_atoms = num_atoms
     vmin = vmin if vmin else -vmax
     self._support = jnp.linspace(vmin, vmax, num_atoms)
-    self._replay_scheme = replay_scheme
     self._double_dqn = double_dqn
     self._noisy = noisy
     self._dueling = dueling
@@ -337,6 +336,8 @@ class JaxFullRainbowAgent(dqn_agent.JaxDQNAgent):
         seed=seed,
         preprocess_fn=preprocess_fn,
     )
+    # Set _replay_scheme after calling the superclass constructor; otherwise, DQN will override it.
+    self._replay_scheme = replay_scheme
 
   def _build_networks_and_optimizer(self):
     self._rng, rng = jax.random.split(self._rng)
