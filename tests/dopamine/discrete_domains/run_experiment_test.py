@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import os
 import shutil
+from unittest import mock
 
 from absl import flags
 from dopamine.discrete_domains import checkpointer
@@ -31,7 +32,6 @@ from dopamine.tf.agents.dqn import dqn_agent
 from dopamine.tf.agents.implicit_quantile import implicit_quantile_agent
 from dopamine.tf.agents.rainbow import rainbow_agent
 import gin
-import mock
 import tensorflow as tf
 
 

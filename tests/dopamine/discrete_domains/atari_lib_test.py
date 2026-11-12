@@ -15,10 +15,11 @@
 """Tests for dopamine.discrete_domains.atari_lib."""
 
 
+from unittest import mock
+
 from absl import flags
 from dopamine.discrete_domains import atari_lib
 import gym
-import mock
 import numpy as np
 import tensorflow as tf
 

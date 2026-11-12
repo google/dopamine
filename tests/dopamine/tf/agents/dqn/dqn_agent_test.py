@@ -19,13 +19,13 @@ from __future__ import print_function
 
 import os
 import shutil
+from unittest import mock
 
 from absl import flags
 from dopamine.discrete_domains import atari_lib
 from dopamine.tf.agents.dqn import dqn_agent
 from dopamine.utils import test_utils
 import gin
-import mock
 import numpy as np
 import tensorflow as tf
 

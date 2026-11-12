@@ -19,6 +19,7 @@ from __future__ import print_function
 
 import os
 import shutil
+from unittest import mock
 
 from absl import flags
 from absl.testing import absltest
@@ -28,7 +29,6 @@ from dopamine.utils import test_utils
 from flax import linen as nn
 import gin
 import jax.numpy as jnp
-import mock
 import numpy as np
 
 FLAGS = flags.FLAGS
