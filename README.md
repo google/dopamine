@@ -4,6 +4,10 @@
 [Baseline Results][baselines] |
 [Changelist](https://google.github.io/dopamine/docs/changelist)
 
+<p align="center">
+  <b>English</b> · <a href="https://github.com/google/dopamine/blob/master/README.zh.md">简体中文</a>
+</p>
+
 <div align="center">
   <img src="https://google.github.io/dopamine/images/dopamine_logo.png"><br><br>
 </div>
